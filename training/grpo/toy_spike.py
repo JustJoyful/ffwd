@@ -109,7 +109,13 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--max-runs", type=int, default=2)
     ap.add_argument("--save-steps", type=int, default=2)  # 10 steps → checkpoints 2,4,6,8,10
     ap.add_argument("--seed", type=int, default=config.BOOTSTRAP_SEED)
+    ap.add_argument("--allow-cpu", action="store_true", help="debug only: train without a GPU")
     a = ap.parse_args(argv)
+    if not torch.cuda.is_available() and not a.allow_cpu:
+        # fail fast: an unattended run would otherwise crawl on CPU for hours while holding a GPU session
+        raise SystemExit(
+            "no CUDA GPU visible (check the accelerator setting / torch build); refusing to train"
+        )
 
     manifest = config.CORPUS_DIR / "manifest.json"
     if manifest.exists():

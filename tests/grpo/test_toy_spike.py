@@ -34,3 +34,12 @@ def test_step_timer_writes_gpu_hours_and_appends_on_resume(tmp_path, monkeypatch
             "reward_std": 0.5,
         }
     ]
+
+
+def test_refuses_to_train_without_gpu(tmp_path, monkeypatch):
+    # An unattended Kaggle run must not silently fall back to CPU and burn the quota for hours.
+    import training.grpo.toy_spike as ts
+
+    monkeypatch.setattr(ts.torch.cuda, "is_available", lambda: False)
+    with pytest.raises(SystemExit, match="no CUDA GPU"):
+        ts.main(["--steps", "1", "--ckpt-dir", str(tmp_path)])
