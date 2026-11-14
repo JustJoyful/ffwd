@@ -1,0 +1,37 @@
+[project]
+name = "ffmpeg-agent-py"
+version = "0.0.0"
+description = "Python harness, training and evaluation for ffmpeg-agent"
+license = "GPL-3.0-only"
+requires-python = ">=3.11"
+dependencies = [
+    "jsonschema>=4.26.0",
+    "openai>=3.51.0",
+]
+
+[tool.uv]
+# Not an installable package: `training` and `eval` are imported from the repo root
+# (python -m training.x), which keeps the layout identical to ARCHITECTURE §11.
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[dependency-groups]
+dev = [
+    "black>=26.10.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]

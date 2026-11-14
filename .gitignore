@@ -1,1 +1,16 @@
 .superpowers/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+node_modules/
+dist/
+.env
+.env.*
+# data/: media, ledger and job dirs stay local; only manifests and tasks are tracked
+data/*
+!data/corpus/
+data/corpus/*
+!data/corpus/manifest.json
+!data/tasks/

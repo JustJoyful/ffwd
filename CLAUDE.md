@@ -14,7 +14,13 @@ You are helping build **ffmpeg-agent**: a browser-first video utility driven by 
 7. `DECISIONS.md`: don't re-litigate settled decisions (D-001…); propose a new entry instead
 
 ## Current state
-Planning docs only; no code yet. Phase 0 creates the monorepo scaffold. The Phase 0 plan lives in `docs/superpowers/plans/`. Add build/test commands here as they come to exist, and don't make up commands before then.
+Phase 0 in progress on branch `phase-0`; plan in `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
+
+## Commands
+- `uv sync`: install the Python env (Python 3.11 pinned in `.python-version`; `training/` and `eval/` import from the repo root, no build step)
+- `uv run pytest`: all Python tests; single test: `uv run pytest tests/env/test_checker.py::test_name -v`
+- `uv run ruff check . && uv run black --check .`: lint and format check (CI runs both)
+- Tests need `ffmpeg`/`ffprobe` on PATH; corpus clips are generated into a temp dir by the `corpus` fixture
 
 ## Big-picture architecture (spans several docs)
 - **`packages/protocol` is the contract.** JSON Schemas for actions, spec, probe result and check result, plus the FFmpeg allowlist. Change the schema first and bump `protocol_version` when you break compatibility.
