@@ -145,11 +145,11 @@ def _walk(args: list[str]) -> tuple[list[str], list[str]]:
     return used_in, used_out
 
 
-def _check_ids(used: list[str], declared: list[str], known: set[str]) -> None:
+def _check_ids(used: list[str], declared: list[str], known: set[str], *, unique: bool) -> None:
     for x in used:
         if x not in known or x not in declared:
             raise _Reject(f"unknown id: {x}")
-    for x in sorted({x for x in used if used.count(x) > 1}):
+    for x in sorted({x for x in used if used.count(x) > 1} if unique else ()):
         raise _Reject(f"used more than once: {x}")
     for x in declared:
         if x not in used:
@@ -166,8 +166,9 @@ def validate_run(
 ) -> ValidationResult:
     try:
         used_in, used_out = _walk(args)
-        _check_ids(used_in, inputs, known_inputs)
-        _check_ids(used_out, outputs, known_outputs)
+        # Inputs may repeat (`-i x -itsoffset 0.5 -i x` is the A/V-offset idiom); outputs may not.
+        _check_ids(used_in, inputs, known_inputs, unique=False)
+        _check_ids(used_out, outputs, known_outputs, unique=True)
     except _Reject as e:
         return ValidationResult(False, str(e))
     return ValidationResult(True)
