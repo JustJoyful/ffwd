@@ -206,3 +206,22 @@ def test_audio_offset_measured_from_start_times(tmp_path, corpus):
         spec, corpus["clip_a"], input_probe=probe(corpus["clip_a"]), run_args=["-c", "copy"]
     )
     assert _failed_fields(in_sync) == ["audio.offset_ms"]
+
+
+def test_loudness_measurement_failure_fails_check_not_raises(tmp_path, corpus, monkeypatch):
+    import subprocess
+
+    from training.env import checker as checker_mod
+
+    real_run = subprocess.run
+
+    def hang_on_ebur128(argv, **k):
+        if any("ebur128" in a for a in argv):
+            raise subprocess.TimeoutExpired(cmd="ffmpeg", timeout=1)
+        return real_run(argv, **k)
+
+    monkeypatch.setattr(checker_mod.subprocess, "run", hang_on_ebur128)
+    spec = _video(audio={"loudness_lufs": -16})
+    r = check(spec, corpus["clip_a"], input_probe=probe(corpus["clip_a"]), run_args=["-c", "copy"])
+    assert r["passed"] is False
+    assert _failed_fields(r) == ["audio.loudness_lufs"]

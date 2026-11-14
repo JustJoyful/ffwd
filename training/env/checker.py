@@ -67,7 +67,13 @@ def _integrated_loudness(path: Path) -> float | None:
         "null",
         "-",
     ]
-    proc = subprocess.run(argv, shell=False, capture_output=True, timeout=config.RUN_TIMEOUT_S)
+    try:
+        proc = subprocess.run(argv, shell=False, capture_output=True, timeout=config.RUN_TIMEOUT_S)
+    except (
+        subprocess.SubprocessError,
+        OSError,
+    ):  # unmeasurable loudness fails the field, never raises
+        return None
     found = _LUFS.findall(proc.stderr.decode(errors="replace"))
     return float(found[-1]) if found and found[-1] != "-inf" else None
 

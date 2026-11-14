@@ -56,7 +56,10 @@ export async function runMiniLoop(
 ): Promise<CheckRecord> {
   await ff.writeFile("loop_in.mp4", await fetchFile(file));
   const inProbe = await probeLite(ff, "loop_in.mp4");
-  const outName = task.family === "F7" ? "loop_frames/%04d.png" : "loop_out.mp4";
+  // Fresh output per run: ffmpeg.wasm has no stdin to confirm overwrites, and leftover frames
+  // from a failed run would inflate the F7 count.
+  const outFor = (n: number) =>
+    task.family === "F7" ? `loop_frames_${n}/%04d.png` : `loop_out_${n}.mp4`;
   const messages: ChatCompletionMessageParam[] = [
     { role: "system", content: systemPrompt },
     {
@@ -95,7 +98,8 @@ export async function runMiniLoop(
         obs = { run_ok: false, rejected: v.reason };
       } else {
         runs++;
-        if (task.family === "F7") await ff.createDir("loop_frames").catch(() => undefined);
+        const outName = outFor(runs);
+        if (task.family === "F7") await ff.createDir(`loop_frames_${runs}`).catch(() => undefined);
         const r = await execLogged(ff, substitute(capThreads(action.args), "loop_in.mp4", outName));
         const c =
           r.code === 0 ? await miniCheck(ff, task.family, outName, inProbe.duration_s ?? 0) : null;
