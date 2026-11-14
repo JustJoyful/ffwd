@@ -1,0 +1,5 @@
+# X1 baseline. Model id, base URL and prices come from training/config.py (single source).
+paid = true
+quant = "api"
+temperature = 0.0
+# Thinking off (RULES §5.3). [VERIFY] the exact request field for V4 Flash on the API docs.

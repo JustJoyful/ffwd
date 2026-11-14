@@ -37,6 +37,19 @@ LEDGER_PATH = DATA_DIR / "budget-ledger.jsonl"
 BUDGET_LIFETIME_USD = 4.00
 BUDGET_PHASE0_PILOT_USD = 0.25
 
+# DeepSeek V4 Flash (teacher + X1 baseline). Prices USD per 1M tokens, supplied by the owner from
+# the official pricing page on 2026-11-15. Re-check before every bulk run (RULES §5.3).
+DEEPSEEK_PRICES_USD_PER_MTOK = {
+    "peak": {"input_cache_hit": 0.006, "input_cache_miss": 0.30, "output": 1.20},
+    "off_peak": {"input_cache_hit": 0.003, "input_cache_miss": 0.15, "output": 0.60},
+}
+DEEPSEEK_PRICES_CHECKED = "2026-11-15"
+DEEPSEEK_MODEL_ID: str | None = None  # owner: copy the exact API model id; guard refuses while None
+DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+DEEPSEEK_API_KEY_ENV = "DEEPSEEK_API_KEY"  # key lives only in the environment (RULES §5.6)
+DEEPSEEK_CONCURRENCY_LIMIT = 3  # account limit per pricing page; runners are sequential anyway
+TEACHER_MAX_OUTPUT_TOKENS = 512
+
 # Statistics (EVALUATION §5)
 BOOTSTRAP_RESAMPLES = 10_000
 BOOTSTRAP_SEED = 20261115

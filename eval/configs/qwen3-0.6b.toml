@@ -1,0 +1,11 @@
+# Base Qwen3-0.6B served locally: llama-server --jinja -m <gguf> --port 8080
+# Record the exact GGUF repo, file and sha256 here before running baselines.
+base_url = "http://127.0.0.1:8080/v1"
+model = "qwen3-0.6b"          # llama-server serves one model; the name is informational
+quant = "Q8_0"
+gguf_repo = ""              # owner: the official Qwen GGUF repo
+gguf_sha256 = ""
+temperature = 0.0
+max_tokens = 512
+# Qwen3 non-thinking mode (ARCH §6). [VERIFY] llama-server forwards chat_template_kwargs with --jinja.
+extra_body = { chat_template_kwargs = { enable_thinking = false } }
