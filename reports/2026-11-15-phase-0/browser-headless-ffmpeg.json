@@ -1,0 +1,73 @@
+{
+  "machine": "owner-desktop (this dev machine), Playwright headless Chromium 159, no WebGPU",
+  "date": "2026-11-15",
+  "git_commit": "3a958960d81ad833fb59579540e4222caf96a6c5",
+  "packages": {
+    "@ffmpeg/ffmpeg": "0.12.15",
+    "@ffmpeg/core-mt": "0.12.10 (FFmpeg 5.1.4)"
+  },
+  "ffmpeg_threads_cap": 4,
+  "pthread_workers_spawned": 33,
+  "records": [
+    {
+      "name": "ffmpeg_mt_load",
+      "ok": true,
+      "ms": 246,
+      "detail": null
+    },
+    {
+      "name": "cross_origin_isolated",
+      "ok": true,
+      "ms": null,
+      "detail": null
+    },
+    {
+      "name": "chore_F1-trim-copy",
+      "ok": true,
+      "ms": 90,
+      "detail": {
+        "code": 0
+      }
+    },
+    {
+      "name": "chore_F4-scale-480p",
+      "ok": true,
+      "ms": 3919,
+      "detail": {
+        "code": 0
+      }
+    },
+    {
+      "name": "chore_F7-frames-every-2s",
+      "ok": true,
+      "ms": 285,
+      "detail": {
+        "code": 0
+      }
+    },
+    {
+      "name": "hevc_decode",
+      "ok": true,
+      "ms": 886,
+      "detail": {
+        "code": 0,
+        "bytes": 7373998
+      }
+    },
+    {
+      "name": "ffprobe_available",
+      "ok": true,
+      "ms": null,
+      "detail": {
+        "code": 0,
+        "ffmpegPkg": "0.12.15",
+        "core": "core-mt 0.12.10"
+      }
+    }
+  ],
+  "notes": [
+    "Without the -threads cap every re-encode (F4, HEVC transcode) hung >150 s; stream copy was unaffected.",
+    "ffprobe() exists in core-mt but logs Aborted() on exit; run last or reload the core.",
+    "Not a substitute for the owner's real-browser runs on 2-3 machines (WebLLM needs WebGPU)."
+  ]
+}

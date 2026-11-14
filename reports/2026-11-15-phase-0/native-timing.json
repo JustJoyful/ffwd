@@ -1,0 +1,30 @@
+{
+  "ffmpeg_version": "ffmpeg version n9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "hardware": {
+    "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+    "cpu": "x86_64",
+    "cpu_count": 12,
+    "ram_gb": 15.3,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "chores": [
+    {
+      "name": "F1-trim-copy",
+      "family": "F1",
+      "ok": true,
+      "seconds": 0.052
+    },
+    {
+      "name": "F4-scale-480p",
+      "family": "F4",
+      "ok": true,
+      "seconds": 0.675
+    },
+    {
+      "name": "F7-frames-every-2s",
+      "family": "F7",
+      "ok": true,
+      "seconds": 0.169
+    }
+  ]
+}
