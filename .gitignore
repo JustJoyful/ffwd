@@ -14,6 +14,6 @@ data/*
 data/corpus/*
 !data/corpus/manifest.json
 !data/tasks/
-public/ffmpeg/
-test-results/
-playwright-report/
+spikes/browser/public/ffmpeg/
+spikes/browser/test-results/
+spikes/browser/playwright-report/
