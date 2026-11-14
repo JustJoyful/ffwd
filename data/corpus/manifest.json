@@ -1,0 +1,425 @@
+[
+  {
+    "id": "h264_aac_1080p",
+    "file": "h264_aac_1080p.mp4",
+    "sha256": "315d5b282d3a4051ea6c8e42ab30b01ffb9b59801ca002ece5d1cb59c0bed8f6",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 4.0,
+      "size_bytes": 7821481,
+      "bit_rate": 15642962,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 1080,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "h264_vertical",
+    "file": "h264_vertical.mp4",
+    "sha256": "f687afc0a4e32b9fd3e86fdba5f7ec16c48c02dd031bc0700bac94195f0649c2",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 4.0,
+      "size_bytes": 7876654,
+      "bit_rate": 15753308,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1080,
+          "height": 1920,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "hevc_iphone",
+    "file": "hevc_iphone.mov",
+    "sha256": "d398cb9ef826617cf5a6ed08c4af96680b823f61e06ff6179dd295974b8ab563",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 4.0,
+      "size_bytes": 1847890,
+      "bit_rate": 3695780,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "hevc",
+          "width": 1920,
+          "height": 1080,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "h264_noaudio",
+    "file": "h264_noaudio.mp4",
+    "sha256": "591c896e984cdf2554bcad858f90648e57ff8fa5a2ceea5f7c2424cf747284ee",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 4.0,
+      "size_bytes": 3750438,
+      "bit_rate": 7500876,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 720,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "h264_quiet",
+    "file": "h264_quiet.mp4",
+    "sha256": "a6025f6d480a13aeb18c425eb5827c6584e6d35e014667a55a87a5c427497faf",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 4.0,
+      "size_bytes": 3766801,
+      "bit_rate": 7533602,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 720,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "h264_25fps_720p",
+    "file": "h264_25fps_720p.mp4",
+    "sha256": "15d6d738d676969b8a01fac496b0dc7cd7d7b95f3ca9612de74f42b675bbb9b5",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 10.0,
+      "size_bytes": 8287254,
+      "bit_rate": 6629803,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 720,
+          "fps": 25.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 10.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 10.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "vp9_opus_webm",
+    "file": "vp9_opus_webm.webm",
+    "sha256": "7b7e9582190f4b75d09adbc0ab2cb5bc35bfc93fd8d2710f8fa2add99337703e",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "matroska,webm",
+      "duration_s": 4.008,
+      "size_bytes": 660971,
+      "bit_rate": 1319303,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "vp9",
+          "width": 640,
+          "height": 360,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": null
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "opus",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "mpeg4_avi",
+    "file": "mpeg4_avi.avi",
+    "sha256": "5c4dca2e6e20b30f94b08ec3e9c2e1d68c94a1342bbe687267d977616c151afb",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "avi",
+      "duration_s": 4.04,
+      "size_bytes": 354046,
+      "bit_rate": 701081,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "mpeg4",
+          "width": 640,
+          "height": 480,
+          "fps": 25.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 4.04
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 4.032
+        }
+      ]
+    }
+  },
+  {
+    "id": "h264_long",
+    "file": "h264_long.mp4",
+    "sha256": "6d8e68b6d2cfa97196e09b38dcaf81b90b1e8c5d41f57da0b3dd7658ab6d19d2",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 20.0,
+      "size_bytes": 18981124,
+      "bit_rate": 7592449,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 720,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 20.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 20.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "clip_a",
+    "file": "clip_a.mp4",
+    "sha256": "9613723fc93c0cbfe0d237a6fa2de8c94f4af015f031b6a21319df10567c6d3b",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 3.0,
+      "size_bytes": 2833869,
+      "bit_rate": 7556984,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 720,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 3.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 3.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "clip_b",
+    "file": "clip_b.mp4",
+    "sha256": "9613723fc93c0cbfe0d237a6fa2de8c94f4af015f031b6a21319df10567c6d3b",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 3.0,
+      "size_bytes": 2833869,
+      "bit_rate": 7556984,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 720,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 3.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 3.0
+        }
+      ]
+    }
+  },
+  {
+    "id": "hevc_rot90",
+    "file": "hevc_rot90.mov",
+    "sha256": "02e6a03cd1b7010814bbd64356490ce32f70f9146cf116d8a92089ddcfef432d",
+    "licence": "CC0-1.0 (synthetic, generated)",
+    "source": "synthetic",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 4.0,
+      "size_bytes": 1847890,
+      "bit_rate": 3695780,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "hevc",
+          "width": 1920,
+          "height": 1080,
+          "fps": 30.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 90,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": 4.0
+        }
+      ]
+    }
+  }
+]
