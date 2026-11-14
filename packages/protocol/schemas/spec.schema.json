@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.1.0/spec",
+  "title": "Output spec (ARCHITECTURE §3.2). null = unconstrained; the checker verifies only set fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["family", "outputs"],
+  "properties": {
+    "family": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/family"}},
+    "outputs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/output"}}
+  },
+  "$defs": {
+    "family": {"enum": ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"]},
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,15}$"},
+    "num": {"type": ["number", "null"]},
+    "int": {"type": ["integer", "null"], "minimum": 0},
+    "str": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.+-]{1,32}$"},
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["video", "audio", "image_sequence", "gif"]},
+        "container": {"$ref": "#/$defs/str"},
+        "per_input": {"type": ["boolean", "null"]},
+        "video": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "codec": {"$ref": "#/$defs/str"},
+            "width": {"$ref": "#/$defs/int"},
+            "height": {"$ref": "#/$defs/int"},
+            "fps": {"$ref": "#/$defs/num"},
+            "pix_fmt": {"$ref": "#/$defs/str"},
+            "rotation": {"enum": [0, 90, 180, 270, null]}
+          }
+        },
+        "audio": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "present": {"type": ["boolean", "null"]},
+            "codec": {"$ref": "#/$defs/str"},
+            "loudness_lufs": {"$ref": "#/$defs/num"},
+            "offset_ms": {"$ref": "#/$defs/num"}
+          }
+        },
+        "time": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "start_s": {"$ref": "#/$defs/num"},
+            "end_s": {"$ref": "#/$defs/num"},
+            "tolerance_s": {"$ref": "#/$defs/num"}
+          }
+        },
+        "size_max_bytes": {"$ref": "#/$defs/int"},
+        "frames": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "interval_s": {"$ref": "#/$defs/num"},
+            "expected_count": {"$ref": "#/$defs/int"},
+            "format": {"enum": ["png", "jpg", null]}
+          }
+        },
+        "lossless": {"type": ["boolean", "null"]}
+      }
+    }
+  }
+}
