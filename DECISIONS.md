@@ -1,0 +1,92 @@
+# DECISIONS: ffmpeg-agent decision log
+
+Format: **context → decision → alternatives considered → consequences.** Newest decisions go at the bottom. To change a decision, add a new entry that supersedes the old one; don't edit history.
+
+---
+
+### D-001: Project domain: natural-language FFmpeg agent (14 Nov 2026)
+- **Context:** I needed a project that adds LLM post-training, agent training, serving and real users to a resume that already has a research study (Testcard), RAG/agents (AxiomLM), streaming audio (S.P.E.A.K.) and data ingestion (VGC-Telemetry).
+- **Decision:** a natural-language video-chore tool powered by a self-trained FFmpeg agent.
+- **Alternatives:**
+  - **SMS expense tracker:** dropped. Open-source on-device apps (PennyWise AI, Cashiro) already exist and parse SMS with regex, Account Aggregator apps (e.g. Fold) make SMS reading unnecessary for many users, and AI wasn't needed for the core job.
+  - **Text-to-SQL:** too crowded with GRPO papers.
+  - **Textbook math in AxiomLM:** least distinctive.
+  - **Receipt splitter and Hinglish voice:** not chosen.
+- **Consequences:** AI is genuinely needed (rules can't cover the long tail); outputs are machine-verifiable, which suits RL.
+
+### D-002: Positioning vs frontier coding agents (14 Nov 2026)
+- **Context:** Claude Code/Codex already do FFmpeg edits well, including batches, and many people pay for them.
+- **Decision:** don't claim to beat them. Position the product for **non-developers** (no terminal, no subscription) and the research as **"small specialist agent vs frontier agent"**, with frontier agents as explicit baselines.
+- **Alternatives:** pivot to batch editing as the differentiator (rejected: coding agents already handle batches).
+- **Consequences:** modest, occasional-use user numbers are expected; the research claim is about accuracy-per-cost and locality.
+
+### D-003: Long-tail chores, not platform presets (14 Nov 2026)
+- **Context:** "fit it for WhatsApp" is weak (WhatsApp recompresses video itself), and common one-click jobs are well served by presets/regex tools (e.g. Ez FFmpeg).
+- **Decision:** target the **long tail of occasional chores** (frame extraction, iPhone compatibility, A/V offset, merges, lossless rotate, loudness, batch trims) and multi-step combinations.
+- **Consequences:** chore families F1–F12 (PRD §5); a regex/preset baseline is included to show where AI actually helps.
+
+### D-004: Multi-turn GRPO in the live tool loop (14 Nov 2026)
+- **Context:** a NeurIPS 2026 study found single-turn RLVR gave no gain over SFT for small tool agents; multi-turn GRPO with the real tool loop executed during rollouts produced large gains (2B: 4.3% → 58.7%). CacheRL (2026) found data and reward design matter more than the optimiser.
+- **Decision:** SFT on verified trajectories → **multi-turn GRPO** with execution-verified rewards; single-turn GRPO kept as an ablation.
+- **Consequences:** heavier rollouts (FFmpeg runs per turn) → checkpoint/resume and careful compute budgeting; a null result is acceptable and will be reported.
+
+### D-005: Browser-first product; helper app for power users (14 Nov 2026)
+- **Context:** hosting GPU inference costs money; users want nothing installed and nothing uploaded.
+- **Decision:** the main product runs entirely in the browser (WebLLM + ffmpeg.wasm). An optional native helper (FFmpeg + llama.cpp) handles big files, batches and GPU encoding.
+- **Alternatives:**
+  - a hosted GPU service (cost; privacy)
+  - helper-only (install friction)
+  - browser-only (ffmpeg.wasm is ~10–100× slower than native, has a ~2 GB memory cap and no GPU encode)
+- **Consequences:** zero marginal hosting cost; there's no server-side "concurrent users" story, so serving skills are shown via the browser/native benchmarks and an optional vLLM load test.
+
+### D-006: Desktop/laptop only in v1 (14 Nov 2026)
+- **Context:** WebGPU and ffmpeg.wasm are weak on phones (memory, GPU support).
+- **Decision:** v1 supports desktop/laptop Chrome/Edge; published system requirements; a clear message on mobile.
+- **Consequences:** mobile is revisited only with measurements.
+
+### D-007: Model family Qwen3 0.6B / 1.7B, reusing WebLLM prebuilt libraries (14 Nov 2026)
+- **Context:** each visitor downloads the model once; WebLLM ships prebuilt Qwen3 runtime libraries.
+- **Decision:** fine-tune Qwen3-0.6B (and 1.7B if compute allows). For the browser, convert merged weights with `mlc_llm convert_weight`/`gen_config` using the prebuilt quantization and template, and reuse the prebuilt `model_lib`. Compile our own WebGPU library only if the architecture, vocab or quantization changes.
+- **Consequences:** no custom engine work; the default size is decided by accuracy + model-load drop-off.
+
+### D-008: User-confirmed spec; checker is code (14 Nov 2026)
+- **Context:** at runtime there is no gold spec, so a model could check its own work too leniently.
+- **Decision:** the model emits a spec; the UI shows it in plain language for confirmation; a deterministic checker verifies outputs against the confirmed spec. Training rewards use generator gold specs. Spec extraction is trained and evaluated separately.
+- **Consequences:** an extra confirmation step in the UX; a much stronger correctness guarantee.
+
+### D-009: `ask_user` and `unsupported` actions (14 Nov 2026)
+- **Context:** requests can be ambiguous ("trim 0:30 to 1:00") or out of scope ("remove the person").
+- **Decision:** two explicit actions, included in task generation and rewards (with penalties for unnecessary asks/refusals).
+
+### D-010: Teacher = DeepSeek V4 Flash (budget $4); fallback = rejection sampling (14 Nov 2026)
+- **Context:** frontier providers' terms may restrict training on outputs; I have ~$4 of DeepSeek credit. Sources indicate DeepSeek's terms allow using outputs for training/distillation, but one tracker reports a restrictive clause.
+- **Decision:** DeepSeek V4 Flash as teacher for hard/multi-step tasks (off-peak, thinking off, cache-friendly prompts, hard cap), after reading and saving the current terms. Free rejection sampling (base Qwen3 / 4-bit 8–14B open model on Kaggle) for easy tasks and as a fallback. Claude Code/Codex are used **only as evaluation baselines**.
+- **Consequences:** budget split pilot $0.25 / SFT $2.75 / baseline $0.75 / reserve $0.25; Kaggle quota is saved for GRPO.
+
+### D-011: Hosting on Cloudflare Pages (14 Nov 2026)
+- **Context:** multithreaded ffmpeg.wasm needs `SharedArrayBuffer` → COOP/COEP headers; GitHub Pages can't set custom headers.
+- **Decision:** Cloudflare Pages with `_headers`; model weights on Hugging Face; helper releases on GitHub Releases.
+
+### D-012: Anonymous PostHog analytics (14 Nov 2026)
+- **Context:** I need real user numbers without accounts or personal data.
+- **Decision:** PostHog anonymous events only (no identify, no autocapture/replay, IP capture disabled, localStorage persistence). Headline metrics: activated users, 30/60-day returning %, monthly actives, funnel. A monthly rhythm suits an occasional-use utility.
+- **Consequences:** undercounting from ad blockers (optional reverse proxy); cleared storage or a different browser shows up as a new user.
+
+### D-013: Helper security model (14 Nov 2026)
+- **Decision:** loopback-only bind, Origin allowlist, pairing token, user-approved folders, structured arguments only, protocol version checks. Chrome's Local Network Access prompt is expected and explained in the UX.
+
+### D-014: Distribution via per-chore pages and real questions (14 Nov 2026)
+- **Context:** users search online for their exact chore.
+- **Decision:** one landing page per chore (pre-filled tool), answering real questions in communities (following their rules), launch posts once ~20 chores are reliable, and a demo video.
+
+### D-015: Kaggle for training, with checkpoint/resume (14 Nov 2026)
+- **Context:** ~30 GPU-h/week, 12 h sessions, older GPUs (no bf16/FlashAttention 2).
+- **Decision:** Kaggle as primary (prefer 2×T4), resumable training from day one, paid Colab as an optional fallback; GPU-hours per GRPO step measured in Phase 0.
+
+### D-016: Open source under GPL-3.0 (14 Nov 2026)
+- **Context:** the browser build distributes an FFmpeg core containing GPL components (e.g. x264).
+- **Decision:** the whole project is GPL-3.0. Model weights are released under terms compatible with the base model licence (verify at release).
+
+### D-017: 10-day core-model milestone; website follows (14 Nov 2026)
+- **Context:** I want fast progress with Claude Code, but compute and RL debugging are wall-clock bound, and I must understand the work well enough for interviews.
+- **Decision:** Phase 1 (≈10 days) delivers the trained model, results table and CLI. The website (Phase 2) follows. Phase 0 go/no-go comes first.
