@@ -24,6 +24,8 @@ MAX_ASK_USER = 1
 DEFAULT_TIME_TOLERANCE_S = 0.1  # ARCH §3.2 example tolerance
 FPS_REL_TOLERANCE = 0.01
 FRAME_COUNT_TOLERANCE = 1
+LOUDNESS_TOLERANCE_LU = 2.0  # single-pass loudnorm lands within ~1-2 LU of target
+OFFSET_TOLERANCE_MS = 40.0  # covers AAC encoder priming (1024 samples = 21 ms at 48 kHz)
 
 # Local data (gitignored except manifests and tasks)
 DATA_DIR = REPO_ROOT / "data"

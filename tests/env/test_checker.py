@@ -157,3 +157,52 @@ def test_null_fields_unconstrained(tmp_path, corpus):
     args = ["-i", "{in:clip}", "-c", "copy", "{out:out1}"]
     out, inp = _make(tmp_path, corpus, "vp9_opus_webm", args, {**spec, "container": "webm"})
     assert check(spec, out, input_probe=inp, run_args=args)["passed"]
+
+
+def test_loudness_target(tmp_path, corpus):
+    spec = _video(audio={"loudness_lufs": -16})
+    args = ["-i", "{in:clip}", "-af", "loudnorm=I=-16", "-c:v", "copy", "-c:a", "aac", "{out:out1}"]
+    out, inp = _make(tmp_path, corpus, "h264_quiet", args, spec)
+    r = check(spec, out, input_probe=inp, run_args=args)
+    assert r["passed"], r
+    assert r["measurements"]["loudness_lufs"] == pytest.approx(-16, abs=2)
+    untouched = _make(
+        tmp_path / "b", corpus, "h264_quiet", ["-i", "{in:clip}", "-c", "copy", "{out:out1}"], spec
+    )
+    assert _failed_fields(check(spec, untouched[0], input_probe=inp, run_args=["-c", "copy"])) == [
+        "audio.loudness_lufs"
+    ]
+
+
+def test_audio_offset_measured_from_start_times(tmp_path, corpus):
+    spec = _video(audio={"offset_ms": -500})  # audio 500 ms earlier relative to video
+    args = [
+        "-i",
+        "{in:clip}",
+        "-itsoffset",
+        "0.5",
+        "-i",
+        "{in:clip2}",
+        "-map",
+        "1:v",
+        "-map",
+        "0:a",
+        "-c",
+        "copy",
+        "{out:out1}",
+    ]
+    outs = {"out1": output_path_for(tmp_path, spec)}
+    from training.env.executor import execute as ex
+
+    r = ex(
+        {"action": "run", "args": args, "inputs": ["clip", "clip2"], "outputs": ["out1"]},
+        input_paths={"clip": corpus["clip_a"], "clip2": corpus["clip_a"]},
+        output_paths=outs,
+    )
+    assert r.ok, r.stderr_tail
+    res = check(spec, r.outputs["out1"], input_probe=probe(corpus["clip_a"]), run_args=args)
+    assert res["passed"], res
+    in_sync = check(
+        spec, corpus["clip_a"], input_probe=probe(corpus["clip_a"]), run_args=["-c", "copy"]
+    )
+    assert _failed_fields(in_sync) == ["audio.offset_ms"]

@@ -2,10 +2,13 @@
 
 Checks only spec fields that are set (null = unconstrained). Never raises on bad media: a probe
 failure or empty output becomes passed=False with `error` set.
-v0 covers video/audio/time/size/frames/re-encode; loudness, offset and quality floor are v1.
+v0 covers video/audio/time/size/frames/re-encode plus loudness (EBU R128) and A/V offset
+(stream start times: verifies the requested shift was applied, not perceived sync). Quality floor is v1.
 """
 
 import math
+import re
+import subprocess
 from pathlib import Path
 
 from training import config
@@ -44,6 +47,29 @@ def _check_frames(spec: dict, out_dir: Path, input_probe: dict, measurements: di
         exts = sorted({f.suffix.lstrip(".") for f in files})
         _add(checks, "frames.format", fmt, exts, exts == [fmt])
     return _result(checks, measurements)
+
+
+_LUFS = re.compile(r"^\s+I:\s+(-?[\d.]+|-inf) LUFS", re.MULTILINE)
+
+
+def _integrated_loudness(path: Path) -> float | None:
+    argv = [
+        config.FFMPEG_BIN,
+        "-hide_banner",
+        "-nostdin",
+        "-i",
+        str(path),
+        "-map",
+        "0:a:0",
+        "-af",
+        "ebur128=framelog=quiet",
+        "-f",
+        "null",
+        "-",
+    ]
+    proc = subprocess.run(argv, shell=False, capture_output=True, timeout=config.RUN_TIMEOUT_S)
+    found = _LUFS.findall(proc.stderr.decode(errors="replace"))
+    return float(found[-1]) if found and found[-1] != "-inf" else None
 
 
 def _expected_duration(t: dict, input_probe: dict) -> float | None:
@@ -107,6 +133,19 @@ def check(out_spec: dict, output: Path, *, input_probe: dict, run_args: list[str
     if "codec" in audio:
         actual = auds[0]["codec"] if auds else None
         _add(checks, "audio.codec", audio["codec"], actual, actual == audio["codec"])
+
+    if "loudness_lufs" in audio:
+        lufs = _integrated_loudness(output) if auds else None
+        measurements["loudness_lufs"] = lufs
+        ok = lufs is not None and abs(lufs - audio["loudness_lufs"]) <= config.LOUDNESS_TOLERANCE_LU
+        _add(checks, "audio.loudness_lufs", audio["loudness_lufs"], lufs, ok)
+    if "offset_ms" in audio:
+        offset = None
+        if vids and auds and None not in (vids[0]["start_time_s"], auds[0]["start_time_s"]):
+            offset = round((auds[0]["start_time_s"] - vids[0]["start_time_s"]) * 1000, 1)
+        measurements["offset_ms"] = offset
+        ok = offset is not None and abs(offset - audio["offset_ms"]) <= config.OFFSET_TOLERANCE_MS
+        _add(checks, "audio.offset_ms", audio["offset_ms"], offset, ok)
 
     t = out_spec.get("time") or {}
     expected = _expected_duration(t, input_probe)
