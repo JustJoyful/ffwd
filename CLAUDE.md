@@ -20,6 +20,8 @@ Phase 0 in progress on branch `phase-0`; plan in `docs/superpowers/plans/2026-11
 - `uv sync`: install the Python env (Python 3.11 pinned in `.python-version`; `training/` and `eval/` import from the repo root, no build step)
 - `uv run pytest`: all Python tests; single test: `uv run pytest tests/env/test_checker.py::test_name -v`
 - `uv run ruff check . && uv run black --check .`: lint and format check (CI runs both)
+- `uv sync --group train` / `uv run --group train ...`: torch + TRL + PEFT for GRPO (not installed in CI; `tests/grpo/test_toy_spike.py` skips without it)
+- `cd spikes/browser && pnpm test && pnpm lint && pnpm e2e`: browser spike unit, lint and Playwright tests
 - Tests need `ffmpeg`/`ffprobe` on PATH; corpus clips are generated into a temp dir by the `corpus` fixture
 
 ## Big-picture architecture (spans several docs)

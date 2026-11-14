@@ -50,6 +50,12 @@ DEEPSEEK_API_KEY_ENV = "DEEPSEEK_API_KEY"  # key lives only in the environment (
 DEEPSEEK_CONCURRENCY_LIMIT = 3  # account limit per pricing page; runners are sequential anyway
 TEACHER_MAX_OUTPUT_TOKENS = 512
 
+# GRPO token stream (Qwen3 ChatML, non-thinking). Inserted after each model turn; masked from the
+# loss. The empty think block matches what enable_thinking=False puts in the generation prompt.
+QWEN3_OBSERVATION_TEMPLATE = (
+    "\n<|im_start|>user\n{obs}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+)
+
 # Statistics (EVALUATION §5)
 BOOTSTRAP_RESAMPLES = 10_000
 BOOTSTRAP_SEED = 20261115
