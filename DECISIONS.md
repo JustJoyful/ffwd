@@ -90,3 +90,11 @@ Format: **context → decision → alternatives considered → consequences.** N
 ### D-017: 10-day core-model milestone; website follows (14 Nov 2026)
 - **Context:** I want fast progress with Claude Code, but compute and RL debugging are wall-clock bound, and I must understand the work well enough for interviews.
 - **Decision:** Phase 1 (≈10 days) delivers the trained model, results table and CLI. The website (Phase 2) follows. Phase 0 go/no-go comes first.
+
+### D-018: Multi-turn GRPO library (PROPOSED 15 Nov 2026, awaiting owner approval)
+- **Context:** D-004 requires GRPO with the real tool loop executed during rollouts. Phase 0 must measure GPU-hours per step on Kaggle 2×T4. Checked TRL docs (Nov 2026): `GRPOTrainer` supports environments two ways. `environment_factory` takes a class whose public methods become *native tool calls*, and the trainer runs the multi-turn loop. `rollout_func` lets us own generation and the environment loop entirely.
+- **Proposal:** TRL `GRPOTrainer` with **`rollout_func`**, wrapping the existing `training/env/loop.run_episode` so training, evaluation and the browser all share one JSON action protocol (ARCH §3.1) and one checker.
+- **Alternatives:**
+  - **TRL `environment_factory`:** least code, but actions become Qwen3 native tool calls, so the training format would diverge from the JSON actions the browser parses (an ARCH §3.1 change, and a WebLLM function-calling dependency).
+  - **verl (multi-turn) / OpenPipe ART:** strong multi-turn support but heavier stacks; T4/fp16 support and Kaggle setup unverified.
+- **Consequences:** we write ~100 lines of rollout code (generation via TRL's vLLM integration [VERIFY on T4/fp16]), and the same `score()` drives reward and eval. If `rollout_func` proves unworkable on T4, fall back to `environment_factory` and record a superseding decision.
