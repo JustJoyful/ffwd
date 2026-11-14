@@ -1,0 +1,34 @@
+from pathlib import Path
+
+import pytest
+
+from training.env.probe import display_size, probe
+
+
+def test_probe_h264_fields(corpus):
+    p = probe(corpus["h264_aac_1080p"])
+    assert "mp4" in p["container"]
+    assert p["duration_s"] == pytest.approx(4.0, abs=0.1)
+    video, audio = p["streams"]
+    assert (video["type"], video["codec"], video["width"], video["height"]) == (
+        "video",
+        "h264",
+        1920,
+        1080,
+    )
+    assert video["fps"] == pytest.approx(30)
+    assert (audio["type"], audio["codec"]) == ("audio", "aac")
+
+
+def test_probe_rotation_normalised(corpus):
+    assert probe(corpus["hevc_rot90"])["streams"][0]["rotation"] == 90
+
+
+def test_display_size_swaps_on_rotation():
+    assert display_size({"width": 1920, "height": 1080, "rotation": 90}) == (1080, 1920)
+    assert display_size({"width": 1920, "height": 1080, "rotation": 180}) == (1920, 1080)
+
+
+def test_probe_missing_file_raises(tmp_path: Path):
+    with pytest.raises(FileNotFoundError):
+        probe(tmp_path / "nope.mp4")
