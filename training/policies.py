@@ -17,6 +17,19 @@ from training.teacher.budget import (
     worst_case_cost,
 )
 
+
+def api_key(env_name: str, dotenv: Path = config.REPO_ROOT / ".env") -> str:
+    """Key from the environment, else from the gitignored repo-root .env (KEY=value lines)."""
+    if value := os.environ.get(env_name):
+        return value
+    if dotenv.is_file():
+        for line in dotenv.read_text().splitlines():
+            name, sep, value = line.strip().partition("=")
+            if sep and name == env_name:
+                return value.strip()
+    return ""
+
+
 DRY_RUN_REPLY = '{"action": "unsupported", "reason": "dry run: no API call made"}'
 
 
@@ -41,7 +54,7 @@ class ChatPolicy:
             require_pricing()
         self.model, self.temperature, self.max_tokens = model, temperature, max_tokens
         self.extra_body, self.guard = extra_body, guard
-        key = os.environ.get(api_key_env, "") if api_key_env else "not-needed"
+        key = api_key(api_key_env) if api_key_env else "not-needed"
         self._client = OpenAI(base_url=base_url, api_key=key or "missing")
 
     def __call__(self, messages: list[dict]) -> str:

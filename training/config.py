@@ -44,7 +44,7 @@ DEEPSEEK_PRICES_USD_PER_MTOK = {
     "off_peak": {"input_cache_hit": 0.003, "input_cache_miss": 0.15, "output": 0.60},
 }
 DEEPSEEK_PRICES_CHECKED = "2026-11-15"
-DEEPSEEK_MODEL_ID: str | None = None  # owner: copy the exact API model id; guard refuses while None
+DEEPSEEK_MODEL_ID: str | None = "deepseek-flash"  # owner-supplied 2026-11-15
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 DEEPSEEK_API_KEY_ENV = "DEEPSEEK_API_KEY"  # key lives only in the environment (RULES §5.6)
 DEEPSEEK_CONCURRENCY_LIMIT = 3  # account limit per pricing page; runners are sequential anyway

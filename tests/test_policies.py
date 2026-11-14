@@ -84,3 +84,16 @@ def test_policy_from_config_paid_requires_guard_and_pricing(tmp_path, monkeypatc
     assert (
         local.guard is None and local.extra_body["chat_template_kwargs"]["enable_thinking"] is False
     )
+
+
+def test_api_key_from_env_var_then_dotenv(tmp_path, monkeypatch):
+    from training.policies import api_key
+
+    dotenv = tmp_path / ".env"
+    dotenv.write_text("# comment\nOTHER=x\nDEEPSEEK_API_KEY=from-dotenv\n")
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    assert api_key("DEEPSEEK_API_KEY", dotenv) == "from-dotenv"
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "from-env")
+    assert api_key("DEEPSEEK_API_KEY", dotenv) == "from-env"
+    monkeypatch.delenv("DEEPSEEK_API_KEY")
+    assert api_key("DEEPSEEK_API_KEY", tmp_path / "missing.env") == ""
