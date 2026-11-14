@@ -97,3 +97,14 @@ def test_api_key_from_env_var_then_dotenv(tmp_path, monkeypatch):
     assert api_key("DEEPSEEK_API_KEY", dotenv) == "from-env"
     monkeypatch.delenv("DEEPSEEK_API_KEY")
     assert api_key("DEEPSEEK_API_KEY", tmp_path / "missing.env") == ""
+
+
+def test_deepseek_config_disables_thinking(tmp_path, priced):
+    # Verified 2026-11-15 against the live API: only this field removes reasoning tokens.
+    from training.policies import policy_from_config
+
+    p = policy_from_config(
+        config.REPO_ROOT / "eval/configs/deepseek-v4-flash.toml",
+        BudgetGuard(tmp_path / "l", 1, 1, "r"),
+    )
+    assert p.extra_body == {"thinking": {"type": "disabled"}}
