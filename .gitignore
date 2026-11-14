@@ -14,3 +14,6 @@ data/*
 data/corpus/*
 !data/corpus/manifest.json
 !data/tasks/
+public/ffmpeg/
+test-results/
+playwright-report/

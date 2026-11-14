@@ -17,3 +17,21 @@ jobs:
       - run: uv run black --check .
       - run: uv run pytest
 
+
+  js:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: spikes/browser
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test # includes the TS validator against packages/protocol/conformance
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm e2e # isolation smoke test; ffmpeg e2e skips without the local corpus
