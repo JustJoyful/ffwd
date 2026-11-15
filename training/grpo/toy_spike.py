@@ -59,6 +59,19 @@ class StepTimer(TrainerCallback):
         self.pending = None
 
 
+def precision_plan(precision: str, bf16_supported: bool) -> dict:
+    """bf16 on Ampere+; fp16 on T4 (no bf16 hardware). On the fp16 path TRL's chunked-logprob kernel
+    must not use torch.addmm(out_dtype=float32): that mixed-precision GEMM needs compute capability
+    >= 8.0 (crashed on Kaggle T4). Its fallback upcasts to fp32 first: same math, a bit slower."""
+    use_bf16 = precision == "bf16" or (precision == "auto" and bf16_supported)
+    return {
+        "bf16": use_bf16,
+        "fp16": not use_bf16,
+        "model_dtype": torch.bfloat16 if use_bf16 else torch.float16,
+        "mixed_out_gemm": use_bf16,
+    }
+
+
 def hf_generator_for(temperature: float):
     def factory(trainer) -> Generator:
         model = trainer.accelerator.unwrap_model(trainer.model)
@@ -110,6 +123,7 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--max-runs", type=int, default=2)
     ap.add_argument("--save-steps", type=int, default=2)  # 10 steps → checkpoints 2,4,6,8,10
     ap.add_argument("--seed", type=int, default=config.BOOTSTRAP_SEED)
+    ap.add_argument("--precision", choices=["auto", "bf16", "fp16"], default="auto")
     ap.add_argument("--allow-cpu", action="store_true", help="debug only: train without a GPU")
     a = ap.parse_args(argv)
     if not torch.cuda.is_available() and not a.allow_cpu:
@@ -124,7 +138,11 @@ def main(argv: list[str] | None = None) -> None:
 
     tasks = make_toy_tasks(16, seed=a.seed)
     dataset = Dataset.from_list([{"prompt": prompt_messages(t, corpus)} for t in tasks])
-    bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()  # T4: False → fp16
+    plan = precision_plan(a.precision, torch.cuda.is_available() and torch.cuda.is_bf16_supported())
+    if not plan["mixed_out_gemm"]:
+        import trl.kernels.chunked_logprob as chunked
+
+        chunked._MM_OUT_DTYPE = False  # see precision_plan
     n_gpus = max(torch.cuda.device_count(), 1)
     a.ckpt_dir.mkdir(parents=True, exist_ok=True)
 
@@ -144,9 +162,10 @@ def main(argv: list[str] | None = None) -> None:
         save_strategy="steps",
         save_steps=a.save_steps,
         save_total_limit=2,
-        bf16=bf16,
-        fp16=not bf16 and torch.cuda.is_available(),
+        bf16=plan["bf16"],
+        fp16=plan["fp16"],
         gradient_checkpointing=True,
+        model_init_kwargs={"dtype": plan["model_dtype"]},
     )
     rollout = make_rollout_func(
         tasks,

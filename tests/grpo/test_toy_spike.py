@@ -43,3 +43,25 @@ def test_refuses_to_train_without_gpu(tmp_path, monkeypatch):
     monkeypatch.setattr(ts.torch.cuda, "is_available", lambda: False)
     with pytest.raises(SystemExit, match="no CUDA GPU"):
         ts.main(["--steps", "1", "--ckpt-dir", str(tmp_path)])
+
+
+def test_precision_plan_for_t4_and_ampere():
+    import torch
+
+    from training.grpo.toy_spike import precision_plan
+
+    t4 = precision_plan("auto", bf16_supported=False)  # Tesla T4, compute capability 7.5
+    assert t4 == {
+        "bf16": False,
+        "fp16": True,
+        "model_dtype": torch.float16,
+        "mixed_out_gemm": False,
+    }
+    amp = precision_plan("auto", bf16_supported=True)
+    assert amp == {
+        "bf16": True,
+        "fp16": False,
+        "model_dtype": torch.bfloat16,
+        "mixed_out_gemm": True,
+    }
+    assert precision_plan("fp16", bf16_supported=True) == t4  # lets us test the T4 path on Ampere
