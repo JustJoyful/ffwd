@@ -29,6 +29,8 @@ from training.grpo.ckpt_sync import (
     restore_metrics,
 )
 from training.grpo.rollout import Generator, make_rollout_func, prompt_messages
+from training.grpo.taskfilter import apply_filter
+from training.grpo.telemetry import TelemetryLog, grpo_reward
 from training.taskgen.toy import CLIPS as TOY_CLIPS
 from training.taskgen.toy import make_toy_tasks
 
@@ -147,6 +149,25 @@ def main(argv: list[str] | None = None) -> None:
         default=None,
         help="keep only the newest N remote checkpoints (dir remote)",
     )
+    ap.add_argument(
+        "--reward",
+        choices=["toy", "v1"],
+        default="toy",
+        help="toy = Phase 0 reward; v1 = ARCHITECTURE §7.4 draft terms",
+    )
+    ap.add_argument(
+        "--shuffle-rewards",
+        type=int,
+        default=None,
+        metavar="SEED",
+        help="sanity control: permute rewards within each group (must NOT improve dev)",
+    )
+    ap.add_argument(
+        "--task-filter",
+        type=Path,
+        default=None,
+        help="pass_rates.json from training.grpo.taskfilter: train only on in-band tasks",
+    )
     ap.add_argument("--allow-cpu", action="store_true", help="debug only: train without a GPU")
     a = ap.parse_args(argv)
     if not torch.cuda.is_available() and not a.allow_cpu:
@@ -160,6 +181,8 @@ def main(argv: list[str] | None = None) -> None:
     corpus = ensure_corpus(config.CORPUS_DIR, ids={clip for clip, _ in TOY_CLIPS})
 
     tasks = make_toy_tasks(16, seed=a.seed)
+    if a.task_filter:
+        tasks = apply_filter(tasks, a.task_filter, a.ckpt_dir)  # fails loudly if nothing is in band
     dataset = Dataset.from_list([{"prompt": prompt_messages(t, corpus)} for t in tasks])
     plan = precision_plan(a.precision, native_bf16())
     print(f"precision plan: {plan}", flush=True)  # visible in Kaggle output
@@ -191,6 +214,7 @@ def main(argv: list[str] | None = None) -> None:
         gradient_checkpointing=True,
         model_init_kwargs={"dtype": plan["model_dtype"]},
     )
+    telemetry = TelemetryLog(a.ckpt_dir / "telemetry.jsonl", a.ckpt_dir / "spotcheck")
     rollout = make_rollout_func(
         tasks,
         corpus,
@@ -198,13 +222,16 @@ def main(argv: list[str] | None = None) -> None:
         jobs_root=config.JOBS_DIR / "grpo-toy",
         max_new_tokens=a.max_new_tokens,
         max_runs=a.max_runs,
+        reward_fn=grpo_reward if a.reward == "v1" else None,
+        on_rollout=lambda step, records, episodes: telemetry.add(step, records, episodes),
+        shuffle_seed=a.shuffle_rewards,
     )
     trainer = GRPOTrainer(
         model=a.model,
         args=args,
         train_dataset=dataset,
         rollout_func=rollout,
-        reward_funcs=[lambda completions, toy_reward, **kw: toy_reward],
+        reward_funcs=[lambda completions, reward, **kw: reward],
         peft_config=LoraConfig(
             r=16, lora_alpha=32, target_modules="all-linear", task_type="CAUSAL_LM"
         ),
@@ -213,7 +240,8 @@ def main(argv: list[str] | None = None) -> None:
     trainer.add_callback(StepTimer(metrics_path, n_gpus))
     remote = remote_from_args(a.hub_repo, a.sync_dir, a.keep_last)
     if remote is not None:
-        trainer.add_callback(SyncCallback(remote, metrics_path))  # push every save off this machine
+        extras = [metrics_path, a.ckpt_dir / "telemetry.jsonl", a.ckpt_dir / "pass_rates.json"]
+        trainer.add_callback(SyncCallback(remote, extras))  # push every save off this machine
     resume = None
     if a.resume:
         # Newest of (local, remote): a fresh Kaggle session has no local checkpoint at all.
@@ -222,7 +250,8 @@ def main(argv: list[str] | None = None) -> None:
         )
         if found is None:
             raise SystemExit(f"--resume given but no checkpoint in {a.ckpt_dir} or the remote")
-        restore_metrics(found, a.ckpt_dir)
+        for name in ("toy_metrics.jsonl", "telemetry.jsonl", "pass_rates.json"):
+            restore_metrics(found, a.ckpt_dir, name)
         resume = str(found)
         print(f"resuming from {resume}", flush=True)
     trainer.train(resume_from_checkpoint=resume)

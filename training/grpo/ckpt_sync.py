@@ -165,14 +165,14 @@ def restore_metrics(ckpt: Path, ckpt_dir: Path, name: str = "toy_metrics.jsonl")
 
 
 class SyncCallback:
-    """transformers.TrainerCallback duck type: push checkpoint-N (and the metrics file) on every save."""
+    """transformers.TrainerCallback duck type: push checkpoint-N (plus metrics/telemetry/pass-rate files) on every save."""
 
-    def __init__(self, remote: Remote, metrics_path: Path | None = None):
-        self.remote, self.metrics_path = remote, metrics_path
+    def __init__(self, remote: Remote, extra_paths: list[Path] | None = None):
+        self.remote, self.extra_paths = remote, extra_paths or []
 
     def on_save(self, args, state, control, **kw):
         ckpt = Path(args.output_dir) / f"checkpoint-{state.global_step}"
-        self.remote.push(ckpt, [self.metrics_path] if self.metrics_path else None)
+        self.remote.push(ckpt, self.extra_paths)
 
     def __getattr__(self, name):  # every other TrainerCallback hook is a no-op
         if name.startswith("on_"):

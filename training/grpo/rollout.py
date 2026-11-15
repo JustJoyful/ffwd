@@ -7,6 +7,7 @@ chat template, so what we train on is exactly what was sampled.
 Known gap: at inference the chat template re-renders history without the empty <think> blocks.
 """
 
+import dataclasses
 import uuid
 from collections.abc import Callable
 from pathlib import Path
@@ -15,6 +16,7 @@ from typing import Protocol
 from training import config
 from training.env.loop import Episode, initial_messages, run_episode, score
 from training.env.probe import probe
+from training.grpo.telemetry import RewardBreakdown, record_for, shuffle_within_groups
 
 
 class Generator(Protocol):
@@ -79,16 +81,30 @@ def make_rollout_func(
     jobs_root: Path,
     max_new_tokens: int,
     max_runs: int = config.MAX_RUNS_PER_JOB,
+    reward_fn: Callable[[dict, Episode], RewardBreakdown] | None = None,
+    on_rollout: Callable[[int, list[dict], list[dict]], None] | None = None,
+    shuffle_seed: int | None = None,
 ):
     """rollout_func(prompts, trainer) for GRPOTrainer. Prompts are matched to tasks by their
-    first user message (request + probes), which is unique per task."""
+    first user message (request + probes), which is unique per task.
+
+    reward_fn: per-episode reward (default: the Phase 0 toy reward). on_rollout(step, records, episodes)
+    gets one flat record and one transcript per rollout, for telemetry. shuffle_seed switches on the
+    shuffled-reward sanity control: rewards are permuted within each prompt's group before training,
+    while the telemetry still logs the TRUE rewards.
+    """
     by_key = {prompt_messages(t, corpus)[-1]["content"]: t for t in tasks}
+    reward_fn = reward_fn or (
+        lambda task, ep: RewardBreakdown(toy_reward(task, ep), {"pass": float(score(task, ep))})
+    )
 
     def rollout_func(prompts: list[list[dict]], trainer) -> dict:
         generate = generator_for(trainer)
         out: dict[str, list] = {
-            k: [] for k in ("prompt_ids", "completion_ids", "logprobs", "env_mask", "toy_reward")
+            k: [] for k in ("prompt_ids", "completion_ids", "logprobs", "env_mask")
         }
+        step = getattr(getattr(trainer, "state", None), "global_step", 0) + 1
+        records, episodes = [], []
         for prompt in prompts:
             task = by_key[prompt[-1]["content"]]
             policy = TokenPolicy(trainer.processing_class, generate, max_new_tokens)
@@ -97,7 +113,17 @@ def make_rollout_func(
             )
             for k, v in policy.trajectory().items():
                 out[k].append(v)
-            out["toy_reward"].append(toy_reward(task, ep))
+            records.append(record_for(task, ep, reward_fn(task, ep), f"{step}:{task['id']}"))
+            episodes.append(dataclasses.asdict(ep))
+        trained = [r["total"] for r in records]
+        if shuffle_seed is not None:
+            trained = shuffle_within_groups(
+                trained, [r["group"] for r in records], shuffle_seed + step
+            )
+        out["reward"] = trained
+        out["toy_reward"] = trained  # name used by the Phase 0 toy reward function
+        if on_rollout is not None:
+            on_rollout(step, records, episodes)
         return out
 
     return rollout_func

@@ -126,3 +126,49 @@ def test_prompt_ids_from_batch_encoding():
     pol = TokenPolicy(DictTok(), FakeGen(["x"]), max_new_tokens=8)
     pol([{"role": "user", "content": "u"}])
     assert all(isinstance(i, int) for i in pol.trajectory()["prompt_ids"])
+
+
+def _scripted_rollout(corpus, tmp_path, **kw):
+    trainer = type(
+        "T", (), {"processing_class": FakeTok(), "state": type("S", (), {"global_step": 4})()}
+    )()
+    gen = FakeGen([GOOD, FINISH] + ["nope"] * 40)
+    rollout = make_rollout_func(
+        [TASK], corpus, lambda tr: gen, jobs_root=tmp_path, max_new_tokens=64, **kw
+    )
+    prompt = prompt_messages(TASK, corpus)
+    return rollout([prompt, prompt, prompt], trainer)
+
+
+def test_on_rollout_receives_the_step_records_and_transcripts(corpus, tmp_path):
+    from training.grpo.telemetry import grpo_reward
+
+    seen = []
+    out = _scripted_rollout(
+        corpus, tmp_path, reward_fn=grpo_reward, on_rollout=lambda *a: seen.append(a)
+    )
+    step, records, episodes = seen[0]
+    assert step == 5  # trainer.state.global_step + 1: the optimizer step this rollout feeds
+    assert len(records) == len(episodes) == 3 == len(out["reward"])
+    assert {r["group"] for r in records} == {
+        f"5:{TASK['id']}"
+    }  # the 3 rollouts of one prompt form one group
+    assert records[0]["passed"] is True and records[0]["total"] == pytest.approx(out["reward"][0])
+    assert episodes[0]["task_id"] == TASK["id"] and "turns" in episodes[0]
+
+
+def test_shuffle_control_changes_trained_rewards_but_logs_true_ones(corpus, tmp_path):
+    from training.grpo.telemetry import grpo_reward
+
+    seen = []
+    plain = _scripted_rollout(corpus, tmp_path / "a", reward_fn=grpo_reward)
+    ctrl = _scripted_rollout(
+        corpus,
+        tmp_path / "b",
+        reward_fn=grpo_reward,
+        shuffle_seed=3,
+        on_rollout=lambda *a: seen.append(a),
+    )
+    assert sorted(ctrl["reward"]) == sorted(plain["reward"])  # same multiset within the group
+    true_totals = [r["total"] for r in seen[0][1]]
+    assert true_totals == plain["reward"]  # telemetry always logs the TRUE reward

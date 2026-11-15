@@ -57,6 +57,27 @@ QWEN3_OBSERVATION_TEMPLATE = (
     "\n<|im_start|>user\n{obs}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
 )
 
+# GRPO reward v1 DRAFT: ARCHITECTURE §7.4 initial weights (tune on dev only, RULES §4.5). Terms are
+# computed in training/grpo/telemetry.py; `invalid` is a per-action penalty, capped per episode.
+REWARD_WEIGHTS = {
+    "pass": 1.0,
+    "partial": 0.3,
+    "spec_acc": 0.2,
+    "efficiency": 0.1,
+    "clarify": 0.5,
+    "invalid": -0.5,
+}
+REWARD_INVALID_CAP = 4
+
+# Pre-GRPO task filter (T6): keep tasks whose pass rate over K samples is inside the band.
+PASS_RATE_BAND = (0.2, 0.8)  # inclusive; tasks the model always/never solves give no GRPO signal
+PASS_RATE_SAMPLES = 8
+PASS_RATE_ALLOWED_SPLITS = ("train", "toy")  # never filter on dev/test tasks (RULES §4.5)
+
+# GRPO telemetry (T6): hand-inspect the top-reward trajectories every N steps (reward-hacking guard)
+TELEMETRY_SPOTCHECK_EVERY = 10
+TELEMETRY_SPOTCHECK_TOP_K = 3
+
 # Statistics (EVALUATION §5)
 BOOTSTRAP_RESAMPLES = 10_000
 BOOTSTRAP_SEED = 20261115

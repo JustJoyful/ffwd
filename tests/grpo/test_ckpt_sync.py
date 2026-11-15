@@ -75,7 +75,7 @@ def test_callback_pushes_every_save_with_the_metrics_file(tmp_path):
     make_ckpt(out, 2)
     (out / "toy_metrics.jsonl").write_text('{"step": 1}\n')
     remote = DirRemote(tmp_path / "remote")
-    cb = SyncCallback(remote, metrics_path=out / "toy_metrics.jsonl")
+    cb = SyncCallback(remote, extra_paths=[out / "toy_metrics.jsonl"])
     cb.on_save(SimpleNamespace(output_dir=str(out)), SimpleNamespace(global_step=2), None)
     assert remote.latest() == "checkpoint-2"
     assert (
