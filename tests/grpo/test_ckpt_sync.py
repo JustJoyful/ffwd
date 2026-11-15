@@ -138,3 +138,29 @@ def test_verify_resume_detects_scheduler_not_restored():
     lr.update({s: 1e-5 for s in range(7, 11)})  # schedule restarted at the top after resume
     r = verify(rows, lr, lr0=1e-5, max_steps=10, resumed_after=6)
     assert not r["ok"] and any("learning rate" in p for p in r["problems"])
+
+
+def test_remote_from_args_picks_the_remote(tmp_path):
+    from training.grpo.ckpt_sync import remote_from_args
+
+    assert remote_from_args(None, None) is None
+    assert isinstance(remote_from_args(None, tmp_path / "r", keep_last=3), DirRemote)
+    pytest.importorskip("huggingface_hub")  # train dependency group
+    assert isinstance(remote_from_args("me/repo", None), HubRemote)
+    with pytest.raises(ValueError):
+        remote_from_args("me/repo", tmp_path / "r")  # one remote at a time
+
+
+def test_restore_metrics_brings_the_history_back_without_clobbering_newer_rows(tmp_path):
+    from training.grpo.ckpt_sync import restore_metrics
+
+    work = tmp_path / "work"
+    ckpt = make_ckpt(work, 6)
+    (ckpt / "toy_metrics.jsonl").write_text('{"step": 5}\n{"step": 6}\n')
+    assert (
+        restore_metrics(ckpt, work) is True
+    )  # fresh session: metrics file was lost with /kaggle/working
+    assert (work / "toy_metrics.jsonl").read_text() == '{"step": 5}\n{"step": 6}\n'
+    (work / "toy_metrics.jsonl").write_text('{"step": 5}\n{"step": 6}\n{"step": 7}\n')
+    assert restore_metrics(ckpt, work) is False  # an existing local file is never overwritten
+    assert (work / "toy_metrics.jsonl").read_text().endswith('{"step": 7}\n')

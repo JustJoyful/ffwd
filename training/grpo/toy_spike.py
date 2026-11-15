@@ -17,11 +17,17 @@ import torch
 from datasets import Dataset
 from peft import LoraConfig
 from transformers import TrainerCallback
-from transformers.trainer_utils import get_last_checkpoint
 from trl import GRPOConfig, GRPOTrainer
 
 from training import config
 from training.corpus.make_synthetic import ensure_corpus
+from training.grpo.ckpt_sync import (
+    SyncCallback,
+    local_latest,
+    remote_from_args,
+    restore_latest,
+    restore_metrics,
+)
 from training.grpo.rollout import Generator, make_rollout_func, prompt_messages
 from training.taskgen.toy import CLIPS as TOY_CLIPS
 from training.taskgen.toy import make_toy_tasks
@@ -130,6 +136,17 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--save-steps", type=int, default=2)  # 10 steps → checkpoints 2,4,6,8,10
     ap.add_argument("--seed", type=int, default=config.BOOTSTRAP_SEED)
     ap.add_argument("--precision", choices=["auto", "bf16", "fp16"], default="auto")
+    ap.add_argument(
+        "--hub-repo",
+        help="private HF Hub repo id for off-box checkpoints (needs HF_TOKEN write token)",
+    )
+    ap.add_argument("--sync-dir", type=Path, help="directory acting as the remote (local tests)")
+    ap.add_argument(
+        "--keep-last",
+        type=int,
+        default=None,
+        help="keep only the newest N remote checkpoints (dir remote)",
+    )
     ap.add_argument("--allow-cpu", action="store_true", help="debug only: train without a GPU")
     a = ap.parse_args(argv)
     if not torch.cuda.is_available() and not a.allow_cpu:
@@ -192,10 +209,22 @@ def main(argv: list[str] | None = None) -> None:
             r=16, lora_alpha=32, target_modules="all-linear", task_type="CAUSAL_LM"
         ),
     )
-    trainer.add_callback(StepTimer(a.ckpt_dir / "toy_metrics.jsonl", n_gpus))
-    resume = get_last_checkpoint(str(a.ckpt_dir)) if a.resume else None
-    if a.resume and resume is None:
-        raise SystemExit(f"--resume given but no checkpoint in {a.ckpt_dir}")
+    metrics_path = a.ckpt_dir / "toy_metrics.jsonl"
+    trainer.add_callback(StepTimer(metrics_path, n_gpus))
+    remote = remote_from_args(a.hub_repo, a.sync_dir, a.keep_last)
+    if remote is not None:
+        trainer.add_callback(SyncCallback(remote, metrics_path))  # push every save off this machine
+    resume = None
+    if a.resume:
+        # Newest of (local, remote): a fresh Kaggle session has no local checkpoint at all.
+        found = (
+            restore_latest(remote, a.ckpt_dir) if remote is not None else local_latest(a.ckpt_dir)
+        )
+        if found is None:
+            raise SystemExit(f"--resume given but no checkpoint in {a.ckpt_dir} or the remote")
+        restore_metrics(found, a.ckpt_dir)
+        resume = str(found)
+        print(f"resuming from {resume}", flush=True)
     trainer.train(resume_from_checkpoint=resume)
 
 

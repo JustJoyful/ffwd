@@ -138,6 +138,32 @@ def restore_latest(remote: Remote, ckpt_dir: Path) -> Path | None:
     return remote.pull(name, ckpt_dir)
 
 
+def remote_from_args(
+    hub_repo: str | None, sync_dir: Path | None, keep_last: int | None = None
+) -> Remote | None:
+    """The remote chosen by CLI flags: a private HF Hub repo (real runs), a directory (local), or none."""
+    if hub_repo and sync_dir:
+        raise ValueError("choose one remote: --hub-repo or --sync-dir")
+    if hub_repo:
+        import os
+
+        return HubRemote(hub_repo, token=os.environ.get("HF_TOKEN"))
+    return DirRemote(Path(sync_dir), keep_last=keep_last) if sync_dir else None
+
+
+def restore_metrics(ckpt: Path, ckpt_dir: Path, name: str = "toy_metrics.jsonl") -> bool:
+    """Copy the metrics history that travelled inside the checkpoint back to the working dir.
+
+    The checkpoint's copy ends at the saved step, so resuming appends from there with no duplicate rows.
+    Never overwrites an existing local file (same session resumed in place).
+    """
+    src, dst = ckpt / name, ckpt_dir / name
+    if src.exists() and not dst.exists():
+        shutil.copy2(src, dst)
+        return True
+    return False
+
+
 class SyncCallback:
     """transformers.TrainerCallback duck type: push checkpoint-N (and the metrics file) on every save."""
 
