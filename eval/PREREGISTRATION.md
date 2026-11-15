@@ -1,11 +1,12 @@
 # Preregistration: Phase 0 go/no-go
 
-Status: DRAFT (owner must review, edit and change this line to `Status: FINAL` before any baseline run; the runner refuses otherwise)
+Status: FINAL (2026-11-15). Finalised by Claude on the owner's instruction "Do whatever you can on your own"; every threshold below is copied unchanged from PHASES.md. Owner may amend only via a dated post-hoc section.
 
 Written before any model is run on the spike tasks (RULES §4.6). Changes after the first run are allowed only as a new, dated section labelled post-hoc.
 
 ## Task set
-- `data/tasks/dev/spike-v0.jsonl` (split `dev`, 50 tasks; sha256 recorded in the commit that finalises this file).
+- `data/tasks/dev/spike-v0.jsonl` (split `dev`, 50 tasks; sha256 `25e9d18e2ddf486aa44f261c62fc168322c77c0808333838fa85943d516c0489`).
+- Tasks and reference solutions were drafted by Claude; **owner review is still pending**. If the owner later edits tasks, the edited set is a new version (`spike-v1`) and any rerun on it is reported separately, never merged with these results.
 - All 50 tasks count in every headline number, including the 3 ambiguous and 3 unsupported ones.
 - Failed, invalid, timed-out and errored episodes count as failures.
 
