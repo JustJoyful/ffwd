@@ -10,10 +10,13 @@ from collections import defaultdict
 from pathlib import Path
 
 from eval.stats import paired_diff_ci, wilson_ci
+from eval.taxonomy import CATEGORIES, classify
 
 
-def _load(dirs: list[Path]) -> dict[str, dict[str, dict]]:
+def _load(dirs: list[Path]) -> tuple[dict[str, dict[str, dict]], dict[str, dict[str, dict]]]:
+    """Results and transcripts by system label; dirs of the same label (pilot + rest) are merged."""
     systems: dict[str, dict[str, dict]] = defaultdict(dict)
+    episodes: dict[str, dict[str, dict]] = defaultdict(dict)
     for d in dirs:
         m = json.loads((d / "manifest.json").read_text())
         label = f"{m['system']}-{m['model']}"
@@ -22,7 +25,12 @@ def _load(dirs: list[Path]) -> dict[str, dict[str, dict]]:
             if r["task_id"] in systems[label]:
                 raise ValueError(f"{label}: task {r['task_id']} appears in two result dirs")
             systems[label][r["task_id"]] = r
-    return systems
+        eps_path = d / "episodes.jsonl"
+        if eps_path.exists():
+            for line in eps_path.read_text().splitlines():
+                e = json.loads(line)
+                episodes[label][e["task_id"]] = e
+    return systems, episodes
 
 
 def _pct(ci: tuple[float, float, float]) -> str:
@@ -32,7 +40,7 @@ def _pct(ci: tuple[float, float, float]) -> str:
 def write_report(out: Path, dirs: list[Path]) -> None:
     if out.exists():
         raise FileExistsError(out)
-    systems = _load(dirs)
+    systems, episodes = _load(dirs)
     lines = [
         "# Baseline results",
         "",
@@ -70,7 +78,42 @@ def write_report(out: Path, dirs: list[Path]) -> None:
             xs = [r["success"] for r in rows.values() if f in r["families"]]
             cells.append(f"{sum(xs)}/{len(xs)}" if xs else "–")
         lines.append(f"| {label} | " + " | ".join(cells) + " |")
-    diffs = [(x, b) for x in systems if x.startswith("X1") for b in systems if b.startswith("B2")]
+    graded = {
+        label: [r for r in rows.values() if not any(r["flags"].values())]
+        for label, rows in systems.items()
+    }
+    lines += [
+        "",
+        "## Graded tasks by number of chore families (single-step = 1 family, multi-step = 2+)",
+        "",
+        "| System | single-step | multi-step |",
+        "|---|---|---|",
+    ]
+    for label, rows in sorted(graded.items()):
+        single = [r["success"] for r in rows if len(r["families"]) == 1]
+        multi = [r["success"] for r in rows if len(r["families"]) >= 2]
+        lines.append(f"| {label} | {sum(single)}/{len(single)} | {sum(multi)}/{len(multi)} |")
+    lines += [
+        "",
+        "## Failure taxonomy (count of FAILED episodes per category; see eval/taxonomy.py)",
+        "",
+        "| System | failed | " + " | ".join(CATEGORIES) + " |",
+        "|---|---|" + "---|" * len(CATEGORIES),
+    ]
+    for label, rows in sorted(systems.items()):
+        counts = {c: 0 for c in CATEGORIES}
+        for tid, r in rows.items():
+            cat = classify(r, episodes[label].get(tid))
+            if cat:
+                counts[cat] += 1
+        lines.append(
+            f"| {label} | {sum(counts.values())} | "
+            + " | ".join(str(counts[c] or "") for c in CATEGORIES)
+            + " |"
+        )
+    diffs = [
+        (x, b) for x in systems if x.startswith("X1") for b in systems if b.startswith(("B0", "B2"))
+    ]
     if diffs:
         lines += ["", "## Paired differences (percentage points, paired bootstrap 95% CI)", ""]
         for x, b in diffs:
