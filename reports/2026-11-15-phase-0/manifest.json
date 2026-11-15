@@ -1,0 +1,15 @@
+{
+  "phase": 0,
+  "date": "2026-11-16",
+  "git_commit_before_report": "5bde8f2",
+  "protocol_version": "0.1.0",
+  "tasks_sha256": "25e9d18e2ddf486aa44f261c62fc168322c77c0808333838fa85943d516c0489",
+  "deepseek_spend_usd": 0.0282,
+  "llama_cpp": "b12032 vulkan",
+  "models": {
+    "qwen3-0.6b-gguf": "Q8_0 9465e63a...",
+    "qwen3-1.7b-gguf": "Q8_0 061b54da..."
+  },
+  "hardware": "owner desktop: RTX 3050 6GB laptop, 16 GB RAM; Kaggle T4",
+  "see": "summary.md"
+}

@@ -4,8 +4,8 @@
 
 | Phase | Name | Status |
 |---|---|---|
-| 0 | Go/no-go spike | ⏳ **Next** |
-| 1 | Core model | ⬜ Not started |
+| 0 | Go/no-go spike | ✅ **GO** (16 Nov 2026; owner items open, see reports/2026-11-15-phase-0/summary.md) |
+| 1 | Core model | ⏳ **Next** |
 | 2 | Website v1 | ⬜ Not started |
 | 3 | Helper app | ⬜ Not started |
 | 4 | Science & polish | ⬜ Not started |

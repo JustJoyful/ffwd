@@ -1,0 +1,109 @@
+{
+  "machine": "owner-desktop-0.6b-json0",
+  "date": "2026-11-15T19:32:44.362Z",
+  "env": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/159.0.0.0 Safari/537.36",
+    "hardwareConcurrency": 12,
+    "deviceMemoryGb": 16,
+    "webgpu": true,
+    "gpuAdapter": {},
+    "crossOriginIsolated": true
+  },
+  "records": [
+    {
+      "name": "webgpu_adapter",
+      "ok": true,
+      "detail": {
+        "vendor": "nvidia",
+        "preference": "high-performance"
+      }
+    },
+    {
+      "name": "webllm_load_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": true,
+      "ms": 48255.515000000596,
+      "detail": {
+        "inPrebuilt": true,
+        "warm": false,
+        "downloadedBytesApprox": 353522688
+      }
+    },
+    {
+      "name": "memory_after_load_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": true,
+      "detail": {
+        "bytes": 39734813,
+        "api": "measureUserAgentSpecificMemory"
+      }
+    },
+    {
+      "name": "webllm_thinking_off_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": true,
+      "detail": {
+        "content": "<think>\n\n</think>\n\n{\"ok\": true}",
+        "completionTokens": 6
+      }
+    },
+    {
+      "name": "webllm_speed_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": true,
+      "detail": {
+        "prefillTokPerS": null,
+        "decodeTokPerS": null,
+        "stats": "prefill: 570.5887 tokens/sec, decoding: 80.5064 tokens/sec"
+      }
+    },
+    {
+      "name": "ffmpeg_mt_load",
+      "ok": true,
+      "ms": 1367.8250000029802
+    },
+    {
+      "name": "mini_loop_F1_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": false,
+      "ms": 3540.5349999964237,
+      "detail": {
+        "reachedFfmpeg": false,
+        "modelPassed": false,
+        "runs": 0,
+        "invalidTurns": 1,
+        "ended": "unsupported",
+        "firstReply": "<think>\n\n</think>\n\n{\"action\":\"spec\",\"spec\":{\"family\":[\"F1\"],\"outputs\":[{\"id\":\"out1\",\"kind\":\"video\",\"container\":\"mp4\",\"time\":{\"start_s\":2,\"end_s\":5,\"tolerance_s\":0.1}}]}}"
+      }
+    },
+    {
+      "name": "mini_loop_F4_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": false,
+      "ms": 3627.119999989867,
+      "detail": {
+        "reachedFfmpeg": false,
+        "modelPassed": false,
+        "runs": 0,
+        "invalidTurns": 1,
+        "ended": "unsupported",
+        "firstReply": "<think>\n\n</think>\n\n{\"action\":\"spec\",\"spec\":{\"family\":[\"F1\"],\"outputs\":[{\"id\":\"out1\",\"kind\":\"video\",\"container\":\"mp4\",\"time\":{\"start_s\":2,\"end_s\":5,\"tolerance_s\":0.1}}]}}"
+      }
+    },
+    {
+      "name": "mini_loop_F7_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": false,
+      "ms": 2651.75,
+      "detail": {
+        "reachedFfmpeg": false,
+        "modelPassed": false,
+        "runs": 0,
+        "invalidTurns": 1,
+        "ended": "unsupported",
+        "firstReply": "<think>\n\n</think>\n\n{\"action\":\"spec\",\"spec\":{\"family\":[\"F1\"],\"outputs\":[{\"id\":\"out1\",\"kind\":\"video\",\"container\":\"mp4\",\"time\":{\"start_s\":2,\"end_s\":5,\"tolerance_s\":0.1}}]}}"
+      }
+    },
+    {
+      "name": "memory_after_loop_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": true,
+      "detail": {
+        "bytes": 35540768065,
+        "api": "measureUserAgentSpecificMemory"
+      }
+    }
+  ]
+}

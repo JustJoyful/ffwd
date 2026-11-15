@@ -14,7 +14,7 @@ You are helping build **ffmpeg-agent**: a browser-first video utility driven by 
 7. `DECISIONS.md`: don't re-litigate settled decisions (D-001…); propose a new entry instead
 
 ## Current state
-Phase 0 in progress on branch `phase-0`; plan in `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
+Phase 0 done (GO, D-020); Phase 1 is next. Work happens on `main`. Phase 0 plan: `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
 
 ## Commands
 - `uv sync`: install the Python env (Python 3.11 pinned in `.python-version`; `training/` and `eval/` import from the repo root, no build step)

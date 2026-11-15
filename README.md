@@ -9,7 +9,7 @@ The project has two goals, and both are deliberate:
 1. **Product:** a free, open-source tool for non-developers who hit a video chore a few times a month.
 2. **Research / engineering:** show that a **small specialist agent (0.6B–1.7B), trained with SFT + multi-turn GRPO on execution-verified rewards**, can get close to frontier agents on this narrow task at ~zero cost per edit, running entirely on the user's hardware.
 
-**Status:** Planning complete. **Next: Phase 0 (go/no-go spike).** See [PHASES.md](PHASES.md).
+**Status:** Phase 0 done: **GO** (D-020). **Next: Phase 1 (core model).** See [PHASES.md](PHASES.md).
 
 ---
 

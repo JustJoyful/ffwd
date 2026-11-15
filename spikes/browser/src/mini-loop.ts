@@ -15,6 +15,14 @@ type Family = "F1" | "F4" | "F7";
 /** One model turn: messages in, raw reply text out. The loop is identical for a real model and a script. */
 export type Chat = (messages: ChatCompletionMessageParam[]) => Promise<string>;
 
+// Minimal grammar for WebLLM's json_object mode: it needs a schema string. Full validation stays in
+// the loop (parseAction + validateRun); this only forces "a JSON object with an action field".
+const ACTION_SCHEMA = JSON.stringify({
+  type: "object",
+  properties: { action: { enum: ["spec", "ask_user", "unsupported", "run", "finish"] } },
+  required: ["action"],
+});
+
 /** WebLLM engine as a Chat. json=true adds response_format json_object (ARCH §4: constrained output). */
 export function engineChat(engine: MLCEngineInterface, json: boolean): Chat {
   return async (messages) => {
@@ -23,7 +31,7 @@ export function engineChat(engine: MLCEngineInterface, json: boolean): Chat {
       temperature: 0,
       max_tokens: MAX_TOKENS,
       extra_body: { enable_thinking: false }, // Qwen3 non-thinking; verified by checkThinking()
-      ...(json ? { response_format: { type: "json_object" as const } } : {}),
+      ...(json ? { response_format: { type: "json_object" as const, schema: ACTION_SCHEMA } } : {}),
     });
     return reply.choices[0]?.message.content ?? "";
   };

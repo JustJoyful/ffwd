@@ -104,3 +104,9 @@ Format: **context → decision → alternatives considered → consequences.** N
 - **Decision:** production loads the core from `cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.10` through `toBlobURL` (blob URLs are same-origin, so the pthread workers stay inside COOP/COEP; jsDelivr sends CORS headers, so it works under `credentialless`). Dev and local e2e use a local copy. The wasm is stripped from `dist`.
 - **Alternatives:** chunking the wasm (complex, fragile); Workers static assets or R2 (same size limits / extra service); a custom smaller core build.
 - **Consequences:** browser mode depends on a third-party CDN that sees visitor IPs, which the privacy page must state in Phase 2; the downloaded binary is not hash-verified yet. Phase 2 should self-host a compressed or chunked core, or add an integrity check.
+
+### D-020: Phase 0 verdict: GO (16 Nov 2026)
+- **Context:** preregistered rule (eval/PREREGISTRATION.md): GO if X1 - best base >= 25 pts and the browser loop runs F1/F4/F7 end to end.
+- **Decision:** GO. X1 94% vs best base 8% (+86 pts, CI +76 to +94); the browser loop passes F1/F4/F7 with a scripted model on the live site; HEVC decodes in ffmpeg.wasm; toy GRPO runs on a T4 at 0.071 GPU-h/step (upper bound).
+- **Open:** browser input-size limit and peak memory unmeasured; 1.7B never loaded in the browser; only one machine; task set owner review pending.
+- **Consequences:** Phase 1 starts. First wins to build: a prompt without copyable examples (or SFT on verified trajectories), vLLM generation, checkpoint upload off Kaggle, checker v1 offset measurement. See reports/2026-11-15-phase-0/summary.md.

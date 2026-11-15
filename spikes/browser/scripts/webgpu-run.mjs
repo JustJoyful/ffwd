@@ -13,17 +13,20 @@ const {
 } = process.env;
 const exe = process.env.CHROME_EXE;
 const corpus = new URL("../../../data/corpus/", import.meta.url).pathname;
-const ctx = await chromium.launchPersistentContext(`/tmp/ffagent-chrome-${LABEL}`, {
-  headless: false,
-  executablePath: exe,
-  acceptDownloads: true,
-  args: [
-    "--enable-unsafe-webgpu",
-    "--enable-features=Vulkan,WebGPU",
-    "--use-angle=vulkan",
-    "--ozone-platform=x11",
-  ],
-});
+const ctx = await chromium.launchPersistentContext(
+  `${process.env.HOME}/.cache/ffagent-chrome-${LABEL}`,
+  {
+    headless: false,
+    executablePath: exe,
+    acceptDownloads: true,
+    args: [
+      "--enable-unsafe-webgpu",
+      "--enable-features=Vulkan,WebGPU",
+      "--use-angle=vulkan",
+      "--ozone-platform=x11",
+    ],
+  },
+);
 const page = await ctx.newPage();
 page.on("pageerror", (e) => console.log("[pageerror]", e.message));
 await page.goto(PAGE_URL);

@@ -58,7 +58,9 @@ export async function checkThinking(engine: MLCEngineInterface, modelId: string)
     extra_body: { enable_thinking: false },
   });
   const content = r.choices[0]?.message.content ?? "";
-  const thinking = /<think>/.test(content) || content.trim() === "";
+  // Non-thinking Qwen3 still emits an EMPTY <think></think> block; only real reasoning text (or no answer) is a failure.
+  const answer = content.replace(/<think>\s*<\/think>/g, "").trim();
+  const thinking = /<think>/.test(answer) || answer === "";
   record({
     name: `webllm_thinking_off_${modelId}`,
     ok: !thinking,
