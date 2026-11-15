@@ -7,7 +7,7 @@
   "scripts": {
     "copy-core": "node scripts/copy-core.mjs",
     "dev": "pnpm copy-core && vite",
-    "build": "pnpm copy-core && tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/strip-core.mjs",
     "preview": "vite preview --port 4173 --strictPort",
     "test": "vitest run",
     "lint": "eslint . && prettier --check .",

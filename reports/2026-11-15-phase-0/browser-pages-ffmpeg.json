@@ -1,0 +1,52 @@
+{
+  "machine": "owner-desktop, Playwright headless Chromium 159 -> LIVE Cloudflare Pages",
+  "date": "2026-11-16",
+  "url": "https://ffmpeg-agent-spike.pages.dev",
+  "git_commit": "see commit adding this file",
+  "headers_verified": {
+    "/": "COOP same-origin, COEP credentialless",
+    "/assets/*.js": "COOP same-origin, COEP credentialless"
+  },
+  "core_source": "jsDelivr @ffmpeg/core-mt@0.12.10 via toBlobURL (Pages 25 MiB file limit; wasm is 31.2 MiB)",
+  "records": [
+    {
+      "name": "ffmpeg_mt_load",
+      "ok": true,
+      "ms": 1819
+    },
+    {
+      "name": "cross_origin_isolated",
+      "ok": true,
+      "ms": null
+    },
+    {
+      "name": "chore_F1-trim-copy",
+      "ok": true,
+      "ms": 125
+    },
+    {
+      "name": "chore_F4-scale-480p",
+      "ok": true,
+      "ms": 5188
+    },
+    {
+      "name": "chore_F7-frames-every-2s",
+      "ok": true,
+      "ms": 227
+    },
+    {
+      "name": "hevc_decode",
+      "ok": true,
+      "ms": 894
+    },
+    {
+      "name": "ffprobe_available",
+      "ok": true,
+      "ms": null
+    }
+  ],
+  "notes": [
+    "All checks passed on the deployed site; F4 re-encode 5.2 s vs 0.68 s native (~7.6x).",
+    "WebLLM/WebGPU checks still need a real browser; headless Chromium has no WebGPU."
+  ]
+}

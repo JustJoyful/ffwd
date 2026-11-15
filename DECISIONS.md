@@ -98,3 +98,9 @@ Format: **context → decision → alternatives considered → consequences.** N
   - **TRL `environment_factory`:** least code, but actions become Qwen3 native tool calls, so the training format would diverge from the JSON actions the browser parses (an ARCH §3.1 change, and a WebLLM function-calling dependency).
   - **verl (multi-turn) / OpenPipe ART:** strong multi-turn support but heavier stacks; T4/fp16 support and Kaggle setup unverified.
 - **Consequences:** we write ~100 lines of rollout code (generation via TRL's vLLM integration [VERIFY on T4/fp16]), and the same `score()` drives reward and eval. If `rollout_func` proves unworkable on T4, fall back to `environment_factory` and record a superseding decision.
+
+### D-019: ffmpeg.wasm core loaded from a pinned CDN, not self-hosted (16 Nov 2026)
+- **Context:** Cloudflare Pages rejects files over 25 MiB; `ffmpeg-core.wasm` (core-mt 0.12.10) is 31.2 MiB. Wrangler 4.162 also delegates new Pages projects to Workers unless `--force` is used (D-011 chose Pages).
+- **Decision:** production loads the core from `cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.10` through `toBlobURL` (blob URLs are same-origin, so the pthread workers stay inside COOP/COEP; jsDelivr sends CORS headers, so it works under `credentialless`). Dev and local e2e use a local copy. The wasm is stripped from `dist`.
+- **Alternatives:** chunking the wasm (complex, fragile); Workers static assets or R2 (same size limits / extra service); a custom smaller core build.
+- **Consequences:** browser mode depends on a third-party CDN that sees visitor IPs, which the privacy page must state in Phase 2; the downloaded binary is not hash-verified yet. Phase 2 should self-host a compressed or chunked core, or add an integrity check.
