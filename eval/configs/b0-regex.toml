@@ -1,0 +1,5 @@
+# B0: regex/preset baseline (eval/b0_regex.py). No model, no cost.
+kind = "regex"
+model = "regex"
+quant = "none"
+temperature = 0.0

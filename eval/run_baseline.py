@@ -17,12 +17,14 @@ import tomllib
 from datetime import UTC, datetime
 from pathlib import Path
 
+from eval.b0_regex import RegexPolicy
 from training import config
 from training.env.loop import Policy, run_episode, score
 from training.policies import policy_from_config
 from training.teacher.budget import BudgetExceeded, BudgetGuard
 
 SYSTEMS = {
+    "B0": config.MAX_RUNS_PER_JOB,
     "B1": 1,
     "B2": config.MAX_RUNS_PER_JOB,
     "X1": config.MAX_RUNS_PER_JOB,
@@ -195,7 +197,9 @@ def main(argv: list[str] | None = None) -> None:
             a.out.name,
             dry_run=a.dry_run,
         )
-    policy = policy_from_config(a.model_config, guard)
+    policy = (
+        RegexPolicy() if cfg.get("kind") == "regex" else policy_from_config(a.model_config, guard)
+    )
     meta = {
         "model": config.DEEPSEEK_MODEL_ID if cfg.get("paid") else cfg["model"],
         "quant": cfg.get("quant"),

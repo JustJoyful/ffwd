@@ -61,3 +61,17 @@ def test_runner_scores_and_report(tmp_path, corpus):
     assert "B2-fake" in text and "X1-fake" in text and "X1-fake − B2-fake" in text
     with pytest.raises(FileExistsError):
         write_report(md, [out])
+
+
+def test_b0_regex_baseline_runs_through_the_same_loop(tmp_path, corpus):
+    from eval.b0_regex import RegexPolicy
+
+    out = _run(tmp_path, RegexPolicy(), out="B0-regex", corpus=corpus, system="B0")
+    by_id = {
+        r["task_id"]: r for r in map(json.loads, (out / "results.jsonl").read_text().splitlines())
+    }
+    assert (
+        by_id["s01-trim-first-3s"]["success"] is True
+    )  # a real FFmpeg run, checked against the gold spec
+    assert by_id["u01-remove-person"]["success"] is True  # no pattern -> unsupported
+    assert by_id["a01-make-shorter"]["success"] is False  # B0 cannot ask
