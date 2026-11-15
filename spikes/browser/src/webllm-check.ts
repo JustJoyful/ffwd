@@ -48,3 +48,40 @@ export async function measureSpeed(engine: MLCEngineInterface, modelId: string):
     detail: { prefillTokPerS: num("prefill"), decodeTokPerS: num("decode"), stats },
   });
 }
+
+/** Is Qwen3 really in non-thinking mode? Without it llama.cpp spent all tokens in reasoning and returned empty content. */
+export async function checkThinking(engine: MLCEngineInterface, modelId: string): Promise<void> {
+  const r = await engine.chat.completions.create({
+    messages: [{ role: "user", content: 'Reply with exactly {"ok": true}' }],
+    temperature: 0,
+    max_tokens: 200,
+    extra_body: { enable_thinking: false },
+  });
+  const content = r.choices[0]?.message.content ?? "";
+  const thinking = /<think>/.test(content) || content.trim() === "";
+  record({
+    name: `webllm_thinking_off_${modelId}`,
+    ok: !thinking,
+    detail: { content: content.slice(0, 200), completionTokens: r.usage?.completion_tokens },
+  });
+}
+
+/** Refuse to run on the wrong GPU: on this hybrid laptop an iGPU fallback puts weights in system RAM. */
+export async function requireDiscreteGpu(): Promise<void> {
+  const nav = navigator as Navigator & {
+    gpu?: {
+      requestAdapter(o: {
+        powerPreference: string;
+      }): Promise<{ info?: { vendor?: string } } | null>;
+    };
+  };
+  const a = await nav.gpu?.requestAdapter({ powerPreference: "high-performance" });
+  const vendor = a?.info?.vendor ?? "none";
+  record({
+    name: "webgpu_adapter",
+    ok: vendor === "nvidia",
+    detail: { vendor, preference: "high-performance" },
+  });
+  if (vendor !== "nvidia")
+    throw new Error(`high-performance WebGPU adapter is '${vendor}', not the discrete GPU`);
+}

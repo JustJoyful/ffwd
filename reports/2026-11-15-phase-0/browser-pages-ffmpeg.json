@@ -2,7 +2,7 @@
   "machine": "owner-desktop, Playwright headless Chromium 159 -> LIVE Cloudflare Pages",
   "date": "2026-11-16",
   "url": "https://ffmpeg-agent-spike.pages.dev",
-  "git_commit": "see commit adding this file",
+  "git_commit": "c42727c",
   "headers_verified": {
     "/": "COOP same-origin, COEP credentialless",
     "/assets/*.js": "COOP same-origin, COEP credentialless"

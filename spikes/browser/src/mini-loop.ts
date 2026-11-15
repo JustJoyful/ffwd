@@ -12,6 +12,55 @@ import { validateRun } from "./validator";
 
 type Family = "F1" | "F4" | "F7";
 
+/** One model turn: messages in, raw reply text out. The loop is identical for a real model and a script. */
+export type Chat = (messages: ChatCompletionMessageParam[]) => Promise<string>;
+
+/** WebLLM engine as a Chat. json=true adds response_format json_object (ARCH §4: constrained output). */
+export function engineChat(engine: MLCEngineInterface, json: boolean): Chat {
+  return async (messages) => {
+    const reply = await engine.chat.completions.create({
+      messages,
+      temperature: 0,
+      max_tokens: MAX_TOKENS,
+      extra_body: { enable_thinking: false }, // Qwen3 non-thinking; verified by checkThinking()
+      ...(json ? { response_format: { type: "json_object" as const } } : {}),
+    });
+    return reply.choices[0]?.message.content ?? "";
+  };
+}
+
+/**
+ * Plumbing proof: the reference solution for each family, fed through the exact same
+ * parseAction → validateRun → capThreads → ffmpeg.exec → check path. Proves the browser loop works
+ * independently of how good the base model is.
+ */
+export function scriptedChat(family: Family): Chat {
+  const args: Record<Family, string[]> = {
+    F1: ["-ss", "3", "-i", "{in:clip}", "-c", "copy", "{out:out1}"],
+    F4: [
+      "-i",
+      "{in:clip}",
+      "-vf",
+      "scale=-2:480",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "veryfast",
+      "{out:out1}",
+    ],
+    F7: ["-i", "{in:clip}", "-vf", "fps=1/2", "{out:out1}"],
+  };
+  const replies = [
+    JSON.stringify({
+      action: "spec",
+      spec: { family: [family], outputs: [{ id: "out1", kind: "video" }] },
+    }),
+    JSON.stringify({ action: "run", args: args[family], inputs: ["clip"], outputs: ["out1"] }),
+    JSON.stringify({ action: "finish", outputs: ["out1"], note: "scripted" }),
+  ];
+  return async () => replies.shift() ?? "{}";
+}
+
 async function probeLite(ff: FFmpeg, name: string) {
   const { log } = await execLogged(ff, ["-hide_banner", "-i", name]); // exits 1 (no output) but logs the probe
   const size = parseVideoSize(log);
@@ -50,9 +99,9 @@ async function miniCheck(
 export async function runMiniLoop(
   task: { family: Family; request: string },
   file: File,
-  engine: MLCEngineInterface,
+  chat: Chat,
   ff: FFmpeg,
-  modelId: string,
+  label: string,
 ): Promise<CheckRecord> {
   await ff.writeFile("loop_in.mp4", await fetchFile(file));
   const inProbe = await probeLite(ff, "loop_in.mp4");
@@ -71,19 +120,15 @@ export async function runMiniLoop(
       }),
     },
   ];
-  let runs = 0,
+  let firstReply = "",
+    runs = 0,
     invalid = 0,
     passed = false,
     ended = "turn_budget";
   const t0 = performance.now();
   for (let turn = 0; turn < MAX_TURNS && ended === "turn_budget"; turn++) {
-    const reply = await engine.chat.completions.create({
-      messages,
-      temperature: 0,
-      max_tokens: MAX_TOKENS,
-      extra_body: { enable_thinking: false }, // Qwen3 non-thinking [VERIFY in pinned WebLLM]
-    });
-    const text = reply.choices[0]?.message.content ?? "";
+    const text = await chat(messages);
+    if (turn === 0) firstReply = text.slice(0, 300);
     const action = parseAction(text);
     let obs: unknown;
     if ("error" in action) {
@@ -127,10 +172,19 @@ export async function runMiniLoop(
     );
   }
   const rec: CheckRecord = {
-    name: `mini_loop_${task.family}_${modelId}`,
-    ok: true, // the loop RAN end to end; model success is reported separately
+    name: `mini_loop_${task.family}_${label}`,
+    // ok = a model-written, validated command actually ran in ffmpeg.wasm (the Phase 0 exit
+    // criterion); whether the output passed the check is reported separately as modelPassed.
+    ok: runs > 0,
     ms: performance.now() - t0,
-    detail: { modelPassed: passed, runs, invalidTurns: invalid, ended },
+    detail: {
+      reachedFfmpeg: runs > 0,
+      modelPassed: passed,
+      runs,
+      invalidTurns: invalid,
+      ended,
+      firstReply,
+    },
   };
   record(rec);
   return rec;

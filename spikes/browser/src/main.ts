@@ -2,9 +2,9 @@ import type { FFmpeg } from "@ffmpeg/ffmpeg";
 import { MINI_LOOP_TASKS, MODEL_IDS } from "./config";
 import { execLogged, loadFfmpeg, runFfmpegChecks } from "./ffmpeg-check";
 import { recordMemory } from "./memory-check";
-import { runMiniLoop } from "./mini-loop";
+import { engineChat, runMiniLoop, scriptedChat } from "./mini-loop";
 import { downloadResults, onRecord, record } from "./results";
-import { loadModel, measureSpeed } from "./webllm-check";
+import { checkThinking, loadModel, measureSpeed, requireDiscreteGpu } from "./webllm-check";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const file = (id: string) => $<HTMLInputElement>(id).files?.[0] ?? null;
@@ -37,15 +37,27 @@ $("run-ffmpeg").onclick = () =>
   );
 $("run-model").onclick = () =>
   guarded("model checks", async () => {
+    await requireDiscreteGpu();
     const modelId = $<HTMLSelectElement>("model").value;
+    const json = $<HTMLInputElement>("json-mode").checked;
     const engine = await loadModel(modelId, status);
     await recordMemory(`after_load_${modelId}`);
+    await checkThinking(engine, modelId);
     await measureSpeed(engine, modelId);
     const long = file("long-file");
+    const label = json ? `${modelId}_json` : modelId;
     if (long)
       for (const t of MINI_LOOP_TASKS)
-        await runMiniLoop(t, long, engine, await ensureFfmpeg(), modelId);
+        await runMiniLoop(t, long, engineChat(engine, json), await ensureFfmpeg(), label);
     await recordMemory(`after_loop_${modelId}`);
+  });
+// No model: proves the browser loop (parse → validate → ffmpeg.wasm → check) works on its own.
+$("run-scripted").onclick = () =>
+  guarded("scripted loop", async () => {
+    const long = file("long-file");
+    if (!long) throw new Error("pick the long clip first");
+    for (const t of MINI_LOOP_TASKS)
+      await runMiniLoop(t, long, scriptedChat(t.family), await ensureFfmpeg(), "scripted");
   });
 $("run-memory").onclick = () =>
   guarded("memory test", async () => {
