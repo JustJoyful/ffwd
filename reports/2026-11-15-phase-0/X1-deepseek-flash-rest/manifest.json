@@ -1,0 +1,28 @@
+{
+  "git_commit": "3c58bd192162c0cb64137ea5c7fd43a55c3a4c2e",
+  "git_dirty": true,
+  "protocol_version": "0.1.0",
+  "ffmpeg_version": "ffmpeg version n9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "system": "X1",
+  "model": "deepseek-flash",
+  "quant": "api",
+  "temperature": 0.0,
+  "model_config": "eval/configs/deepseek-v4-flash.toml",
+  "offset": 20,
+  "limit": 30,
+  "dry_run": false,
+  "tasks_sha256": "25e9d18e2ddf486aa44f261c62fc168322c77c0808333838fa85943d516c0489",
+  "n_tasks": 30,
+  "hardware": {
+    "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+    "cpu": "x86_64",
+    "cpu_count": 12,
+    "ram_gb": 15.3,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "started": "2026-11-15T17:29:56.302251+00:00",
+  "finished": "2026-11-15T17:31:39.295907+00:00",
+  "stopped_reason": null,
+  "cost_usd": 0.014818380000000006,
+  "cache_hit_ratio": 0.7635065760524129
+}

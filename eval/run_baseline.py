@@ -130,6 +130,7 @@ def run_baseline(
             row["cost_usd"] = (guard.spent(run_only=True) - spent_before) if guard else 0.0
             res.write(json.dumps(row) + "\n")
             res.flush()
+            eps.flush()  # a killed run must keep every finished transcript
             if stopped_reason:
                 break
     manifest = {

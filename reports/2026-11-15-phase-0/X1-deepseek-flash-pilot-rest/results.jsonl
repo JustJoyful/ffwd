@@ -1,0 +1,5 @@
+{"task_id": "s16-under-3mb", "families": ["F6"], "difficulty": 1, "flags": {"ambiguous": false, "unsupported": false}, "success": true, "runs": 1, "invalid_turns": 4, "end_reason": "finish", "cost_usd": 0.0008841719999999999}
+{"task_id": "s17-email-2mb", "families": ["F6"], "difficulty": 1, "flags": {"ambiguous": false, "unsupported": false}, "success": true, "runs": 1, "invalid_turns": 1, "end_reason": "finish", "cost_usd": 0.0005744999999999999}
+{"task_id": "s18-1mb-keep-1080p", "families": ["F6"], "difficulty": 1, "flags": {"ambiguous": false, "unsupported": false}, "success": true, "runs": 1, "invalid_turns": 2, "end_reason": "finish", "cost_usd": 0.0007201799999999995}
+{"task_id": "s19-frame-every-2s", "families": ["F7"], "difficulty": 1, "flags": {"ambiguous": false, "unsupported": false}, "success": true, "runs": 1, "invalid_turns": 1, "end_reason": "finish", "cost_usd": 0.00040665600000000003}
+{"task_id": "s20-every-second-jpg", "families": ["F7"], "difficulty": 1, "flags": {"ambiguous": false, "unsupported": false}, "success": true, "runs": 1, "invalid_turns": 3, "end_reason": "finish", "cost_usd": 0.0007210559999999999}

@@ -1,0 +1,29 @@
+{
+  "git_commit": "f5faaee",
+  "git_dirty": false,
+  "protocol_version": "0.1.0",
+  "ffmpeg_version": "ffmpeg version n9.0.2",
+  "system": "X1",
+  "model": "deepseek-flash",
+  "quant": "api",
+  "temperature": 0.0,
+  "model_config": "eval/configs/deepseek-v4-flash.toml",
+  "offset": 0,
+  "limit": 20,
+  "dry_run": false,
+  "tasks_sha256": "25e9d18e2ddf486aa44f261c62fc168322c77c0808333838fa85943d516c0489",
+  "n_tasks": 15,
+  "hardware": {
+    "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+    "cpu": "x86_64",
+    "cpu_count": 12,
+    "ram_gb": 15.3,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "started": "2026-11-15T17:0x (exact start lost with the process)",
+  "finished": "2026-11-15T17:12:54+00:00 (last ledger entry)",
+  "stopped_reason": "process killed by systemd-oomd (desktop out of memory) after 15 of 20 pilot tasks; tasks 16-20 rerun separately with --offset 15",
+  "cost_usd": 0.009946787999999998,
+  "cache_hit_ratio": 0.7575189185693034,
+  "manifest_note": "written after the crash from results.jsonl + budget ledger; runner did not reach its own manifest step"
+}
