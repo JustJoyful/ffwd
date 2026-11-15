@@ -59,6 +59,12 @@ class StepTimer(TrainerCallback):
         self.pending = None
 
 
+def native_bf16() -> bool:
+    """bf16 in hardware (compute capability >= 8.0). Not torch.cuda.is_bf16_supported(): that counts
+    emulation and returns True on a T4, which sent the Kaggle run down the crashing bf16 path."""
+    return torch.cuda.is_available() and torch.cuda.get_device_capability() >= (8, 0)
+
+
 def precision_plan(precision: str, bf16_supported: bool) -> dict:
     """bf16 on Ampere+; fp16 on T4 (no bf16 hardware). On the fp16 path TRL's chunked-logprob kernel
     must not use torch.addmm(out_dtype=float32): that mixed-precision GEMM needs compute capability
@@ -138,7 +144,8 @@ def main(argv: list[str] | None = None) -> None:
 
     tasks = make_toy_tasks(16, seed=a.seed)
     dataset = Dataset.from_list([{"prompt": prompt_messages(t, corpus)} for t in tasks])
-    plan = precision_plan(a.precision, torch.cuda.is_available() and torch.cuda.is_bf16_supported())
+    plan = precision_plan(a.precision, native_bf16())
+    print(f"precision plan: {plan}", flush=True)  # visible in Kaggle output
     if not plan["mixed_out_gemm"]:
         import trl.kernels.chunked_logprob as chunked
 

@@ -65,3 +65,17 @@ def test_precision_plan_for_t4_and_ampere():
         "mixed_out_gemm": True,
     }
     assert precision_plan("fp16", bf16_supported=True) == t4  # lets us test the T4 path on Ampere
+
+
+def test_native_bf16_uses_compute_capability_not_emulation(monkeypatch):
+    # torch.cuda.is_bf16_supported() counts emulation and returns True on a T4 (crashed on Kaggle).
+    import torch
+
+    from training.grpo.toy_spike import native_bf16
+
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+    monkeypatch.setattr(torch.cuda, "is_bf16_supported", lambda *a, **k: True)
+    monkeypatch.setattr(torch.cuda, "get_device_capability", lambda *a: (7, 5))  # Tesla T4
+    assert native_bf16() is False
+    monkeypatch.setattr(torch.cuda, "get_device_capability", lambda *a: (8, 6))  # RTX 3050
+    assert native_bf16() is True
