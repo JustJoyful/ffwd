@@ -125,7 +125,7 @@ Normalised ffprobe-style JSON: container, duration, size, bitrate; per stream: t
 **Measurements beyond ffprobe:**
 - loudness via FFmpeg's EBU R128 meter
 - frame count and interval for image sequences
-- audio stream offset via stream start times (verifies that the *requested* offset was applied, not perceived sync)
+- audio stream offset via **first-packet timestamps** of the audio and video streams (verifies that the *requested* offset was applied, not perceived sync). Container `start_time` is not used: MP4 edit lists hide negative offsets and ffprobe clamps them to 0 (Phase 0 follow-up T2). Offsets made with filters (e.g. `adelay`) leave timestamps unchanged and cannot be verified this way
 - `re_encoded`: whether streams were copied or re-encoded
 - optional quality floor (SSIM/PSNR fast; VMAF in eval only)
 

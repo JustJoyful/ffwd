@@ -3,7 +3,7 @@
 Checks only spec fields that are set (null = unconstrained). Never raises on bad media: a probe
 failure or empty output becomes passed=False with `error` set.
 v0 covers video/audio/time/size/frames/re-encode plus loudness (EBU R128) and A/V offset
-(stream start times: verifies the requested shift was applied, not perceived sync). Quality floor is v1.
+(first-packet timestamps: verifies the requested shift was applied, not perceived sync). Quality floor is v1.
 """
 
 import math
@@ -12,7 +12,7 @@ import subprocess
 from pathlib import Path
 
 from training import config
-from training.env.probe import display_size, probe
+from training.env.probe import display_size, first_packet_pts, probe
 from training.env.validator import uses_stream_copy_only
 
 # shortcut: container is a substring match on ffprobe's format_name, which cannot tell mp4 from
@@ -147,8 +147,12 @@ def check(out_spec: dict, output: Path, *, input_probe: dict, run_args: list[str
         _add(checks, "audio.loudness_lufs", audio["loudness_lufs"], lufs, ok)
     if "offset_ms" in audio:
         offset = None
-        if vids and auds and None not in (vids[0]["start_time_s"], auds[0]["start_time_s"]):
-            offset = round((auds[0]["start_time_s"] - vids[0]["start_time_s"]) * 1000, 1)
+        if vids and auds:
+            # First-packet timestamps, not stream start_time: see first_packet_pts (edit-list clamping
+            # made a correct audio advance read as 0.0, a false negative found in Phase 0).
+            v0, a0 = first_packet_pts(output, "video"), first_packet_pts(output, "audio")
+            if v0 is not None and a0 is not None:
+                offset = round((a0 - v0) * 1000, 1)
         measurements["offset_ms"] = offset
         ok = offset is not None and abs(offset - audio["offset_ms"]) <= config.OFFSET_TOLERANCE_MS
         _add(checks, "audio.offset_ms", audio["offset_ms"], offset, ok)

@@ -82,3 +82,30 @@ def display_size(stream: dict) -> tuple[int, int]:
     """Width/height as the viewer sees them (rotation 90/270 swaps the coded dimensions)."""
     w, h = stream["width"], stream["height"]
     return (h, w) if stream.get("rotation") in (90, 270) else (w, h)
+
+
+def first_packet_pts(path: Path, stream_type: str, window: int | None = None) -> float | None:
+    """Earliest presentation timestamp (s) among a stream's first packets, or None.
+
+    Container `start_time` is NOT the true stream offset: MP4 hides negative pre-roll behind an edit
+    list and ffprobe clamps start_time to 0 (an audio advance of 0.5 s reads as 0.0). Packet
+    timestamps keep the real value. The minimum over a small window tolerates B-frame reordering.
+    """
+    n = window or config.OFFSET_PACKET_WINDOW
+    argv = [
+        config.FFPROBE_BIN,
+        "-v",
+        "error",
+        "-select_streams",
+        stream_type[0],
+        "-read_intervals",
+        f"%+#{n}",
+        "-show_entries",
+        "packet=pts_time",
+        "-of",
+        "csv=p=0",
+        str(path),
+    ]
+    out = subprocess.run(argv, shell=False, check=True, capture_output=True, text=True).stdout
+    pts = [float(x.strip(",")) for x in out.split() if x.strip(",") not in ("", "N/A")]
+    return min(pts) if pts else None
