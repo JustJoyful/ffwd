@@ -50,11 +50,11 @@ def _first_user_message(task: dict, probes: dict[str, dict]) -> str:
     )
 
 
-def initial_messages(task: dict, probes: dict[str, dict]) -> list[dict]:
+def initial_messages(task: dict, probes: dict[str, dict], system: str | None = None) -> list[dict]:
     """System prompt + first user turn. Shared by run_episode and the GRPO dataset so the prompt
     TRL sees is byte-identical to the one the loop continues from."""
     return [
-        {"role": "system", "content": system_prompt()},
+        {"role": "system", "content": system if system is not None else system_prompt()},
         {"role": "user", "content": _first_user_message(task, probes)},
     ]
 
@@ -108,10 +108,11 @@ def run_episode(
     corpus: dict[str, Path],
     job_dir: Path,
     max_runs: int = config.MAX_RUNS_PER_JOB,
+    system_prompt_text: str | None = None,
 ) -> Episode:
     ep = Episode(task_id=task["id"])
     probes = {cid: probe(corpus[cid]) for cid in task["inputs"]}
-    messages = initial_messages(task, probes)
+    messages = initial_messages(task, probes, system_prompt_text)
     asks = 0
     while len(ep.turns) < config.MAX_TURNS_PER_JOB:
         reply = policy(messages)

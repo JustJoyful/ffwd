@@ -19,6 +19,7 @@ from pathlib import Path
 
 from eval.b0_regex import RegexPolicy
 from training import config
+from training.env.constrained import load_prompt
 from training.env.loop import Policy, run_episode, score
 from training.policies import policy_from_config
 from training.teacher.budget import BudgetExceeded, BudgetGuard
@@ -84,6 +85,7 @@ def run_baseline(
     guard: BudgetGuard | None = None,
     tasks_sha256: str | None = None,
     jobs_root: Path = config.JOBS_DIR,
+    system_prompt_text: str | None = None,
 ) -> Path:
     out.mkdir(parents=True, exist_ok=False)  # refuses to overwrite a report
     started = datetime.now(UTC).isoformat()
@@ -104,6 +106,7 @@ def run_baseline(
                     corpus=corpus,
                     job_dir=jobs_root / out.name / task["id"],
                     max_runs=SYSTEMS[system],
+                    system_prompt_text=system_prompt_text,
                 )
                 row |= {
                     "success": score(task, ep),
@@ -205,6 +208,8 @@ def main(argv: list[str] | None = None) -> None:
         "quant": cfg.get("quant"),
         "temperature": cfg.get("temperature", 0.0),
         "model_config": str(a.model_config),
+        "system_prompt": cfg.get("system_prompt", "system-v0.txt"),
+        "constrained_decoding": bool(cfg.get("constrained")),
         "offset": a.offset,
         "limit": a.limit,
         "dry_run": a.dry_run,
@@ -218,6 +223,7 @@ def main(argv: list[str] | None = None) -> None:
         meta=meta,
         guard=guard,
         tasks_sha256=hashlib.sha256(raw).hexdigest(),
+        system_prompt_text=load_prompt(cfg["system_prompt"]) if cfg.get("system_prompt") else None,
     )
     print(f"wrote {out}")
 

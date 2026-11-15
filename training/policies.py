@@ -9,6 +9,7 @@ from pathlib import Path
 from openai import OpenAI
 
 from training import config
+from training.env import constrained
 from training.teacher.budget import (
     BudgetGuard,
     billing_prices,
@@ -49,11 +50,16 @@ class ChatPolicy:
         max_tokens: int,
         extra_body: dict | None = None,
         guard: BudgetGuard | None = None,
+        response_format: dict | None = None,
     ):
         if guard is not None:
             require_pricing()
         self.model, self.temperature, self.max_tokens = model, temperature, max_tokens
-        self.extra_body, self.guard = extra_body, guard
+        self.extra_body = {
+            **(extra_body or {}),
+            **({"response_format": response_format} if response_format else {}),
+        } or None
+        self.guard = guard
         key = api_key(api_key_env) if api_key_env else "not-needed"
         self._client = OpenAI(base_url=base_url, api_key=key or "missing")
 
@@ -101,4 +107,5 @@ def policy_from_config(path: Path, guard: BudgetGuard | None) -> ChatPolicy:
         max_tokens=cfg["max_tokens"],
         extra_body=cfg.get("extra_body"),
         guard=None,
+        response_format=constrained.response_format() if cfg.get("constrained") else None,
     )

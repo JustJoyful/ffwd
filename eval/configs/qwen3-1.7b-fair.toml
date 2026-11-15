@@ -1,0 +1,23 @@
+# Server: llama.cpp b12032 ubuntu-vulkan-x64 (sha256 f75e7107f945...), data/tools/llama-b12032
+# FAIR variant (Phase 0 follow-up T4): small-model prompt without copyable example actions +
+# JSON-schema constrained decoding. The original rows (qwen3-1.7b.toml) stay unchanged.
+# Base Qwen3-1.7B served locally: llama-server --jinja -m <gguf> --port 8080
+# --cache-ram 0: llama.cpp defaults to an 8 GB host-RAM prompt cache, which OOM-killed the desktop
+# twice on this 16 GB laptop (2026-11-15). Cache only affects speed, not temperature-0 outputs.
+server_args = "--jinja -ngl 99 -c 8192 -np 1 --cache-ram 0 --seed 20261115"
+base_url = "http://127.0.0.1:8080/v1"
+model = "qwen3-1.7b-fair"          # llama-server serves one model; the name is informational
+quant = "Q8_0"
+gguf_repo = "Qwen/Qwen3-1.7B-GGUF"
+gguf_revision = "90862c4b9d2787eaed51d12237eafdfe7c5f6077"
+gguf_file = "Qwen3-1.7B-Q8_0.gguf"
+gguf_sha256 = "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a"  # verified against HF LFS metadata 2026-11-15
+temperature = 0.0
+max_tokens = 512
+# Qwen3 non-thinking mode (ARCH §6). Verified 2026-11-15 on llama.cpp b12032 --jinja: without this the
+# model spent all 200 tokens in reasoning_content and returned empty content; with it, 13 tokens, no reasoning.
+extra_body = { chat_template_kwargs = { enable_thinking = false } }
+
+# Fair variant
+system_prompt = "system-v0-small.txt"
+constrained = true
