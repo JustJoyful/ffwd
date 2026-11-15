@@ -1,5 +1,8 @@
 # Server: llama.cpp b12032 ubuntu-vulkan-x64 (sha256 f75e7107f945...), data/tools/llama-b12032
 # Base Qwen3-0.6B served locally: llama-server --jinja -m <gguf> --port 8080
+# --cache-ram 0: llama.cpp defaults to an 8 GB host-RAM prompt cache, which OOM-killed the desktop
+# twice on this 16 GB laptop (2026-11-15). Cache only affects speed, not temperature-0 outputs.
+server_args = "--jinja -ngl 99 -c 8192 -np 1 --cache-ram 0 --seed 20261115"
 base_url = "http://127.0.0.1:8080/v1"
 model = "qwen3-0.6b"          # llama-server serves one model; the name is informational
 quant = "Q8_0"
