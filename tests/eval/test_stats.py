@@ -1,20 +1,30 @@
 import pytest
+from scipy.stats import binomtest
 
-from eval.stats import bootstrap_ci, paired_diff_ci
-
-
-def test_bootstrap_all_true():
-    assert bootstrap_ci([True] * 20) == (1.0, 1.0, 1.0)
+from eval.stats import paired_diff_ci, wilson_ci
 
 
-def test_bootstrap_half_brackets_half():
-    mean, low, high = bootstrap_ci([i % 2 == 0 for i in range(100)])
-    assert mean == 0.5 and low < 0.5 < high and high - low < 0.25
+@pytest.mark.parametrize("k,n", [(0, 50), (50, 50), (4, 50), (47, 50), (1, 44), (3, 3)])
+def test_wilson_matches_scipy_reference(k, n):
+    # Independent implementation (scipy) computes the expected interval; nothing is hard-coded.
+    ref = binomtest(k, n).proportion_ci(confidence_level=0.95, method="wilson")
+    p, lo, hi = wilson_ci(k, n)
+    assert p == pytest.approx(k / n)
+    assert lo == pytest.approx(ref.low, abs=1e-9) and hi == pytest.approx(ref.high, abs=1e-9)
 
 
-def test_bootstrap_is_deterministic():
-    xs = [i % 3 == 0 for i in range(50)]
-    assert bootstrap_ci(xs) == bootstrap_ci(xs)
+def test_wilson_zero_successes_is_not_a_degenerate_interval():
+    # The percentile bootstrap returned [0%, 0%] for 0/50; the true uncertainty is about [0%, 7%].
+    p, lo, hi = wilson_ci(0, 50)
+    assert (p, lo) == (0.0, 0.0) and 0.05 < hi < 0.09
+    p, lo, hi = wilson_ci(50, 50)
+    assert (p, hi) == (1.0, 1.0) and 0.91 < lo < 0.95
+
+
+def test_wilson_rejects_bad_counts():
+    for k, n in ((1, 0), (-1, 5), (6, 5)):
+        with pytest.raises(ValueError):
+            wilson_ci(k, n)
 
 
 def test_paired_diff():

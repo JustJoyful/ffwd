@@ -9,7 +9,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from eval.stats import bootstrap_ci, paired_diff_ci
+from eval.stats import paired_diff_ci, wilson_ci
 
 
 def _load(dirs: list[Path]) -> dict[str, dict[str, dict]]:
@@ -36,7 +36,8 @@ def write_report(out: Path, dirs: list[Path]) -> None:
     lines = [
         "# Baseline results",
         "",
-        "Success with bootstrap 95% CI. Failed, invalid and errored " "episodes count as failures.",
+        "Success with Wilson 95% CI (D-021); paired differences use a paired bootstrap. Failed, invalid and errored "
+        "episodes count as failures.",
         "",
         "| System | n | success | graded | ambiguous | unsupported | runs/task | invalid turns/task |",
         "|---|---|---|---|---|---|---|---|",
@@ -48,7 +49,7 @@ def write_report(out: Path, dirs: list[Path]) -> None:
         uns = [r["success"] for r in rs if r["flags"]["unsupported"]]
         frac = lambda xs: f"{sum(xs)}/{len(xs)}"  # noqa: E731
         lines.append(
-            f"| {label} | {len(rs)} | {_pct(bootstrap_ci([r['success'] for r in rs]))} | {frac(graded)} | "
+            f"| {label} | {len(rs)} | {_pct(wilson_ci(sum(r['success'] for r in rs), len(rs)))} | {frac(graded)} | "
             f"{frac(amb)} | {frac(uns)} | {sum(r['runs'] for r in rs) / len(rs):.2f} | "
             f"{sum(r['invalid_turns'] for r in rs) / len(rs):.2f} |"
         )

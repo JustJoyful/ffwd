@@ -110,3 +110,10 @@ Format: **context → decision → alternatives considered → consequences.** N
 - **Decision:** GO. X1 94% vs best base 8% (+86 pts, CI +76 to +94); the browser loop passes F1/F4/F7 with a scripted model on the live site; HEVC decodes in ffmpeg.wasm; toy GRPO runs on a T4 at 0.071 GPU-h/step (upper bound).
 - **Open:** browser input-size limit and peak memory unmeasured; 1.7B never loaded in the browser; only one machine; task set owner review pending.
 - **Consequences:** Phase 1 starts. First wins to build: a prompt without copyable examples (or SFT on verified trajectories), vLLM generation, checkpoint upload off Kaggle, checker v1 offset measurement. See reports/2026-11-15-phase-0/summary.md.
+
+### D-021: Wilson score intervals for single success rates (16 Nov 2026)
+- **Context:** the Phase 0 baseline table showed "0% [0%, 0%]" for base Qwen3-0.6B (0/50). A percentile bootstrap resamples only observed outcomes, so at 0/n or n/n every resample is identical and the interval collapses; the real uncertainty at 0/50 is about [0%, 7%].
+- **Decision:** single success rates use the **Wilson score interval** (95%, no continuity correction). The paired percentile bootstrap stays only for paired differences between systems on the same tasks.
+- **Alternatives:** Clopper-Pearson (exact, guaranteed >= 95% coverage but noticeably wider, e.g. 0/50 gives [0%, 7.1%] vs Wilson [0%, 7.1%] here but 4/50 [2.2%, 19.2%] vs [3.2%, 18.8%]); percentile bootstrap (degenerate at the extremes).
+- **Why Wilson:** closed form (also trivial to port to the TypeScript site), good coverage for small n and for rates near 0 or 1, which is exactly where our baselines sit; reference values are tested against scipy's implementation.
+- **Consequences:** Phase 0 tables are regenerated with Wilson in `reports/2026-11-16-phase0-followups/baselines-wilson.md` (the original report is unchanged). With n = 50, intervals are wide (about +-14 points near 50%); say so next to every headline number.

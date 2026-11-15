@@ -38,6 +38,7 @@ dev = [
     "black>=26.10.1",
     "pytest>=9.2.0",
     "ruff>=0.17.5",
+    "scipy>=1.17.1",
 ]
 train = [
     "accelerate>=1.15.0",

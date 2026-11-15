@@ -76,7 +76,7 @@ All systems use the **same environment, allowlist, checker, turn budget and time
 Defined in PRD §10 (activated, returning 30/60 days, monthly actives, funnel, success by family, unsupported categories). Product metrics are **reported separately** from offline model metrics and never mixed into the same table.
 
 ## 5. Statistics & reporting rules
-- **Bootstrap 95% CIs** (≥10k resamples) on success rates; **paired bootstrap** for system-vs-system on the same tasks.
+- **Wilson 95% intervals** on single success rates (D-021; the percentile bootstrap gave a degenerate 0–0% for 0/50); **paired bootstrap** (≥10k resamples) for system-vs-system on the same tasks.
 - **Holm correction** across the predeclared comparison family.
 - **Seeds:** ≥3 training seeds for M3 vs M1 if compute allows; otherwise report it as a single-seed result and say so.
 - Report **by family and by difficulty**, not only overall.
