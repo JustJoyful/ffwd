@@ -21,8 +21,9 @@ from transformers.trainer_utils import get_last_checkpoint
 from trl import GRPOConfig, GRPOTrainer
 
 from training import config
-from training.corpus.make_synthetic import make_corpus
+from training.corpus.make_synthetic import ensure_corpus
 from training.grpo.rollout import Generator, make_rollout_func, prompt_messages
+from training.taskgen.toy import CLIPS as TOY_CLIPS
 from training.taskgen.toy import make_toy_tasks
 
 
@@ -117,12 +118,9 @@ def main(argv: list[str] | None = None) -> None:
             "no CUDA GPU visible (check the accelerator setting / torch build); refusing to train"
         )
 
-    manifest = config.CORPUS_DIR / "manifest.json"
-    if manifest.exists():
-        records = json.loads(manifest.read_text())
-    else:  # e.g. a fresh Kaggle session: regenerate the synthetic corpus
-        records = make_corpus(config.CORPUS_DIR)
-    corpus = {r["id"]: config.CORPUS_DIR / r["file"] for r in records}
+    # Only the clips toy tasks use: regenerated on a fresh clone (Kaggle ships FFmpeg 6.1, so we avoid
+    # recipes only verified on FFmpeg 9).
+    corpus = ensure_corpus(config.CORPUS_DIR, ids={clip for clip, _ in TOY_CLIPS})
 
     tasks = make_toy_tasks(16, seed=a.seed)
     dataset = Dataset.from_list([{"prompt": prompt_messages(t, corpus)} for t in tasks])

@@ -20,6 +20,8 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
+# Kaggle commits this notebook (with outputs) via its GitHub link; it is not hand-maintained.
+extend-exclude = ["training/grpo/kaggle_toy.ipynb"]
 target-version = "py311"
 
 [tool.ruff.lint]
@@ -28,6 +30,7 @@ ignore = ["E501"]  # line length is Black's job
 
 [tool.black]
 line-length = 100
+extend-exclude = "training/grpo/kaggle_toy.ipynb"
 target-version = ["py311"]
 
 [dependency-groups]

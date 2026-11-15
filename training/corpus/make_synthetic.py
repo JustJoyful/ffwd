@@ -109,17 +109,34 @@ def _record(clip_id: str, path: Path) -> ClipRecord:
     )
 
 
-def make_corpus(out_dir: Path) -> list[ClipRecord]:
+def make_corpus(out_dir: Path, ids: set[str] | None = None) -> list[ClipRecord]:
+    """Generate all clips, or only `ids` (plus the sources derived clips need)."""
     out_dir.mkdir(parents=True, exist_ok=True)
+    derived = {k: v for k, v in DERIVED.items() if ids is None or k in ids}
+    base = {k for k in RECIPES if ids is None or k in ids} | {src for _, src, _ in derived.values()}
     records = []
     for clip_id, (name, args) in RECIPES.items():
-        _ffmpeg(args, out_dir / name)
-        records.append(_record(clip_id, out_dir / name))
-    for clip_id, (name, src_id, input_opts) in DERIVED.items():
+        if clip_id in base:
+            _ffmpeg(args, out_dir / name)
+            if ids is None or clip_id in ids:
+                records.append(_record(clip_id, out_dir / name))
+    for clip_id, (name, src_id, input_opts) in derived.items():
         src = out_dir / RECIPES[src_id][0]
         _ffmpeg([*input_opts, "-i", str(src), "-c", "copy"], out_dir / name)
         records.append(_record(clip_id, out_dir / name))
     return records
+
+
+def ensure_corpus(out_dir: Path, ids: set[str] | None = None) -> dict[str, Path]:
+    """Clip paths by id (all clips, or only `ids`), generating them if any is missing (e.g. a fresh
+    git clone: the manifest is tracked, the media is not). Never rewrites the tracked manifest."""
+    wanted = ids if ids is not None else set(RECIPES) | set(DERIVED)
+    manifest = out_dir / "manifest.json"
+    if manifest.exists():
+        paths = {r["id"]: out_dir / r["file"] for r in json.loads(manifest.read_text())}
+        if wanted <= set(paths) and all(paths[i].is_file() for i in wanted):
+            return {i: paths[i] for i in wanted}
+    return {r["id"]: out_dir / r["file"] for r in make_corpus(out_dir, ids)}
 
 
 def main() -> None:
