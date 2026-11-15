@@ -20,19 +20,3 @@ describe("ffmpeg log parsing", () => {
     expect(parseFrameCount("")).toBeNull();
   });
 });
-
-import { capThreads } from "../src/ffmpeg-check";
-
-describe("capThreads", () => {
-  it("inserts -threads before every output token", () => {
-    expect(capThreads(["-i", "{in:a}", "-c:v", "libx264", "{out:o}"], 4)).toEqual([
-      "-i",
-      "{in:a}",
-      "-c:v",
-      "libx264",
-      "-threads",
-      "4",
-      "{out:o}",
-    ]);
-  });
-});

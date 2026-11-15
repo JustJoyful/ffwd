@@ -1,6 +1,8 @@
 import type { FFmpeg } from "@ffmpeg/ffmpeg";
 import { MINI_LOOP_TASKS, MODEL_IDS } from "./config";
 import { execLogged, loadFfmpeg, runFfmpegChecks } from "./ffmpeg-check";
+import { harnessArgs } from "./harness-args";
+import { ffprobeJson, probeViaLog } from "./probe";
 import { recordMemory } from "./memory-check";
 import { engineChat, runMiniLoop, scriptedChat } from "./mini-loop";
 import { downloadResults, onRecord, record } from "./results";
@@ -66,19 +68,26 @@ $("run-memory").onclick = () =>
     const f = await ensureFfmpeg();
     await recordMemory(`before_${big.size}`);
     await f.writeFile("big.mp4", new Uint8Array(await big.arrayBuffer()));
-    const r = await execLogged(f, [
-      "-i",
-      "big.mp4",
-      "-vf",
-      "scale=-2:480",
-      "-c:v",
-      "libx264",
-      "-preset",
-      "ultrafast",
-      "-c:a",
-      "copy",
-      "big_out.mp4",
-    ]);
+    const r = await execLogged(
+      f,
+      harnessArgs(
+        [
+          "-i",
+          "{in:clip}",
+          "-vf",
+          "scale=-2:480",
+          "-c:v",
+          "libx264",
+          "-preset",
+          "ultrafast",
+          "-c:a",
+          "copy",
+          "{out:out1}",
+        ],
+        "big.mp4",
+        "big_out.mp4",
+      ),
+    );
     await recordMemory(`after_${big.size}`);
     record({
       name: `big_file_${big.size}`,
@@ -91,3 +100,8 @@ $("run-memory").onclick = () =>
   });
 $("download").onclick = () => downloadResults($<HTMLInputElement>("machine").value || "unlabelled");
 for (const id of MODEL_IDS) $("model").append(new Option(id, id));
+
+// Test hook for Playwright (spike only): lets e2e specs drive ffmpeg.wasm on arbitrary files.
+Object.assign(window, {
+  spike: { ensureFfmpeg, loadFfmpeg, execLogged, probeViaLog, ffprobeJson, harnessArgs },
+});

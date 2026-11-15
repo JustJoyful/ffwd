@@ -1,7 +1,8 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import chores from "../../../packages/protocol/conformance/timing-chores.json";
-import { FFMPEG_CORE_BASE, FFMPEG_THREADS } from "./config";
+import { FFMPEG_CORE_BASE } from "./config";
+import { harnessArgs } from "./harness-args";
 import { record } from "./results";
 import { validateRun } from "./validator";
 
@@ -39,16 +40,6 @@ export async function execLogged(ff: FFmpeg, args: string[]): Promise<Exec> {
   }
 }
 
-/** Harness-owned thread cap inserted before every output (see FFMPEG_THREADS). */
-export function capThreads(args: string[], n: number = FFMPEG_THREADS): string[] {
-  return args.flatMap((a) => (/^\{out:/.test(a) ? ["-threads", String(n), a] : [a]));
-}
-
-/** Replace {in:id}/{out:id} with in-memory FS names. Only ever called on validated args. */
-export function substitute(args: string[], inName: string, outName: string): string[] {
-  return args.map((a) => (/^\{in:/.test(a) ? inName : /^\{out:/.test(a) ? outName : a));
-}
-
 export async function outputBytes(ff: FFmpeg, outName: string): Promise<number> {
   if (outName.includes("%")) {
     const dir = outName.split("/")[0] as string;
@@ -77,25 +68,20 @@ export async function runFfmpegChecks(
       }
       if (c.output.includes("/"))
         await ff.createDir(c.output.split("/")[0] as string).catch(() => undefined);
-      const r = await execLogged(ff, substitute(capThreads(c.args), "long.mp4", c.output));
+      const r = await execLogged(ff, harnessArgs(c.args, "long.mp4", c.output));
       record({ name: `chore_${c.name}`, ok: r.code === 0, ms: r.ms, detail: { code: r.code } });
     }
   }
   if (hevc) {
     await ff.writeFile("hevc.mov", await fetchFile(hevc));
-    const r = await execLogged(ff, [
-      "-i",
-      "hevc.mov",
-      "-c:v",
-      "libx264",
-      "-preset",
-      "ultrafast",
-      "-c:a",
-      "aac",
-      "-threads",
-      String(FFMPEG_THREADS),
-      "hevc_out.mp4",
-    ]);
+    const r = await execLogged(
+      ff,
+      harnessArgs(
+        ["-i", "{in:clip}", "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "{out:out1}"],
+        "hevc.mov",
+        "hevc_out.mp4",
+      ),
+    );
     const bytes = r.code === 0 ? await outputBytes(ff, "hevc_out.mp4").catch(() => 0) : 0;
     record({
       name: "hevc_decode",

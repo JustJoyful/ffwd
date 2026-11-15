@@ -6,9 +6,10 @@ import type { ChatCompletionMessageParam, MLCEngineInterface } from "@mlc-ai/web
 import systemPrompt from "../../../packages/protocol/prompts/system-v0.txt?raw";
 import { parseAction } from "./actions";
 import { FRAME_COUNT_TOLERANCE, MAX_RUNS, MAX_TOKENS, MAX_TURNS, TIME_TOLERANCE_S } from "./config";
-import { capThreads, execLogged, outputBytes, substitute } from "./ffmpeg-check";
-import { parseFfmpegDuration, parseVideoSize, record, type CheckRecord } from "./results";
-import { validateRun } from "./validator";
+import { runValidated } from "./executor";
+import { outputBytes } from "./ffmpeg-check";
+import { probeViaLog } from "./probe";
+import { record, type CheckRecord } from "./results";
 
 type Family = "F1" | "F4" | "F7";
 
@@ -39,7 +40,7 @@ export function engineChat(engine: MLCEngineInterface, json: boolean): Chat {
 
 /**
  * Plumbing proof: the reference solution for each family, fed through the exact same
- * parseAction → validateRun → capThreads → ffmpeg.exec → check path. Proves the browser loop works
+ * parseAction → runValidated (validate + harness cap) → ffmpeg.exec → check path. Proves the browser loop works
  * independently of how good the base model is.
  */
 export function scriptedChat(family: Family): Chat {
@@ -69,16 +70,6 @@ export function scriptedChat(family: Family): Chat {
   return async () => replies.shift() ?? "{}";
 }
 
-async function probeLite(ff: FFmpeg, name: string) {
-  const { log } = await execLogged(ff, ["-hide_banner", "-i", name]); // exits 1 (no output) but logs the probe
-  const size = parseVideoSize(log);
-  return {
-    duration_s: parseFfmpegDuration(log),
-    width: size?.[0] ?? null,
-    height: size?.[1] ?? null,
-  };
-}
-
 async function miniCheck(
   ff: FFmpeg,
   family: Family,
@@ -93,7 +84,8 @@ async function miniCheck(
       detail: { count, expected },
     };
   }
-  const p = await probeLite(ff, outName);
+  const p = await probeViaLog(ff, outName);
+  const height = p.streams.find((x) => x.type === "video")?.height ?? null;
   if (family === "F1") {
     const expected = inDuration - 3;
     return {
@@ -101,7 +93,7 @@ async function miniCheck(
       detail: { duration: p.duration_s, expected },
     };
   }
-  return { passed: p.height === 480, detail: { height: p.height, expected: 480 } };
+  return { passed: height === 480, detail: { height, expected: 480 } };
 }
 
 export async function runMiniLoop(
@@ -112,7 +104,8 @@ export async function runMiniLoop(
   label: string,
 ): Promise<CheckRecord> {
   await ff.writeFile("loop_in.mp4", await fetchFile(file));
-  const inProbe = await probeLite(ff, "loop_in.mp4");
+  // Same probe shape the Python harness shows the model (probe.schema.json subset).
+  const inProbe = { ...(await probeViaLog(ff, "loop_in.mp4")), size_bytes: file.size };
   // Fresh output per run: ffmpeg.wasm has no stdin to confirm overwrites, and leftover frames
   // from a failed run would inflate the F7 count.
   const outFor = (n: number) =>
@@ -143,17 +136,21 @@ export async function runMiniLoop(
       invalid++;
       obs = { error: action.error };
     } else if (action.action === "run") {
-      const v = validateRun(action.args, action.inputs, action.outputs, {
-        inputs: new Set(["clip"]),
-        outputs: new Set(["out1"]),
-      });
-      if (!v.ok) {
-        obs = { run_ok: false, rejected: v.reason };
+      // Fresh output per run; the F7 frame dir must exist before ffmpeg writes into it.
+      const outName = outFor(runs + 1);
+      if (task.family === "F7")
+        await ff.createDir(`loop_frames_${runs + 1}`).catch(() => undefined);
+      const res = await runValidated(
+        ff,
+        action,
+        { in: "loop_in.mp4", out: outName },
+        { inputs: new Set(["clip"]), outputs: new Set(["out1"]) },
+      );
+      if (res.rejected !== null) {
+        obs = { run_ok: false, rejected: res.rejected };
       } else {
         runs++;
-        const outName = outFor(runs);
-        if (task.family === "F7") await ff.createDir(`loop_frames_${runs}`).catch(() => undefined);
-        const r = await execLogged(ff, substitute(capThreads(action.args), "loop_in.mp4", outName));
+        const r = res.exec;
         const c =
           r.code === 0 ? await miniCheck(ff, task.family, outName, inProbe.duration_s ?? 0) : null;
         passed = c?.passed ?? false;

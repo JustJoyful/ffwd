@@ -79,6 +79,8 @@ def execute(
 
     subst = {f"{{in:{k}}}": str(p) for k, p in input_paths.items()}
     subst |= {f"{{out:{k}}}": str(p) for k, p in output_paths.items()}
+    # No thread cap here: the ffmpeg.wasm deadlock (spikes/browser/src/harness-args.ts) does not affect
+    # native FFmpeg; Phase 0 native F4 ran in 0.68 s with default threading.
     # -y is safe: every output path is a fresh, harness-owned file inside the job dir.
     argv = [
         config.FFMPEG_BIN,

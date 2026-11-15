@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-15T20:45:51.958Z",
+  "core": "@ffmpeg/core-mt 0.12.10",
+  "summary": {
+    "clips": 12,
+    "medianMs": {
+      "logProbe": 29,
+      "ffprobe": 30,
+      "coreReload": 1078
+    }
+  },
+  "rows": [
+    {
+      "clip": "clip_a.mp4",
+      "coreLoadMs": 1273,
+      "logProbeMs": 33,
+      "logProbeDuration": 3,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 3,
+      "ffprobeMs": 30,
+      "ffprobeJsonBytes": 4175,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "clip_b.mp4",
+      "coreLoadMs": 1118,
+      "logProbeMs": 30,
+      "logProbeDuration": 3,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 3,
+      "ffprobeMs": 32,
+      "ffprobeJsonBytes": 4175,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "h264_25fps_720p.mp4",
+      "coreLoadMs": 1025,
+      "logProbeMs": 28,
+      "logProbeDuration": 10,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 10,
+      "ffprobeMs": 26,
+      "ffprobeJsonBytes": 4189,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "h264_aac_1080p.mp4",
+      "coreLoadMs": 1012,
+      "logProbeMs": 29,
+      "logProbeDuration": 4,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4,
+      "ffprobeMs": 29,
+      "ffprobeJsonBytes": 4188,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "h264_long.mp4",
+      "coreLoadMs": 1035,
+      "logProbeMs": 28,
+      "logProbeDuration": 20,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 20,
+      "ffprobeMs": 36,
+      "ffprobeJsonBytes": 4184,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "h264_noaudio.mp4",
+      "coreLoadMs": 1038,
+      "logProbeMs": 25,
+      "logProbeDuration": 4,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4,
+      "ffprobeMs": 37,
+      "ffprobeJsonBytes": 2601,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "h264_quiet.mp4",
+      "coreLoadMs": 1152,
+      "logProbeMs": 51,
+      "logProbeDuration": 4,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4,
+      "ffprobeMs": 50,
+      "ffprobeJsonBytes": 4180,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "h264_vertical.mp4",
+      "coreLoadMs": 1078,
+      "logProbeMs": 29,
+      "logProbeDuration": 4,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4,
+      "ffprobeMs": 29,
+      "ffprobeJsonBytes": 4187,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "hevc_iphone.mov",
+      "coreLoadMs": 1082,
+      "logProbeMs": 19,
+      "logProbeDuration": 4,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4,
+      "ffprobeMs": 20,
+      "ffprobeJsonBytes": 4009,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "hevc_rot90.mov",
+      "coreLoadMs": 1492,
+      "logProbeMs": 20,
+      "logProbeDuration": 4,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4,
+      "ffprobeMs": 19,
+      "ffprobeJsonBytes": 4326,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "mpeg4_avi.avi",
+      "coreLoadMs": 1012,
+      "logProbeMs": 16,
+      "logProbeDuration": 4.04,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4.04,
+      "ffprobeMs": 16,
+      "ffprobeJsonBytes": 3448,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    },
+    {
+      "clip": "vp9_opus_webm.webm",
+      "coreLoadMs": 1047,
+      "logProbeMs": 30,
+      "logProbeDuration": 4.01,
+      "execAfterLogProbeExit": 0,
+      "logProbeAgainDuration": 4.01,
+      "ffprobeMs": 33,
+      "ffprobeJsonBytes": 3447,
+      "execAfterFfprobeExit": 0,
+      "logProbeAfterFfprobeDuration": "threw: Error: no input description in ffmpeg log"
+    }
+  ]
+}
