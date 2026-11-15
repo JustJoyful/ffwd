@@ -1,0 +1,36 @@
+{
+  "git_commit": "97696a8",
+  "date": "2026-11-15",
+  "hardware": "Kaggle Tesla T4 16 GB x1 (CUDA_VISIBLE_DEVICES=0), driver 580.178.04",
+  "software": {
+    "torch": "2.15.0+cu132",
+    "transformers": "5.23.0",
+    "trl": "1.18.0",
+    "peft": "0.21.3",
+    "ffmpeg": "6.1.1 (Ubuntu)"
+  },
+  "run": {
+    "model": "Qwen/Qwen3-0.6B",
+    "lora": "r=16 alpha=32 all-linear",
+    "precision": "fp16 weights + fp16 AMP, TRL chunked-logprob fp32-upcast fallback",
+    "generation": "transformers .generate (no vLLM)",
+    "num_generations": 4,
+    "prompts_per_step": 4,
+    "rollouts_per_step": 16,
+    "max_runs": 2,
+    "max_new_tokens_per_turn": 256,
+    "beta": 0.0,
+    "seed": 20261115,
+    "tasks": "make_toy_tasks(16, seed=20261115), split toy"
+  },
+  "steps_completed": 6,
+  "steps_planned": 10,
+  "stopped_reason": "stopped by owner after checkpoint-6 for the resume test; the Kaggle session then restarted after idling, which wiped /kaggle/working (checkpoints included) before resume ran",
+  "summary": {
+    "mean_seconds_per_step": 256.0,
+    "median_seconds_per_step": 268.9,
+    "mean_gpu_hours_per_step": 0.0711,
+    "seconds_per_rollout": 16.0
+  },
+  "resume": "verified locally (RTX 3050: checkpoint-1 -> resumed at step 2); NOT verified on Kaggle"
+}

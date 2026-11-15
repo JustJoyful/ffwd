@@ -1,0 +1,6 @@
+{"step": 1, "seconds": 284.221, "gpu_hours": 0.07895, "n_gpus": 1, "mean_reward": -1.03125, "reward_std": 1.2841178178787231}
+{"step": 2, "seconds": 252.63, "gpu_hours": 0.070175, "n_gpus": 1, "mean_reward": -0.59375, "reward_std": 0.9525186419487}
+{"step": 3, "seconds": 272.493, "gpu_hours": 0.075692, "n_gpus": 1, "mean_reward": -0.8125, "reward_std": 1.276388168334961}
+{"step": 4, "seconds": 163.186, "gpu_hours": 0.045329, "n_gpus": 1, "mean_reward": -0.21875, "reward_std": 0.2561737895011902}
+{"step": 5, "seconds": 265.355, "gpu_hours": 0.07371, "n_gpus": 1, "mean_reward": -0.34375, "reward_std": 0.3010398745536804}
+{"step": 6, "seconds": 297.867, "gpu_hours": 0.082741, "n_gpus": 1, "mean_reward": -0.53125, "reward_std": 0.9568829536437988}
