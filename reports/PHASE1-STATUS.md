@@ -25,6 +25,13 @@ No questions to the owner; conservative defaults, documented. All work is on `ma
 | T24/T25 | results report builder (Holm, denominators, test-lock checks), model/data card builders, licence audit |
 | extra | D-032 proposal: free programmatic "oracle" trajectories (`training/teacher/oracle.py`) |
 
+## Smoke tests run (local RTX 3050, free, tiny; NOT the gated runs)
+- Task build v1 finished: 4486 train / 300 dev / 500 test-iid / 200 test-compositional / 200 test-phrasing (`reports/2026-11-16-taskgen-v1/`): held-out splits pass the leakage gate (max Jaccard 0.69 / 0.74 < 0.9). Limitations there (single-family content space is small; few ambiguous/unsupported dev tasks).
+- Oracle trajectories: 60/60 train tasks solved through the real spec-first loop (draft prompt). SFT examples are ~1.6k tokens each (only ~220 trained): `SFT_MAX_LEN` raised to 3072; default batch 2 x 8.
+- SFT: 3 steps on the local GPU ran (eval loss 0.705), adapter saved, merged model carries the agent template (`tests/export`).
+- GRPO driver: 1 step, 2 generations x 2 prompts, real lockstep generation + telemetry + checkpoint: works (0.013 GPU-h; junk policy, as expected after 3 SFT steps).
+- GGUF export: **blocked** on llama.cpp's `convert_hf_to_gguf.py` (not in the release binaries; fetching it means running external code). Wrapper is ready: set `LLAMA_CPP_DIR` / `LLAMA_QUANTIZE`.
+
 ## Waiting on the owner
 1. **G0:** Kaggle kill-and-resume result (kernel `justjoyful/ffmpeg-agent-resume-auto` still QUEUED), D-024 FFmpeg pin decision, D-025-D-031 proposals in the plan, D-032, your ~20 new spike-v1 tasks + 2-3 clips.
 2. **G-terms:** read DeepSeek's terms (training on outputs) and send the off-peak window (`config.DEEPSEEK_OFFPEAK_UTC`, `TEACHER_TERMS_URL`).
