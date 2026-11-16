@@ -1,6 +1,7 @@
 """Single config module for the Python harness (RULES §6.2). Every tunable lives here."""
 
 import os
+from datetime import time
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -145,6 +146,10 @@ DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 DEEPSEEK_API_KEY_ENV = "DEEPSEEK_API_KEY"  # key lives only in the environment (RULES §5.6)
 DEEPSEEK_CONCURRENCY_LIMIT = 3  # account limit per pricing page; runners are sequential anyway
 TEACHER_MAX_OUTPUT_TOKENS = 512
+# Owner-supplied (gate G-terms): bulk runs are refused while the off-peak window is unknown. (start, end) in UTC.
+DEEPSEEK_OFFPEAK_UTC: tuple[time, time] | None = None
+TEACHER_TERMS_URL: str | None = None  # the terms page the owner confirmed allow training on outputs
+TEACHER_TERMS_SNAPSHOT_SHA256: str | None = None  # sha256 of the saved terms text
 
 # GRPO token stream (Qwen3 ChatML, non-thinking). Inserted after each model turn; masked from the
 # loss. The empty think block matches what enable_thinking=False puts in the generation prompt.

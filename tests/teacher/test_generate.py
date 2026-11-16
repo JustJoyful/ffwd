@@ -1,0 +1,176 @@
+import dataclasses
+import json
+from datetime import UTC, datetime, time
+
+import pytest
+
+from training import config
+from training.env.loop import run_episode
+from training.teacher.budget import BudgetExceeded
+from training.teacher.datacard import build_card
+from training.teacher.generate import OffPeakRequired, PromptNotFrozen, generate, is_offpeak
+
+TRIM = {
+    "id": "tr-aaaaaaaaaa-terse",
+    "split": "train",
+    "source": "taskgen-1.0",
+    "request": "cut the first 2 seconds off this video",
+    "inputs": ["h264_long"],
+    "gold_spec": {
+        "family": ["F1"],
+        "outputs": [
+            {
+                "id": "out1",
+                "kind": "video",
+                "container": "mp4",
+                "time": {"start_s": 2, "end_s": None, "tolerance_s": 0.15},
+            }
+        ],
+    },
+    "families": ["F1"],
+    "difficulty": 1,
+    "flags": {"ambiguous": False, "unsupported": False},
+    "clarification": None,
+    "reference_runs": [
+        {
+            "action": "run",
+            "args": ["-ss", "2", "-i", "{in:h264_long}", "-c", "copy", "{out:out1}"],
+            "inputs": ["h264_long"],
+            "outputs": ["out1"],
+        }
+    ],
+}
+
+
+class ReferenceTeacher:
+    """Plays the task's own gold spec and reference command (stands in for DeepSeek)."""
+
+    def __init__(self, task):
+        self.task = task
+
+    def __call__(self, messages):
+        turn = (len(messages) - 2) // 2
+        t = self.task
+        return json.dumps(
+            [
+                {"action": "spec", "spec": t["gold_spec"]},
+                t["reference_runs"][0],
+                {"action": "finish", "outputs": ["out1"], "note": "done"},
+            ][min(turn, 2)]
+        )
+
+
+class Switch:
+    """One policy object across tasks: looks the task up by the request text in the first user message."""
+
+    def __init__(self, tasks, bad=()):
+        self.by_request = {t["request"]: t for t in tasks}
+        self.bad = set(bad)
+
+    def __call__(self, messages):
+        req = json.loads(messages[1]["content"])["request"]
+        if req in self.bad:
+            return json.dumps({"action": "unsupported", "reason": "no", "nearest_supported": None})
+        return ReferenceTeacher(self.by_request[req])(messages)
+
+
+def _gen(tmp_path, corpus, tasks, policy, **kw):
+    return generate(tasks, tmp_path / "out", policy, None, corpus, allow_draft_prompt=True, **kw)
+
+
+def test_teacher_never_sees_gold_spec_or_reference(corpus, tmp_path):
+    seen = []
+    teacher = ReferenceTeacher(TRIM)
+
+    def spy(messages):
+        seen.append(json.dumps(messages[:2]))
+        return teacher(messages)
+
+    _gen(tmp_path, corpus, [TRIM], spy)
+    blob = seen[0]
+    assert (
+        json.dumps(TRIM["gold_spec"]) not in blob
+        and json.dumps(TRIM["gold_spec"]).replace('"', '\\"') not in blob
+    )
+    ref_args = json.dumps(TRIM["reference_runs"][0]["args"])
+    assert ref_args not in blob and ref_args.replace('"', '\\"') not in blob
+    assert "cut the first 2 seconds" in blob and "duration_s" in blob
+
+
+def test_only_passing_trajectories_are_kept(corpus, tmp_path):
+    bad = dict(TRIM, id="tr-bbbbbbbbbb-terse", request="remove the first 2 seconds please")
+    s = _gen(tmp_path, corpus, [TRIM, bad], Switch([TRIM, bad], bad={bad["request"]}))
+    assert (s.attempted, s.kept) == (2, 1)
+    kept = [json.loads(x) for x in (tmp_path / "out" / "kept.jsonl").read_text().splitlines()]
+    allr = [
+        json.loads(x) for x in (tmp_path / "out" / "trajectories.jsonl").read_text().splitlines()
+    ]
+    assert [r["task_id"] for r in kept] == [TRIM["id"]] and len(allr) == 2 and not allr[1]["passed"]
+
+
+def test_resume_skips_finished_tasks(corpus, tmp_path):
+    _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM))
+    s = _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM))
+    assert s.attempted == 0 and s.skipped_done == 1
+    assert len((tmp_path / "out" / "trajectories.jsonl").read_text().splitlines()) == 1
+
+
+def test_draft_prompt_and_non_train_splits_are_refused(corpus, tmp_path):
+    with pytest.raises(PromptNotFrozen):
+        generate([TRIM], tmp_path / "o", ReferenceTeacher(TRIM), None, corpus)
+    with pytest.raises(PermissionError):
+        _gen(tmp_path, corpus, [dict(TRIM, split="dev")], ReferenceTeacher(TRIM))
+
+
+def test_offpeak_gate_with_a_fake_clock(corpus, tmp_path, monkeypatch):
+    with pytest.raises(OffPeakRequired):  # window unknown is never off-peak
+        _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM), offpeak_only=True)
+    monkeypatch.setattr(
+        config, "DEEPSEEK_OFFPEAK_UTC", (time(16, 30), time(0, 30))
+    )  # wraps midnight
+    assert is_offpeak(datetime(2026, 11, 16, 23, 0, tzinfo=UTC)) and not is_offpeak(
+        datetime(2026, 11, 16, 12, 0, tzinfo=UTC)
+    )
+    s = _gen(
+        tmp_path,
+        corpus,
+        [TRIM],
+        ReferenceTeacher(TRIM),
+        offpeak_only=True,
+        now=lambda: datetime(2026, 11, 16, 23, 0, tzinfo=UTC),
+    )
+    assert s.kept == 1
+
+
+def test_budget_exceeded_stops_cleanly_keeping_earlier_results(corpus, tmp_path):
+    second = dict(TRIM, id="tr-cccccccccc-terse", request="drop the first 2 seconds")
+    teacher = Switch([TRIM, second])
+    calls = {"n": 0}
+
+    def flaky(messages):
+        calls["n"] += 1
+        if json.loads(messages[1]["content"])["request"] == second["request"]:
+            raise BudgetExceeded("cap")
+        return teacher(messages)
+
+    s = _gen(tmp_path, corpus, [TRIM, second], flaky)
+    assert s.kept == 1 and s.stopped.startswith("budget")
+
+
+def test_datacard_flags_missing_terms(corpus, tmp_path):
+    s = _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM))
+    card = json.loads(build_card(tmp_path / "out", dataclasses.asdict(s)).read_text())
+    assert card["status"].startswith("INCOMPLETE") and card["kept_trajectories"] == 1
+    assert card["teacher_model"] == config.DEEPSEEK_MODEL_ID
+
+
+def test_loop_options_used_by_generate_are_the_phase1_ones(corpus, tmp_path):
+    ep = run_episode(
+        TRIM,
+        ReferenceTeacher(TRIM),
+        corpus=corpus,
+        job_dir=tmp_path,
+        require_spec=True,
+        stop_after_ask=True,
+    )
+    assert ep.end_reason == "finish" and ep.emitted_spec == TRIM["gold_spec"]

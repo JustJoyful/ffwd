@@ -17,7 +17,7 @@ from training.env.executor import execute, output_path_for
 from training.env.probe import probe
 
 Policy = Callable[[list[dict]], str]
-EndReason = Literal["finish", "unsupported", "run_budget", "turn_budget"]
+EndReason = Literal["finish", "unsupported", "run_budget", "turn_budget", "asked"]
 
 NO_MORE_INFO = "No more information is available; proceed with your best interpretation."
 
