@@ -61,3 +61,7 @@ B0 regex 158/300 = 53% [47%, 58%]; B2 stock Qwen3-0.6B 0/300 = 0% (all 8 turns i
 
 ## Kaggle kill-and-resume: PASSED on the Hub evidence (23:56 IST)
 Owner ran session 1 (checkpoints 2, 4 on `JustJoyful/ffmpeg-agent-ckpt`), then re-ran with `MODE='resume'` (after the clone fix + clearing `/kaggle/working/ckpt`). `checkpoint-6` and `-8` appeared; in `checkpoint-8` the `log_history` and `toy_metrics.jsonl` steps 1-4 are identical to `checkpoint-4`, steps 5-8 continue, LR 6.25e-06 -> 5e-06 across the boundary. Recorded in D-022. Still unconfirmed: the notebook's `verify_resume` line (`"ok": true`) and that local ckpt was empty; owner can paste the log tail to close both.
+
+
+### Kaggle resume: `verify_resume` confirmed (17 Nov)
+Owner pasted the console output: `"ok": true`, `"problems": []`, `"steps": [1,2,3,4,5,6,7,8]`, exit code 0. Kill-and-resume is closed (D-022 updated). Only the "local ckpt dir was empty" detail rests on the notebook edit rather than a log line.
