@@ -1,0 +1,4 @@
+dev {'n': 4, 'tests': 300, 'max_jaccard': 1.0, 'mean_jaccard': 0.465, 'threshold': 0.9} 28 over
+test-iid {'n': 4, 'tests': 500, 'max_jaccard': 1.0, 'mean_jaccard': 0.481, 'threshold': 0.9} 65 over
+test-compositional {'n': 4, 'tests': 200, 'max_jaccard': 0.737, 'mean_jaccard': 0.423, 'threshold': 0.9} 0 over
+test-phrasing {'n': 4, 'tests': 200, 'max_jaccard': 0.692, 'mean_jaccard': 0.243, 'threshold': 0.9} 0 over

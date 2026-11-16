@@ -1,0 +1,202 @@
+{
+ "attempts": 25390,
+ "corpus_manifest_sha256": "f3098b21e07826c53db8780a0b40b4a82085cd139bdc4b686d360e321370ea13",
+ "dropped": {
+  "duplicate": 14671,
+  "no_draft": 1367,
+  "verify_failed:F12+F1+F4+F5": 1,
+  "verify_failed:F2+F9": 22,
+  "verify_failed:F3+F1+F4": 1,
+  "verify_failed:F3+F12+F1+F4": 1,
+  "verify_failed:F3+F12+F4": 1,
+  "verify_failed:F4+F5+F1": 1,
+  "verify_failed:F5+F4+F1": 1,
+  "verify_failed:F5+F4+F9": 1
+ },
+ "generator_version": "1.0",
+ "git_commit": "f955a01e46e53e15d1da3711499fffe4ef1c900d",
+ "heldout_combos": [
+  [
+   "F3",
+   "F4"
+  ],
+  [
+   "F5",
+   "F12"
+  ],
+  [
+   "F1",
+   "F8"
+  ],
+  [
+   "F4",
+   "F10"
+  ],
+  [
+   "F6",
+   "F9"
+  ],
+  [
+   "F9",
+   "F12"
+  ],
+  [
+   "F1",
+   "F4",
+   "F6"
+  ]
+ ],
+ "heldout_styles": [
+  "technical",
+  "indirect"
+ ],
+ "seed": 20261116,
+ "splits": {
+  "dev": {
+   "ambiguous": 2,
+   "contents": 300,
+   "difficulty": {
+    "1": 44,
+    "2": 129,
+    "3": 107,
+    "4": 20
+   },
+   "families": {
+    "F1": 195,
+    "F10": 40,
+    "F11": 1,
+    "F12": 97,
+    "F2": 30,
+    "F3": 37,
+    "F4": 122,
+    "F5": 48,
+    "F6": 17,
+    "F7": 13,
+    "F8": 5,
+    "F9": 93,
+    "unsupported": 5
+   },
+   "sha256": "bdfc8588373ad54ecfba837789654c0b25a6525d8255e9de0633a9fba37073f5",
+   "target": 300,
+   "tasks": 300,
+   "unsupported": 5
+  },
+  "test-compositional": {
+   "ambiguous": 0,
+   "contents": 200,
+   "difficulty": {
+    "2": 191,
+    "3": 9
+   },
+   "families": {
+    "F1": 75,
+    "F10": 37,
+    "F12": 52,
+    "F3": 21,
+    "F4": 67,
+    "F5": 27,
+    "F6": 24,
+    "F8": 66,
+    "F9": 40
+   },
+   "sha256": "5162309301420dd405cbde389aa138ffb6cb327bf8b7bca6f0a408691f14c5e8",
+   "target": 200,
+   "tasks": 200,
+   "unsupported": 0
+  },
+  "test-iid": {
+   "ambiguous": 12,
+   "contents": 500,
+   "difficulty": {
+    "1": 117,
+    "2": 205,
+    "3": 135,
+    "4": 43
+   },
+   "families": {
+    "F1": 273,
+    "F10": 61,
+    "F11": 11,
+    "F12": 166,
+    "F2": 47,
+    "F3": 71,
+    "F4": 201,
+    "F5": 81,
+    "F6": 20,
+    "F7": 19,
+    "F8": 8,
+    "F9": 134,
+    "unsupported": 12
+   },
+   "sha256": "5a9a8bf5bbfd3cd6f1022dad097a05aa2d97417c1aa5fef3e56984a837b00506",
+   "target": 500,
+   "tasks": 500,
+   "unsupported": 12
+  },
+  "test-phrasing": {
+   "ambiguous": 8,
+   "contents": 200,
+   "difficulty": {
+    "1": 72,
+    "2": 76,
+    "3": 44,
+    "4": 8
+   },
+   "families": {
+    "F1": 88,
+    "F10": 11,
+    "F11": 11,
+    "F12": 57,
+    "F2": 23,
+    "F3": 31,
+    "F4": 70,
+    "F5": 28,
+    "F6": 13,
+    "F7": 6,
+    "F8": 2,
+    "F9": 42,
+    "unsupported": 6
+   },
+   "sha256": "21a3bbca0a17fa28ab5b3274d0417fcfedaf51eb27babd5978119db8e9aa5aed",
+   "target": 200,
+   "tasks": 200,
+   "unsupported": 6
+  },
+  "train": {
+   "ambiguous": 94,
+   "contents": 1500,
+   "difficulty": {
+    "1": 1564,
+    "2": 1644,
+    "3": 1026,
+    "4": 252
+   },
+   "families": {
+    "F1": 2205,
+    "F10": 510,
+    "F11": 118,
+    "F12": 1265,
+    "F2": 431,
+    "F3": 503,
+    "F4": 1372,
+    "F5": 708,
+    "F6": 207,
+    "F7": 192,
+    "F8": 90,
+    "F9": 1166,
+    "unsupported": 171
+   },
+   "sha256": "4168061d2e1cb3327f66414ef44704df098ff98bcf0b82c38f556347a6ce1cce",
+   "target": 4500,
+   "tasks": 4486,
+   "unsupported": 171
+  }
+ },
+ "train_styles": [
+  "terse",
+  "polite",
+  "verbose",
+  "symptom",
+  "casual_typos"
+ ]
+}
