@@ -137,6 +137,10 @@ ORIENTATION_MIN_GAP = 4.0
 
 # --- Task splits and who may read them (RULES §4.5; guard in training/taskgen/loader.py) ---
 TEST_SPLITS = ("test-iid", "test-compositional", "test-phrasing", "test-real")
+# D-027(b): real clips are split BY CLIP before any task is generated. A clip whose manifest `role` is
+# "test-real" is the input of test-real tasks only; taskgen never sees it and CI fails if another split uses it.
+CLIP_ROLES = ("taskgen", "test-real")
+CLIP_ROLE_DEFAULT = "taskgen"  # synthetic clips and legacy manifest rows without a `role`
 SPLIT_PURPOSES = {
     "train": ("train", "toy"),
     "teacher": ("train",),

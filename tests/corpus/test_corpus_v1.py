@@ -126,8 +126,8 @@ def test_add_clip_requires_licence_and_unique_id(tmp_path, corpus_records):
     (d / "manifest.json").write_text("[]")
     src = out / records[0]["file"]
     with pytest.raises(ValueError, match="licence"):
-        add_clip(src, "mine", "  ", "owner", corpus_dir=d)
-    rec = add_clip(src, "mine", "own recording", "owner", corpus_dir=d)
+        add_clip(src, "mine", "  ", "owner", "taskgen", corpus_dir=d)
+    rec = add_clip(src, "mine", "own recording", "owner", "taskgen", corpus_dir=d)
     assert probe(d / rec["file"])["duration_s"] > 0
     with pytest.raises(ValueError, match="already exists"):
-        add_clip(src, "mine", "own recording", "owner", corpus_dir=d)
+        add_clip(src, "mine", "own recording", "owner", "taskgen", corpus_dir=d)

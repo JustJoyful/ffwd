@@ -30,6 +30,8 @@ class ClipIndex:
         self.clips: dict[str, Clip] = {}
         self._lufs: dict[str, float | None] = {}
         for r in json.loads(manifest.read_text()):
+            if r.get("role", config.CLIP_ROLE_DEFAULT) == "test-real":
+                continue  # D-027(b): never an input of generated tasks
             p = r["probe"]
             v = next((s for s in p["streams"] if s["type"] == "video"), None)
             w, h = display_size(v) if v else (0, 0)

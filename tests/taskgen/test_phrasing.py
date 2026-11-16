@@ -9,7 +9,7 @@ from training import config
 from training.taskgen.clips import ClipIndex
 from training.taskgen.families import SAMPLERS
 from training.taskgen.phrasing import BANK, TRAIN_STYLES, render_request
-from training.taskgen.phrasing_heldout import HELDOUT_STYLES, TECH
+from training.taskgen.phrasing_heldout import HELDOUT_STYLES
 
 NUM = re.compile(r"\d+(?::\d+)*(?:\.\d+)?")
 
@@ -51,9 +51,7 @@ def test_all_styles_render_every_intent_with_only_slot_digits(drafts, style):
     for intent, d in drafts.items():
         text = render_request(d.intents, d.slots, style, rng)
         allowed = set(NUM.findall(" ".join(d.slots.values())))
-        allowed |= set(
-            NUM.findall(" ".join(sum(BANK[intent].values(), []) + sum(TECH.values(), [])))
-        )
+        allowed |= set(NUM.findall(" ".join(sum(BANK[intent].values(), []))))
         assert set(NUM.findall(text)) <= allowed, (intent, style, text)
 
 

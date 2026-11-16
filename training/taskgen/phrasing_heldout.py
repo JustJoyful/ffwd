@@ -1,29 +1,22 @@
 """HELD-OUT phrasing styles for test-phrasing (D-027). Imported only by taskgen.build (via phrasing.render).
 Do NOT read this file when writing baselines (B0) or training data: its wording is the generalisation test.
 
-technical: FFmpeg-flavoured wording. indirect: the goal/context first, the request second.
+context_first (owner-approved replacement for the earlier `technical` style): a situation first, then the
+problem statement, never an explicit command ("for my viva tomorrow, ppt won't play this").
+indirect: a goal first, then the explicit request.
 """
 
 import random
 
-HELDOUT_STYLES = ("technical", "indirect")
+HELDOUT_STYLES = ("context_first", "indirect")
 
-TECH = {
-    "f1": ["re-mux with a start offset and duration set so the output keeps the requested span"],
-    "f2": ["concatenate the inputs in order into one stream"],
-    "f3": ["transcode to H.264 yuv420p with AAC audio in an MP4 container"],
-    "f4": ["re-scale the video stream to the target frame size"],
-    "f5": ["apply the display rotation so the picture is rotated"],
-    "f6": ["re-encode to a bitrate that keeps the output under the size cap"],
-    "f7": ["decode to a still-image sequence at the given interval"],
-    "f8": ["encode a palette-based GIF at the given width"],
-    "f9": ["demux the audio stream"],
-    "f10": ["apply a gain / EBU R128 loudness filter to the audio stream"],
-    "f11": ["shift the audio stream timestamps relative to the video"],
-    "f12": ["change the presentation timestamps or the output frame rate"],
-    "amb": ["an under-specified edit request"],
-    "unsup": ["a request that needs content-aware processing"],
-}
+_SITUATIONS = [
+    "for my viva tomorrow, ",
+    "the college portal keeps rejecting my upload and ",
+    "my cousin's old TV just shows a black screen, ",
+    "the group chat won't let me send this, ",
+    "I'm sitting in the library with bad wifi and ",
+]
 _GOALS = [
     "I'm posting this online later, so ",
     "before I send this to a friend, ",
@@ -35,13 +28,11 @@ _GOALS = [
 def render(intents: list[str], slots: dict, style: str, rng: random.Random) -> str:
     from training.taskgen.phrasing import BANK  # noqa: PLC0415
 
-    if style == "technical":
-        pieces = []
-        for it in intents:
-            fam = it.split(".")[0]
-            base = BANK[it]["core"][0].format(**slots)
-            pieces.append(f"{rng.choice(TECH[fam])}: {base}")
-        return "; ".join(pieces)
+    if style == "context_first":
+        first = rng.choice(BANK[intents[0]]["symptom"]).format(**slots)
+        rest = [rng.choice(BANK[i]["cont"]).format(**slots) for i in intents[1:]]
+        first = first[0].lower() + first[1:] if first[:2] not in ("I ", "I'") else first
+        return rng.choice(_SITUATIONS) + first + "".join(f", and {r}" for r in rest)
     if style == "indirect":
         cores = [BANK[it]["core"][0].format(**slots) for it in intents]
         return rng.choice(_GOALS) + " and ".join(cores)

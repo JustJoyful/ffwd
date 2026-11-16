@@ -19,6 +19,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from training import config
+from training.env.ffmpeg_version import ffmpeg_version
 from training.protocol import validate
 from training.taskgen import phrasing
 from training.taskgen.clips import ClipIndex
@@ -77,9 +78,11 @@ CACHE = config.JOBS_DIR / "taskgen-verify-cache.jsonl"
 
 
 def _cache_key(core: dict) -> str:
-    """Verification depends on the gold spec AND the reference command (and the checker code, so bump on changes)."""
+    """Verification depends on the gold spec, the reference command, the checker code (bump on changes) and the
+    FFmpeg build that ran it: a pass on 9.0.2 says nothing about 5.1.x (D-024)."""
     blob = json.dumps(
-        [core["content_key"], core["reference_runs"], config.CHECKER_VERSION], sort_keys=True
+        [core["content_key"], core["reference_runs"], config.CHECKER_VERSION, ffmpeg_version()],
+        sort_keys=True,
     )
     return hashlib.sha256(blob.encode()).hexdigest()
 
