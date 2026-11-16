@@ -83,7 +83,7 @@ def test_phase1_protocol_flags_reach_the_loop(tmp_path, corpus):
     spec = json.dumps({"action": "spec", "spec": task["gold_spec"]})
     finish = json.dumps({"action": "finish", "outputs": ["out1"], "note": "ok"})
 
-    def run(policy, name, **kw):
+    def go(policy, name, **kw):
         out = run_baseline(
             system="M1", policy=policy, tasks=[task], out=tmp_path / name, corpus=corpus,
             meta={"model": "fake", "quant": "none", "temperature": 0.0}, jobs_root=tmp_path / "jobs", **kw,
@@ -94,9 +94,9 @@ def test_phase1_protocol_flags_reach_the_loop(tmp_path, corpus):
         it = iter(replies)
         return lambda messages: next(it)
 
-    strict = run(script([run, spec, run, finish]), "strict", require_spec=True)
+    strict = go(script([run, spec, run, finish]), "strict", require_spec=True)
     assert (
         strict["invalid_turns"] == 1 and strict["success"] is True
     )  # the early run was rejected, then recovered
-    lenient = run(script([run, finish]), "lenient")
+    lenient = go(script([run, finish]), "lenient")
     assert lenient["invalid_turns"] == 0 and lenient["success"] is True
