@@ -75,3 +75,28 @@ def test_b0_regex_baseline_runs_through_the_same_loop(tmp_path, corpus):
     )  # a real FFmpeg run, checked against the gold spec
     assert by_id["u01-remove-person"]["success"] is True  # no pattern -> unsupported
     assert by_id["a01-make-shorter"]["success"] is False  # B0 cannot ask
+
+
+def test_phase1_protocol_flags_reach_the_loop(tmp_path, corpus):
+    task = next(t for t in TASKS if t["id"] == "s01-trim-first-3s")
+    run = json.dumps(task["reference_runs"][0])
+    spec = json.dumps({"action": "spec", "spec": task["gold_spec"]})
+    finish = json.dumps({"action": "finish", "outputs": ["out1"], "note": "ok"})
+
+    def run(policy, name, **kw):
+        out = run_baseline(
+            system="M1", policy=policy, tasks=[task], out=tmp_path / name, corpus=corpus,
+            meta={"model": "fake", "quant": "none", "temperature": 0.0}, jobs_root=tmp_path / "jobs", **kw,
+        )  # fmt: skip
+        return json.loads((out / "results.jsonl").read_text().splitlines()[0])
+
+    def script(replies):
+        it = iter(replies)
+        return lambda messages: next(it)
+
+    strict = run(script([run, spec, run, finish]), "strict", require_spec=True)
+    assert (
+        strict["invalid_turns"] == 1 and strict["success"] is True
+    )  # the early run was rejected, then recovered
+    lenient = run(script([run, finish]), "lenient")
+    assert lenient["invalid_turns"] == 0 and lenient["success"] is True

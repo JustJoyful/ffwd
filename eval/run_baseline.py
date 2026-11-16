@@ -26,6 +26,8 @@ from training.policies import policy_from_config
 from training.teacher.budget import BudgetExceeded, BudgetGuard
 
 SYSTEMS = {
+    "M1": config.MAX_RUNS_PER_JOB,
+    "M3": config.MAX_RUNS_PER_JOB,
     "B0": config.MAX_RUNS_PER_JOB,
     "B1": 1,
     "B2": config.MAX_RUNS_PER_JOB,
@@ -87,6 +89,8 @@ def run_baseline(
     tasks_sha256: str | None = None,
     jobs_root: Path = config.JOBS_DIR,
     system_prompt_text: str | None = None,
+    require_spec: bool = False,
+    stop_after_ask: bool = False,
 ) -> Path:
     out.mkdir(parents=True, exist_ok=False)  # refuses to overwrite a report
     started = datetime.now(UTC).isoformat()
@@ -108,6 +112,8 @@ def run_baseline(
                     job_dir=jobs_root / out.name / task["id"],
                     max_runs=SYSTEMS[system],
                     system_prompt_text=system_prompt_text,
+                    require_spec=require_spec,
+                    stop_after_ask=stop_after_ask,
                 )
                 row |= {
                     "success": score(task, ep),
@@ -223,6 +229,8 @@ def main(argv: list[str] | None = None) -> None:
         "model_config": str(a.model_config),
         "system_prompt": cfg.get("system_prompt", "system-v0.txt"),
         "constrained_decoding": bool(cfg.get("constrained")),
+        "require_spec": bool(cfg.get("require_spec")),
+        "stop_after_ask": bool(cfg.get("stop_after_ask")),
         "offset": a.offset,
         "limit": a.limit,
         "dry_run": a.dry_run,
@@ -237,6 +245,8 @@ def main(argv: list[str] | None = None) -> None:
         guard=guard,
         tasks_sha256=hashlib.sha256(raw).hexdigest(),
         system_prompt_text=load_prompt(cfg["system_prompt"]) if cfg.get("system_prompt") else None,
+        require_spec=bool(cfg.get("require_spec")),
+        stop_after_ask=bool(cfg.get("stop_after_ask")),
     )
     print(f"wrote {out}")
 

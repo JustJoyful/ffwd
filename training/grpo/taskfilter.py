@@ -32,6 +32,9 @@ def episode_sampler(
     corpus: dict[str, Path],
     jobs_root: Path,
     max_runs: int = config.MAX_RUNS_PER_JOB,
+    system_prompt_text: str | None = None,
+    require_spec: bool = False,
+    stop_after_ask: bool = False,
 ) -> Sampler:
     """Sample by running real episodes (probe -> run -> check) with a fresh policy for each one."""
 
@@ -45,6 +48,9 @@ def episode_sampler(
                     corpus=corpus,
                     job_dir=jobs_root / uuid.uuid4().hex,
                     max_runs=max_runs,
+                    system_prompt_text=system_prompt_text,
+                    require_spec=require_spec,
+                    stop_after_ask=stop_after_ask,
                 ),
             )
             for _ in range(k)
@@ -123,6 +129,7 @@ def load_table(path: Path) -> dict:
 def main(argv: list[str] | None = None) -> None:
     from training.corpus.make_synthetic import ensure_corpus
     from training.policies import policy_from_config
+    from training.teacher.generate import load_prompt_v1
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--tasks", type=Path, required=True)
@@ -139,6 +146,12 @@ def main(argv: list[str] | None = None) -> None:
     )
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--seed", type=int, default=config.BOOTSTRAP_SEED)
+    ap.add_argument(
+        "--phase1",
+        action="store_true",
+        help="prompt v1, spec-first, stop after a clarification (the Phase 1 protocol)",
+    )
+    ap.add_argument("--allow-draft-prompt", action="store_true")
     a = ap.parse_args(argv)
     if a.temperature <= 0:
         sys.exit("--temperature must be > 0")
@@ -147,9 +160,17 @@ def main(argv: list[str] | None = None) -> None:
     corpus = ensure_corpus(config.CORPUS_DIR, ids={c for t in tasks for c in t["inputs"]})
     policy = policy_from_config(a.policy_config, None)
     policy.temperature = a.temperature
+    sampler = episode_sampler(
+        lambda: policy,
+        corpus,
+        config.JOBS_DIR / "taskfilter",
+        system_prompt_text=load_prompt_v1(a.allow_draft_prompt) if a.phase1 else None,
+        require_spec=a.phase1,
+        stop_after_ask=a.phase1,
+    )
     table = pass_rate_table(
         tasks,
-        episode_sampler(lambda: policy, corpus, config.JOBS_DIR / "taskfilter"),
+        sampler,
         a.k,
         tuple(a.band),
         {

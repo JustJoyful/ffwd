@@ -1,0 +1,13 @@
+# M1 (SFT) served from a merged GGUF in llama.cpp, the deployment path (D-028). Phase 1 protocol: prompt v1, spec-first.
+# Replace gguf_file with the merged model once trained; the AGENT chat template must be loaded (D-026), and
+# `chat_template_kwargs` must NOT be passed (the stock enable_thinking switch does not exist in our template).
+server_args = "--jinja --chat-template-file packages/protocol/prompts/chat-template.jinja -ngl 99 -c 4096 -np 1 --cache-ram 0 --seed 20261115"
+base_url = "http://127.0.0.1:8080/v1"
+model = "ffmpeg-agent-m1-0.6b"
+quant = "Q8_0"
+gguf_file = "ffmpeg-agent-m1-0.6b-q8_0.gguf"
+temperature = 0.0
+max_tokens = 512
+system_prompt = "system-v1.txt"
+require_spec = true
+stop_after_ask = true
