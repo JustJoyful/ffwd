@@ -95,6 +95,10 @@ def build_args(
     tl = []
     if d.trim and not d.merge and d.trim[1] is not None:
         tl += ["-t", _fmt(d.trim[1] - (d.trim[0] or 0))]
+    if (
+        d.speed and tl
+    ):  # with a speed change -t must limit what is READ (input side), not the sped-up output
+        ss, tl = [*ss, *tl], []
     audio = has_audio[d.inputs[0]] and not d.drop_audio
 
     if (

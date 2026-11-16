@@ -12,7 +12,7 @@ from training.taskgen.clips import Clip, ClipIndex
 from training.taskgen.frag import Draft
 
 TOL = 0.15  # trim tolerance used throughout (same as the hand-written spike tasks)
-SAMPLERS: dict[str, Callable[[random.Random, ClipIndex], Draft | None]] = {}
+SAMPLERS: dict[str, Callable[..., Draft | None]] = {}
 
 
 def family(fid: str):
@@ -29,6 +29,11 @@ def _h264(ci: ClipIndex, **kw) -> list[Clip]:
         exclude_tags=("vfr", "rotation", "webm", "prores", "portrait", "av_offset"),
         **kw,
     )
+
+
+def _pick(rng: random.Random, ci: ClipIndex, clip: str | None, pool: list[Clip]) -> Clip:
+    """A forced clip (compositions share one input) bypasses the pool; verify_draft still checks feasibility."""
+    return ci[clip] if clip else rng.choice(pool)
 
 
 def _even(x: float) -> int:
@@ -48,8 +53,8 @@ def _times(draft: Draft, start, end) -> dict:
 
 
 @family("F1")
-def f1(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, audio=True, min_s=4))
+def f1(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, audio=True, min_s=4))
     D = c.duration_s
     kind = rng.choice(["cut_first", "keep_range", "last_n", "first_n"])
     d = Draft(["F1"], [c.id], [f"f1.{kind}"], copy_mode="stream")
@@ -71,7 +76,7 @@ def f1(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F2")
-def f2(rng: random.Random, ci: ClipIndex) -> Draft | None:
+def f2(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
     pool = [
         c
         for c in ci.pool(audio=True, vcodec="h264")
@@ -95,7 +100,7 @@ def f2(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F3")
-def f3(rng: random.Random, ci: ClipIndex) -> Draft | None:
+def f3(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
     kinds = {
         "hevc": "f3.iphone",
         "vp9": "f3.webm",
@@ -108,7 +113,9 @@ def f3(rng: random.Random, ci: ClipIndex) -> Draft | None:
         for c in ci.pool(audio=True)
         if c.vcodec in kinds and (c.vcodec != "h264" or c.container == "matroska")
     ]
-    c = rng.choice(pool)
+    c = _pick(rng, ci, clip, pool)
+    if c.vcodec not in kinds or (c.vcodec == "h264" and c.container != "matroska"):
+        return None  # forced clips that are already compatible have nothing to convert
     d = Draft(["F3"], [c.id], [kinds[c.vcodec]])
     d.spec = {"video": {"codec": "h264", "pix_fmt": "yuv420p"}, "audio": {"codec": "aac"}}
     d.copy_mode = "stream" if c.vcodec == "h264" else "auto"  # mkv h264/aac remuxes losslessly
@@ -121,8 +128,8 @@ def f3(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F4")
-def f4(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, min_s=2))
+def f4(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, min_s=2))
     kind = rng.choice(["height", "width", "vertical", "square"])
     d = Draft(["F4"], [c.id], [f"f4.{kind}"])
     if kind == "height":
@@ -153,8 +160,8 @@ def f4(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F5")
-def f5(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, min_s=2))
+def f5(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, min_s=2))
     deg = rng.choice([90, 270, 180])
     lossless = rng.random() < 0.5
     name = {90: "cw", 270: "ccw", 180: "flip"}[deg]
@@ -172,8 +179,8 @@ def f5(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F6")
-def f6(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, audio=True, min_s=4))
+def f6(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, audio=True, min_s=4))
     target = rng.choice([1, 2, 3, 5]) * 1_000_000
     if target > 0.5 * c.size_bytes:
         return None
@@ -190,8 +197,8 @@ def f6(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F7")
-def f7(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, min_s=4))
+def f7(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, min_s=4))
     fmt = rng.choice(["png", "jpg"])
     if rng.random() < 0.2:
         d = Draft(
@@ -226,8 +233,8 @@ def f7(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F8")
-def f8(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, min_s=3))
+def f8(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, min_s=3))
     w = rng.choice([240, 320, 480])
     d = Draft(["F8"], [c.id], ["f8.whole"], kind="gif", container="gif", gif_width=w)
     d.spec = {"video": {"width": w}}
@@ -248,8 +255,8 @@ def f8(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F9")
-def f9(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, audio=True, min_s=2))
+def f9(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, audio=True, min_s=2))
     if rng.random() < 0.5:
         d = Draft(["F9"], [c.id], ["f9.mp3"], kind="audio", container="mp3")
         d.spec = {"audio": {"codec": "mp3"}}
@@ -260,8 +267,8 @@ def f9(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F10")
-def f10(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, audio=True, min_s=2))
+def f10(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, audio=True, min_s=2))
     lufs = ci.loudness(c.id)
     if lufs is None:
         return None
@@ -281,7 +288,7 @@ def f10(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F11")
-def f11(rng: random.Random, ci: ClipIndex) -> Draft | None:
+def f11(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
     baked = ci.pool(audio=True, only_tags=("av_offset",))
     plain = [
         c
@@ -306,8 +313,8 @@ def f11(rng: random.Random, ci: ClipIndex) -> Draft | None:
 
 
 @family("F12")
-def f12(rng: random.Random, ci: ClipIndex) -> Draft | None:
-    c = rng.choice(_h264(ci, min_s=4))
+def f12(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
+    c = _pick(rng, ci, clip, _h264(ci, min_s=4))
     if rng.random() < 0.6:
         f = rng.choice([2, 0.5, 1.5])
         d = Draft(["F12"], [c.id], ["f12.speed_up" if f > 1 else "f12.slow_down"], speed=f)

@@ -150,3 +150,23 @@ def test_ask_user_and_unsupported_are_allowed_before_a_spec(corpus, tmp_path):
     reply = json.dumps({"action": "unsupported", "reason": "no", "nearest_supported": None})
     ep = run_episode(task, Scripted([reply]), corpus=corpus, job_dir=tmp_path, require_spec=True)
     assert ep.refused and ep.invalid_turns == 0
+
+
+def test_stop_after_ask_ends_an_ambiguous_episode_and_still_scores(corpus, tmp_path):
+    task = _task(gold=None, ambiguous=True) | {"clarification": "keep the first 10 seconds"}
+    ask = json.dumps({"action": "ask_user", "question": "how long?"})
+    stopped = run_episode(
+        task, Scripted([ask]), corpus=corpus, job_dir=tmp_path / "a", stop_after_ask=True
+    )
+    assert stopped.end_reason == "asked" and len(stopped.turns) == 1 and score(task, stopped)
+    assert stopped.turns[0]["observation"] == {"answer": "keep the first 10 seconds"}
+    flailing = run_episode(
+        task,
+        Scripted([ask] + [FINISH] * 8),
+        corpus=corpus,
+        job_dir=tmp_path / "b",
+        stop_after_ask=False,
+    )
+    assert len(flailing.turns) == 8 and score(
+        task, flailing
+    )  # Phase 0 behaviour: runs on until the turn cap

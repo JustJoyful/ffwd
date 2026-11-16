@@ -363,6 +363,139 @@ BANK: dict[str, dict[str, list[str]]] = {
     },
 }
 
+
+BANK |= {
+    # ambiguous: the request lacks a parameter the agent must ASK for (D-009); `answer` is what the user replies
+    "amb.shorter": {
+        "core": ["make it shorter", "can you shorten this video", "cut this down a bit"],
+        "cont": ["make it shorter"],
+        "symptom": ["this video is too long"],
+    },
+    "amb.smaller": {
+        "core": [
+            "make it smaller",
+            "reduce the size of this file",
+            "I need this video to be smaller",
+        ],
+        "cont": ["make it smaller"],
+        "symptom": ["this file is too big"],
+    },
+    "amb.fix": {
+        "core": [
+            "can you fix this video",
+            "fix this video for me",
+            "something is wrong with this video, fix it",
+        ],
+        "cont": ["fix it"],
+        "symptom": ["this video looks wrong"],
+    },
+    "amb.trim": {
+        "core": [
+            "trim this video",
+            "cut out part of this clip",
+            "remove a section from the middle",
+        ],
+        "cont": ["trim it"],
+        "symptom": ["there is a part of this video I don't want"],
+    },
+    "amb.convert": {
+        "core": [
+            "convert this video",
+            "change the format of this clip",
+            "convert this to something else",
+        ],
+        "cont": ["convert it"],
+        "symptom": ["this video is in the wrong format"],
+    },
+    "amb.audio": {
+        "core": ["fix the audio", "change the sound of this video", "do something about the sound"],
+        "cont": ["fix the audio"],
+        "symptom": ["the sound on this video is bad"],
+    },
+    # unsupported: needs content understanding or tools outside FFmpeg operations (D-009)
+    "unsup.remove_object": {
+        "core": [
+            "remove the person walking in the background",
+            "erase the car from this video",
+            "get rid of the logo in the corner of the picture",
+        ],
+        "cont": ["remove the person in the background"],
+        "symptom": ["someone walks through my shot, take them out"],
+    },
+    "unsup.subtitles": {
+        "core": [
+            "add English subtitles to this video",
+            "generate captions for this clip",
+            "put subtitles on this",
+        ],
+        "cont": ["add subtitles"],
+        "symptom": ["people can't hear the audio, add captions"],
+    },
+    "unsup.colour_grade": {
+        "core": [
+            "make it look cinematic with a teal and orange colour grade",
+            "give this a vintage film look",
+            "colour grade this to look like a movie",
+        ],
+        "cont": ["give it a cinematic colour grade"],
+        "symptom": ["this looks flat, make it look like a movie"],
+    },
+    "unsup.upscale": {
+        "core": [
+            "upscale this to 4K with AI",
+            "make this 480p video look crisp and sharp like HD",
+            "enhance this blurry video with AI",
+        ],
+        "cont": ["upscale it with AI"],
+        "symptom": ["this old footage is blurry, make it sharp"],
+    },
+    "unsup.background": {
+        "core": [
+            "remove the background and put me on a beach",
+            "replace the background of this video",
+            "cut me out of this video and make the background transparent",
+        ],
+        "cont": ["replace the background"],
+        "symptom": ["my room is messy, change the background"],
+    },
+    "unsup.voice": {
+        "core": [
+            "change my voice to sound like a robot",
+            "translate the speech into Spanish",
+            "make the speaker sound like a woman",
+        ],
+        "cont": ["change the voice"],
+        "symptom": ["I don't want people to recognise my voice"],
+    },
+    "unsup.transcribe": {
+        "core": [
+            "write down everything that is said in this video",
+            "give me a transcript of this clip",
+            "summarize what happens in this video",
+        ],
+        "cont": ["transcribe it"],
+        "symptom": ["I need the text of what they say"],
+    },
+    "unsup.stabilize": {
+        "core": [
+            "stabilize this shaky video",
+            "smooth out the camera shake",
+            "fix the shaky footage",
+        ],
+        "cont": ["stabilize it"],
+        "symptom": ["my hands were shaking, the footage is jittery"],
+    },
+    "unsup.blur_faces": {
+        "core": [
+            "blur everyone's face in this video",
+            "hide the faces of the people in the clip",
+            "censor the license plate",
+        ],
+        "cont": ["blur the faces"],
+        "symptom": ["I can't post this with people's faces visible"],
+    },
+}
+
 TRAIN_STYLES = ("terse", "polite", "verbose", "symptom", "casual_typos")
 _POLITE = ["could you please {c}?", "please {c}", "can you {c}?", "I'd like you to {c}, thanks"]
 _PRE = [

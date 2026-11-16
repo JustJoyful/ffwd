@@ -123,9 +123,13 @@ def run_episode(
     run_timeout_s: int = config.RUN_TIMEOUT_S,
     max_output_bytes: int = config.MAX_OUTPUT_BYTES,
     require_spec: bool = False,
+    stop_after_ask: bool = False,
 ) -> Episode:
     """require_spec (prompt v1, D-008): a `run` before any `spec` is an invalid turn, so the model always
-    states what it is building before it builds it (the CLI/UI shows that spec for confirmation)."""
+    states what it is building before it builds it (the CLI/UI shows that spec for confirmation).
+    stop_after_ask (Phase 1 runners): an ambiguous task has no gradable continuation, so the episode ends right
+    after the simulated user answers instead of letting the model flail through "no executable outputs".
+    """
     ep = Episode(task_id=task["id"])
     probes = {cid: probe(corpus[cid]) for cid in task["inputs"]}
     messages = initial_messages(task, probes, system_prompt_text)
@@ -148,6 +152,8 @@ def run_episode(
             else:
                 ep.asked = ep.asked or ep.runs == 0
                 obs = {"answer": task.get("clarification") or NO_MORE_INFO}
+                if stop_after_ask and task["flags"]["ambiguous"]:
+                    ep.end_reason, done = "asked", True
         elif action["action"] == "unsupported":
             ep.refused, ep.end_reason, done = True, "unsupported", True
             obs = {"ended": "unsupported"}
