@@ -12,7 +12,8 @@
     "request": {"type": "string", "minLength": 1},
     "inputs": {"type": "array", "minItems": 1, "items": {"$ref": "spec#/$defs/id"}},
     "gold_spec": {"anyOf": [{"$ref": "spec"}, {"type": "null"}]},
-    "families": {"type": "array", "minItems": 1, "items": {"$ref": "spec#/$defs/family"}},
+    "families": {"type": "array", "items": {"$ref": "spec#/$defs/family"}, "description": "At least one family, except unsupported tasks, which belong to none (empty list; spike-v0 still lists a nominal family there, spike-v1 requires [])."},
+    "nearest_supported": {"anyOf": [{"$ref": "spec#/$defs/family"}, {"type": "null"}], "description": "Unsupported tasks only: the closest supported family the agent may name in its `unsupported` action, or null when nothing is close. Optional elsewhere."},
     "difficulty": {"type": "integer", "minimum": 1, "maximum": 4},
     "flags": {
       "type": "object", "additionalProperties": false, "required": ["ambiguous", "unsupported"],
@@ -20,5 +21,7 @@
     },
     "clarification": {"type": ["string", "null"]},
     "reference_runs": {"anyOf": [{"type": "array", "minItems": 1, "items": {"$ref": "action#/$defs/run"}}, {"type": "null"}]}
-  }
+  },
+  "if": {"properties": {"flags": {"properties": {"unsupported": {"const": true}}}}},
+  "else": {"properties": {"families": {"minItems": 1}}}
 }

@@ -56,7 +56,7 @@ def test_rotated_display_dims_pass(tmp_path, corpus):
         "id": "out1",
         "kind": "video",
         "container": "mov",
-        "video": {"width": 1080, "height": 1920, "rotation": 90},
+        "video": {"width": 1080, "height": 1920},
     }
     args = ["-i", "{in:clip}", "-c", "copy", "{out:out1}"]
     out, inp = _make(tmp_path, corpus, "hevc_rot90", args, spec)

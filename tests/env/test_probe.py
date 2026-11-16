@@ -20,8 +20,10 @@ def test_probe_h264_fields(corpus):
     assert (audio["type"], audio["codec"]) == ("audio", "aac")
 
 
-def test_probe_rotation_normalised(corpus):
-    assert probe(corpus["hevc_rot90"])["streams"][0]["rotation"] == 90
+def test_probe_rotation_is_clockwise(corpus):
+    # hevc_rot90 was made with `-display_rotation 90` (FFmpeg: counterclockwise 90, ffprobe rotation=90),
+    # which players show turned 90 degrees counterclockwise = 270 clockwise (the one convention).
+    assert probe(corpus["hevc_rot90"])["streams"][0]["rotation"] == 270
 
 
 def test_display_size_swaps_on_rotation():

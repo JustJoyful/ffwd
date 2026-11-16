@@ -33,7 +33,10 @@
             "height": {"$ref": "#/$defs/int"},
             "fps": {"$ref": "#/$defs/num"},
             "pix_fmt": {"$ref": "#/$defs/str"},
-            "rotation": {"enum": [0, 90, 180, 270, null]}
+            "rotation": {
+              "enum": [0, 90, 180, 270, null],
+              "description": "CONVENTION (single, everywhere): CLOCKWISE degrees. In a spec: the net rotation of the picture a viewer sees, relative to the input's displayed picture, however achieved (display-matrix metadata or re-encoded pixels); 90 = turn right/clockwise, 270 = turn left/counterclockwise, 180 = upside down. The checker measures it from picture content. In a probe result: the clockwise degrees the container's display matrix tells players to apply (ffprobe reports the same angle counterclockwise, so it is negated)."
+            }
           }
         },
         "audio": {
@@ -60,8 +63,8 @@
           "type": ["object", "null"],
           "additionalProperties": false,
           "properties": {
-            "interval_s": {"$ref": "#/$defs/num"},
-            "expected_count": {"$ref": "#/$defs/int"},
+            "interval_s": {"$ref": "#/$defs/num", "description": "One frame at t = k * interval_s for k = 0, 1, 2, ... while t < duration - half a source frame."},
+            "expected_count": {"$ref": "#/$defs/int", "description": "Exact number of images (matched with zero tolerance). With only interval_s set, the checker accepts the strict count, or one fewer when the last sample lies within half an interval of the end (FFmpeg's fps filter drops that final slot; select keeps it). Rule and evidence: training/config.py."},
             "format": {"enum": ["png", "jpg", null]}
           }
         },

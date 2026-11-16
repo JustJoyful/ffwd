@@ -29,11 +29,12 @@ def _fps(rate: str | None) -> float | None:
 
 
 def _rotation(stream: dict) -> int:
-    # ffprobe's displaymatrix rotation is counterclockwise degrees, possibly negative (-90 on
-    # iPhone portrait clips). Normalise onto {0, 90, 180, 270}.
+    # Convention (packages/protocol spec.schema.json): CLOCKWISE degrees a player applies. ffprobe reports
+    # the displaymatrix angle counterclockwise (-90 on iPhone portrait clips), so negate it.
+    # Normalised onto {0, 90, 180, 270}.
     for sd in stream.get("side_data_list", []):
         if "rotation" in sd:
-            return round(float(sd["rotation"]) / 90) * 90 % 360
+            return -round(float(sd["rotation"]) / 90) * 90 % 360
     return 0
 
 

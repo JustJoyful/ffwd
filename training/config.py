@@ -20,13 +20,42 @@ MAX_RUNS_PER_JOB = 4
 MAX_TURNS_PER_JOB = 8
 MAX_ASK_USER = 1
 
-# Checker tolerances (checker v0)
+# --- Checker tolerances (checker v1.2). Each one says what it measures, why that size, and its evidence. ---
+# Time (seconds): explicit `time` fields use the spec's own tolerance_s, else this default.
 DEFAULT_TIME_TOLERANCE_S = 0.1  # ARCH §3.2 example tolerance
-FPS_REL_TOLERANCE = 0.01
-FRAME_COUNT_TOLERANCE = 1
-LOUDNESS_TOLERANCE_LU = 2.0  # single-pass loudnorm lands within ~1-2 LU of target
-OFFSET_PACKET_WINDOW = 16  # packets per stream inspected for the offset (B-frame safe)
-OFFSET_TOLERANCE_MS = 40.0  # covers AAC encoder priming (1024 samples = 21 ms at 48 kHz)
+# Implicit duration invariant: when no time field is set the output must last as long as the input (the
+# sum of the inputs for a merge). Same size as the default: across the 17 spike-v1 reference solutions where it
+# applies and nothing shifts audio, the largest deviation measured is 0.008 s (eval.verify_tasks), so 0.1 s
+# has >10x margin, while the s07 failure mode (a 0.1 s clip from a 4 s input) is 3.9 s off. When
+# audio.offset_ms is set the allowed deviation grows by |offset| (shifting audio stretches the container).
+IMPLICIT_DURATION_TOLERANCE_S = 0.1
+FPS_REL_TOLERANCE = 0.01  # 1 %: 29.97 vs 30 fps passes, 25 vs 30 fails
+# Frame counts. A sample is wanted at t = k * interval for k = 0, 1, ...; sample k exists only while
+# t_k < duration - (FRAME_SAMPLE_EPS_FRAMES / fps) (a sample inside the last half frame has no frame to take).
+# An explicit expected_count is matched exactly. With only an interval, the count may be one lower when the last
+# sample lies within half an interval of the end: FFmpeg's fps filter drops that final slot while the select
+# filter keeps it (measured on FFmpeg 9.0.2 across 4 clips x 4 intervals), and both are reasonable readings.
+FRAME_COUNT_TOLERANCE = 0
+FRAME_SAMPLE_EPS_FRAMES = 0.5
+# Loudness (EBU R128 integrated, LUFS): +-2.0 LU. Single-pass loudnorm and `volume=` chains land within about
+# 1-2 LU of a target on short clips in general; the spike references measure -16.0 for a -16 request and
+# -41.8 for +20 dB on a -61.8 LUFS clip (exact, because the gold values were derived from the same chain). Tighter
+# would fail correct single-pass solutions on other clips; looser would pass a plain +6 dB boost when -16 LUFS
+# was requested.
+LOUDNESS_TOLERANCE_LU = 2.0
+# A/V offset (milliseconds, audio first-packet pts minus video first-packet pts): +-40 ms. Measured on the
+# reference solutions: requests of -500 / +300 / +200 ms read -521.3 / +278.7 / +178.7, i.e. every one is 21.3 ms
+# early = exactly one AAC frame of encoder priming (1024 samples at 48 kHz). The window of OFFSET_PACKET_WINDOW
+# packets absorbs B-frame reordering. 40 ms covers that priming with margin and stays well under the ~100 ms
+# humans notice and the 200-500 ms offsets F11 requests, so a wrong shift cannot pass.
+OFFSET_PACKET_WINDOW = 16
+OFFSET_TOLERANCE_MS = 40.0
+# Rotation: net clockwise rotation of the displayed picture is measured from content by comparing
+# 32x32 thumbnails (training/env/orientation.py). The best of the 4 candidates must beat the runner-up by
+# this ratio and absolute grey-level gap, else the measurement is None and the field fails (fail closed).
+ORIENTATION_THUMB = 32
+ORIENTATION_MAX_RATIO = 0.75
+ORIENTATION_MIN_GAP = 4.0
 
 # Local data (gitignored except manifests and tasks)
 DATA_DIR = REPO_ROOT / "data"

@@ -79,7 +79,14 @@ def _do_run(
         return {"run_ok": False, "rejected": result.rejected, "stderr_tail": result.stderr_tail}
     input_probe = probes[task["inputs"][0]]
     checks = {
-        oid: check(gold[oid], path, input_probe=input_probe, run_args=action["args"])
+        oid: check(
+            gold[oid],
+            path,
+            input_probe=input_probe,
+            run_args=action["args"],
+            input_probes=[probes[cid] for cid in task["inputs"]],
+            input_paths=[corpus[cid] for cid in task["inputs"]],
+        )
         for oid, path in result.outputs.items()
     }
     # Pass only when every gold output was produced in this run and passed.

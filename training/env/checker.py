@@ -2,8 +2,11 @@
 
 Checks only spec fields that are set (null = unconstrained). Never raises on bad media: a probe
 failure or empty output becomes passed=False with `error` set.
-v0 covers video/audio/time/size/frames/re-encode plus loudness (EBU R128) and A/V offset
-(first-packet timestamps: verifies the requested shift was applied, not perceived sync). Quality floor is v1.
+Covers video/audio/time/size/frames/re-encode plus loudness (EBU R128), A/V offset (first-packet
+timestamps: verifies the requested shift was applied, not perceived sync), net rotation measured from
+content, and IMPLICIT invariants (v1.2): unless the spec changes them, output duration and audio
+presence equal the input's (so a 0.1 s clip can never satisfy "make it play on PowerPoint").
+Quality floor is still to come. Tolerances and their evidence live in training/config.py.
 """
 
 import math
@@ -12,6 +15,7 @@ import subprocess
 from pathlib import Path
 
 from training import config
+from training.env.orientation import net_rotation_cw
 from training.env.probe import display_size, first_packet_pts, probe
 from training.env.validator import uses_stream_copy_only
 
@@ -29,6 +33,19 @@ def _add(checks: list[dict], field: str, expected, actual, ok: bool) -> None:
     checks.append({"field": field, "expected": expected, "actual": actual, "ok": bool(ok)})
 
 
+def expected_frame_range(
+    duration_s: float, interval_s: float, fps: float | None
+) -> tuple[int, int]:
+    """(min, max) accepted frame count for "one frame every interval_s" over duration_s (counting rule in
+    training/config.py): samples at t = k * interval, kept while t < duration - 0.5 frame. The max is the
+    strict count; the min is one lower when the last sample is within half an interval of the end.
+    """
+    last = duration_s - config.FRAME_SAMPLE_EPS_FRAMES / (fps or 30.0)
+    strict = max(1, math.ceil(last / interval_s - 1e-9))
+    boundary = last - (strict - 1) * interval_s < interval_s / 2
+    return (max(1, strict - 1) if boundary else strict), strict
+
+
 def _check_frames(spec: dict, out_dir: Path, input_probe: dict, measurements: dict) -> dict:
     frames = spec.get("frames") or {}
     fmt = frames.get("format")
@@ -38,11 +55,15 @@ def _check_frames(spec: dict, out_dir: Path, input_probe: dict, measurements: di
         return _result([], measurements, "no frames written")
     checks: list[dict] = []
     expected = frames.get("expected_count")
-    if expected is None and frames.get("interval_s") and input_probe.get("duration_s"):
-        expected = math.floor(input_probe["duration_s"] / frames["interval_s"])
     if expected is not None:
         ok = abs(len(files) - expected) <= config.FRAME_COUNT_TOLERANCE
         _add(checks, "frames.expected_count", expected, len(files), ok)
+    elif frames.get("interval_s") and input_probe.get("duration_s"):
+        vid = next((s for s in input_probe["streams"] if s["type"] == "video"), {})
+        lo, hi = expected_frame_range(
+            input_probe["duration_s"], frames["interval_s"], vid.get("fps")
+        )
+        _add(checks, "frames.count_for_interval", f"{lo}..{hi}", len(files), lo <= len(files) <= hi)
     if fmt:
         exts = sorted({f.suffix.lstrip(".") for f in files})
         _add(checks, "frames.format", fmt, exts, exts == [fmt])
@@ -87,7 +108,46 @@ def _expected_duration(t: dict, input_probe: dict) -> float | None:
     return end
 
 
-def check(out_spec: dict, output: Path, *, input_probe: dict, run_args: list[str]) -> dict:
+def _implicit_checks(
+    out_spec: dict, p: dict, vids: list, auds: list, input_probes: list[dict], checks: list[dict]
+) -> None:
+    """Invariants every output must keep unless the spec says otherwise (v1.2)."""
+    kind = out_spec["kind"]
+    if kind == "video":
+        _add(checks, "implicit.video_stream", True, bool(vids), bool(vids))
+    if kind == "audio":
+        _add(checks, "implicit.audio_stream", True, bool(auds), bool(auds))
+    audio = out_spec.get("audio") or {}
+    if kind == "video" and audio.get("present") is None:
+        expected = any(s["type"] == "audio" for ip in input_probes for s in ip["streams"])
+        _add(checks, "implicit.audio_present", expected, bool(auds), bool(auds) == expected)
+    t = out_spec.get("time") or {}
+    if kind != "image_sequence" and t.get("start_s") is None and t.get("end_s") is None:
+        durations = [ip.get("duration_s") for ip in input_probes]
+        if durations and all(d is not None for d in durations):
+            expected = sum(durations)  # one output from several inputs = their concatenation
+            tol = t.get("tolerance_s")
+            tol = config.IMPLICIT_DURATION_TOLERANCE_S if tol is None else tol
+            if audio.get("offset_ms") is not None:
+                tol += (
+                    abs(audio["offset_ms"]) / 1000
+                )  # shifting audio may stretch the container by the shift
+            ok = abs(p["duration_s"] - expected) <= tol
+            _add(checks, "implicit.duration_s", expected, p["duration_s"], ok)
+
+
+def check(
+    out_spec: dict,
+    output: Path,
+    *,
+    input_probe: dict,
+    run_args: list[str],
+    input_probes: list[dict] | None = None,
+    input_paths: list[Path] | None = None,
+) -> dict:
+    """input_probes/input_paths: every input in task order (default: just `input_probe`). input_paths is
+    needed for `video.rotation`, which is measured against the input's picture."""
+    input_probes = input_probes or [input_probe]
     measurements: dict = {"re_encoded": not uses_stream_copy_only(run_args)}
     if out_spec["kind"] == "image_sequence":
         return _check_frames(out_spec, output, input_probe, measurements)
@@ -121,10 +181,13 @@ def check(out_spec: dict, output: Path, *, input_probe: dict, run_args: list[str
                 ("pix_fmt", v["pix_fmt"]),
                 ("width", w),
                 ("height", h),
-                ("rotation", v["rotation"]),
             ):
                 if key in video:
                     _add(checks, f"video.{key}", video[key], actual, actual == video[key])
+            if "rotation" in video:
+                net = net_rotation_cw(input_paths[0], output) if input_paths else None
+                measurements["net_rotation_cw"] = net
+                _add(checks, "video.rotation", video["rotation"], net, net == video["rotation"])
             if "fps" in video:
                 fps = v["fps"]
                 ok = (
@@ -132,6 +195,8 @@ def check(out_spec: dict, output: Path, *, input_probe: dict, run_args: list[str
                     and abs(fps - video["fps"]) <= config.FPS_REL_TOLERANCE * video["fps"]
                 )
                 _add(checks, "video.fps", video["fps"], fps, ok)
+
+    _implicit_checks(out_spec, p, vids, auds, input_probes, checks)
 
     audio = {k: v for k, v in (out_spec.get("audio") or {}).items() if v is not None}
     if "present" in audio:

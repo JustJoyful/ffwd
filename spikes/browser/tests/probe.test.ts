@@ -36,15 +36,16 @@ describe("browser probe parser agrees with the Python probe", () => {
     });
   });
 
-  it("reads rotation from the displaymatrix side data (iPhone-style clip)", () => {
+  it("reads rotation from the displaymatrix side data as CLOCKWISE degrees", () => {
+    // hevc_rot90 was made with -display_rotation 90 (counterclockwise 90 in FFmpeg's log) = 270 clockwise
     const rot = parseFfmpegProbe((logs as Record<string, string>)["hevc_rot90.mov"] as string);
-    expect(rot.streams[0]).toMatchObject({ width: 1920, height: 1080, rotation: 90 });
+    expect(rot.streams[0]).toMatchObject({ width: 1920, height: 1080, rotation: 270 });
   });
 
-  it("normalises negative rotations and tolerates garbage", () => {
+  it("negates and normalises: -90 (iPhone portrait) is 90 clockwise; garbage throws", () => {
     const neg =
       "Input #0, mov,mp4, from 'x.mov':\n  Duration: 00:00:01.00, start: 0.0, bitrate: 1 kb/s\n  Stream #0:0: Video: h264, yuv420p, 100x50, 25 fps\n    Side data:\n      displaymatrix: rotation of -90.00 degrees\n";
-    expect(parseFfmpegProbe(neg).streams[0]).toMatchObject({ rotation: 270 });
+    expect(parseFfmpegProbe(neg).streams[0]).toMatchObject({ rotation: 90 });
     expect(() => parseFfmpegProbe("not an ffmpeg log")).toThrow(/no input/i);
   });
 });

@@ -406,7 +406,7 @@
           "height": 1080,
           "fps": 30.0,
           "pix_fmt": "yuv420p",
-          "rotation": 90,
+          "rotation": 270,
           "start_time_s": 0.0,
           "duration_s": 4.0
         },

@@ -17,10 +17,10 @@ def _by_id(records, clip_id):
     return next(r for r in records if r["id"] == clip_id)
 
 
-def test_hevc_rot90_has_rotation_90(corpus_records):
+def test_hevc_rot90_is_270_clockwise(corpus_records):
     video = _by_id(corpus_records[1], "hevc_rot90")["probe"]["streams"][0]
     assert video["codec"] == "hevc"
-    assert video["rotation"] == 90
+    assert video["rotation"] == 270  # clockwise convention
 
 
 def test_noaudio_has_no_audio_stream(corpus_records):

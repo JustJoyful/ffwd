@@ -55,8 +55,10 @@ function splitTopLevel(s: string): string[] {
   return parts;
 }
 
-const normaliseRotation = (deg: number): number =>
-  (((Math.round(deg / 90) * 90) % 360) + 360) % 360;
+// One convention everywhere (spec.schema.json): CLOCKWISE degrees. FFmpeg logs the display matrix
+// counterclockwise ("rotation of -90.00 degrees" on iPhone portrait clips), so negate it.
+const normaliseRotation = (ccwDeg: number): number =>
+  (((-Math.round(ccwDeg / 90) * 90) % 360) + 360) % 360;
 
 export function parseFfmpegProbe(log: string): BrowserProbe {
   const input = /^Input #0, (.+?), from /m.exec(log);
