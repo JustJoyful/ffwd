@@ -109,8 +109,22 @@ def _expected_duration(t: dict, input_probe: dict) -> float | None:
     return end
 
 
+def _input_offset_ms(input_paths: list[Path] | None) -> float:
+    """|audio start - video start| of the first input in ms (0 when unmeasurable)."""
+    if not input_paths:
+        return 0.0
+    v0, a0 = first_packet_pts(input_paths[0], "video"), first_packet_pts(input_paths[0], "audio")
+    return abs((a0 - v0) * 1000) if v0 is not None and a0 is not None else 0.0
+
+
 def _implicit_checks(
-    out_spec: dict, p: dict, vids: list, auds: list, input_probes: list[dict], checks: list[dict]
+    out_spec: dict,
+    p: dict,
+    vids: list,
+    auds: list,
+    input_probes: list[dict],
+    checks: list[dict],
+    input_paths: list[Path] | None = None,
 ) -> None:
     """Invariants every output must keep unless the spec says otherwise (v1.2)."""
     kind = out_spec["kind"]
@@ -130,9 +144,9 @@ def _implicit_checks(
             tol = t.get("tolerance_s")
             tol = config.IMPLICIT_DURATION_TOLERANCE_S if tol is None else tol
             if audio.get("offset_ms") is not None:
-                tol += (
-                    abs(audio["offset_ms"]) / 1000
-                )  # shifting audio may stretch the container by the shift
+                # Shifting audio stretches/shrinks the container by the shift: allow the target offset plus the
+                # input's own offset (an "audio is 0.5 s late, fix it" task targets 0 but removes 0.5 s).
+                tol += (abs(audio["offset_ms"]) + _input_offset_ms(input_paths)) / 1000
             ok = abs(p["duration_s"] - expected) <= tol
             _add(checks, "implicit.duration_s", expected, p["duration_s"], ok)
 
@@ -239,7 +253,7 @@ def check(
                 )
                 _add(checks, "video.fps", video["fps"], fps, ok)
 
-    _implicit_checks(out_spec, p, vids, auds, input_probes, checks)
+    _implicit_checks(out_spec, p, vids, auds, input_probes, checks, input_paths)
 
     audio = {k: v for k, v in (out_spec.get("audio") or {}).items() if v is not None}
     if "present" in audio:

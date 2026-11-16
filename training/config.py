@@ -64,6 +64,11 @@ OFFSET_TOLERANCE_MS = 40.0
 QUALITY_SAMPLE_FPS = 2
 SSIM_FLOOR_DEFAULT = 0.90
 PSNR_FLOOR_DB_DEFAULT = 28.0
+# Lossless rotation spelling used by REFERENCE solutions (gold specs are identical either way). "display_rotation" =
+# `-display_rotation` (FFmpeg >= 6, native only); "metadata_rotate" = `-metadata:s:v:0 rotate=` (FFmpeg 5.1 / ffmpeg.wasm).
+# Switch when D-024 is decided.
+LOSSLESS_ROTATE_SPELLING = "display_rotation"
+
 # --- Frozen agent format (plan T6, D-026) ---
 SYSTEM_PROMPT_V1 = "system-v1.txt"
 # Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and

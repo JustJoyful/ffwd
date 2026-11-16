@@ -5,9 +5,9 @@ import json
 
 import pytest
 
-from eval.verify_tasks import verify_task
 from training import config
 from training.protocol import validate
+from training.taskgen.verify import verify_task
 
 DEV = config.DATA_DIR / "tasks" / "dev"
 V0_SHA256 = (

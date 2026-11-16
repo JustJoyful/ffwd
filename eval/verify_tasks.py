@@ -14,46 +14,7 @@ import tempfile
 from pathlib import Path
 
 from eval.run_baseline import load_corpus
-from training.env.checker import check
-from training.env.executor import execute, output_path_for
-from training.env.probe import probe
-
-
-def verify_task(task: dict, corpus: dict[str, Path], work: Path) -> dict:
-    gold = {o["id"]: o for o in task["gold_spec"]["outputs"]}
-    run = task["reference_runs"][-1]
-    res = execute(
-        run,
-        input_paths={c: corpus[c] for c in task["inputs"]},
-        output_paths={oid: output_path_for(work, o) for oid, o in gold.items()},
-    )
-    row: dict = {"task_id": task["id"], "passed": False, "failed": [], "measurements": {}}
-    if not res.ok:
-        row["failed"] = [f"reference run rejected/failed: {res.stderr_tail[-120:]}"]
-        return row
-    probes = [probe(corpus[c]) for c in task["inputs"]]
-    ok = set(res.outputs) == set(gold)
-    for oid, path in res.outputs.items():
-        r = check(
-            gold[oid],
-            path,
-            input_probe=probes[0],
-            run_args=run["args"],
-            input_probes=probes,
-            input_paths=[corpus[c] for c in task["inputs"]],
-        )
-        ok &= r["passed"]
-        row["failed"] += [c["field"] for c in r["checks"] if not c["ok"]] + (
-            [r["error"]] if r["error"] else []
-        )
-        row["measurements"] |= {k: v for k, v in r["measurements"].items() if v is not None}
-        for c in r["checks"]:
-            if c["field"] == "implicit.duration_s":  # evidence for IMPLICIT_DURATION_TOLERANCE_S
-                row["measurements"]["implicit_duration_delta_s"] = round(
-                    c["actual"] - c["expected"], 3
-                )
-    row["passed"] = bool(ok)
-    return row
+from training.taskgen.verify import verify_task
 
 
 def main() -> None:
