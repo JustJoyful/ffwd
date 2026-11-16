@@ -49,3 +49,7 @@ Kernels pushed from the CLI have no secrets attached, and I will not embed token
 - Real SFT, M1, GRPO: need data (gated) and a GPU (Kaggle queued; local RTX 3050 is for smoke tests only).
 - B0 v2 (patterns from train phrasing only) and dev baselines on the new splits.
 - Dual-runtime (ffmpeg.wasm) conformance run: Phase 2.
+
+
+## Kaggle retry after owner attached secrets (22:20 IST)
+Pushed `--mode train` as kernel version 2. It failed the same way: `get_secret('HF_TOKEN')` -> HTTP 400 (`reports/2026-11-16-phase1-dev-baselines/kaggle-session2-error.log`). Secrets attached in the UI are not reaching API-pushed runs. Not re-pushed again. Next step needs the owner: in the kernel's UI (Add-ons > Secrets) tick the HF_TOKEN toggle for the latest version and run it from the UI, or tell me to use another method.
