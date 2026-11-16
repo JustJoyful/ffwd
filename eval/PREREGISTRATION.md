@@ -28,3 +28,9 @@ Written before any model is run on the spike tasks (RULES §4.6). Changes after 
 - 50 hand-drafted tasks: wide CIs (±~14 points at 50%).
 - Base Qwen3 runs at GGUF Q8_0, not fp16.
 - Checker v0: direction of re-encoded rotations is not verified; mp4 vs mov containers are not distinguished; A/V offset is measured from stream start times only.
+
+## Post-hoc section (2026-11-16): paraphrase robustness
+Not part of the Phase 0 verdict. Owner approved (cap $0.02 for paraphrasing, budget-guarded). Question: do B0 and X1 hold up on wording the author did not write?
+- Dev tasks only; no test split touched. One DeepSeek paraphrase per task, generated once.
+- A paraphrase is kept only if (a) its digits match the original's exactly and (b) a second DeepSeek call, shown the gold spec, answers YES to "same meaning". Dropped ones are listed with the reason, never regenerated.
+- B0 frozen first (`reports/2026-11-16-paraphrase-robustness/FREEZE.md`). Report B0 and X1 on originals vs paraphrases, same kept task set, Wilson CIs; paired difference by bootstrap.
