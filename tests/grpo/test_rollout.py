@@ -54,7 +54,6 @@ def test_token_stream_masks_observations(corpus, tmp_path):
     assert t["prompt_ids"] == tok.apply_chat_template(
         prompt_messages(TASK, corpus),
         add_generation_prompt=True,
-        enable_thinking=False,
         tokenize=True,
     )
     n1 = len(GOOD) + 1

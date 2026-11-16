@@ -21,6 +21,7 @@ from trl import GRPOConfig, GRPOTrainer
 
 from training import config
 from training.corpus.make_synthetic import ensure_corpus
+from training.env.chat_template import install as install_agent_template
 from training.grpo.ckpt_sync import (
     SyncCallback,
     local_latest,
@@ -243,6 +244,9 @@ def main(argv: list[str] | None = None) -> None:
             r=16, lora_alpha=32, target_modules="all-linear", task_type="CAUSAL_LM"
         ),
     )
+    # TokenPolicy no longer passes enable_thinking: the tokenizer must carry the agent template (D-026), which
+    # keeps the empty think block exactly as enable_thinking=False did for the newest turn.
+    install_agent_template(trainer.processing_class)
     metrics_path = a.ckpt_dir / "toy_metrics.jsonl"
     trainer.add_callback(StepTimer(metrics_path, n_gpus))
     remote = remote_from_args(a.hub_repo, a.sync_dir, a.keep_last)
