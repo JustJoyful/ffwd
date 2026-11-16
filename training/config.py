@@ -98,6 +98,19 @@ MIX_FAMILY_COUNT = (0.55, 0.30, 0.12, 0.03)
 # Leakage audit (eval/leakage.py): word 4-gram Jaccard between a test request and its most similar train request.
 LEAKAGE_JACCARD_MAX = 0.9
 
+# --- SFT (training/sft) ---
+SFT_MAX_LEN = 2048  # tokens per example; longer streams are dropped and counted
+SFT_FAMILY_CAP = 0.25  # no family above this share of the mix
+SFT_REJECTION_SHARE_MAX = 0.25  # base-model rejection samples: easy, low-information, capped
+SFT_LORA = {"r": 16, "alpha": 32, "dropout": 0.0}  # all-linear LoRA, as in the GRPO toy
+SFT_HPARAMS = {
+    "lr": 1e-4,
+    "epochs": 3,
+    "per_device_batch": 4,
+    "grad_accum": 4,
+    "warmup_ratio": 0.03,
+}
+
 # --- Frozen agent format (plan T6, D-026) ---
 SYSTEM_PROMPT_V1 = "system-v1.txt"
 # Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and

@@ -32,6 +32,10 @@ from training.grpo.ckpt_sync import (
 from training.grpo.rollout import Generator, make_rollout_func, prompt_messages
 from training.grpo.taskfilter import apply_filter
 from training.grpo.telemetry import TelemetryLog, grpo_reward
+from training.precision import (
+    native_bf16,
+    precision_plan,
+)  # noqa: F401  (re-exported: tests import them from here)
 from training.taskgen.toy import CLIPS as TOY_CLIPS
 from training.taskgen.toy import make_toy_tasks
 
@@ -66,25 +70,6 @@ class StepTimer(TrainerCallback):
         with self.path.open("a") as f:
             f.write(json.dumps(row) + "\n")
         self.pending = None
-
-
-def native_bf16() -> bool:
-    """bf16 in hardware (compute capability >= 8.0). Not torch.cuda.is_bf16_supported(): that counts
-    emulation and returns True on a T4, which sent the Kaggle run down the crashing bf16 path."""
-    return torch.cuda.is_available() and torch.cuda.get_device_capability() >= (8, 0)
-
-
-def precision_plan(precision: str, bf16_supported: bool) -> dict:
-    """bf16 on Ampere+; fp16 on T4 (no bf16 hardware). On the fp16 path TRL's chunked-logprob kernel
-    must not use torch.addmm(out_dtype=float32): that mixed-precision GEMM needs compute capability
-    >= 8.0 (crashed on Kaggle T4). Its fallback upcasts to fp32 first: same math, a bit slower."""
-    use_bf16 = precision == "bf16" or (precision == "auto" and bf16_supported)
-    return {
-        "bf16": use_bf16,
-        "fp16": not use_bf16,
-        "model_dtype": torch.bfloat16 if use_bf16 else torch.float16,
-        "mixed_out_gemm": use_bf16,
-    }
 
 
 def hf_generator_for(temperature: float):
