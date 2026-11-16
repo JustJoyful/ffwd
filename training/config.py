@@ -8,9 +8,33 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 PROTOCOL_DIR = REPO_ROOT / "packages" / "protocol"
 PROTOCOL_VERSION = "0.2.0"  # ARCH §12: shared by web, helper, training
 
-# Binaries (ARCH §3.5): resolved from PATH, always invoked with argument lists.
-FFMPEG_BIN = "ffmpeg"
-FFPROBE_BIN = "ffprobe"
+# D-024/D-029: ONE pinned static FFmpeg for the checker, the executor and every reference run, everywhere (local,
+# Kaggle, CI). The browser runs ffmpeg.wasm 5.1.4; no static native 5.1.4 exists, so the pin is 5.1.1 and the
+# patch-level gap is covered by the native-vs-wasm parity test (D-024). Install: `python -m training.env.ffmpeg_pin
+# install` (downloads, verifies the sha256 below, extracts into FFMPEG_PIN_HOME).
+FFMPEG_PIN = {
+    "version": "5.1.1",
+    "url": "https://johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
+    "sha256": "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
+    "dirname": "ffmpeg-5.1.1-amd64-static",
+}
+FFMPEG_PIN_HOME = Path(
+    os.environ.get("FFMPEG_AGENT_PIN_HOME", Path.home() / ".cache" / "ffmpeg-agent" / "pin")
+)
+# Staged: the pinned build is downloaded but was not yet runnable in the dev environment (sandbox classifier), so
+# enforcement is switched on in the commit that verifies it. While False the harness still uses the pinned binary
+# when installed, but a mismatching FFmpeg on PATH is not refused. Must be True before any Phase 1 data is built.
+FFMPEG_PIN_ENFORCED = False
+
+
+def _pinned_tool(name: str) -> str:
+    p = FFMPEG_PIN_HOME / FFMPEG_PIN["dirname"] / name
+    return str(p) if p.exists() else name  # not installed: PATH (refused when FFMPEG_PIN_ENFORCED)
+
+
+# Binaries (ARCH §3.5): the pinned build when installed, else PATH; always invoked with argument lists.
+FFMPEG_BIN = _pinned_tool("ffmpeg")
+FFPROBE_BIN = _pinned_tool("ffprobe")
 
 # Per-run limits (RULES §1.4)
 RUN_TIMEOUT_S = 120

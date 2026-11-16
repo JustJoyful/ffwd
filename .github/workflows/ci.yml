@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install FFmpeg
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - uses: astral-sh/setup-uv@v5
       - run: uv sync
+      - name: Install the pinned FFmpeg (D-024)
+        run: uv run python -m training.env.ffmpeg_pin install
       - run: uv run ruff check .
       - run: uv run black --check .
       - run: uv run pytest

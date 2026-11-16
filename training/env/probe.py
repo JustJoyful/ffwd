@@ -6,6 +6,7 @@ from fractions import Fraction
 from pathlib import Path
 
 from training import config
+from training.env.ffmpeg_pin import ffprobe_bin
 
 _STREAM_TYPES = {"video", "audio", "subtitle", "data", "attachment"}
 
@@ -59,7 +60,7 @@ def probe(path: Path) -> dict:
     if not path.is_file():
         raise FileNotFoundError(path)
     argv = [
-        config.FFPROBE_BIN,
+        ffprobe_bin(),
         "-v",
         "error",
         "-print_format",
@@ -94,7 +95,7 @@ def first_packet_pts(path: Path, stream_type: str, window: int | None = None) ->
     """
     n = window or config.OFFSET_PACKET_WINDOW
     argv = [
-        config.FFPROBE_BIN,
+        ffprobe_bin(),
         "-v",
         "error",
         "-select_streams",

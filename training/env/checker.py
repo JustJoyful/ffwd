@@ -15,6 +15,7 @@ import subprocess
 from pathlib import Path
 
 from training import config
+from training.env.ffmpeg_pin import ffmpeg_bin
 from training.env.orientation import net_rotation_cw
 from training.env.probe import display_size, first_packet_pts, probe
 from training.env.quality import measure_quality
@@ -76,7 +77,7 @@ _LUFS = re.compile(r"^\s+I:\s+(-?[\d.]+|-inf) LUFS", re.MULTILINE)
 
 def _integrated_loudness(path: Path) -> float | None:
     argv = [
-        config.FFMPEG_BIN,
+        ffmpeg_bin(),
         "-hide_banner",
         "-nostdin",
         "-i",

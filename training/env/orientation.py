@@ -16,13 +16,14 @@ import subprocess
 from pathlib import Path
 
 from training import config
+from training.env.ffmpeg_pin import ffmpeg_bin
 
 Thumb = list[list[int]]
 
 
 def thumbnail(path: Path, size: int = config.ORIENTATION_THUMB) -> Thumb | None:
     argv = [
-        config.FFMPEG_BIN, "-hide_banner", "-nostdin", "-v", "error", "-i", str(path),
+        ffmpeg_bin(), "-hide_banner", "-nostdin", "-v", "error", "-i", str(path),
         "-frames:v", "1", "-vf", f"scale={size}:{size}:flags=area,format=gray",
         "-f", "rawvideo", "-",
     ]  # fmt: skip

@@ -45,9 +45,10 @@ def sh(cmd, ok=(0,)):
         sys.exit(rc)
     return rc
 
-sh("git log --oneline -1; nvidia-smi -L; which ffmpeg || (apt-get -qq update && apt-get -qq install -y ffmpeg)")
+sh("git log --oneline -1; nvidia-smi -L")
 sh("curl -LsSf https://astral.sh/uv/install.sh | sh")
 sh("uv sync --group train")
+sh("uv run python -m training.env.ffmpeg_pin install")  # the ONE pinned FFmpeg (D-024), never apt's
 sh("uv run --group train python -c \\"import torch; assert torch.cuda.is_available(); print('cuda ok')\\"")
 train = "uv run --group train python -m training.grpo.toy_spike --model Qwen/Qwen3-0.6B --steps {steps} --save-steps 2 --hub-repo {hub} --ckpt-dir /kaggle/working/ckpt"
 if MODE == "train":

@@ -11,6 +11,7 @@ import subprocess
 from pathlib import Path
 
 from training import config
+from training.env.ffmpeg_pin import ffmpeg_bin
 
 _SSIM = re.compile(r"SSIM .*? All:([\d.]+)")
 _PSNR = re.compile(r"PSNR .*? average:([\d.inf]+)")
@@ -21,7 +22,7 @@ def measure_quality(reference: Path, candidate: Path, width: int, height: int) -
     prep = f"fps={fps},scale={width}:{height}:flags=bicubic,format=yuv420p"
     graph = f"[0:v]{prep},split[a1][a2];[1:v]{prep},split[b1][b2];[a1][b1]ssim;[a2][b2]psnr"
     argv = [
-        config.FFMPEG_BIN, "-hide_banner", "-nostdin", "-i", str(candidate), "-i", str(reference),
+        ffmpeg_bin(), "-hide_banner", "-nostdin", "-i", str(candidate), "-i", str(reference),
         "-filter_complex", graph, "-f", "null", "-",
     ]  # fmt: skip
     try:

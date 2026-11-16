@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from training import config
+from training.env.ffmpeg_pin import ffmpeg_bin
 from training.env.sandbox import sandbox_prefix
 from training.env.validator import validate_run
 
@@ -95,7 +96,7 @@ def execute(
     )
     argv = [
         *sandbox_argv,
-        config.FFMPEG_BIN,
+        ffmpeg_bin(),
         "-hide_banner",
         "-nostdin",
         "-y",
