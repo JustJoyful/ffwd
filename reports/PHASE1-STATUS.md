@@ -32,6 +32,11 @@ No questions to the owner; conservative defaults, documented. All work is on `ma
 - GRPO driver: 1 step, 2 generations x 2 prompts, real lockstep generation + telemetry + checkpoint: works (0.013 GPU-h; junk policy, as expected after 3 SFT steps).
 - GGUF export: **blocked** on llama.cpp's `convert_hf_to_gguf.py` (not in the release binaries; fetching it means running external code). Wrapper is ready: set `LLAMA_CPP_DIR` / `LLAMA_QUANTIZE`.
 
+## Kaggle kill-and-resume: failed at secrets (needs one UI step from you)
+The pushed kernel `justjoyful/ffmpeg-agent-resume-auto` waited ~2 h in the GPU queue, then died after 1 s: `kaggle_secrets.get_secret('HF_TOKEN')` -> HTTP 400.
+Kernels pushed from the CLI have no secrets attached, and I will not embed tokens in pushed code. **Owner step:** open https://www.kaggle.com/code/justjoyful/ffmpeg-agent-resume-auto -> Add-ons -> Secrets -> tick `HF_TOKEN` and `GITHUB_TOKEN`. Then either re-run
+`uv run python -m training.grpo.kaggle_kernel push --mode train` (I can do this on the next wakeup once told) or click Save & Run. The log is in `reports/2026-11-16-phase1-dev-baselines/kaggle-session1-error.log`. D-022's Kaggle verification stays open.
+
 ## Waiting on the owner
 1. **G0:** Kaggle kill-and-resume result (kernel `justjoyful/ffmpeg-agent-resume-auto` still QUEUED), D-024 FFmpeg pin decision, D-025-D-031 proposals in the plan, D-032, your ~20 new spike-v1 tasks + 2-3 clips.
 2. **G-terms:** read DeepSeek's terms (training on outputs) and send the off-peak window (`config.DEEPSEEK_OFFPEAK_UTC`, `TEACHER_TERMS_URL`).

@@ -1,0 +1,40 @@
+[{"stream_name":"stderr","time":1.035530944,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":1.046656409,"data":"  File \"/usr/local/lib/python3.13/dist-packages/kaggle_web_client.py\", line 46, in make_post_request\n"}
+,{"stream_name":"stderr","time":1.046674153,"data":"    with urllib.request.urlopen(req, timeout=timeout) as response:\n"}
+,{"stream_name":"stderr","time":1.04667884,"data":"         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":1.046682176,"data":"  File \"/usr/lib/python3.13/urllib/request.py\", line 189, in urlopen\n"}
+,{"stream_name":"stderr","time":1.046685907,"data":"    return opener.open(url, data, timeout)\n"}
+,{"stream_name":"stderr","time":1.04669018,"data":"           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":1.046694017,"data":"  File \"/usr/lib/python3.13/urllib/request.py\", line 495, in open\n"}
+,{"stream_name":"stderr","time":1.046697972,"data":"    response = meth(req, response)\n"}
+,{"stream_name":"stderr","time":1.046701425,"data":"  File \"/usr/lib/python3.13/urllib/request.py\", line 604, in http_response\n"}
+,{"stream_name":"stderr","time":1.046704638,"data":"    response = self.parent.error(\n"}
+,{"stream_name":"stderr","time":1.04670774,"data":"        'http', request, response, code, msg, hdrs)\n"}
+,{"stream_name":"stderr","time":1.046711017,"data":"  File \"/usr/lib/python3.13/urllib/request.py\", line 533, in error\n"}
+,{"stream_name":"stderr","time":1.046714424,"data":"    return self._call_chain(*args)\n"}
+,{"stream_name":"stderr","time":1.046717682,"data":"           ~~~~~~~~~~~~~~~~^^^^^^^\n"}
+,{"stream_name":"stderr","time":1.046720885,"data":"  File \"/usr/lib/python3.13/urllib/request.py\", line 466, in _call_chain\n"}
+,{"stream_name":"stderr","time":1.046724455,"data":"    result = func(*args)\n"}
+,{"stream_name":"stderr","time":1.046728234,"data":"  File \"/usr/lib/python3.13/urllib/request.py\", line 613, in http_error_default\n"}
+,{"stream_name":"stderr","time":1.046732338,"data":"    raise HTTPError(req.full_url, code, msg, hdrs, fp)\n"}
+,{"stream_name":"stderr","time":1.046736202,"data":"urllib.error.HTTPError: HTTP Error 400: Bad Request\n"}
+,{"stream_name":"stderr","time":1.046740163,"data":"\n"}
+,{"stream_name":"stderr","time":1.046743876,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stderr","time":1.046747318,"data":"\n"}
+,{"stream_name":"stderr","time":1.046750588,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":1.046753717,"data":"  File \"/kaggle/src/script.py\", line 7, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":1.046757424,"data":"    os.environ[\"HF_TOKEN\"] = s.get_secret(\"HF_TOKEN\")\n"}
+,{"stream_name":"stderr","time":1.046761035,"data":"                             ~~~~~~~~~~~~^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":1.046764905,"data":"  File \"/usr/local/lib/python3.13/dist-packages/kaggle_secrets.py\", line 64, in get_secret\n"}
+,{"stream_name":"stderr","time":1.046768524,"data":"    response_json = self.web_client.make_post_request(request_body, self.GET_USER_SECRET_BY_LABEL_ENDPOINT)\n"}
+,{"stream_name":"stderr","time":1.046772064,"data":"  File \"/usr/local/lib/python3.13/dist-packages/kaggle_web_client.py\", line 58, in make_post_request\n"}
+,{"stream_name":"stderr","time":1.046775789,"data":"    raise ConnectionError(\n"}
+,{"stream_name":"stderr","time":1.046779008,"data":"        'Connection error trying to communicate with service.') from e\n"}
+,{"stream_name":"stderr","time":1.046782311,"data":"ConnectionError: Connection error trying to communicate with service.\n"}
+,{"stream_name":"stderr","time":3.500784807,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":3.5008362269999997,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":3.847892453,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":3.847918511,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":5.463396463,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":6.438269734,"data":"[NbConvertApp] Writing 279611 bytes to __results__.html\n"}
+]
