@@ -131,7 +131,7 @@ def summarize(records: list[dict], step: int) -> dict:
         "no_signal_group_share": no_signal / len(groups),
         "mean_reward": mean,
         "reward_std": (sum((t - mean) ** 2 for t in totals) / n) ** 0.5,
-        "terms_mean": {k: sum(r["terms"][k] for r in records) / n for k in config.REWARD_WEIGHTS},
+        "terms_mean": {k: sum(r["terms"][k] for r in records) / n for k in records[0]["terms"]},
         "invalid_action_rate": sum(r["invalid_turns"] for r in records) / turns if turns else 0.0,
         "ask_rate_on_supported": (
             sum(r["asked"] for r in supported) / len(supported) if supported else 0.0

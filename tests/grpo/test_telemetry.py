@@ -251,3 +251,12 @@ def test_shuffled_reward_control_permutes_within_groups_only():
         )
     assert shuffle_within_groups(rewards, groups, seed=1) == out  # deterministic
     assert any(shuffle_within_groups(rewards, groups, seed=s) != rewards for s in range(1, 6))
+
+
+def test_summarize_handles_the_toy_reward_which_has_only_a_pass_term():
+    # the default `--reward toy` path crashed on Kaggle with KeyError 'partial'
+    rec = dict(
+        task_id="a", group="a", total=1.0, terms={"pass": 1.0}, invalid_turns=0, turns=2,
+        supported=True, asked=False, refused=False, passed=True, runs=1,
+    )  # fmt: skip
+    assert summarize([rec, rec], step=1)["terms_mean"] == {"pass": 1.0}
