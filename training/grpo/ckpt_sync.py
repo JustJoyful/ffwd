@@ -9,6 +9,7 @@ Torch-free on purpose: the remote is pluggable (a directory for tests and local 
 real runs), and only the TrainerCallback hook needs transformers' duck-typed args/state objects.
 """
 
+import os
 import re
 import shutil
 from pathlib import Path
@@ -167,12 +168,17 @@ def restore_metrics(ckpt: Path, ckpt_dir: Path, name: str = "toy_metrics.jsonl")
 class SyncCallback:
     """transformers.TrainerCallback duck type: push checkpoint-N (plus metrics/telemetry/pass-rate files) on every save."""
 
-    def __init__(self, remote: Remote, extra_paths: list[Path] | None = None):
-        self.remote, self.extra_paths = remote, extra_paths or []
+    def __init__(
+        self, remote: Remote, extra_paths: list[Path] | None = None, crash_after: int | None = None
+    ):
+        self.remote, self.extra_paths, self.crash_after = remote, extra_paths or [], crash_after
 
     def on_save(self, args, state, control, **kw):
         ckpt = Path(args.output_dir) / f"checkpoint-{state.global_step}"
         self.remote.push(ckpt, self.extra_paths)
+        if self.crash_after is not None and state.global_step >= self.crash_after:
+            # Test hook: die right after the push, like a killed session (no cleanup, no final save).
+            os._exit(42)
 
     def __getattr__(self, name):  # every other TrainerCallback hook is a no-op
         if name.startswith("on_"):

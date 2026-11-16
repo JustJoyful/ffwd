@@ -83,6 +83,20 @@ def test_callback_pushes_every_save_with_the_metrics_file(tmp_path):
     ).read_text() == '{"step": 1}\n'
 
 
+def test_crash_after_exits_only_after_the_push(tmp_path, monkeypatch):
+    out = tmp_path / "ckpt"
+    exits = []
+    monkeypatch.setattr("os._exit", exits.append)
+    remote = DirRemote(tmp_path / "remote")
+    cb = SyncCallback(remote, crash_after=4)
+    for step in (2, 4):
+        make_ckpt(out, step)
+        cb.on_save(SimpleNamespace(output_dir=str(out)), SimpleNamespace(global_step=step), None)
+    assert (
+        exits == [42] and remote.latest() == "checkpoint-4"
+    )  # step 2 did not exit; 4 pushed first
+
+
 def test_hub_remote_uses_private_repo_and_one_commit_per_checkpoint(tmp_path):
     calls = []
 

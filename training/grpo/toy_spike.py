@@ -168,6 +168,13 @@ def main(argv: list[str] | None = None) -> None:
         default=None,
         help="pass_rates.json from training.grpo.taskfilter: train only on in-band tasks",
     )
+    ap.add_argument(
+        "--crash-after",
+        type=int,
+        default=None,
+        metavar="STEP",
+        help="test hook: hard-exit (code 42) right after checkpoint STEP is pushed off-box",
+    )
     ap.add_argument("--allow-cpu", action="store_true", help="debug only: train without a GPU")
     a = ap.parse_args(argv)
     if not torch.cuda.is_available() and not a.allow_cpu:
@@ -241,7 +248,9 @@ def main(argv: list[str] | None = None) -> None:
     remote = remote_from_args(a.hub_repo, a.sync_dir, a.keep_last)
     if remote is not None:
         extras = [metrics_path, a.ckpt_dir / "telemetry.jsonl", a.ckpt_dir / "pass_rates.json"]
-        trainer.add_callback(SyncCallback(remote, extras))  # push every save off this machine
+        trainer.add_callback(
+            SyncCallback(remote, extras, a.crash_after)
+        )  # push every save off this machine
     resume = None
     if a.resume:
         # Newest of (local, remote): a fresh Kaggle session has no local checkpoint at all.
