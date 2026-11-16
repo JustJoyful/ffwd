@@ -1,5 +1,6 @@
 """Single config module for the Python harness (RULES §6.2). Every tunable lives here."""
 
+import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -13,6 +14,12 @@ FFPROBE_BIN = "ffprobe"
 # Per-run limits (RULES §1.4)
 RUN_TIMEOUT_S = 120
 MAX_OUTPUT_BYTES = 200 * 2**20
+# GRPO rollouts run thousands of FFmpeg jobs on small clips: a hung or runaway command must not burn GPU hours.
+ROLLOUT_RUN_TIMEOUT_S = 20
+ROLLOUT_MAX_OUTPUT_BYTES = 50 * 2**20
+SANDBOX_DEFAULT = os.environ.get(
+    "FFMPEG_AGENT_SANDBOX", "off"
+)  # off | auto | require (training/env/sandbox.py)
 STDERR_TAIL_CHARS = 2000
 
 # Agent loop budget (ARCH §3.1)

@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from training import config
+from training.env.sandbox import sandbox_prefix
 from training.env.validator import validate_run
 
 
@@ -66,6 +67,7 @@ def execute(
     output_paths: dict[str, Path],
     timeout_s: int = config.RUN_TIMEOUT_S,
     max_output_bytes: int = config.MAX_OUTPUT_BYTES,
+    sandbox: str | None = None,
 ) -> RunResult:
     v = validate_run(
         run["args"],
@@ -82,14 +84,19 @@ def execute(
     # No thread cap here: the ffmpeg.wasm deadlock (spikes/browser/src/harness-args.ts) does not affect
     # native FFmpeg; Phase 0 native F4 ran in 0.68 s with default threading.
     # -y is safe: every output path is a fresh, harness-owned file inside the job dir.
+    declared = {k: output_paths[k] for k in run["outputs"]}
+    # Raises SandboxUnavailable in "require" mode when bubblewrap cannot run: never runs unsandboxed silently.
+    sandbox_argv = sandbox_prefix(
+        sandbox or config.SANDBOX_DEFAULT, [_artifact(p).parent for p in declared.values()]
+    )
     argv = [
+        *sandbox_argv,
         config.FFMPEG_BIN,
         "-hide_banner",
         "-nostdin",
         "-y",
         *(subst.get(a, a) for a in run["args"]),
     ]
-    declared = {k: output_paths[k] for k in run["outputs"]}
     try:
         proc = subprocess.run(argv, shell=False, capture_output=True, timeout=timeout_s)
     except subprocess.TimeoutExpired as e:

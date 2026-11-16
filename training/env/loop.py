@@ -66,6 +66,8 @@ def _do_run(
     corpus: dict[str, Path],
     job_dir: Path,
     probes: dict[str, dict],
+    run_timeout_s: int,
+    max_output_bytes: int,
 ) -> dict:
     gold = {o["id"]: o for o in task["gold_spec"]["outputs"]}
     run_dir = job_dir / f"run{ep.runs}"
@@ -73,6 +75,8 @@ def _do_run(
         action,
         input_paths={cid: corpus[cid] for cid in task["inputs"]},
         output_paths={oid: output_path_for(run_dir, spec) for oid, spec in gold.items()},
+        timeout_s=run_timeout_s,
+        max_output_bytes=max_output_bytes,
     )
     if not result.ok:
         ep.last_check = {"passed": False, "outputs": {}}
@@ -116,6 +120,8 @@ def run_episode(
     job_dir: Path,
     max_runs: int = config.MAX_RUNS_PER_JOB,
     system_prompt_text: str | None = None,
+    run_timeout_s: int = config.RUN_TIMEOUT_S,
+    max_output_bytes: int = config.MAX_OUTPUT_BYTES,
 ) -> Episode:
     ep = Episode(task_id=task["id"])
     probes = {cid: probe(corpus[cid]) for cid in task["inputs"]}
@@ -159,7 +165,9 @@ def run_episode(
                     ep.last_check = {"passed": False, "outputs": {}}
                     obs = {"run_ok": False, "error": "this request has no executable outputs"}
                 else:
-                    obs = _do_run(action, task, ep, corpus, job_dir, probes)
+                    obs = _do_run(
+                        action, task, ep, corpus, job_dir, probes, run_timeout_s, max_output_bytes
+                    )
                 if ep.runs >= max_runs and not ep.last_check["passed"]:
                     ep.end_reason, done = "run_budget", True
         ep.turns.append({"assistant": reply, "observation": obs})

@@ -109,7 +109,13 @@ def make_rollout_func(
             task = by_key[prompt[-1]["content"]]
             policy = TokenPolicy(trainer.processing_class, generate, max_new_tokens)
             ep = run_episode(
-                task, policy, corpus=corpus, job_dir=jobs_root / uuid.uuid4().hex, max_runs=max_runs
+                task,
+                policy,
+                corpus=corpus,
+                job_dir=jobs_root / uuid.uuid4().hex,
+                max_runs=max_runs,
+                run_timeout_s=config.ROLLOUT_RUN_TIMEOUT_S,
+                max_output_bytes=config.ROLLOUT_MAX_OUTPUT_BYTES,
             )
             for k, v in policy.trajectory().items():
                 out[k].append(v)
