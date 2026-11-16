@@ -1,0 +1,50 @@
+{"task_id": "s01-trim-first-3s", "original": "cut the first 3 seconds off this video", "paraphrase": "trim the first 3 seconds from this video", "dropped": null}
+{"task_id": "s02-keep-12-to-18", "original": "keep only the part from 0:12 to 0:18", "paraphrase": "just leave the section between 0:12 and 0:18", "dropped": null}
+{"task_id": "s03-last-2s", "original": "I only need the last 2 seconds of this clip", "paraphrase": "Just the final 2 seconds of this clip is all I need.", "dropped": "judge: NO"}
+{"task_id": "s04-merge-two", "original": "merge these two clips into one video", "paraphrase": "combine these two clips into a single video", "dropped": null}
+{"task_id": "s05-back-to-back-mp4", "original": "put these two clips back to back in a single MP4, same size as the originals", "paraphrase": "join these two clips one after the other into one MP4, keeping the same dimensions as the originals", "dropped": null}
+{"task_id": "s06-merge-no-sound", "original": "combine both videos into one, I don't need the sound", "paraphrase": "merge the two videos together, no audio needed", "dropped": null}
+{"task_id": "s07-iphone-powerpoint", "original": "this iPhone video won't play in PowerPoint, can you fix it?", "paraphrase": "My PowerPoint isn't playing this video from my iPhone\u2014can you sort it out?", "dropped": null}
+{"task_id": "s08-webm-for-tv", "original": "my TV won't play this .webm file, convert it to something normal", "paraphrase": "My TV can't play this .webm file\u2014can you convert it into a regular format?", "dropped": null}
+{"task_id": "s09-avi-to-mp4", "original": "convert this old AVI into an MP4 that plays everywhere", "paraphrase": "turn this old AVI into an MP4 that'll play anywhere", "dropped": null}
+{"task_id": "s10-vertical-9-16", "original": "make it vertical 9:16 for my phone, 1080 by 1920", "paraphrase": "Can you turn it into a vertical 9:16 for my phone\u20141080 by 1920?", "dropped": null}
+{"task_id": "s11-shrink-720p", "original": "shrink this to 720p", "paraphrase": "Can you scale this down to 720p?", "dropped": null}
+{"task_id": "s12-square", "original": "make it a square video, 1080 x 1080", "paraphrase": "Can you turn it into a square video at 1080 x 1080?", "dropped": null}
+{"task_id": "s13-rotate-cw-lossless", "original": "rotate this 90 degrees clockwise without losing quality", "paraphrase": "Turn this 90 degrees clockwise and keep the quality intact.", "dropped": null}
+{"task_id": "s14-upside-down", "original": "this video is upside down, flip it the right way up without re-encoding", "paraphrase": "this video's inverted \u2014 can you turn it right side up without re-encoding?", "dropped": null}
+{"task_id": "s15-turn-left", "original": "turn this video 90 degrees to the left", "paraphrase": "Rotate this video 90 degrees counterclockwise.", "dropped": null}
+{"task_id": "s16-under-3mb", "original": "make this video smaller than 3 MB", "paraphrase": "Can you get this video down under 3 MB?", "dropped": null}
+{"task_id": "s17-email-2mb", "original": "I need to email this, get it under 2 MB", "paraphrase": "Can you send this over email? Make sure it's smaller than 2 MB.", "dropped": null}
+{"task_id": "s18-1mb-keep-1080p", "original": "make the file under 1 MB but keep it 1080p", "paraphrase": "keep it at 1080p, but get the file size below 1 MB", "dropped": null}
+{"task_id": "s19-frame-every-2s", "original": "take a frame every 2 seconds and save them as images", "paraphrase": "grab a frame every 2 seconds and save each one as an image", "dropped": null}
+{"task_id": "s20-every-second-jpg", "original": "export one picture for every second of the video, as JPGs", "paraphrase": "pull a JPG still from the video for each second, one image per second", "dropped": null}
+{"task_id": "s21-first-frame", "original": "grab just the first frame as a picture", "paraphrase": "snag the opening frame only and save it as an image", "dropped": null}
+{"task_id": "s22-gif-5-to-9", "original": "make a GIF of 0:05 to 0:09", "paraphrase": "Could you turn the part from 0:05 to 0:09 into a GIF?", "dropped": null}
+{"task_id": "s23-small-gif-320", "original": "turn the whole clip into a small GIF, 320 pixels wide", "paraphrase": "Make a little GIF out of that entire clip, 320 pixels wide.", "dropped": null}
+{"task_id": "s24-gif-first-2s", "original": "GIF of the first 2 seconds please", "paraphrase": "Can I get a GIF of the first 2 seconds?", "dropped": null}
+{"task_id": "s25-audio-mp3", "original": "save the audio as an MP3", "paraphrase": "export the sound as an MP3", "dropped": null}
+{"task_id": "s26-remove-sound", "original": "remove the sound from this video", "paraphrase": "take the audio out of this video", "dropped": null}
+{"task_id": "s28-normalize-16", "original": "the audio is way too quiet, normalize it to -16 LUFS", "paraphrase": "can you boost the sound? it's way too low \u2014 get it to -16 LUFS", "dropped": null}
+{"task_id": "s29-boost-20db", "original": "boost the volume by 20 dB", "paraphrase": "turn the volume up by 20 dB", "dropped": null}
+{"task_id": "s31-audio-half-second-behind", "original": "the audio is half a second behind the video, fix it", "paraphrase": "the sound's lagging behind the picture by 0.5 seconds, can you fix that", "dropped": "digits differ"}
+{"task_id": "s32-sound-too-early", "original": "the sound comes 0.3 seconds too early, delay it", "paraphrase": "The audio is ahead by 0.3 seconds\u2014push it back.", "dropped": null}
+{"task_id": "s33-delay-audio-200ms", "original": "delay the audio by 200 ms", "paraphrase": "push the audio back by 200 ms", "dropped": null}
+{"task_id": "s34-speed-2x", "original": "speed this video up 2x", "paraphrase": "Can you make this video play twice as fast?", "dropped": "digits differ"}
+{"task_id": "s35-to-30fps", "original": "convert this to 30 fps", "paraphrase": "Can you change this to 30 fps?", "dropped": null}
+{"task_id": "s36-half-speed", "original": "make it play at half speed", "paraphrase": "slow it down to 50%", "dropped": "digits differ"}
+{"task_id": "m01-trim-vertical-small", "original": "keep 0:02 to 0:08, make it vertical (1080x1920) and under 2 MB", "paraphrase": "cut it down to just 0:02\u20130:08, flip it to vertical at 1080x1920, and keep the file size below 2 MB", "dropped": null}
+{"task_id": "m02-iphone-first-2s", "original": "this iPhone clip won't play in PowerPoint, and I only need the first 2 seconds", "paraphrase": "My iPhone video isn't playing in PowerPoint \u2014 I just need the first 2 seconds of it.", "dropped": null}
+{"task_id": "m03-frames-2-to-7", "original": "grab one frame per second, but only between 0:02 and 0:07", "paraphrase": "pull a single frame every second, but just from 0:02 to 0:07", "dropped": null}
+{"task_id": "m04-gif-3-to-6-480", "original": "make a 480px wide GIF of seconds 3 to 6", "paraphrase": "can you turn seconds 3 to 6 into a GIF that's 480px wide?", "dropped": null}
+{"task_id": "m05-merge-mute", "original": "merge these two clips and remove the sound", "paraphrase": "combine these two clips and take out the audio", "dropped": null}
+{"task_id": "m06-cut-then-2x", "original": "cut off the first second, then speed the rest up 2x", "paraphrase": "trim the opening 1 second, then double the speed of what's left", "dropped": "digits differ"}
+{"task_id": "m07-webm-to-720p-mp4", "original": "convert this webm to an mp4 and make it 720p", "paraphrase": "Can you turn this webm into an mp4 and set it to 720p?", "dropped": null}
+{"task_id": "m08-loudnorm-720p", "original": "normalize the audio to -16 LUFS and shrink the video to 720p", "paraphrase": "bring the audio up to -16 LUFS and downscale the video to 720p", "dropped": null}
+{"task_id": "m09-rotate-cw-30fps", "original": "rotate it 90 degrees clockwise and convert it to 30 fps", "paraphrase": "Turn it 90 degrees to the right and make it 30 fps.", "dropped": null}
+{"task_id": "m10-audio-5-to-15-mp3", "original": "extract the audio from 0:05 to 0:15 as an MP3", "paraphrase": "grab the audio between 0:05 and 0:15 and save it as an MP3", "dropped": null}
+{"task_id": "a01-make-shorter", "original": "make it shorter", "paraphrase": "trim it down", "dropped": null}
+{"task_id": "a02-make-smaller", "original": "make it smaller", "paraphrase": "Could you shrink it down a bit?", "dropped": null}
+{"task_id": "a03-fix-the-video", "original": "can you fix this video", "paraphrase": "could you sort out this video for me", "dropped": null}
+{"task_id": "u01-remove-person", "original": "remove the person walking in the background", "paraphrase": "take out the guy walking in the background", "dropped": null}
+{"task_id": "u02-add-subtitles", "original": "add English subtitles to this video", "paraphrase": "put English subtitles on this video", "dropped": null}
+{"task_id": "u03-cinematic-grade", "original": "make it look cinematic with a teal and orange colour grade", "paraphrase": "give it a cinematic look, throw on a teal and orange colour grade", "dropped": "judge: NO"}
