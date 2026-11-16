@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ffmpeg-agent.dev/protocol/v0.1.0/action",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.2.0/action",
   "title": "One model action per turn (ARCHITECTURE §3.1). check is not an action: the harness runs it.",
   "oneOf": [
     {"$ref": "#/$defs/spec"},

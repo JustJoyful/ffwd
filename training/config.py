@@ -4,7 +4,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PROTOCOL_DIR = REPO_ROOT / "packages" / "protocol"
-PROTOCOL_VERSION = "0.1.0"  # ARCH §12: shared by web, helper, training
+PROTOCOL_VERSION = "0.2.0"  # ARCH §12: shared by web, helper, training
 
 # Binaries (ARCH §3.5): resolved from PATH, always invoked with argument lists.
 FFMPEG_BIN = "ffmpeg"
@@ -56,6 +56,18 @@ OFFSET_TOLERANCE_MS = 40.0
 ORIENTATION_THUMB = 32
 ORIENTATION_MAX_RATIO = 0.75
 ORIENTATION_MIN_GAP = 4.0
+
+# --- Task splits and who may read them (RULES §4.5; guard in training/taskgen/loader.py) ---
+TEST_SPLITS = ("test-iid", "test-compositional", "test-phrasing", "test-real")
+SPLIT_PURPOSES = {
+    "train": ("train", "toy"),
+    "teacher": ("train",),
+    "sft": ("train",),
+    "grpo": ("train", "toy"),
+    "tune": ("dev",),  # reward/prompt/checkpoint tuning
+    "dev-eval": ("dev",),
+    "test-eval": TEST_SPLITS,  # only the final, preregistered, single run (eval/testlock.py)
+}
 
 # Local data (gitignored except manifests and tasks)
 DATA_DIR = REPO_ROOT / "data"

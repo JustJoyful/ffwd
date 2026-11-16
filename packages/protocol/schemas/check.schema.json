@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ffmpeg-agent.dev/protocol/v0.1.0/check",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.2.0/check",
   "title": "Check result (ARCHITECTURE §3.4). Produced by deterministic code, never a model.",
   "type": "object",
   "additionalProperties": false,

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ffmpeg-agent.dev/protocol/v0.1.0/spec",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.2.0/spec",
   "title": "Output spec (ARCHITECTURE §3.2). null = unconstrained; the checker verifies only set fields.",
   "type": "object",
   "additionalProperties": false,
@@ -59,6 +59,12 @@
           }
         },
         "size_max_bytes": {"$ref": "#/$defs/int"},
+        "quality": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "description": "Minimum picture quality of the output vs the input (checker v1.1). null = unconstrained. Size-target outputs get a default floor from training/config.py even when this is null.",
+          "properties": {"min_ssim": {"$ref": "#/$defs/num"}, "min_psnr_db": {"$ref": "#/$defs/num"}}
+        },
         "frames": {
           "type": ["object", "null"],
           "additionalProperties": false,
