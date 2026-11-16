@@ -41,9 +41,8 @@ class TokenPolicy:
 
     def __call__(self, messages: list[dict]) -> str:
         if self.prompt_ids is None:
-            ids = self.tok.apply_chat_template(
-                messages, add_generation_prompt=True, enable_thinking=False, tokenize=True
-            )
+            # The tokenizer carries the agent template (training/env/chat_template.py): enable_thinking is ignored.
+            ids = self.tok.apply_chat_template(messages, add_generation_prompt=True, tokenize=True)
             # transformers ≥5 returns a BatchEncoding; older versions a plain list
             self.prompt_ids = list(ids["input_ids"] if hasattr(ids, "keys") else ids)
         else:

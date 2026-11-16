@@ -122,7 +122,10 @@ def run_episode(
     system_prompt_text: str | None = None,
     run_timeout_s: int = config.RUN_TIMEOUT_S,
     max_output_bytes: int = config.MAX_OUTPUT_BYTES,
+    require_spec: bool = False,
 ) -> Episode:
+    """require_spec (prompt v1, D-008): a `run` before any `spec` is an invalid turn, so the model always
+    states what it is building before it builds it (the CLI/UI shows that spec for confirmation)."""
     ep = Episode(task_id=task["id"])
     probes = {cid: probe(corpus[cid]) for cid in task["inputs"]}
     messages = initial_messages(task, probes, system_prompt_text)
@@ -154,6 +157,9 @@ def run_episode(
                 obs = {"ended": "finish"}
             else:
                 obs = {"error": "finish requires a passing check"}
+        elif require_spec and ep.emitted_spec is None:
+            ep.invalid_turns += 1
+            obs = {"error": "emit a spec action first; a run before a spec is rejected"}
         else:  # run
             if ep.runs >= max_runs:
                 ep.end_reason, done = "run_budget", True

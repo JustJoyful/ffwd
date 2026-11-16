@@ -45,7 +45,7 @@ Failure modes the spec implies but no task would otherwise exercise, most likely
 
 | Gate | Needs | Blocks |
 |---|---|---|
-| **G0 preconditions** | (a) Kaggle kill-and-resume verifier says `"ok": true` (`reports` note + D-022 update); (b) owner reviews/accepts the 50 dev tasks (edits → `spike-v1`); (c) owner approves this plan and the proposed decisions D-025…D-029 below | all coding tasks T1+ |
+| **G0 preconditions** | (a) Kaggle kill-and-resume verifier says `"ok": true` (`reports` note + D-022 update); (b) owner reviews/accepts the 50 dev tasks (edits → `spike-v1`); (c) owner approves this plan and the proposed decisions D-027…D-031 below | all coding tasks T1+ |
 | **G-terms** | owner reads and confirms DeepSeek's current terms allow training on outputs (D-010 flagged a conflicting report) and sends the **off-peak window** to put in config | T13 pilot |
 | **G-clips** | owner supplies ≥10 own recordings (phone, with audio, mixed orientation) + licence statement; later writes ≈100 test-real requests | T3 real clips, T24 test-real |
 | **[ASK] G1 pilot** | go-ahead to spend ≤ $0.05 on ≤ 20 train tasks | T13 |
@@ -54,11 +54,11 @@ Failure modes the spec implies but no task would otherwise exercise, most likely
 | **[ASK] G4 test run** | preregistration marked FINAL + selected checkpoint + owner go-ahead; test run happens once | T22 |
 
 **Proposed decisions (new DECISIONS entries, owner accepts or edits at G0):**
-- D-025 Split design: content-key hashing, held-out family *combinations* for test-compositional, held-out phrasing *styles* for test-phrasing, B0 authored from train styles only.
-- D-026 M1/M3 are evaluated through merged GGUF in llama.cpp (deployment path), not HF generate.
-- D-027 Corpus is distributed as a hash-verified tarball in a private HF dataset repo; the FFmpeg version question is D-024 (browser parity), which this plan builds on once the owner decides it.
-- D-028 Test-run lock: a test split can be evaluated once per system+checkpoint; reruns need a logged `--supersede` reason.
-- D-029 M2 (single-turn GRPO ablation) deferred to Phase 4; Phase 1 table is B0, B2, M1, M3, X1 as the exit criteria say. 1.7B is a stretch (SFT first; GRPO only if the 0.6B result and the measured 1.7B GPU-h/step justify it).
+- D-027 Split design: content-key hashing, held-out family *combinations* for test-compositional, held-out phrasing *styles* for test-phrasing, B0 authored from train styles only.
+- D-028 M1/M3 are evaluated through merged GGUF in llama.cpp (deployment path), not HF generate.
+- D-029 Corpus is distributed as a hash-verified tarball in a private HF dataset repo; the FFmpeg version question is D-024 (browser parity), which this plan builds on once the owner decides it.
+- D-030 Test-run lock: a test split can be evaluated once per system+checkpoint; reruns need a logged `--supersede` reason.
+- D-031 M2 (single-turn GRPO ablation) deferred to Phase 4; Phase 1 table is B0, B2, M1, M3, X1 as the exit criteria say. 1.7B is a stretch (SFT first; GRPO only if the 0.6B result and the measured 1.7B GPU-h/step justify it).
 
 **Proposed numeric gates (to be preregistered at G0; they decide *when to continue*, not what to report):** teacher pilot continues to bulk only if kept-rate ≥ 70 % overall and cache-hit ratio ≥ 60 %; GRPO starts only if M1 dev success ≥ 60 % and invalid-action rate ≤ 5 %; minimum meaningful difference for Q2/Q3 = 5 pp on test-iid.
 
@@ -233,7 +233,7 @@ G0 ─▶ T1-T5 (infra, corpus, checker) ─▶ T6 prompt freeze ─▶ T7-T10 t
 - Test: `tests/taskgen/test_phrasing.py`
 
 **Interfaces:**
-- Produces: `render_request(family: str, slots: dict, style: str, rng: random.Random) -> str`. Styles (proposal): train = `terse`, `polite`, `verbose`, `symptom` ("won't play on my TV"), `casual_typos`; held-out = `technical` (FFmpeg-flavoured wording) and `indirect` (goal/context first, parameters last). Each family has ≥ 4 templates per style. Held-out templates live **only** in `phrasing_heldout.py`, imported by exactly one module (`splits.build`); the B0 author never opens it (D-025 process control).
+- Produces: `render_request(family: str, slots: dict, style: str, rng: random.Random) -> str`. Styles (proposal): train = `terse`, `polite`, `verbose`, `symptom` ("won't play on my TV"), `casual_typos`; held-out = `technical` (FFmpeg-flavoured wording) and `indirect` (goal/context first, parameters last). Each family has ≥ 4 templates per style. Held-out templates live **only** in `phrasing_heldout.py`, imported by exactly one module (`splits.build`); the B0 author never opens it (D-027 process control).
 
 - [ ] **Step 1: Write failing tests** `test_all_slots_appear_in_request` (digits/units preserved, the same digit rule as `eval/paraphrase.py`), `test_every_family_has_templates_for_every_style`, `test_heldout_templates_not_importable_outside_build` (AST check over the repo), `test_no_template_overlap_between_train_and_heldout`.
 - [ ] **Step 2: Run** → FAIL. **Step 3: Implement.** **Step 4: Run** → PASS.
@@ -418,7 +418,7 @@ G0 ─▶ T1-T5 (infra, corpus, checker) ─▶ T6 prompt freeze ─▶ T7-T10 t
 
 ### Task 25: Cards, Hugging Face release, phase report
 
-**Files:** Create `reports/<date>-phase-1/summary.md` (headline table + honest limitations), HF model repo `JustJoyful/ffmpeg-agent-0.6b` (GGUF Q8/Q4 + merged weights), model card, dataset repos (tasks + teacher trajectories with data card); Modify `PHASES.md` (Phase 1 ✅, Phase 2 ⏳), `DECISIONS.md` (D-025…D-029 + results decision), `README.md` limitations, `CLAUDE.md` (current state, new commands).
+**Files:** Create `reports/<date>-phase-1/summary.md` (headline table + honest limitations), HF model repo `JustJoyful/ffmpeg-agent-0.6b` (GGUF Q8/Q4 + merged weights), model card, dataset repos (tasks + teacher trajectories with data card); Modify `PHASES.md` (Phase 1 ✅, Phase 2 ⏳), `DECISIONS.md` (D-027…D-031 + results decision), `README.md` limitations, `CLAUDE.md` (current state, new commands).
 
 - [ ] **Step 1: Write failing test** `tests/test_cards.py::test_model_card_has_required_sections` (base model, data sources, teacher + terms snapshot, recipe, eval table with CIs, limitations, licence; RULES §7).
 - [ ] **Step 2:** Licence audit script `eval/licences.py` over corpus manifest + datasets + models; fails on any unrecorded licence. Qwen3 (Apache-2.0), project GPL-3.0 (D-016), weights licence compatible; synthetic clips CC0; real clips per their records; DeepSeek terms snapshot attached.

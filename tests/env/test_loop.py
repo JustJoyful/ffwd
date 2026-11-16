@@ -128,3 +128,25 @@ def test_finish_before_pass_rejected(tmp_path, corpus):
     ep = run_episode(_task(), policy, corpus=corpus, job_dir=tmp_path)
     assert "finish requires a passing check" in policy.seen[1][-1]["content"]
     assert ep.end_reason == "finish" and ep.runs == 1
+
+
+def test_require_spec_rejects_a_run_before_any_spec(corpus, tmp_path):
+    policy = Scripted([GOOD, SPEC, GOOD, FINISH])
+    ep = run_episode(_task(), policy, corpus=corpus, job_dir=tmp_path, require_spec=True)
+    assert (
+        ep.invalid_turns == 1 and ep.runs == 1
+    )  # the early run was rejected and NOT counted as a run
+    assert "spec action first" in ep.turns[0]["observation"]["error"]
+    assert ep.emitted_spec == TRIM_GOLD and score(_task(), ep)
+
+
+def test_require_spec_off_by_default_keeps_phase0_behaviour(corpus, tmp_path):
+    ep = run_episode(_task(), Scripted([GOOD, FINISH]), corpus=corpus, job_dir=tmp_path)
+    assert ep.invalid_turns == 0 and score(_task(), ep)
+
+
+def test_ask_user_and_unsupported_are_allowed_before_a_spec(corpus, tmp_path):
+    task = _task(gold=None, unsupported=True)
+    reply = json.dumps({"action": "unsupported", "reason": "no", "nearest_supported": None})
+    ep = run_episode(task, Scripted([reply]), corpus=corpus, job_dir=tmp_path, require_spec=True)
+    assert ep.refused and ep.invalid_turns == 0

@@ -64,6 +64,11 @@ OFFSET_TOLERANCE_MS = 40.0
 QUALITY_SAMPLE_FPS = 2
 SSIM_FLOOR_DEFAULT = 0.90
 PSNR_FLOOR_DB_DEFAULT = 28.0
+# --- Frozen agent format (plan T6, D-026) ---
+SYSTEM_PROMPT_V1 = "system-v1.txt"
+# Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and
+# every trained model. None = still a DRAFT (D-024 may add the lossless-rotate spelling); teacher runs refuse a draft.
+SYSTEM_PROMPT_V1_SHA256: str | None = None
 # Rotation: net clockwise rotation of the displayed picture is measured from content by comparing
 # 32x32 thumbnails (training/env/orientation.py). The best of the 4 candidates must beat the runner-up by
 # this ratio and absolute grey-level gap, else the measurement is None and the field fails (fail closed).

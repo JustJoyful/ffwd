@@ -23,8 +23,9 @@ class FakeTok:
         assert tok == "<|im_end|>"
         return IM_END
 
-    def apply_chat_template(self, messages, add_generation_prompt, enable_thinking, tokenize):
-        assert tokenize and add_generation_prompt and enable_thinking is False
+    def apply_chat_template(self, messages, add_generation_prompt, tokenize):
+        # the agent template lives on the tokenizer (D-026): no enable_thinking argument any more
+        assert tokenize and add_generation_prompt
         text = "".join(f"<{m['role']}>{m['content']}" for m in messages) + "<assistant>"
         return self.encode(text)
 
