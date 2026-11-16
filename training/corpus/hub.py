@@ -1,0 +1,78 @@
+"""Distribute the corpus as ONE hash-verified tarball through a private HF dataset repo (plan T3, D-027).
+
+Why: clip bytes differ across FFmpeg builds (Kaggle apt ships 6.1, local is 9) and real recordings cannot
+be regenerated at all, so training machines pull the exact bytes instead of regenerating them; every file is
+verified against the tracked manifest's sha256 and a mismatch is a hard error.
+Tests inject a fake `api`; real use needs HF_TOKEN with write access (push) or read access (pull).
+"""
+
+import hashlib
+import json
+import tarfile
+from pathlib import Path
+
+from training import config
+
+TARBALL = "corpus.tar.gz"
+MANIFEST = "manifest.json"
+
+
+class CorpusIntegrityError(RuntimeError):
+    pass
+
+
+def _api(token: str | None = None):
+    from huggingface_hub import HfApi
+
+    return HfApi(token=token)
+
+
+def push_corpus(corpus_dir: Path, repo_id: str, api=None) -> None:
+    manifest = json.loads((corpus_dir / MANIFEST).read_text())
+    for rec in manifest:  # never upload bytes that do not match the manifest
+        got = hashlib.sha256((corpus_dir / rec["file"]).read_bytes()).hexdigest()
+        if got != rec["sha256"]:
+            raise CorpusIntegrityError(f"{rec['id']} does not match its manifest hash")
+    api = api or _api()
+    api.create_repo(repo_id, repo_type="dataset", private=True, exist_ok=True)
+    tar = corpus_dir / TARBALL
+    with tarfile.open(tar, "w:gz") as t:
+        for rec in manifest:
+            t.add(corpus_dir / rec["file"], arcname=rec["file"])
+    api.upload_file(
+        path_or_fileobj=str(tar), path_in_repo=TARBALL, repo_id=repo_id, repo_type="dataset"
+    )
+    api.upload_file(
+        path_or_fileobj=str(corpus_dir / MANIFEST),
+        path_in_repo=MANIFEST,
+        repo_id=repo_id,
+        repo_type="dataset",
+    )
+    tar.unlink()
+
+
+def pull_corpus(repo_id: str, dest: Path, api=None) -> dict[str, Path]:
+    """Download, extract and verify every clip; returns clip id -> path."""
+    api = api or _api()
+    dest.mkdir(parents=True, exist_ok=True)
+    tar = Path(api.hf_hub_download(repo_id, TARBALL, repo_type="dataset", local_dir=str(dest)))
+    man = Path(api.hf_hub_download(repo_id, MANIFEST, repo_type="dataset", local_dir=str(dest)))
+    manifest = json.loads(man.read_text())
+    wanted = {rec["file"] for rec in manifest}
+    with tarfile.open(tar) as t:
+        for m in t.getmembers():
+            if m.name not in wanted or not m.isfile():  # no path tricks, no surprise members
+                raise CorpusIntegrityError(f"unexpected tar member {m.name!r}")
+        t.extractall(dest, filter="data")
+    paths = {}
+    for rec in manifest:
+        path = dest / rec["file"]
+        if hashlib.sha256(path.read_bytes()).hexdigest() != rec["sha256"]:
+            raise CorpusIntegrityError(f"{rec['id']} does not match its manifest hash")
+        paths[rec["id"]] = path
+    (dest / MANIFEST).write_text(json.dumps(manifest, indent=2) + "\n")
+    tar.unlink()
+    return paths
+
+
+DEFAULT_REPO = config.CORPUS_HUB_REPO

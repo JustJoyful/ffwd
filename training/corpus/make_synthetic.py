@@ -27,6 +27,10 @@ class ClipRecord(TypedDict):
     licence: str
     source: str
     probe: dict
+    tags: list[str]
+    known_offset_ms: (
+        float | None
+    )  # nominal audio-minus-video start offset baked into the clip, else None
 
 
 def _video(size: str, rate: int, seconds: float) -> list[str]:
@@ -76,10 +80,74 @@ RECIPES: dict[str, tuple[str, list[str]]] = {
     "clip_a": ("clip_a.mp4", _video("1280x720", 30, 3) + _audio(3) + _H264 + _AAC),
     "clip_b": ("clip_b.mp4", _video("1280x720", 30, 3) + _audio(3) + _H264 + _AAC),
 }
+# --- Corpus v1 additions (ARCH §7.1 coverage): VFR, 4:3, ProRes-lite, MKV, mono/44.1 kHz, noisy and offset audio.
+# Existing recipes above are untouched, so their bytes and hashes do not change.
+_VFR = [
+    "-vf",
+    "select='lt(mod(n,7),3)'",
+    "-fps_mode",
+    "vfr",
+]  # keeps 3 of every 7 frames: irregular timestamps
+RECIPES |= {
+    "h264_vfr": ("h264_vfr.mp4", _video("1280x720", 30, 6) + _audio(6) + _VFR + _H264 + _AAC),
+    "h264_4x3": ("h264_4x3.mp4", _video("640x480", 30, 5) + _audio(5) + _H264 + _AAC),
+    "prores_lite": (
+        "prores_lite.mov",
+        _video("1280x720", 30, 3)
+        + _audio(3)
+        + ["-c:v", "prores_ks", "-profile:v", "0", "-pix_fmt", "yuv422p10le", "-c:a", "pcm_s16le"],
+    ),
+    "h264_mkv": ("h264_mkv.mkv", _video("1280x720", 30, 4) + _audio(4) + _H264 + _AAC),
+    "h264_mono_44k": (
+        "h264_mono_44k.mp4",
+        _video("1280x720", 30, 4)
+        + ["-f", "lavfi", "-i", "sine=frequency=330:sample_rate=44100:duration=4"]
+        + _H264
+        + ["-ac", "1", "-c:a", "aac", "-b:a", "64k"],
+    ),
+    "h264_noisy": (
+        "h264_noisy.mp4",
+        _video("1280x720", 30, 4)
+        + ["-f", "lavfi", "-i", "anoisesrc=d=4:c=pink:r=48000:a=0.3:seed=7"]
+        + _H264
+        + _AAC,
+    ),
+    "h264_2s": ("h264_2s.mp4", _video("1280x720", 30, 2) + _audio(2) + _H264 + _AAC),
+    "av_late_500": (  # audio starts 500 ms after the video
+        "av_late_500.mp4",
+        _video("1280x720", 30, 4) + ["-itsoffset", "0.5"] + _audio(4) + _H264 + _AAC,
+    ),
+    "av_early_500": (  # audio starts 500 ms before the video
+        "av_early_500.mp4",
+        _video("1280x720", 30, 4) + ["-itsoffset", "-0.5"] + _audio(4) + _H264 + _AAC,
+    ),
+}
+TAGS: dict[str, list[str]] = {
+    "hevc_iphone": ["hevc", "mov"],
+    "hevc_rot90": ["hevc", "mov", "rotation"],
+    "h264_vertical": ["portrait"],
+    "h264_noaudio": ["no_audio"],
+    "h264_quiet": ["quiet_audio"],
+    "vp9_opus_webm": ["webm", "vp9"],
+    "mpeg4_avi": ["avi"],
+    "h264_vfr": ["vfr"],
+    "h264_4x3": ["4:3"],
+    "prores_lite": ["prores", "mov", "pcm_audio"],
+    "h264_mkv": ["mkv"],
+    "h264_mono_44k": ["mono", "44k1"],
+    "h264_noisy": ["noisy_audio"],
+    "av_late_500": ["av_offset"],
+    "av_early_500": ["av_offset"],
+    "h264_rot270": ["rotation", "portrait"],
+}
+KNOWN_OFFSET_MS: dict[str, float] = {"av_late_500": 500.0, "av_early_500": -500.0}
+
 # Derived clip: remux hevc_iphone with display rotation 90 (iPhone portrait-style metadata).
 # Verified on FFmpeg 9: `-display_rotation` is an input option; ffprobe then reports rotation 90.
 DERIVED: dict[str, tuple[str, str, list[str]]] = {
     "hevc_rot90": ("hevc_rot90.mov", "hevc_iphone", ["-display_rotation", "90"]),
+    # Portrait-style H.264 with display-matrix rotation 270 clockwise (FFmpeg `-display_rotation 90`).
+    "h264_rot270": ("h264_rot270.mp4", "h264_aac_1080p", ["-display_rotation", "90"]),
 }
 
 
@@ -106,6 +174,8 @@ def _record(clip_id: str, path: Path) -> ClipRecord:
         licence=LICENCE,
         source="synthetic",
         probe=probe(path),
+        tags=TAGS.get(clip_id, []),
+        known_offset_ms=KNOWN_OFFSET_MS.get(clip_id),
     )
 
 

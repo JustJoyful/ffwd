@@ -80,6 +80,9 @@ SPLIT_PURPOSES = {
 DATA_DIR = REPO_ROOT / "data"
 CORPUS_DIR = DATA_DIR / "corpus"
 JOBS_DIR = DATA_DIR / "jobs"
+CORPUS_HUB_REPO = (
+    "JustJoyful/ffmpeg-agent-corpus"  # private HF dataset repo (training/corpus/hub.py)
+)
 LEDGER_PATH = DATA_DIR / "budget-ledger.jsonl"
 
 # Budget (PHASES budgets; RULES §5.1)

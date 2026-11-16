@@ -5,7 +5,7 @@ from training.protocol import validate
 
 def test_make_corpus_records_valid_probe_and_hash(corpus_records):
     out, records = corpus_records
-    assert len(records) == 12
+    assert len(records) == 22
     for r in records:
         path = out / r["file"]
         assert path.is_file()
@@ -40,7 +40,7 @@ def test_ensure_corpus_regenerates_when_media_missing(tmp_path):
     )
     corpus = ensure_corpus(tmp_path)
     assert corpus["clip_a"].is_file() and corpus["clip_a"].parent == tmp_path
-    assert len(corpus) == 12
+    assert len(corpus) == 22
     before = corpus["clip_a"].stat().st_mtime_ns
     assert (
         ensure_corpus(tmp_path)["clip_a"].stat().st_mtime_ns == before
