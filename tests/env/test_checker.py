@@ -122,7 +122,8 @@ def test_size_and_codec(tmp_path, corpus):
     spec = _video(size_max_bytes=10_000_000, video={"codec": "h264", "pix_fmt": "yuv420p"})
     args = ["-i", "{in:clip}", "-c", "copy", "{out:out1}"]
     out, inp = _make(tmp_path, corpus, "hevc_iphone", args, spec)
-    assert _failed_fields(check(spec, out, input_probe=inp, run_args=args)) == ["video.codec"]
+    r = check(spec, out, input_probe=inp, run_args=args, input_paths=[corpus["hevc_iphone"]])
+    assert _failed_fields(r) == ["video.codec"]
 
 
 def test_empty_output_fails_not_raises(tmp_path, corpus):

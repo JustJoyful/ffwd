@@ -15,7 +15,12 @@ from training.env.checker import check
 from training.env.executor import execute, output_path_for
 from training.env.probe import probe
 
-FILES = ("checker-invariants.jsonl", "checker-rotation.jsonl", "checker-frames.jsonl")
+FILES = (
+    "checker-invariants.jsonl",
+    "checker-rotation.jsonl",
+    "checker-frames.jsonl",
+    "checker-quality.jsonl",
+)
 CASES = [
     (f, json.loads(line))
     for f in FILES

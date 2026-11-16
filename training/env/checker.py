@@ -17,6 +17,7 @@ from pathlib import Path
 from training import config
 from training.env.orientation import net_rotation_cw
 from training.env.probe import display_size, first_packet_pts, probe
+from training.env.quality import measure_quality
 from training.env.validator import uses_stream_copy_only
 
 # shortcut: container is a substring match on ffprobe's format_name, which cannot tell mp4 from
@@ -136,6 +137,48 @@ def _implicit_checks(
             _add(checks, "implicit.duration_s", expected, p["duration_s"], ok)
 
 
+def _quality_applies(out_spec: dict, input_probe: dict) -> bool:
+    """Default floor: a size-target video that keeps the input's timeline and framing (so frames are
+    comparable). Trimmed or reframed outputs are exempt unless the spec states a quality explicitly.
+    """
+    t, video = out_spec.get("time") or {}, out_spec.get("video") or {}
+    inp = next((s for s in input_probe["streams"] if s["type"] == "video"), None)
+    if out_spec.get("size_max_bytes") is None or out_spec["kind"] != "video" or inp is None:
+        return False
+    if t.get("start_s") is not None or t.get("end_s") is not None:
+        return False
+    w, h = display_size(inp)
+    return all(video.get(k) in (None, v) for k, v in (("width", w), ("height", h)))
+
+
+def _quality_checks(out_spec, output, input_probe, input_paths, checks, measurements, vids) -> None:
+    explicit = {k: v for k, v in (out_spec.get("quality") or {}).items() if v is not None}
+    floors = dict(explicit)
+    if not floors and _quality_applies(out_spec, input_probe):
+        floors = {
+            "min_ssim": config.SSIM_FLOOR_DEFAULT,
+            "min_psnr_db": config.PSNR_FLOOR_DB_DEFAULT,
+        }
+    if not floors:
+        return
+    inp = next((s for s in input_probe["streams"] if s["type"] == "video"), None)
+    q = None
+    if vids and inp and input_paths:
+        w, h = display_size(inp)
+        q = measure_quality(input_paths[0], output, w, h)
+    measurements["quality"] = q
+    for key, field in (("min_ssim", "ssim"), ("min_psnr_db", "psnr_db")):
+        if key in floors:
+            actual = q[field] if q else None
+            _add(
+                checks,
+                f"quality.{key}",
+                floors[key],
+                actual,
+                actual is not None and actual >= floors[key],
+            )
+
+
 def check(
     out_spec: dict,
     output: Path,
@@ -240,6 +283,8 @@ def check(
 
     if (cap := out_spec.get("size_max_bytes")) is not None:
         _add(checks, "size_max_bytes", cap, p["size_bytes"], p["size_bytes"] <= cap)
+
+    _quality_checks(out_spec, output, input_probe, input_paths, checks, measurements, vids)
 
     if out_spec.get("lossless"):
         _add(

@@ -57,6 +57,13 @@ LOUDNESS_TOLERANCE_LU = 2.0
 # humans notice and the 200-500 ms offsets F11 requests, so a wrong shift cannot pass.
 OFFSET_PACKET_WINDOW = 16
 OFFSET_TOLERANCE_MS = 40.0
+# Quality floor for size-target outputs that keep the input's timeline and framing (training/env/quality.py).
+# Measured on a 20 s 720p test clip: 1 Mbps re-encode SSIM 0.98 / PSNR 38 dB; crf 45 SSIM 0.95 / 33 dB; a 64x36
+# upscale (the cheap way to hit a size cap) SSIM 0.84 / 23 dB; a blank picture SSIM 0.40 / 7 dB. PSNR separates the
+# tiny-picture hack that SSIM alone lets through, so both floors apply. Spike reference solutions pass (see report).
+QUALITY_SAMPLE_FPS = 2
+SSIM_FLOOR_DEFAULT = 0.90
+PSNR_FLOOR_DB_DEFAULT = 28.0
 # Rotation: net clockwise rotation of the displayed picture is measured from content by comparing
 # 32x32 thumbnails (training/env/orientation.py). The best of the 4 candidates must beat the runner-up by
 # this ratio and absolute grey-level gap, else the measurement is None and the field fails (fail closed).
