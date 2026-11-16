@@ -221,6 +221,7 @@ BANK: dict[str, dict[str, list[str]]] = {
         "core": [
             "make the file under {mb} MB but keep it {res}",
             "compress this to less than {mb} MB without changing the resolution ({res})",
+            "get this below {mb} MB and leave the resolution at {res}",
         ],
         "cont": ["make it under {mb} MB but keep it {res}"],
         "symptom": ["this is too big, get it under {mb} MB but keep {res}"],
