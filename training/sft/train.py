@@ -56,6 +56,8 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--ckpt-dir", type=Path, required=True)
     ap.add_argument("--epochs", type=float, default=h["epochs"])
     ap.add_argument("--lr", type=float, default=h["lr"])
+    ap.add_argument("--per-device-batch", type=int, default=h["per_device_batch"])
+    ap.add_argument("--grad-accum", type=int, default=h["grad_accum"])
     ap.add_argument("--max-steps", type=int, default=-1, help="smoke tests only")
     ap.add_argument("--save-steps", type=int, default=50)
     ap.add_argument("--seed", type=int, default=config.TASKGEN_SEED)
@@ -101,8 +103,8 @@ def main(argv: list[str] | None = None) -> None:
     a.ckpt_dir.mkdir(parents=True, exist_ok=True)
     args = TrainingArguments(
         output_dir=str(a.ckpt_dir), num_train_epochs=a.epochs, max_steps=a.max_steps, learning_rate=a.lr,
-        per_device_train_batch_size=h["per_device_batch"], gradient_accumulation_steps=h["grad_accum"],
-        warmup_ratio=h["warmup_ratio"], lr_scheduler_type="cosine", logging_steps=5, save_strategy="steps",
+        per_device_train_batch_size=a.per_device_batch, per_device_eval_batch_size=1, gradient_accumulation_steps=a.grad_accum,
+        warmup_steps=h["warmup_ratio"], lr_scheduler_type="cosine", logging_steps=5, save_strategy="steps",
         save_steps=a.save_steps, save_total_limit=2, eval_strategy="steps" if val else "no", eval_steps=a.save_steps,
         bf16=plan["bf16"], fp16=plan["fp16"], seed=a.seed, report_to="none", remove_unused_columns=False,
         use_cpu=cpu, gradient_checkpointing=False,

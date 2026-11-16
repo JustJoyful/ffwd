@@ -102,7 +102,8 @@ MIX_FAMILY_COUNT = (0.55, 0.30, 0.12, 0.03)
 LEAKAGE_JACCARD_MAX = 0.9
 
 # --- SFT (training/sft) ---
-SFT_MAX_LEN = 2048  # tokens per example; longer streams are dropped and counted
+# Prompt v1 + probes are ~1.6k tokens of every example (only ~220 are trained); 3-input merges exceed 2048.
+SFT_MAX_LEN = 3072  # tokens per example; longer streams are dropped and counted
 SFT_FAMILY_CAP = 0.25  # no family above this share of the mix
 SFT_REJECTION_SHARE_MAX = 0.25  # base-model rejection samples: easy, low-information, capped
 SFT_LORA = {"r": 16, "alpha": 32, "dropout": 0.0}  # all-linear LoRA, as in the GRPO toy
