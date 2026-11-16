@@ -41,3 +41,25 @@ Not part of the Phase 0 verdict, which stays as recorded. After the owner's task
 - spike-v1 = 49 carried-over tasks (source `spike-v0`) + the owner's new tasks (ids `n01..`, source `spike-v1-new`, plus 2-3 new clips). Every task's reference solution must pass its gold spec under checker v1.2 (`uv run python -m eval.verify_tasks`) before any system is run.
 - Systems to run once the new tasks are in: B0 at the frozen commit (tag `b0-frozen-paraphrase`, hash in `reports/2026-11-16-paraphrase-robustness/FREEZE.md`, unchanged), base Qwen3-1.7B (fair prompt, constrained decoding), and X1 (DeepSeek V4 Flash, loop, thinking off, budget-guarded). Report Wilson 95% intervals for each, split into **original** and **new** tasks, and overall.
 - Limitation declared in advance: the owner wrote the new tasks after seeing the original set and the checker's behaviour; B0's patterns were not touched but the tasks may still resemble them.
+
+## Phase 1 preregistration (2026-11-16)
+**Phase 1 status: DRAFT.** Written before any Phase 1 model is evaluated; it becomes FINAL only by an explicit owner-approved edit that records the date. `eval/testlock.py` refuses every test-split run until the marker reads FINAL, and then allows each (system, checkpoint, split) once.
+
+### Data and splits
+Generator v1 (`training/taskgen`, D-027): hash-pinned splits in `data/tasks/MANIFEST.json`. Test-compositional holds out whole family combinations (`config.HELDOUT_COMBOS`); test-phrasing uses two phrasing styles (technical, indirect) that appear nowhere else; test-iid is the training distribution. test-real (about 100 hand-written tasks on owner clips) is added later and reported separately. The hand-written spike-v1 tasks stay dev-only.
+
+### Systems
+B0 (regex/preset, v2, authored from train phrasing only, frozen by tag + file hash before any test split is generated or run), B2 (base Qwen3-0.6B and 1.7B with the loop), M1 (SFT), M3 (SFT + multi-turn GRPO), X1 (DeepSeek V4 Flash with the loop). M2 (single-turn GRPO) is deferred to Phase 4 (D-031). Checkpoint selection uses **dev only**.
+
+### Primary comparison family (Holm-adjusted across all of them; paired bootstrap 10,000 resamples, seed 20261115)
+1. Q2: M1 - B2 on test-iid. 2. Q3: M3 - M1 on test-iid. 3. Q4: M3 - X1 on test-iid. 4. Q5: M3 on test-compositional and test-phrasing, each vs M1. 5. Q7: M3 - B0 per family on test-iid.
+Minimum meaningful difference: 5 percentage points on test-iid. A claim needs the Holm-adjusted interval to exclude 0. Single rates use Wilson 95% intervals (D-021).
+
+### Continue-gates (decide when to proceed, never what is reported)
+Teacher pilot continues to bulk if kept-rate >= 70% overall and cache-hit ratio >= 60%. GRPO starts only if M1 reaches >= 60% dev success with <= 5% invalid actions.
+
+### GRPO stopping rules
+Cap 15 GPU-hours; stop if the no-signal group share exceeds 60% for 10 consecutive steps, if the refusal rate on supported tasks leaves `REFUSAL_RATE_BAND`, if the invalid-action rate rises for 10 steps, or if a human spot-check finds an exploit (then fix the reward in a new commit and restart from the last clean checkpoint, documenting the discontinuity).
+
+### Controls and disclosures
+Shuffled-reward run (30 steps; must not improve dev). Leakage audit (`eval/leakage.py`) of test-phrasing and test-compositional against train must stay below `LEAKAGE_JACCARD_MAX`. 50 random passed M3 outputs are inspected by hand. Single training seed unless compute allows more; the report says "single seed". B0 is hand-written by the same author as the tasks (process control: the held-out phrasing templates were not read). Teacher and X1 are the same model family. Checker blind spots: filter-made A/V offsets, first-frame rotation measurement, and no default quality floor on trimmed/reframed size tasks (D-025).

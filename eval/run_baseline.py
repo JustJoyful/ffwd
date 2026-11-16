@@ -18,6 +18,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from eval.b0_regex import RegexPolicy
+from eval.testlock import acquire_test_run
 from training import config
 from training.env.constrained import load_prompt
 from training.env.loop import Policy, run_episode, score
@@ -181,6 +182,11 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--budget-usd", type=float, default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument(
+        "--checkpoint",
+        help="model/checkpoint id (required for test splits; keys the single-run lock)",
+    )
+    ap.add_argument("--supersede-reason", help="re-run a test split on purpose (logged)")
     a = ap.parse_args(argv)
     if a.out.exists():
         sys.exit(f"refusing to overwrite {a.out}")
@@ -188,6 +194,13 @@ def main(argv: list[str] | None = None) -> None:
         sys.exit("eval/PREREGISTRATION.md must say 'Status: FINAL' before any baseline run")
     raw = a.tasks.read_bytes()
     tasks = [json.loads(x) for x in raw.decode().splitlines()][a.offset :][: a.limit]
+    split = tasks[0]["split"] if tasks else "dev"
+    if split in config.TEST_SPLITS:
+        if not a.checkpoint:
+            sys.exit(
+                "test splits need --checkpoint (the single-run lock is keyed by system+checkpoint+split)"
+            )
+        acquire_test_run(a.system, a.checkpoint, split, supersede_reason=a.supersede_reason)
     cfg = tomllib.loads(a.model_config.read_text())
     guard = None
     if cfg.get("paid"):

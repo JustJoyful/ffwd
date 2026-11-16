@@ -1,0 +1,26 @@
+from eval.leakage import leakage_report, ngrams
+
+
+def test_ngrams_are_word_sets():
+    assert ngrams("Cut the first 3 seconds off", 4) == {
+        ("cut", "the", "first", "3"),
+        ("the", "first", "3", "seconds"),
+        ("first", "3", "seconds", "off"),
+    }
+    assert ngrams("hi there", 4) == {("hi", "there")}
+
+
+def test_planted_near_duplicate_is_flagged_and_unrelated_text_is_not():
+    train = ["please remove the sound from this video thanks", "make it vertical 1080 by 1920"]
+    r = leakage_report(
+        train,
+        ["please remove the sound from this video thanks", "convert this old AVI to an MP4"],
+        threshold=0.8,
+    )
+    assert r["max_jaccard"] == 1.0 and len(r["pairs_over_threshold"]) == 1
+    assert r["pairs_over_threshold"][0]["train"] == train[0]
+
+
+def test_empty_inputs():
+    assert leakage_report([], ["a b c d e"])["max_jaccard"] == 0.0
+    assert leakage_report(["a b c d e"], [])["tests"] == 0

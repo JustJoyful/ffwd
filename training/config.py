@@ -93,6 +93,9 @@ MIX_AMBIGUOUS = 0.08
 MIX_UNSUPPORTED = 0.08
 MIX_FAMILY_COUNT = (0.55, 0.30, 0.12, 0.03)
 
+# Leakage audit (eval/leakage.py): word 4-gram Jaccard between a test request and its most similar train request.
+LEAKAGE_JACCARD_MAX = 0.9
+
 # --- Frozen agent format (plan T6, D-026) ---
 SYSTEM_PROMPT_V1 = "system-v1.txt"
 # Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and
