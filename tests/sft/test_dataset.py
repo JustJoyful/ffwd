@@ -79,3 +79,17 @@ def test_validation_holds_out_whole_contents():
 def test_stats_counts_trained_tokens():
     s = stats([{"task_id": "x", "family": "F1", "input_ids": [1, 2, 3], "labels": [IGNORE, 2, 3]}])
     assert s["trained_tokens"] == 2 and s["examples"] == 1
+
+
+def test_oracle_share_is_capped_tagged_and_the_cap_can_be_lifted_explicitly():
+    teacher = [_ex(f"t{i}", f"F{i % 4}") for i in range(70)]
+    oracle = [_ex(f"o{i}", f"F{i % 4}") for i in range(200)]
+    out = mix(teacher, [], oracle=oracle, oracle_share_max=0.3, per_family_cap=1.0, seed=1)
+    orc = [e for e in out if e["source"] == "oracle"]
+    assert len(orc) == 30 and len(orc) / len(out) <= 0.3 + 1e-9
+    assert {e["source"] for e in out if e not in orc} == {"teacher"}
+    lifted = mix([], [], oracle=oracle, oracle_share_max=None, per_family_cap=1.0, seed=1)
+    assert len(lifted) == 200 and {e["source"] for e in lifted} == {"oracle"}
+    assert (
+        mix([], [], oracle=oracle, per_family_cap=1.0, seed=1) == []
+    )  # default cap with no teacher: nothing

@@ -40,6 +40,10 @@ def acquire_test_run(
     """No-op for non-test splits. Raises NotPreregistered / TestAlreadyRun; otherwise records the lock."""
     if split not in config.TEST_SPLITS:
         return
+    if system.startswith(config.DEV_ONLY_SYSTEM_PREFIXES):
+        raise PermissionError(
+            f"{system} is a dev-only ablation (D-032): it is never run on a test split"
+        )
     if not prereg.exists() or "Phase 1 status: FINAL" not in prereg.read_text():
         raise NotPreregistered(
             "eval/PREREGISTRATION.md must say 'Phase 1 status: FINAL' before any test run"

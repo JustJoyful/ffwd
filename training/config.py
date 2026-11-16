@@ -105,6 +105,9 @@ LEAKAGE_JACCARD_MAX = 0.9
 # Prompt v1 + probes are ~1.6k tokens of every example (only ~220 are trained); 3-input merges exceed 2048.
 SFT_MAX_LEN = 3072  # tokens per example; longer streams are dropped and counted
 SFT_FAMILY_CAP = 0.25  # no family above this share of the mix
+SFT_ORACLE_SHARE_MAX = (
+    0.30  # D-032: programmatic oracle trajectories, at most this share of the final mix
+)
 SFT_REJECTION_SHARE_MAX = 0.25  # base-model rejection samples: easy, low-information, capped
 SFT_LORA = {"r": 16, "alpha": 32, "dropout": 0.0}  # all-linear LoRA, as in the GRPO toy
 SFT_HPARAMS = {
@@ -136,6 +139,7 @@ ORIENTATION_MAX_RATIO = 0.75
 ORIENTATION_MIN_GAP = 4.0
 
 # --- Task splits and who may read them (RULES §4.5; guard in training/taskgen/loader.py) ---
+DEV_ONLY_SYSTEM_PREFIXES = ("M1-oracle",)  # D-032 ablation: dev, descriptive, outside Holm
 TEST_SPLITS = ("test-iid", "test-compositional", "test-phrasing", "test-real")
 # Phase 1 preregistered primary comparison family (eval/PREREGISTRATION.md): (name, system_a, system_b, split);
 # reports b - a. Holm runs over exactly these. A split "x+y" pools the tasks of both splits into ONE comparison
@@ -187,8 +191,13 @@ DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 DEEPSEEK_API_KEY_ENV = "DEEPSEEK_API_KEY"  # key lives only in the environment (RULES §5.6)
 DEEPSEEK_CONCURRENCY_LIMIT = 3  # account limit per pricing page; runners are sequential anyway
 TEACHER_MAX_OUTPUT_TOKENS = 512
-# Owner-supplied (gate G-terms): bulk runs are refused while the off-peak window is unknown. (start, end) in UTC.
-DEEPSEEK_OFFPEAK_UTC: tuple[time, time] | None = None
+# DeepSeek peak windows, UTC (owner-supplied 17 Nov 2026, in force since 16 Aug 2026): 01:00-04:00 and 06:00-10:00
+# are peak; every other hour is off-peak. Bulk teacher runs are refused during peak (RULES 5.3). Windows do not
+# wrap midnight. Re-check the official pricing page before each bulk run: DeepSeek changed these several times.
+DEEPSEEK_PEAK_UTC: tuple[tuple[time, time], ...] = (
+    (time(1, 0), time(4, 0)),
+    (time(6, 0), time(10, 0)),
+)
 TEACHER_TERMS_URL: str | None = None  # the terms page the owner confirmed allow training on outputs
 TEACHER_TERMS_SNAPSHOT_SHA256: str | None = None  # sha256 of the saved terms text
 

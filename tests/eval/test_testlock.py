@@ -55,3 +55,12 @@ def test_dev_and_train_splits_are_unaffected_and_never_logged(tmp_path):
             "M1", "x", split, ledger=tmp_path / "runs.jsonl", prereg=tmp_path / "nope.md"
         )
     assert not (tmp_path / "runs.jsonl").exists()
+
+
+def test_oracle_ablation_is_never_run_on_a_test_split(tmp_path):
+    import pytest
+
+    from eval.testlock import acquire_test_run
+
+    with pytest.raises(PermissionError, match="dev-only"):
+        acquire_test_run("M1-oracle", "ckpt", "test-iid", ledger=tmp_path / "l.jsonl")

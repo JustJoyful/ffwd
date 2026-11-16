@@ -61,18 +61,28 @@ def mix(
     teacher: list[dict],
     rejection: list[dict],
     *,
+    oracle: list[dict] | None = None,
+    oracle_share_max: float | None = config.SFT_ORACLE_SHARE_MAX,
     per_family_cap: float = config.SFT_FAMILY_CAP,
     rejection_share_max: float = config.SFT_REJECTION_SHARE_MAX,
     seed: int = config.TASKGEN_SEED,
 ) -> list[dict]:
-    """Teacher data, plus base-model rejection samples capped at a share of the final mix, with no family above
-    `per_family_cap` of it (a family over the cap is subsampled, deterministically)."""
+    """Teacher data, plus base-model rejection samples and programmatic oracle trajectories (D-032), each capped at
+    a share of the final mix, with no family above `per_family_cap` of it (a family over the cap is subsampled,
+    deterministically). Oracle examples carry source="oracle" (data card). `oracle_share_max=None` lifts the oracle
+    cap: only for the explicit fallback when the teacher budget is gone, or the M1-oracle ablation (teacher=[]).
+    """
     rng = random.Random(seed)
-    pool = [*teacher]
+    pool = [{**e, "source": e.get("source", "teacher")} for e in teacher]
     r = list(rejection)
     rng.shuffle(r)
     max_rej = int(rejection_share_max * len(teacher) / (1 - rejection_share_max)) if teacher else 0
-    pool += r[:max_rej]
+    pool += [{**e, "source": "rejection"} for e in r[:max_rej]]
+    o = list(oracle or [])
+    rng.shuffle(o)
+    if oracle_share_max is not None:
+        o = o[: int(oracle_share_max * len(pool) / (1 - oracle_share_max))] if pool else []
+    pool += [{**e, "source": "oracle"} for e in o]
     by_fam = defaultdict(list)
     for ex in pool:
         by_fam[ex["family"]].append(ex)
@@ -108,5 +118,6 @@ def stats(examples: list[dict]) -> dict:
     trained = sum(1 for e in examples for x in e["labels"] if x != IGNORE)
     return {
         "examples": len(examples), "mean_len": round(sum(lens) / max(1, len(lens)), 1), "max_len": max(lens, default=0),
+        "by_source": dict(sorted(Counter(e.get("source", "teacher") for e in examples).items())),
         "trained_tokens": trained, "by_family": dict(sorted(Counter(e["family"] for e in examples).items())),
     }  # fmt: skip

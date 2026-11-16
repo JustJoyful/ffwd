@@ -1,6 +1,6 @@
 import dataclasses
 import json
-from datetime import UTC, datetime, time
+from datetime import UTC, datetime
 
 import pytest
 from fakes import TRIM, ReferenceTeacher  # noqa: E402
@@ -74,22 +74,15 @@ def test_draft_prompt_and_non_train_splits_are_refused(corpus, tmp_path):
         _gen(tmp_path, corpus, [dict(TRIM, split="dev")], ReferenceTeacher(TRIM))
 
 
-def test_offpeak_gate_with_a_fake_clock(corpus, tmp_path, monkeypatch):
-    with pytest.raises(OffPeakRequired):  # window unknown is never off-peak
-        _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM), offpeak_only=True)
-    monkeypatch.setattr(
-        config, "DEEPSEEK_OFFPEAK_UTC", (time(16, 30), time(0, 30))
-    )  # wraps midnight
-    assert is_offpeak(datetime(2026, 11, 16, 23, 0, tzinfo=UTC)) and not is_offpeak(
-        datetime(2026, 11, 16, 12, 0, tzinfo=UTC)
-    )
+def test_offpeak_gate_with_a_fake_clock(corpus, tmp_path):
+    at = lambda h, m=0: datetime(2026, 11, 16, h, m, tzinfo=UTC)  # noqa: E731
+    assert not is_offpeak(at(1)) and not is_offpeak(at(3, 59)) and is_offpeak(at(4))
+    assert is_offpeak(at(5, 59)) and not is_offpeak(at(6)) and not is_offpeak(at(9, 59))
+    assert is_offpeak(at(10)) and is_offpeak(at(23)) and is_offpeak(at(0))
+    with pytest.raises(OffPeakRequired):
+        _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM), offpeak_only=True, now=lambda: at(2))
     s = _gen(
-        tmp_path,
-        corpus,
-        [TRIM],
-        ReferenceTeacher(TRIM),
-        offpeak_only=True,
-        now=lambda: datetime(2026, 11, 16, 23, 0, tzinfo=UTC),
+        tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM), offpeak_only=True, now=lambda: at(23)
     )
     assert s.kept == 1
 

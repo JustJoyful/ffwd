@@ -52,14 +52,10 @@ def load_prompt_v1(allow_draft: bool = False) -> str:
     return text
 
 
-def is_offpeak(now: datetime, window: tuple[time, time] | None = None) -> bool:
-    """Window is (start, end) UTC, wrapping midnight allowed; None = unknown, which is never treated as off-peak."""
-    window = window or config.DEEPSEEK_OFFPEAK_UTC
-    if window is None:
-        return False
-    start, end = window
+def is_offpeak(now: datetime, peak: tuple[tuple[time, time], ...] | None = None) -> bool:
+    """Off-peak = not inside any (start, end) UTC peak window (config.DEEPSEEK_PEAK_UTC; end exclusive)."""
     t = now.astimezone(UTC).time()
-    return start <= t < end if start <= end else (t >= start or t < end)
+    return not any(start <= t < end for start, end in (peak or config.DEEPSEEK_PEAK_UTC))
 
 
 def make_record(
@@ -114,7 +110,7 @@ def generate(
             break
         if offpeak_only and not is_offpeak(now()):
             raise OffPeakRequired(
-                "bulk teacher runs are off-peak only (RULES §5.3); the window is config.DEEPSEEK_OFFPEAK_UTC"
+                "bulk teacher runs are off-peak only (RULES §5.3); the peak windows are config.DEEPSEEK_PEAK_UTC"
             )
         before = guard.spent(run_only=True) if guard else 0.0
         try:
