@@ -40,3 +40,29 @@ def paired_diff_ci(
     n, rng = len(diffs), random.Random(seed)
     means = [sum(rng.choices(diffs, k=n)) / n for _ in range(resamples)]
     return (sum(diffs) / n, *_percentiles(means))
+
+
+def paired_diff_pvalue(
+    a: dict[str, bool],
+    b: dict[str, bool],
+    resamples: int = config.BOOTSTRAP_RESAMPLES,
+    seed: int = config.BOOTSTRAP_SEED,
+) -> float:
+    """Two-sided bootstrap p for "mean(a - b) = 0": 2 * min(P(resampled mean <= 0), P(>= 0)), floored at 1/resamples."""
+    if set(a) != set(b):
+        raise ValueError(f"task sets differ: {sorted(set(a) ^ set(b))[:5]}")
+    diffs = [float(a[k]) - float(b[k]) for k in sorted(a)]
+    n, rng = len(diffs), random.Random(seed)
+    means = [sum(rng.choices(diffs, k=n)) / n for _ in range(resamples)]
+    le, ge = sum(m <= 0 for m in means) / resamples, sum(m >= 0 for m in means) / resamples
+    return min(1.0, max(2 * min(le, ge), 1 / resamples))
+
+
+def holm(pvalues: dict[str, float]) -> dict[str, float]:
+    """Holm-Bonferroni adjusted p-values (step-down), in the same keys."""
+    order = sorted(pvalues, key=pvalues.get)
+    m, running, out = len(order), 0.0, {}
+    for i, k in enumerate(order):
+        running = max(running, (m - i) * pvalues[k])
+        out[k] = min(1.0, running)
+    return out
