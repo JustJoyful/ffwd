@@ -62,6 +62,23 @@ def is_offpeak(now: datetime, window: tuple[time, time] | None = None) -> bool:
     return start <= t < end if start <= end else (t >= start or t < end)
 
 
+def make_record(
+    task: dict, ep, corpus: dict[str, Path], prompt: str, passed: bool, cost_usd: float
+) -> dict:
+    """One trajectory record: the full conversation the model saw/produced, the verdict and the episode."""
+    messages = initial_messages(task, {c: probe(corpus[c]) for c in task["inputs"]}, prompt)
+    for turn in ep.turns:
+        messages += [
+            {"role": "assistant", "content": turn["assistant"]},
+            {"role": "user", "content": json.dumps(turn["observation"])},
+        ]
+    return {
+        "task_id": task["id"], "families": task["families"], "passed": passed, "runs": ep.runs,
+        "end_reason": ep.end_reason, "invalid_turns": ep.invalid_turns, "cost_usd": round(cost_usd, 8),
+        "messages": messages, "episode": dataclasses.asdict(ep),
+    }  # fmt: skip
+
+
 def _done_ids(path: Path) -> set[str]:
     return (
         {json.loads(x)["task_id"] for x in path.read_text().splitlines()}
@@ -109,18 +126,14 @@ def generate(
             summary.stopped = f"budget: {e}"
             break
         passed = score(task, ep)
-        messages = initial_messages(task, {c: probe(corpus[c]) for c in task["inputs"]}, prompt)
-        for turn in ep.turns:
-            messages += [
-                {"role": "assistant", "content": turn["assistant"]},
-                {"role": "user", "content": json.dumps(turn["observation"])},
-            ]
-        rec = {
-            "task_id": task["id"], "families": task["families"], "passed": passed, "runs": ep.runs,
-            "end_reason": ep.end_reason, "invalid_turns": ep.invalid_turns,
-            "cost_usd": round((guard.spent(run_only=True) - before) if guard else 0.0, 8), "messages": messages,
-            "episode": dataclasses.asdict(ep),
-        }  # fmt: skip
+        rec = make_record(
+            task,
+            ep,
+            corpus,
+            prompt,
+            passed,
+            (guard.spent(run_only=True) - before) if guard else 0.0,
+        )
         with traj.open("a") as f:
             f.write(json.dumps(rec) + "\n")
         if passed:
