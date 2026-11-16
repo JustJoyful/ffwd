@@ -24,6 +24,8 @@ Phase 0 done (GO, D-020); Phase 1 is next. Work happens on `main`. Phase 0 plan:
 - `cd spikes/browser && pnpm test && pnpm lint && pnpm e2e`: browser spike unit, lint and Playwright tests
 - `uv run python -m eval.verify_tasks data/tasks/dev/spike-v1.jsonl`: every task's reference solution must pass its gold spec (run on any new or edited task before evaluating systems)
 - `uv run python -m training.corpus.add_clip <file> --id <id> --licence "..." --source "..."`: register an extra clip in the corpus manifest (licence required)
+- `uv run python -m apps.cli.ffmpeg_agent_cli "<request>" file.mp4 --model m.gguf --llama-server /path/to/llama-server`: the CLI (spec confirmation, then run/check; success only when a check passed)
+- `uv run python -m training.taskgen.build --workers 3`: regenerate the hash-pinned task splits into `data/tasks/` (writes `MANIFEST.json`)
 - Tests need `ffmpeg`/`ffprobe` on PATH; corpus clips are generated into a temp dir by the `corpus` fixture
 
 ## Big-picture architecture (spans several docs)
