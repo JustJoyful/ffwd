@@ -43,7 +43,7 @@ class Draft:
 
     @property
     def output_id(self) -> str:
-        return "frames" if self.kind == "image_sequence" else "out1"
+        return "out1"  # one id for every kind: the id must not reveal the output kind to the model
 
 
 def deep_merge(a: dict, b: dict) -> dict | None:

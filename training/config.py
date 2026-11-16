@@ -18,6 +18,7 @@ MAX_OUTPUT_BYTES = 200 * 2**20
 # GRPO rollouts run thousands of FFmpeg jobs on small clips: a hung or runaway command must not burn GPU hours.
 ROLLOUT_RUN_TIMEOUT_S = 20
 ROLLOUT_MAX_OUTPUT_BYTES = 50 * 2**20
+EXEC_CONCURRENCY = max(2, (os.cpu_count() or 2))  # concurrent FFmpeg processes (lockstep rollouts)
 SANDBOX_DEFAULT = os.environ.get(
     "FFMPEG_AGENT_SANDBOX", "off"
 )  # off | auto | require (training/env/sandbox.py)

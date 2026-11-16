@@ -157,6 +157,11 @@ def build(
             seen.add(core["content_key"])
             pending[split].append(cand)
         flat = [(s, c) for s, cs in pending.items() for c in cs]
+        print(
+            f"round {_round}: verifying {len(flat)}; have "
+            + ", ".join(f"{k}={len(v)}/{need[k]}" for k, v in have.items()),
+            flush=True,
+        )
         with ProcessPoolExecutor(workers) as pool:
             results = list(pool.map(_verify_job, [(c["core"], corpus) for _, c in flat]))
         for (s, c), (_, ok, _why) in zip(flat, results, strict=True):

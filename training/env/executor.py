@@ -6,12 +6,16 @@ Order: validate → substitute harness-owned paths for {in:id}/{out:id} → argu
 
 import shutil
 import subprocess
+import threading
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from training import config
 from training.env.sandbox import sandbox_prefix
 from training.env.validator import validate_run
+
+# Lockstep rollouts run many episodes in threads; cap concurrent FFmpeg processes at the CPU count.
+_EXEC_SLOTS = threading.BoundedSemaphore(config.EXEC_CONCURRENCY)
 
 
 @dataclass
@@ -98,7 +102,8 @@ def execute(
         *(subst.get(a, a) for a in run["args"]),
     ]
     try:
-        proc = subprocess.run(argv, shell=False, capture_output=True, timeout=timeout_s)
+        with _EXEC_SLOTS:
+            proc = subprocess.run(argv, shell=False, capture_output=True, timeout=timeout_s)
     except subprocess.TimeoutExpired as e:
         _delete(declared)
         return RunResult(ok=False, timed_out=True, stderr_tail=_tail(e.stderr) + "\n[timed out]")

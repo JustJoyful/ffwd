@@ -10,12 +10,14 @@ Known gap: at inference the chat template re-renders history without the empty <
 import dataclasses
 import uuid
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Protocol
 
 from training import config
 from training.env.loop import Episode, initial_messages, run_episode, score
 from training.env.probe import probe
+from training.grpo.lockstep import BatchCoordinator, BatchGenerate
 from training.grpo.telemetry import RewardBreakdown, record_for, shuffle_within_groups
 
 
@@ -68,8 +70,8 @@ def toy_reward(task: dict, ep: Episode) -> float:
     return (1.0 if score(task, ep) else 0.0) - 0.5 * ep.invalid_turns
 
 
-def prompt_messages(task: dict, corpus: dict[str, Path]) -> list[dict]:
-    return initial_messages(task, {cid: probe(corpus[cid]) for cid in task["inputs"]})
+def prompt_messages(task: dict, corpus: dict[str, Path], system: str | None = None) -> list[dict]:
+    return initial_messages(task, {cid: probe(corpus[cid]) for cid in task["inputs"]}, system)
 
 
 def make_rollout_func(
@@ -83,8 +85,16 @@ def make_rollout_func(
     reward_fn: Callable[[dict, Episode], RewardBreakdown] | None = None,
     on_rollout: Callable[[int, list[dict], list[dict]], None] | None = None,
     shuffle_seed: int | None = None,
+    batch_generator_for: Callable[[object], BatchGenerate] | None = None,
+    system_prompt_text: str | None = None,
+    require_spec: bool = False,
+    stop_after_ask: bool = False,
 ):
-    """rollout_func(prompts, trainer) for GRPOTrainer. Prompts are matched to tasks by their
+    """rollout_func(prompts, trainer) for GRPOTrainer.
+
+    batch_generator_for (T17): when given, all episodes of a step run in lockstep threads and their prompts are
+    decoded in batches (training/grpo/lockstep.py); `generator_for` is then unused. system_prompt_text/require_spec/
+    stop_after_ask select the Phase 1 protocol (prompt v1, spec-first, episode ends after a clarification). Prompts are matched to tasks by their
     first user message (request + probes), which is unique per task.
 
     reward_fn: per-episode reward (default: the Phase 0 toy reward). on_rollout(step, records, episodes)
@@ -98,24 +108,45 @@ def make_rollout_func(
     )
 
     def rollout_func(prompts: list[list[dict]], trainer) -> dict:
-        generate = generator_for(trainer)
         out: dict[str, list] = {
             k: [] for k in ("prompt_ids", "completion_ids", "logprobs", "env_mask")
         }
         step = getattr(getattr(trainer, "state", None), "global_step", 0) + 1
         records, episodes = [], []
-        for prompt in prompts:
-            task = by_key[prompt[-1]["content"]]
+        tasks_in_order = [by_key[prompt[-1]["content"]] for prompt in prompts]
+        coordinator = (
+            BatchCoordinator(batch_generator_for(trainer), len(prompts))
+            if batch_generator_for
+            else None
+        )
+        generate = coordinator.generate if coordinator else generator_for(trainer)
+
+        def one(task):
             policy = TokenPolicy(trainer.processing_class, generate, max_new_tokens)
-            ep = run_episode(
-                task,
-                policy,
-                corpus=corpus,
-                job_dir=jobs_root / uuid.uuid4().hex,
-                max_runs=max_runs,
-                run_timeout_s=config.ROLLOUT_RUN_TIMEOUT_S,
-                max_output_bytes=config.ROLLOUT_MAX_OUTPUT_BYTES,
-            )
+            try:
+                ep = run_episode(
+                    task,
+                    policy,
+                    corpus=corpus,
+                    job_dir=jobs_root / uuid.uuid4().hex,
+                    max_runs=max_runs,
+                    system_prompt_text=system_prompt_text,
+                    run_timeout_s=config.ROLLOUT_RUN_TIMEOUT_S,
+                    max_output_bytes=config.ROLLOUT_MAX_OUTPUT_BYTES,
+                    require_spec=require_spec,
+                    stop_after_ask=stop_after_ask,
+                )
+            finally:
+                if coordinator:
+                    coordinator.episode_finished()
+            return policy, ep
+
+        if coordinator:
+            with ThreadPoolExecutor(max_workers=len(prompts)) as pool:
+                results = list(pool.map(one, tasks_in_order))
+        else:
+            results = [one(t) for t in tasks_in_order]
+        for task, (policy, ep) in zip(tasks_in_order, results, strict=True):
             for k, v in policy.trajectory().items():
                 out[k].append(v)
             records.append(record_for(task, ep, reward_fn(task, ep), f"{step}:{task['id']}"))
