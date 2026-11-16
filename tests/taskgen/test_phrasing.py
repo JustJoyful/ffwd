@@ -38,10 +38,11 @@ def test_every_intent_has_enough_wordings():
 
 
 def test_every_sampled_intent_is_in_the_bank_and_every_bank_intent_is_reachable(drafts):
+    from training.taskgen.special import AMBIGUOUS, UNSUPPORTED
+
     assert set(drafts) <= set(BANK)
-    assert (
-        set(BANK) - set(drafts) <= {"f5.cw_lossless", "f5.ccw_lossless", "f5.flip_lossless"} | set()
-    ), set(BANK) - set(drafts)
+    special = set(AMBIGUOUS) | set(UNSUPPORTED)
+    assert set(BANK) - set(drafts) - special == set()
 
 
 @pytest.mark.parametrize("style", [*TRAIN_STYLES, *HELDOUT_STYLES])
