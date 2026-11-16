@@ -46,20 +46,36 @@ Not part of the Phase 0 verdict, which stays as recorded. After the owner's task
 **Phase 1 status: DRAFT.** Written before any Phase 1 model is evaluated; it becomes FINAL only by an explicit owner-approved edit that records the date. `eval/testlock.py` refuses every test-split run until the marker reads FINAL, and then allows each (system, checkpoint, split) once.
 
 ### Data and splits
-Generator v1 (`training/taskgen`, D-027): hash-pinned splits in `data/tasks/MANIFEST.json`. Test-compositional holds out whole family combinations (`config.HELDOUT_COMBOS`); test-phrasing uses two phrasing styles (technical, indirect) that appear nowhere else; test-iid is the training distribution. test-real (about 100 hand-written tasks on owner clips) is added later and reported separately. The hand-written spike-v1 tasks stay dev-only.
+Generator v1 (`training/taskgen`, D-027): hash-pinned splits in `data/tasks/MANIFEST.json`. Test-compositional holds out whole family combinations (`config.HELDOUT_COMBOS`); test-phrasing uses two phrasing styles that appear nowhere else (`context_first`: a situation first, then the problem, e.g. "for my viva tomorrow, ppt won't play this"; and `indirect`: a goal first, then the request); test-iid is the training distribution. **Real clips are split by clip before any task is generated**: a clip registered with role `test-real` is the input of test-real tasks only, is skipped by the generator, and CI (`tests/taskgen/test_clip_roles.py`) fails if its id appears in any other split, including the spike tasks. test-real (about 100 hand-written tasks on owner clips) is added later and reported separately. The hand-written spike-v1 tasks stay dev-only.
+
+### Runtime and checker
+Phase 1 numbers are for the **native GGUF path** (llama.cpp, D-028). The browser (MLC q4f16_1) number comes from the Phase 2 parity check, not from this report. The checker (and every reference-solution run) uses the single pinned FFmpeg build chosen in D-024 (5.1.x, browser parity), everywhere (D-029).
 
 ### Systems
 B0 (regex/preset, v2, authored from train phrasing only, frozen by tag + file hash before any test split is generated or run), B2 (base Qwen3-0.6B and 1.7B with the loop), M1 (SFT), M3 (SFT + multi-turn GRPO), X1 (DeepSeek V4 Flash with the loop). M2 (single-turn GRPO) is deferred to Phase 4 (D-031). Checkpoint selection uses **dev only**.
 
-### Primary comparison family (Holm-adjusted across all of them; paired bootstrap 10,000 resamples, seed 20261115)
-1. Q2: M1 - B2 on test-iid. 2. Q3: M3 - M1 on test-iid. 3. Q4: M3 - X1 on test-iid. 4. Q5: M3 on test-compositional and test-phrasing, each vs M1. 5. Q7: M3 - B0 per family on test-iid.
-Minimum meaningful difference: 5 percentage points on test-iid. A claim needs the Holm-adjusted interval to exclude 0. Single rates use Wilson 95% intervals (D-021).
+### Primary comparison family (Holm-adjusted across exactly these six; paired bootstrap 10,000 resamples, seed 20261115)
+Encoded in `config.PREREG_COMPARISONS`, so code and this text cannot drift. 1. Q2: M1 - B2 on test-iid. 2. Q3: M3 - M1 on test-iid. 3. Q4: M3 - X1 on test-iid. 4. Q5a: M3 - M1 on test-compositional. 5. Q5b: M3 - M1 on test-phrasing. 6. **Q7: M3 - B0, ONE aggregate comparison on test-real + test-phrasing.**
+Q7 estimator: the paired difference over the **pooled union of tasks** (each task weighs equally, so test-phrasing carries about two thirds of the weight and test-real one third), one bootstrap resampling tasks jointly. Per-split and per-family differences of Q7 (and every other per-family table) are **descriptive only and outside Holm**; the report labels them so. Minimum meaningful difference: 5 percentage points. That is an interest threshold, not a promise of power: see the table. A claim needs the Holm-adjusted interval to exclude 0. Single rates use Wilson 95% intervals (D-021).
+
+**Detectable difference** (`eval.stats.detectable_difference`; paired normal approximation, 80% power, two-sided; "disagree" = share of tasks on which the two systems differ, an assumption not a measurement; Holm worst case uses alpha 0.05/6). Percentage points:
+
+| split | n | disagree 15%, alpha .05 | disagree 15%, Holm worst | disagree 30%, alpha .05 | disagree 30%, Holm worst |
+|---|---|---|---|---|---|
+| test-iid | 500 | 4.9 | 6.0 | 6.9 | 8.5 |
+| test-compositional | 200 | 7.7 | 9.5 | 10.9 | 13.5 |
+| test-phrasing | 200 | 7.7 | 9.5 | 10.9 | 13.5 |
+| test-real | 100 | 10.9 | 13.5 | 15.3 | 19.1 |
+| real + phrasing (Q7) | 300 | 6.3 | 7.8 | 8.9 | 11.0 |
+
+So test-real alone (n about 100) cannot detect 5 pp; even test-iid detects 5 pp only under the optimistic column. Differences smaller than the listed value are reported with their intervals and are not claimed.
 
 ### Continue-gates (decide when to proceed, never what is reported)
-Teacher pilot continues to bulk if kept-rate >= 70% overall and cache-hit ratio >= 60%. GRPO starts only if M1 reaches >= 60% dev success with <= 5% invalid actions.
+- **Teacher pilot to bulk:** cache-hit ratio >= 60%, and the kept-rate gate below. The kept-rate gate is **not set yet**: it is set after the X1 (DeepSeek, dev) run, which needs owner approval for the spend. Proposed rule, justified there: kept-rate on the pilot must be at least `max(40%, X1 dev success - 15 pp)`. Reasoning: with rejection sampling the kept-rate is about the teacher's pass rate on train-style tasks, which X1 on dev estimates; a pilot far below that signals a prompt, format or checker bug rather than a hard task mix; and the absolute floor 40% keeps the cost per kept trajectory below 2.5x the budget plan's (which assumed 70%). The owner confirms the number at G1; it is then written here before any bulk spend.
+- **SFT to GRPO:** GRPO starts only if M1 reaches >= 60% dev success with <= 5% invalid actions. **If M1 reaches >= 90% on dev, the report says "SFT nearly sufficient" (little headroom left for GRPO) and GRPO still runs as preregistered**; the claim about GRPO's gain is then bounded by that headroom.
 
 ### GRPO stopping rules
 Cap 15 GPU-hours; stop if the no-signal group share exceeds 60% for 10 consecutive steps, if the refusal rate on supported tasks leaves `REFUSAL_RATE_BAND`, if the invalid-action rate rises for 10 steps, or if a human spot-check finds an exploit (then fix the reward in a new commit and restart from the last clean checkpoint, documenting the discontinuity).
 
 ### Controls and disclosures
-Shuffled-reward run (30 steps; must not improve dev). Leakage audit (`eval/leakage.py`) of test-phrasing and test-compositional against train must stay below `LEAKAGE_JACCARD_MAX`. 50 random passed M3 outputs are inspected by hand. Single training seed unless compute allows more; the report says "single seed". B0 is hand-written by the same author as the tasks (process control: the held-out phrasing templates were not read). Teacher and X1 are the same model family. Checker blind spots: filter-made A/V offsets, first-frame rotation measurement, and no default quality floor on trimmed/reframed size tasks (D-025).
+Shuffled-reward run (30 steps; must not improve dev). Leakage audit (`eval/leakage.py`) of test-phrasing and test-compositional against train must stay below `LEAKAGE_JACCARD_MAX`. 50 random passed M3 outputs are inspected by hand. Single training seed unless compute allows more; the report says "single seed". B0 is hand-written by the same author as the tasks (process control: B0 v2 is written from the train phrase banks only and its source is checked not to reference the held-out module). The `context_first` and `indirect` styles reuse train symptom/core wordings inside a new framing, so test-phrasing measures robustness to framing and situation context, not to entirely new vocabulary. Teacher and X1 are the same model family. Checker blind spots: filter-made A/V offsets, first-frame rotation measurement, and no default quality floor on trimmed/reframed size tasks (D-025).

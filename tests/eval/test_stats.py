@@ -37,3 +37,10 @@ def test_paired_diff():
 def test_paired_diff_rejects_mismatched_ids():
     with pytest.raises(ValueError):
         paired_diff_ci({"a": True, "b": False}, {"a": True})
+
+
+def test_detectable_difference_shrinks_with_n_and_grows_with_stricter_alpha():
+    from eval.stats import detectable_difference as dd
+
+    assert dd(500, 0.3) < dd(100, 0.3) and dd(100, 0.3, alpha=0.05 / 6) > dd(100, 0.3)
+    assert 0.12 < dd(100, 0.3) < 0.17  # n = 100 cannot see 5 pp

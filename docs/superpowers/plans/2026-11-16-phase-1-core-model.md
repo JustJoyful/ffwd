@@ -10,6 +10,17 @@
 
 **Spec:** `PHASES.md` (Phase 1 + budgets), `ARCHITECTURE.md` §3, §6, §7, `EVALUATION.md` §2–§7, `RULES.md`, `DECISIONS.md` D-004, D-007, D-008, D-009, D-010, D-015, D-018, D-021, D-022. Phase 0 evidence: `reports/2026-11-15-phase-0/`, `reports/2026-11-16-phase0-followups/`, `reports/2026-11-16-paraphrase-robustness/`.
 
+## Status (17 Nov 2026)
+
+| Item | State |
+|---|---|
+| Owner plan review | Done 17 Nov: D-027 (changed), D-028, D-029, D-030, D-031 approved; D-032 pending the owner's decision |
+| Phase | **In progress** (`PHASES.md`) |
+| Gate G0a Kaggle kill-and-resume | **Satisfied** (16/17 Nov, `verify_resume` ok, D-022). It blocks T16+ only, never T1-T15 |
+| Built (T1-T15 code and local smoke tests) | Corpus, checker v1.3, taskgen + splits, chat template, SFT/GRPO/export code; dev baselines B0 53% and stock Qwen3-0.6B 0% on dev v1 |
+| Open engineering item | D-029 pin: 5.1.1 static build downloaded (sha256 in D-024) but not yet runnable here (sandbox classifier); splits are rebuilt after the pin |
+| Paid steps | None open. G-terms (terms file + off-peak window) must exist before any DeepSeek call |
+
 ## Global Constraints
 
 Copied from the spec and `training/config.py`; every task includes these implicitly.
@@ -45,7 +56,8 @@ Failure modes the spec implies but no task would otherwise exercise, most likely
 
 | Gate | Needs | Blocks |
 |---|---|---|
-| **G0 preconditions** | (a) Kaggle kill-and-resume verifier says `"ok": true` (`reports` note + D-022 update); (b) owner reviews/accepts the 50 dev tasks (edits → `spike-v1`); (c) owner approves this plan and the proposed decisions D-027…D-031 below | all coding tasks T1+ |
+| **G0a Kaggle kill-and-resume** | verifier says `"ok": true` (**satisfied 17 Nov**, D-022) | **T16+ only** (T1-T15 never wait for it) |
+| **G0b/c plan and spike review** | owner reviewed the 50 dev tasks (`spike-v1`) and approved the plan: D-027 (with changes), D-028, D-029, D-030, D-031 approved 17 Nov; D-032 undecided | T1+ (done) |
 | **G-terms** | owner reads and confirms DeepSeek's current terms allow training on outputs (D-010 flagged a conflicting report) and sends the **off-peak window** to put in config | T13 pilot |
 | **G-clips** | owner supplies ≥10 own recordings (phone, with audio, mixed orientation) + licence statement; later writes ≈100 test-real requests | T3 real clips, T24 test-real |
 | **[ASK] G1 pilot** | go-ahead to spend ≤ $0.05 on ≤ 20 train tasks | T13 |
@@ -53,7 +65,7 @@ Failure modes the spec implies but no task would otherwise exercise, most likely
 | **[ASK] G3 GRPO** | go-ahead for the shuffled control (≈3 GPU-h) and then the main run (≤ 15 GPU-h cap) | T20, T21 |
 | **[ASK] G4 test run** | preregistration marked FINAL + selected checkpoint + owner go-ahead; test run happens once | T22 |
 
-**Proposed decisions (new DECISIONS entries, owner accepts or edits at G0):**
+**Decisions (recorded in `DECISIONS.md`; approved by the owner 17 Nov 2026 unless marked):**
 - D-027 Split design: content-key hashing, held-out family *combinations* for test-compositional, held-out phrasing *styles* for test-phrasing, B0 authored from train styles only.
 - D-028 M1/M3 are evaluated through merged GGUF in llama.cpp (deployment path), not HF generate.
 - D-029 Corpus is distributed as a hash-verified tarball in a private HF dataset repo; the FFmpeg version question is D-024 (browser parity), which this plan builds on once the owner decides it.
@@ -172,7 +184,7 @@ G0 ─▶ T1-T5 (infra, corpus, checker) ─▶ T6 prompt freeze ─▶ T7-T10 t
 - [ ] **Step 1: Write failing tests** `test_blank_video_under_size_target_fails_quality`, `test_truncated_output_under_size_target_fails_duration`, `test_good_compression_passes_with_floor`, `test_loudness_within_2lu_passes_and_3lu_fails`, `test_frame_count_off_by_two_fails`, `test_silent_audio_fails_loudness`. Each uses a mutated output made by ffmpeg from the corpus.
 - [ ] **Step 2: Run** `uv run pytest tests/env/test_checker_v1.py -v` → FAIL.
 - [ ] **Step 3: Implement** `quality.py` and the checker additions. Do not loosen existing tolerances (RULES §4.1). Record the checker version string `checker-v1.1` in `check()` output measurements and in every report manifest.
-- [ ] **Step 4: Run** full suite → PASS; confirm the Phase 0 dev tasks re-grade unchanged: `uv run python -m eval.run_baseline --system B0 …` on `spike-v0` into a fresh dir, expect 46/50 as before.
+- [ ] **Step 4: Run** full suite → PASS; re-grade the Phase 0 dev tasks with B0 (`uv run python -m eval.run_baseline --system B0 …` on `spike-v0` into a fresh dir). The score may change under checker v1.1 (the quality floor and duration guard are new): **report each changed task and explain why**, do not expect 46/50 unchanged and do not loosen the checker to restore it.
 - [ ] **Step 5: Commit** `feat(checker): v1.1 quality floor and duration guard for size targets, loudness/frame golden cases`.
 
 ### Task 5: Dev-task review and `spike-v1` (owner gate G0b)
@@ -233,7 +245,7 @@ G0 ─▶ T1-T5 (infra, corpus, checker) ─▶ T6 prompt freeze ─▶ T7-T10 t
 - Test: `tests/taskgen/test_phrasing.py`
 
 **Interfaces:**
-- Produces: `render_request(family: str, slots: dict, style: str, rng: random.Random) -> str`. Styles (proposal): train = `terse`, `polite`, `verbose`, `symptom` ("won't play on my TV"), `casual_typos`; held-out = `technical` (FFmpeg-flavoured wording) and `indirect` (goal/context first, parameters last). Each family has ≥ 4 templates per style. Held-out templates live **only** in `phrasing_heldout.py`, imported by exactly one module (`splits.build`); the B0 author never opens it (D-027 process control).
+- Produces: `render_request(family: str, slots: dict, style: str, rng: random.Random) -> str`. Styles (proposal): train = `terse`, `polite`, `verbose`, `symptom` ("won't play on my TV"), `casual_typos`; held-out = `context_first` (a situation first, then the problem, e.g. "for my viva tomorrow, ppt won't play this"; owner-approved replacement for `technical`) and `indirect` (a goal first, then the request). Each family has ≥ 4 templates per style. Held-out templates live **only** in `phrasing_heldout.py`, imported by exactly one module (`splits.build`); the B0 author never opens it (D-027 process control).
 
 - [ ] **Step 1: Write failing tests** `test_all_slots_appear_in_request` (digits/units preserved, the same digit rule as `eval/paraphrase.py`), `test_every_family_has_templates_for_every_style`, `test_heldout_templates_not_importable_outside_build` (AST check over the repo), `test_no_template_overlap_between_train_and_heldout`.
 - [ ] **Step 2: Run** → FAIL. **Step 3: Implement.** **Step 4: Run** → PASS.

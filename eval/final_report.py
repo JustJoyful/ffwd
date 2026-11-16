@@ -15,6 +15,14 @@ from training.env.validator import uses_stream_copy_only
 Runs = dict[str, dict[str, Path]]  # system -> split -> run dir
 
 
+def pooled(success: dict, system: str, split: str) -> dict[str, bool]:
+    """Task -> success for `split`; "a+b" pools the tasks of several splits (ids prefixed so they cannot collide)."""
+    parts = split.split("+")
+    if len(parts) == 1:
+        return success[system][split]
+    return {f"{p}:{t}": ok for p in parts for t, ok in success[system][p].items()}
+
+
 def load(run_dir: Path) -> tuple[dict[str, dict], dict[str, dict]]:
     results = {
         r["task_id"]: r
@@ -120,11 +128,17 @@ def final_report(
         )
     raw = {}
     for name, a, b, sp in comparisons:
-        d, lo, hi = paired_diff_ci(success[b][sp], success[a][sp])
-        raw[name] = paired_diff_pvalue(success[b][sp], success[a][sp])
+        d, lo, hi = paired_diff_ci(pooled(success, b, sp), pooled(success, a, sp))
+        raw[name] = paired_diff_pvalue(pooled(success, b, sp), pooled(success, a, sp))
         results_json["comparisons"].append(
             {"name": name, "split": sp, "a": a, "b": b, "diff_b_minus_a": d, "ci95": [lo, hi]}
         )
+        if "+" in sp:  # descriptive only: never enters Holm
+            for part in sp.split("+"):
+                dd, dlo, dhi = paired_diff_ci(success[b][part], success[a][part])
+                results_json.setdefault("descriptive", []).append(
+                    {"name": name, "split": part, "diff_b_minus_a": dd, "ci95": [dlo, dhi]}
+                )
     adj = holm(raw) if raw else {}
     lines += ["", "## Preregistered comparisons (b - a, paired bootstrap; Holm-adjusted p across all)", "", "| Comparison | split | diff (pp) [95% CI] | raw p | Holm p |", "|---|---|---|---|---|"]  # fmt: skip
     for c in results_json["comparisons"]:
@@ -132,6 +146,12 @@ def final_report(
         lines.append(
             f"| {c['name']} | {c['split']} | {c['diff_b_minus_a'] * 100:+.1f} [{c['ci95'][0] * 100:+.1f}, {c['ci95'][1] * 100:+.1f}] | {c['p_raw']:.4f} | {c['p_holm']:.4f} |"
         )
+    if results_json.get("descriptive"):
+        lines += ["", "Descriptive only (not in Holm): the pooled comparison split by component.", "", "| Comparison | split | diff (pp) [95% CI] |", "|---|---|---|"]  # fmt: skip
+        lines += [
+            f"| {c['name']} | {c['split']} | {c['diff_b_minus_a'] * 100:+.1f} [{c['ci95'][0] * 100:+.1f}, {c['ci95'][1] * 100:+.1f}] |"
+            for c in results_json["descriptive"]
+        ]
     groups: dict[tuple, list[int]] = defaultdict(lambda: [0, 0])
     for s in runs:
         for sp, by_task in success[s].items():

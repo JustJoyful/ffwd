@@ -66,3 +66,17 @@ def holm(pvalues: dict[str, float]) -> dict[str, float]:
         running = max(running, (m - i) * pvalues[k])
         out[k] = min(1.0, running)
     return out
+
+
+def detectable_difference(
+    n: int, discordant_rate: float, alpha: float = 0.05, power: float = 0.8
+) -> float:
+    """Smallest true paired difference (as a rate) a two-sided test at `alpha` detects with `power`, for n tasks
+    on which the two systems disagree on a fraction `discordant_rate` of tasks. Normal approximation of the paired
+    difference: var(d) ~= discordant_rate / n for small d. Under Holm the strictest step uses alpha / m, so pass
+    alpha / m for the worst case. This is a planning figure under stated assumptions, not a result.
+    """
+    if n <= 0 or not 0 < discordant_rate <= 1:
+        raise ValueError("need n > 0 and 0 < discordant_rate <= 1")
+    z = NormalDist().inv_cdf
+    return (z(1 - alpha / 2) + z(power)) * sqrt(discordant_rate / n)

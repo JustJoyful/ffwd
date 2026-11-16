@@ -122,3 +122,28 @@ def test_holm_and_bootstrap_p_behave():
 def test_last_run_args_and_reencode_rate_edge_cases():
     assert last_run_args({"turns": [{"assistant": "not json"}]}) is None
     assert reencode_rate({}, {}, {"t": {"reference_runs": None}}) is None
+
+
+def test_preregistered_family_has_six_comparisons_and_one_pooled_q7():
+    from training import config
+
+    fam = config.PREREG_COMPARISONS
+    assert len(fam) == 6 and len({c[0] for c in fam}) == 6
+    q7 = [c for c in fam if c[0].startswith("Q7")]
+    assert len(q7) == 1 and q7[0][3] == "test-real+test-phrasing" and q7[0][2] == "M3"
+
+
+def test_pooled_comparison_is_one_holm_entry_plus_descriptive_rows(tmp_path):
+    tasks = make_tasks()
+    runs = runs_for(
+        tmp_path, tasks, {"M3": (lambda i: i % 4 != 0, False), "B0": (lambda i: i % 2 == 0, False)}
+    )
+    out = final_report(
+        runs, tasks, [("Q7 pooled", "B0", "M3", "test-iid+test-phrasing")], tmp_path / "rep"
+    )
+    res = json.loads((out / "results.json").read_text())
+    assert (
+        len(res["comparisons"]) == 1 and res["comparisons"][0]["split"] == "test-iid+test-phrasing"
+    )
+    assert {c["split"] for c in res["descriptive"]} == {"test-iid", "test-phrasing"}
+    assert "Descriptive only" in (out / "summary.md").read_text()

@@ -137,6 +137,17 @@ ORIENTATION_MIN_GAP = 4.0
 
 # --- Task splits and who may read them (RULES §4.5; guard in training/taskgen/loader.py) ---
 TEST_SPLITS = ("test-iid", "test-compositional", "test-phrasing", "test-real")
+# Phase 1 preregistered primary comparison family (eval/PREREGISTRATION.md): (name, system_a, system_b, split);
+# reports b - a. Holm runs over exactly these. A split "x+y" pools the tasks of both splits into ONE comparison
+# (per-split and per-family differences are descriptive only, outside Holm).
+PREREG_COMPARISONS = (
+    ("Q2 M1-B2", "B2", "M1", "test-iid"),
+    ("Q3 M3-M1", "M1", "M3", "test-iid"),
+    ("Q4 M3-X1", "X1", "M3", "test-iid"),
+    ("Q5a M3-M1 compositional", "M1", "M3", "test-compositional"),
+    ("Q5b M3-M1 phrasing", "M1", "M3", "test-phrasing"),
+    ("Q7 M3-B0 real+phrasing", "B0", "M3", "test-real+test-phrasing"),
+)
 # D-027(b): real clips are split BY CLIP before any task is generated. A clip whose manifest `role` is
 # "test-real" is the input of test-real tasks only; taskgen never sees it and CI fails if another split uses it.
 CLIP_ROLES = ("taskgen", "test-real")

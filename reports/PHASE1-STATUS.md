@@ -65,3 +65,11 @@ Owner ran session 1 (checkpoints 2, 4 on `JustJoyful/ffmpeg-agent-ckpt`), then r
 
 ### Kaggle resume: `verify_resume` confirmed (17 Nov)
 Owner pasted the console output: `"ok": true`, `"problems": []`, `"steps": [1,2,3,4,5,6,7,8]`, exit code 0. Kill-and-resume is closed (D-022 updated). Only the "local ckpt dir was empty" detail rests on the notebook edit rather than a log line.
+
+
+## Owner plan review applied (17 Nov, after the Kaggle test)
+Done: D-027 (change a: held-out style `technical` -> `context_first`; change b: real clips split by clip, `add_clip --role` required, CI test with a planted violation), D-028 to D-031 recorded as approved, D-024 marked accepted (option A) from the D-029 wording, preregistration edits (Q7 = one pooled comparison on test-real + test-phrasing, per-family descriptive only; detectable-difference table; M1 >= 90% "SFT nearly sufficient" rule; kept-rate gate rule proposed, number set after the X1 dev run), plan edits (G0a blocks T16+ only, T4 Step 4 reworded, status table), `PHASES.md` and `CLAUDE.md` set to in progress. `reports/TEST_RUNS.jsonl` does not exist: no test split has ever been run, so changing test-phrasing wording invalidates nothing.
+
+**Blocked, needs the owner (D-024/D-029 pin):** I downloaded the 5.1.1 static build (sha256 `2d848c37...9f42`, `~/.cache/ffmpeg-pin-dl/ffmpeg-5.1.1-amd64-static.tar.xz`) but the sandbox classifier denied extracting and running it, as last time. Please run in this session: `! cd ~/.cache/ffmpeg-pin-dl && mkdir -p x && tar -xf ffmpeg-5.1.1-amd64-static.tar.xz -C x && x/ffmpeg-5.1.1-amd64-static/ffmpeg -version | head -1`. If runs of that binary are still refused for me, add a Bash permission rule for it. Until then: no pin enforcement, no split rebuild (the test-phrasing file still holds the old `technical` wording; it is rebuilt once, together with the pin, to avoid regenerating twice), `LOSSLESS_ROTATE_SPELLING` unchanged.
+
+**Still waiting on the owner:** D-032 decision (text pasted in the reply), DeepSeek terms snapshot + off-peak window (nothing paid runs until the terms file exists), at least 10 own clips with `--role`, about 100 test-real requests.
