@@ -111,6 +111,14 @@ SFT_HPARAMS = {
     "warmup_ratio": 0.03,
 }
 
+# GRPO stop rules (eval/PREREGISTRATION.md Phase 1; training/grpo/gates.py)
+GRPO_STOP_RULES = {
+    "no_signal_share": 0.60, "no_signal_steps": 10,  # share of groups with identical rewards, for N steps in a row
+    "refusal_rate_max": 0.20, "refusal_steps": 3,  # `unsupported` on tasks that are supported
+    "invalid_rising_steps": 10,  # invalid-action rate rising for N consecutive steps
+    "max_gpu_hours": 15.0,
+}  # fmt: skip
+
 # --- Frozen agent format (plan T6, D-026) ---
 SYSTEM_PROMPT_V1 = "system-v1.txt"
 # Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and
