@@ -143,3 +143,20 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 
 ### Success signal
 - Activated users growing month over month; a returning-user share that is stable or rising; the top unsupported categories addressed
+
+---
+
+## Phase 0 follow-ups (16 Nov 2026; results in `reports/2026-11-16-phase0-followups/`)
+
+| # | Task | Status |
+|---|---|---|
+| T1 | Wilson CIs for single rates (D-021), tests vs scipy, regenerated table | ✅ done |
+| T2 | Checker v1 A/V offset (first-packet timestamps), golden cases, X1 re-graded row | ✅ done (X1 48/50 re-graded) |
+| T3 | Harness owns `-threads` cap; browser probe via `ffmpeg -i` parsing (measured vs ffprobe) | ✅ done |
+| T4 | B0 regex baseline, fair base-model baselines, failure taxonomy (dev only) | ✅ done (B0 46/50 optimistic; fair rows no better) |
+| T5 | Off-box checkpoints on a private HF repo (D-022), resume verifier, local kill-and-resume rehearsal | ✅ code + local rehearsal; ⏳ **Kaggle kill-and-resume run is the owner's step** (`training/grpo/kaggle_resume_test.ipynb`), plus the Qwen3-1.7B GPU-h/step measurement |
+| T6 | Pass-rate task filter, reward v1 draft terms, per-step telemetry, shuffled-reward control | ✅ code only, no main run |
+| T7 | Browser bench scripts, native bench, GPU policy flag (D-023, provisional) | ✅ scripts + desktop run; ⏳ other machines are the owner's step |
+| - | Owner: review the 50 tasks (edits create `spike-v1`) | ⏳ open |
+| - | Owner: run the bench on 1-2 other machines incl. an iGPU-only laptop | ⏳ open |
+| - | [ASK] before any teacher-data generation or the main GRPO run | gate |

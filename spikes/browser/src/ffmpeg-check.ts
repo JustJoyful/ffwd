@@ -27,13 +27,13 @@ export async function loadFfmpeg(): Promise<FFmpeg> {
   return ff;
 }
 
-export async function execLogged(ff: FFmpeg, args: string[]): Promise<Exec> {
+export async function execLogged(ff: FFmpeg, args: string[], timeoutMs = -1): Promise<Exec> {
   let log = "";
   const onLog = ({ message }: { message: string }) => (log += message + "\n");
   ff.on("log", onLog);
   const t0 = performance.now();
   try {
-    const code = await ff.exec(args);
+    const code = await ff.exec(args, timeoutMs);
     return { code, log, ms: performance.now() - t0 };
   } finally {
     ff.off("log", onLog);

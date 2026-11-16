@@ -1,34 +1,54 @@
 import {
   CreateWebWorkerMLCEngine,
+  deleteModelAllInfoInCache,
   hasModelInCache,
   prebuiltAppConfig,
   type MLCEngineInterface,
 } from "@mlc-ai/web-llm";
+import { gpuDecision, splitLoadPhases, type LoadEvent } from "./bench-core";
+import type { GpuPolicy } from "./config";
 import { record } from "./results";
 
 async function storageUsage(): Promise<number> {
   return (await navigator.storage.estimate()).usage ?? 0;
 }
 
-/** Load one model and record download bytes (storage delta), load time and cache state. */
+/**
+ * Load one model and record load time, cache state and the download / weights / shader / init split
+ * (from WebLLM's own progress messages). forceCold clears the cached model first so the download is measured.
+ */
 export async function loadModel(
   modelId: string,
   onProgress: (text: string) => void,
+  opts: { forceCold?: boolean; label?: string } = {},
 ): Promise<MLCEngineInterface> {
   const inPrebuilt = prebuiltAppConfig.model_list.some((m) => m.model_id === modelId);
+  if (opts.forceCold) await deleteModelAllInfoInCache(modelId).catch(() => undefined);
   const cached = await hasModelInCache(modelId).catch(() => false);
   const before = await storageUsage();
   const t0 = performance.now();
+  const events: LoadEvent[] = [];
   const engine = await CreateWebWorkerMLCEngine(
     new Worker(new URL("./llm.worker.ts", import.meta.url), { type: "module" }),
     modelId,
-    { initProgressCallback: (p) => onProgress(p.text) },
+    {
+      initProgressCallback: (p) => {
+        events.push({ t: performance.now() - t0, text: p.text });
+        onProgress(p.text);
+      },
+    },
   );
+  const total = performance.now() - t0;
   record({
-    name: `webllm_load_${modelId}`,
+    name: `webllm_load_${modelId}${opts.label ? `_${opts.label}` : ""}`,
     ok: true,
-    ms: performance.now() - t0,
-    detail: { inPrebuilt, warm: cached, downloadedBytesApprox: (await storageUsage()) - before },
+    ms: total,
+    detail: {
+      inPrebuilt,
+      warm: cached,
+      downloadedBytesApprox: (await storageUsage()) - before,
+      phases: splitLoadPhases(events, total),
+    },
   });
   return engine;
 }
@@ -68,22 +88,51 @@ export async function checkThinking(engine: MLCEngineInterface, modelId: string)
   });
 }
 
-/** Refuse to run on the wrong GPU: on this hybrid laptop an iGPU fallback puts weights in system RAM. */
-export async function requireDiscreteGpu(): Promise<void> {
+type AdapterInfo = {
+  vendor?: string;
+  architecture?: string;
+  device?: string;
+  description?: string;
+};
+type GpuAdapter = {
+  info?: AdapterInfo;
+  isFallbackAdapter?: boolean;
+  limits?: { maxBufferSize?: number };
+};
+
+/**
+ * Record both WebGPU adapters (high-performance and low-power) and apply the discrete-GPU policy.
+ * On a hybrid laptop these are different GPUs; on an iGPU-only machine they are the same one.
+ * Throws only if the policy is "refuse" and the high-performance adapter is not a discrete GPU.
+ */
+export async function checkGpu(policy: GpuPolicy) {
   const nav = navigator as Navigator & {
-    gpu?: {
-      requestAdapter(o: {
-        powerPreference: string;
-      }): Promise<{ info?: { vendor?: string } } | null>;
-    };
+    gpu?: { requestAdapter(o: { powerPreference: string }): Promise<GpuAdapter | null> };
   };
-  const a = await nav.gpu?.requestAdapter({ powerPreference: "high-performance" });
-  const vendor = a?.info?.vendor ?? "none";
+  const seen: Record<string, unknown> = {};
+  let vendor: string | null = null;
+  for (const preference of ["high-performance", "low-power"]) {
+    const a =
+      (await nav.gpu?.requestAdapter({ powerPreference: preference }).catch(() => null)) ?? null;
+    seen[preference] = a
+      ? {
+          ...a.info,
+          isFallbackAdapter: a.isFallbackAdapter ?? null,
+          maxBufferSize: a.limits?.maxBufferSize ?? null,
+        }
+      : null;
+    if (preference === "high-performance") vendor = a?.info?.vendor ?? null;
+  }
+  const decision = gpuDecision(vendor, policy);
   record({
     name: "webgpu_adapter",
-    ok: vendor === "nvidia",
-    detail: { vendor, preference: "high-performance" },
+    ok: decision.proceed && decision.warning === null,
+    detail: { policy, ...decision, adapters: seen },
   });
-  if (vendor !== "nvidia")
-    throw new Error(`high-performance WebGPU adapter is '${vendor}', not the discrete GPU`);
+  if (!decision.proceed) {
+    throw new Error(
+      `GPU policy 'refuse': high-performance adapter is '${vendor ?? "none"}' (${decision.gpuClass})`,
+    );
+  }
+  return decision;
 }

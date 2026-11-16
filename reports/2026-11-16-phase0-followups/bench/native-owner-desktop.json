@@ -1,0 +1,40 @@
+{
+  "ffmpeg_version": "ffmpeg version n9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "hardware": {
+    "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+    "cpu": "x86_64",
+    "cpu_count": 12,
+    "ram_gb": 15.3,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "jobs": [
+    {
+      "name": "bench_hevc_1080p_60s_to_h264",
+      "ok": true,
+      "seconds": 5.96,
+      "input_bytes": 91640342,
+      "output_bytes": 36539987
+    },
+    {
+      "name": "bench_f4_480p_60s_input100mb",
+      "ok": true,
+      "seconds": 2.32,
+      "input_bytes": 101249097,
+      "output_bytes": 21598510
+    },
+    {
+      "name": "bench_hevc_4k_60s_to_h264",
+      "ok": true,
+      "seconds": 21.16,
+      "input_bytes": 227771931,
+      "output_bytes": 108979286
+    },
+    {
+      "name": "bench_f4_480p_60s_input500mb",
+      "ok": true,
+      "seconds": 3.78,
+      "input_bytes": 499359251,
+      "output_bytes": 22334596
+    }
+  ]
+}

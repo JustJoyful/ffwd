@@ -1,0 +1,143 @@
+{
+  "machine": "owner-desktop",
+  "date": "2026-11-16T00:11:45.844Z",
+  "env": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/159.0.0.0 Safari/537.36",
+    "hardwareConcurrency": 12,
+    "deviceMemoryGb": 16,
+    "webgpu": true,
+    "gpuAdapter": {},
+    "crossOriginIsolated": true
+  },
+  "records": [
+    {
+      "name": "webgpu_adapter",
+      "ok": true,
+      "detail": {
+        "policy": "warn",
+        "proceed": true,
+        "warning": null,
+        "gpuClass": "discrete",
+        "adapters": {
+          "high-performance": {
+            "isFallbackAdapter": null,
+            "maxBufferSize": 4294967292
+          },
+          "low-power": {
+            "isFallbackAdapter": null,
+            "maxBufferSize": 4294967292
+          }
+        }
+      }
+    },
+    {
+      "name": "webllm_load_Qwen3-0.6B-q4f16_1-MLC_cold",
+      "ok": true,
+      "ms": 40418.22999998927,
+      "detail": {
+        "inPrebuilt": true,
+        "warm": false,
+        "downloadedBytesApprox": 353390848,
+        "phases": {
+          "cold": true,
+          "download_ms": 33656.625,
+          "weights_load_ms": 661.7000000029802,
+          "shader_ms": 0.04500000178813934,
+          "init_ms": 6099.859999984503
+        }
+      }
+    },
+    {
+      "name": "webllm_speed_Qwen3-0.6B-q4f16_1-MLC",
+      "ok": true,
+      "detail": {
+        "prefillTokPerS": null,
+        "decodeTokPerS": null,
+        "stats": "prefill: 22.7511 tokens/sec, decoding: 79.2472 tokens/sec"
+      }
+    },
+    {
+      "name": "webllm_load_Qwen3-0.6B-q4f16_1-MLC_warm",
+      "ok": true,
+      "ms": 1248.109999999404,
+      "detail": {
+        "inPrebuilt": true,
+        "warm": true,
+        "downloadedBytesApprox": 0,
+        "phases": {
+          "cold": false,
+          "download_ms": 0,
+          "weights_load_ms": 544.3800000101328,
+          "shader_ms": 0.03999999165534973,
+          "init_ms": 703.6899999976158
+        }
+      }
+    },
+    {
+      "name": "ffmpeg_mt_load",
+      "ok": true,
+      "ms": 1318.6800000071526
+    },
+    {
+      "name": "bench_hevc_1080p_60s_to_h264",
+      "ok": true,
+      "ms": 47765.71999999881,
+      "detail": {
+        "file": "hevc_1080p_60s.mov",
+        "inputBytes": 91640342,
+        "outputBytes": 34422043,
+        "peakBytesUserAgent": 35668911425,
+        "memorySamples": 3,
+        "code": 0,
+        "timedOut": false
+      }
+    },
+    {
+      "name": "bench_f4_480p_60s_input100mb",
+      "ok": true,
+      "ms": 8961.260000005364,
+      "detail": {
+        "file": "h264_100mb_60s.mp4",
+        "inputBytes": 101249097,
+        "outputBytes": 21463875,
+        "peakBytesUserAgent": 35665562256,
+        "memorySamples": 3,
+        "code": 0,
+        "timedOut": false
+      }
+    },
+    {
+      "name": "bench_hevc_4k_60s_to_h264",
+      "ok": false,
+      "ms": 688.1350000053644,
+      "detail": {
+        "file": "hevc_4k_60s.mov",
+        "inputBytes": 227771931,
+        "outputBytes": 0,
+        "peakBytesUserAgent": 9964298297,
+        "memorySamples": 3,
+        "code": -1,
+        "timedOut": false
+      }
+    },
+    {
+      "name": "ffmpeg_mt_load",
+      "ok": true,
+      "ms": 525.9699999988079
+    },
+    {
+      "name": "bench_f4_480p_60s_input500mb",
+      "ok": true,
+      "ms": 8478.845000013709,
+      "detail": {
+        "file": "h264_500mb_60s.mp4",
+        "inputBytes": 499359251,
+        "outputBytes": 22159951,
+        "peakBytesUserAgent": 36064844095,
+        "memorySamples": 3,
+        "code": 0,
+        "timedOut": false
+      }
+    }
+  ]
+}

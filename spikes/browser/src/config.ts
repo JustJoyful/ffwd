@@ -1,3 +1,5 @@
+import benchJobs from "../../../packages/protocol/conformance/bench-jobs.json";
+
 // Single config module for the browser spike (RULES §6.2).
 export const PROTOCOL_VERSION = "0.1.0";
 // Cloudflare Pages rejects files > 25 MiB and ffmpeg-core.wasm is 31 MiB, so production loads the
@@ -22,3 +24,18 @@ export const MINI_LOOP_TASKS = [
   { family: "F4", request: "shrink this video to 480p" },
   { family: "F7", request: "take a frame every 2 seconds and save them as images" },
 ] as const;
+
+// Discrete-GPU policy for model loading (DECISIONS D-023, PROVISIONAL): "warn" lets an integrated GPU run and
+// records the warning; "refuse" is the Phase 0 behaviour. Override per page load with ?gpuPolicy=refuse.
+export type GpuPolicy = "warn" | "refuse";
+export const DEFAULT_GPU_POLICY: GpuPolicy = "warn";
+export const gpuPolicy = (): GpuPolicy =>
+  new URLSearchParams(globalThis.location?.search ?? "").get("gpuPolicy") === "refuse"
+    ? "refuse"
+    : DEFAULT_GPU_POLICY;
+
+// Phase 2 bench
+export const BENCH_STEP_TIMEOUT_MS = 10 * 60_000; // a 4K HEVC decode in wasm can be very slow; record a timeout, don't hang
+export const BENCH_MEMORY_SAMPLE_MS = 1_000;
+// Same commands the native bench (eval/native_bench.py) times: one shared file, so browser and native compare like for like.
+export const BENCH_FFMPEG_ARGS = benchJobs;

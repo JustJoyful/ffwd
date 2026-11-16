@@ -9,9 +9,41 @@ export type CheckRecord = {
 const records: CheckRecord[] = [];
 const listeners: ((r: CheckRecord) => void)[] = [];
 
+const STORE = "ffagent-bench-records";
+
+// Records are mirrored to localStorage so a tab crash (the 500 MB input test can kill the tab) keeps everything
+// measured so far; restoreSaved() reloads them after the page is reopened.
+function persist(): void {
+  try {
+    localStorage.setItem(STORE, JSON.stringify(records));
+  } catch {
+    /* storage unavailable or full: measurements just aren't crash-safe */
+  }
+}
+
 export function record(r: CheckRecord): void {
   records.push(r);
+  persist();
   listeners.forEach((l) => l(r));
+}
+
+export function restoreSaved(): CheckRecord[] {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE) ?? "[]") as CheckRecord[];
+    saved.forEach((r) => records.push(r));
+    return saved;
+  } catch {
+    return [];
+  }
+}
+
+export function clearSaved(): void {
+  records.length = 0;
+  try {
+    localStorage.removeItem(STORE);
+  } catch {
+    /* ignore */
+  }
 }
 
 export function onRecord(l: (r: CheckRecord) => void): void {

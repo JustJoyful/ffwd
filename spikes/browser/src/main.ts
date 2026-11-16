@@ -5,8 +5,10 @@ import { harnessArgs } from "./harness-args";
 import { ffprobeJson, probeViaLog } from "./probe";
 import { recordMemory } from "./memory-check";
 import { engineChat, runMiniLoop, scriptedChat } from "./mini-loop";
-import { downloadResults, onRecord, record } from "./results";
-import { checkThinking, loadModel, measureSpeed, requireDiscreteGpu } from "./webllm-check";
+import { clearSaved, downloadResults, onRecord, record, restoreSaved } from "./results";
+import { reportCrash, runBench } from "./bench";
+import { checkGpu, checkThinking, loadModel, measureSpeed } from "./webllm-check";
+import { gpuPolicy } from "./config";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const file = (id: string) => $<HTMLInputElement>(id).files?.[0] ?? null;
@@ -39,7 +41,7 @@ $("run-ffmpeg").onclick = () =>
   );
 $("run-model").onclick = () =>
   guarded("model checks", async () => {
-    await requireDiscreteGpu();
+    await checkGpu(gpuPolicy());
     const modelId = $<HTMLSelectElement>("model").value;
     const json = $<HTMLInputElement>("json-mode").checked;
     const engine = await loadModel(modelId, status);
@@ -105,3 +107,34 @@ for (const id of MODEL_IDS) $("model").append(new Option(id, id));
 Object.assign(window, {
   spike: { ensureFfmpeg, loadFfmpeg, execLogged, probeViaLog, ffprobeJson, harnessArgs },
 });
+
+// --- Phase 2 bench -------------------------------------------------------------------------------------
+$("gpu-policy").textContent = gpuPolicy();
+const restored = restoreSaved();
+if (restored.length) {
+  status(`restored ${restored.length} saved records from the previous session`);
+  restored.forEach((r) => {
+    const li = document.createElement("li");
+    li.textContent = `(restored) ${r.ok ? "✓" : "✗"} ${r.name}`;
+    $("log").append(li);
+  });
+}
+reportCrash();
+$("clear-saved").onclick = () => {
+  clearSaved();
+  $("log").replaceChildren();
+  status("saved results cleared");
+};
+$("run-bench").onclick = () =>
+  guarded("bench", async () => {
+    await runBench(
+      {
+        hevc1080: file("bench-hevc1080") ?? undefined,
+        hevc4k: file("bench-hevc4k") ?? undefined,
+        h264_100mb: file("bench-h264-100mb") ?? undefined,
+        h264_500mb: file("bench-h264-500mb") ?? undefined,
+      },
+      $<HTMLSelectElement>("model").value,
+      status,
+    );
+  });

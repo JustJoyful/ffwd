@@ -45,6 +45,26 @@
       /></label>
       <label>Machine label <input id="machine" placeholder="e.g. owner-laptop" /></label>
     </fieldset>
+    <fieldset>
+      <legend>
+        Phase 2 bench (files from data/bench, see
+        reports/2026-11-16-phase0-followups/bench/README.md)
+      </legend>
+      <label>HEVC 1080p 60 s <input id="bench-hevc1080" type="file" accept="video/*" /></label>
+      <label>HEVC 4K 60 s <input id="bench-hevc4k" type="file" accept="video/*" /></label>
+      <label
+        >H.264 ~100 MB (60 s) <input id="bench-h264-100mb" type="file" accept="video/*"
+      /></label>
+      <label
+        >H.264 ~500 MB (60 s) <input id="bench-h264-500mb" type="file" accept="video/*"
+      /></label>
+      <button id="run-bench">Run full bench (uses the model selected below)</button>
+      <button id="clear-saved">Clear saved results</button>
+      <p>
+        GPU policy: <strong id="gpu-policy">?</strong> (add <code>?gpuPolicy=refuse</code> to the
+        URL to refuse integrated GPUs)
+      </p>
+    </fieldset>
     <button id="run-ffmpeg">1. ffmpeg.wasm checks</button>
     <label
       >Model
