@@ -1,0 +1,32 @@
+{
+  "git_commit": "eceb5839e7bee0eeff6ff834120cf77fdc17fa42",
+  "git_dirty": true,
+  "protocol_version": "0.2.0",
+  "ffmpeg_version": "ffmpeg version n9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "system": "B2",
+  "model": "qwen3-0.6b-v1",
+  "quant": "Q8_0",
+  "temperature": 0.0,
+  "model_config": "eval/configs/qwen3-0.6b-v1.toml",
+  "system_prompt": "system-v1.txt",
+  "constrained_decoding": false,
+  "require_spec": true,
+  "stop_after_ask": true,
+  "offset": 0,
+  "limit": null,
+  "dry_run": false,
+  "tasks_sha256": "bdfc8588373ad54ecfba837789654c0b25a6525d8255e9de0633a9fba37073f5",
+  "n_tasks": 300,
+  "hardware": {
+    "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+    "cpu": "x86_64",
+    "cpu_count": 12,
+    "ram_gb": 15.3,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "started": "2026-11-16T14:41:41.419260+00:00",
+  "finished": "2026-11-16T17:17:49.238218+00:00",
+  "stopped_reason": null,
+  "cost_usd": 0.0,
+  "cache_hit_ratio": null
+}

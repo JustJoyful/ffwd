@@ -53,3 +53,7 @@ Kernels pushed from the CLI have no secrets attached, and I will not embed token
 
 ## Kaggle retry after owner attached secrets (22:20 IST)
 Pushed `--mode train` as kernel version 2. It failed the same way: `get_secret('HF_TOKEN')` -> HTTP 400 (`reports/2026-11-16-phase1-dev-baselines/kaggle-session2-error.log`). Secrets attached in the UI are not reaching API-pushed runs. Not re-pushed again. Next step needs the owner: in the kernel's UI (Add-ons > Secrets) tick the HF_TOKEN toggle for the latest version and run it from the UI, or tell me to use another method.
+
+
+## Dev baselines on dev v1 (n=300), finished 23:08 IST
+B0 regex 158/300 = 53% [47%, 58%]; B2 stock Qwen3-0.6B 0/300 = 0% (all 8 turns invalid: writes `{"spec":...}` without `"action"`). Details and Wilson tables by difficulty: `reports/2026-11-16-phase1-dev-baselines/summary.md`.
