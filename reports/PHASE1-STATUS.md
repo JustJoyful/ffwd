@@ -1,21 +1,39 @@
 # Phase 1 status (autonomous run; owner away from 16 Nov 2026)
 
 Plan: `docs/superpowers/plans/2026-11-16-phase-1-core-model.md`. Rule while the owner is away: do every ungated task; **never cross an [ASK] gate**
-(DeepSeek spend incl. paraphrases/teacher/X1, the main GRPO run, the single test run, HF/public publishing beyond private repos already in use).
-No questions to the owner; conservative defaults, documented.
+(DeepSeek spend incl. paraphrases/teacher/X1, the main GRPO run + shuffled control, the single test run, publishing beyond private repos).
+No questions to the owner; conservative defaults, documented. All work is on `main` (commits tagged by task).
 
-| Task | Status |
+## Done (code + tests, all ungated)
+| Task | What |
 |---|---|
-| T1 protocol 0.2.0 + split guard | done (`training/taskgen/loader.py`) |
-| T2 sandbox + rollout timeouts | done; FFmpeg pin **blocked on D-024** (owner decision + permission to fetch a 5.1.x build) |
-| T3 corpus v1 + Hub distribution | done in code (22 clips); **Hub push not done** (creates a repo on the owner's HF account; do when Kaggle needs it); real clips wait for the owner |
-| T4 checker quality floor | done (v1.3) |
-| T5 spike-v1 owner tasks | waiting for the owner's ~20 tasks + 2-3 clips |
-| T6 prompt v1 + agent chat template | done (D-026; llama.cpp/HF/Jinja parity verified); prompt v1 is a DRAFT until D-024 |
-| T7-T10 taskgen v1 | done in code (F1-F12, compositions 2-4, ambiguous/unsupported, styles, content-hash splits, verified build); full build running/ran: see data/tasks/MANIFEST.json |
-| T11 leakage audit | done (`eval/leakage.py`); **train paraphrases (DeepSeek) not run: gated** |
-| T12 prereg + test lock | done (prereg is a DRAFT; `eval/testlock.py`); dev baselines on v1 wait for the owner's new spike tasks and are DeepSeek-gated for X1 |
-| T13 teacher runner | done in code + tests; **pilot/bulk gated** (needs G-terms, off-peak window, frozen prompt, owner go-ahead) |
-| T14-T15 | gated (teacher bulk) / rejection sampling code not yet written |
-| T16-T25 | not started (SFT, lockstep rollouts, GRPO driver, parity, CLI, final report, cards) |
-| Kaggle kill-and-resume | session 1 pushed 16 Nov ~18:00 IST and still QUEUED hours later |
+| T1 | protocol 0.2.0, split-purpose guard (`training/taskgen/loader.py`): training code cannot read test splits |
+| T2 | fail-closed bubblewrap sandbox option, rollout timeouts. **FFmpeg pin blocked on D-024** |
+| T3 | corpus v1 (22 clips: VFR, 4:3, ProRes, MKV, mono/44k, noisy, known A/V offsets, rot270), tags, hash-verified Hub distribution code. **Hub push not done** (creates a repo on your account) |
+| T4 | checker v1.3: quality floor (SSIM/PSNR) for size targets; 6 golden cases |
+| T6 | D-026: ONE agent chat template (empty think on every assistant turn; stock Qwen3 drops it from history, which would skew train vs inference); spec-first prompt v1 (DRAFT hash until D-024); `require_spec` loop option. Verified identical in HF, Jinja and llama.cpp |
+| T7-T10 | task generator v1: F1-F12 samplers on a shared plan, compositions of 2-4 families, ambiguous/unsupported tasks, 5 train + 2 held-out styles, content-hash splits, held-out family combos, executed-reference verification, parallel build + manifest |
+| T11 | leakage audit (`eval/leakage.py`). **Train paraphrases via DeepSeek not run (gated)** |
+| T12 | test-run lock (`eval/testlock.py`), Phase 1 preregistration as a DRAFT |
+| T13 | teacher runner + data card (train-only, spec-first, passing-only, off-peak gate, refuses draft prompt). **Pilot/bulk gated** |
+| T15 | rejection sampling code (free local model) |
+| T16 | SFT dataset/mix/validation split, LoRA SFT trainer, build CLI (code only; not trained) |
+| T17 | lockstep batched rollouts + HF batched generator (verified equal to one-at-a-time under padding) |
+| T18/T19 | stop rules (`training/grpo/gates.py`), main GRPO driver (`training/grpo/main_run.py`); **never run: gated** |
+| T22 | parity metrics (`eval/parity.py`); GGUF export needs llama.cpp's converter script (not fetched: external code) |
+| T23 | `ffmpeg-agent` CLI + plain-language spec describer + goldens |
+| T24/T25 | results report builder (Holm, denominators, test-lock checks), model/data card builders, licence audit |
+| extra | D-032 proposal: free programmatic "oracle" trajectories (`training/teacher/oracle.py`) |
+
+## Waiting on the owner
+1. **G0:** Kaggle kill-and-resume result (kernel `justjoyful/ffmpeg-agent-resume-auto` still QUEUED), D-024 FFmpeg pin decision, D-025-D-031 proposals in the plan, D-032, your ~20 new spike-v1 tasks + 2-3 clips.
+2. **G-terms:** read DeepSeek's terms (training on outputs) and send the off-peak window (`config.DEEPSEEK_OFFPEAK_UTC`, `TEACHER_TERMS_URL`).
+3. **G1/G2:** approve the teacher pilot (<= $0.05) then bulk (<= $2.30); approve the paraphrase spend (<= $0.30).
+4. **G3:** approve the shuffled-reward control and the main GRPO run (<= 15 GPU-h).
+5. **G4:** preregistration FINAL + the single test run. Your ~10 own clips + ~100 test-real requests.
+6. Freeze prompt v1 (set `SYSTEM_PROMPT_V1_SHA256`) after D-024.
+
+## Not done / blocked
+- Real SFT, M1, GRPO: need data (gated) and a GPU (Kaggle queued; local RTX 3050 is for smoke tests only).
+- B0 v2 (patterns from train phrasing only) and dev baselines on the new splits.
+- Dual-runtime (ffmpeg.wasm) conformance run: Phase 2.
