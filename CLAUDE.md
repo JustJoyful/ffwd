@@ -22,6 +22,8 @@ Phase 0 done (GO, D-020); Phase 1 is next. Work happens on `main`. Phase 0 plan:
 - `uv run ruff check . && uv run black --check .`: lint and format check (CI runs both)
 - `uv sync --group train` / `uv run --group train ...`: torch + TRL + PEFT for GRPO (not installed in CI; `tests/grpo/test_toy_spike.py` skips without it)
 - `cd spikes/browser && pnpm test && pnpm lint && pnpm e2e`: browser spike unit, lint and Playwright tests
+- `uv run python -m eval.verify_tasks data/tasks/dev/spike-v1.jsonl`: every task's reference solution must pass its gold spec (run on any new or edited task before evaluating systems)
+- `uv run python -m training.corpus.add_clip <file> --id <id> --licence "..." --source "..."`: register an extra clip in the corpus manifest (licence required)
 - Tests need `ffmpeg`/`ffprobe` on PATH; corpus clips are generated into a temp dir by the `corpus` fixture
 
 ## Big-picture architecture (spans several docs)

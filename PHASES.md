@@ -159,4 +159,5 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 | T7 | Browser bench scripts, native bench, GPU policy flag (D-023, provisional) | ✅ scripts + desktop run; ⏳ other machines are the owner's step |
 | - | Owner: review the 50 tasks (edits create `spike-v1`) | ⏳ open |
 | - | Owner: run the bench on 1-2 other machines incl. an iGPU-only laptop | ⏳ open |
+| V1 | spike-v1 (D-025): checker v1.2 implicit invariants, one rotation convention, frame-count rule, unsupported tasks without a family, m05 dropped; FFmpeg version parity proposed (D-024) | ✅ checker + tasks + 32 golden cases; ⏳ owner adds ~20 tasks + 2-3 clips, then B0/1.7B/X1 on spike-v1 |
 | - | [ASK] before any teacher-data generation or the main GRPO run | gate |

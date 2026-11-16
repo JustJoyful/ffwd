@@ -126,6 +126,9 @@ Normalised ffprobe-style JSON: container, duration, size, bitrate; per stream: t
 - loudness via FFmpeg's EBU R128 meter
 - frame count and interval for image sequences
 - audio stream offset via **first-packet timestamps** of the audio and video streams (verifies that the *requested* offset was applied, not perceived sync). Container `start_time` is not used: MP4 edit lists hide negative offsets and ffprobe clamps them to 0 (Phase 0 follow-up T2). Offsets made with filters (e.g. `adelay`) leave timestamps unchanged and cannot be verified this way
+- **implicit invariants** (checker v1.2, D-025): unless the spec changes them, output duration and audio presence equal the input's (merge: sum of the inputs), and a video/audio output has a video/audio stream. A 0.1 s clip can no longer satisfy a conversion task
+- **net rotation:** `video.rotation` = clockwise degrees of the displayed picture relative to the input's, measured from picture content (one convention for spec and probe; 90 = right, 270 = left)
+- **image sequences:** one frame at t = k*interval while t < duration - half a frame; explicit `expected_count` matches exactly, interval-only accepts the strict count or one fewer at the boundary (`training/config.py`)
 - `re_encoded`: whether streams were copied or re-encoded
 - optional quality floor (SSIM/PSNR fast; VMAF in eval only)
 

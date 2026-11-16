@@ -1,0 +1,419 @@
+[
+ {
+  "task_id": "s01-trim-first-3s",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 17.0
+  }
+ },
+ {
+  "task_id": "s02-keep-12-to-18",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 6.005333
+  }
+ },
+ {
+  "task_id": "s03-last-2s",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 2.0
+  }
+ },
+ {
+  "task_id": "s04-merge-two",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 6.0
+  }
+ },
+ {
+  "task_id": "s05-back-to-back-mp4",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 6.0
+  }
+ },
+ {
+  "task_id": "s06-merge-no-sound",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 6.0
+  }
+ },
+ {
+  "task_id": "s07-iphone-powerpoint",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s08-webm-for-tv",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": -0.008
+  }
+ },
+ {
+  "task_id": "s09-avi-to-mp4",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.04,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s10-vertical-9-16",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s11-shrink-720p",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s12-square",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s13-rotate-cw-lossless",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 4.0,
+   "net_rotation_cw": 90,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s14-upside-down",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 4.0,
+   "net_rotation_cw": 180,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s15-turn-left",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "net_rotation_cw": 270,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s16-under-3mb",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 20.0
+  }
+ },
+ {
+  "task_id": "s17-email-2mb",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 10.0
+  }
+ },
+ {
+  "task_id": "s18-1mb-keep-1080p",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0
+  }
+ },
+ {
+  "task_id": "s19-frame-every-2s",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "frame_count": 5
+  }
+ },
+ {
+  "task_id": "s20-every-second-jpg",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "frame_count": 10
+  }
+ },
+ {
+  "task_id": "s21-first-frame",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "frame_count": 1
+  }
+ },
+ {
+  "task_id": "s22-gif-5-to-9",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0
+  }
+ },
+ {
+  "task_id": "s23-small-gif-320",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 3.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s24-gif-first-2s",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 2.0
+  }
+ },
+ {
+  "task_id": "s25-audio-mp3",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s26-remove-sound",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 4.0
+  }
+ },
+ {
+  "task_id": "s28-normalize-16",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "loudness_lufs": -16.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s29-boost-20db",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "loudness_lufs": -41.8,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s31-audio-half-second-behind",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 3.5,
+   "offset_ms": -521.3,
+   "implicit_duration_delta_s": 0.5
+  }
+ },
+ {
+  "task_id": "s32-sound-too-early",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 3.3,
+   "offset_ms": 278.7,
+   "implicit_duration_delta_s": 0.3
+  }
+ },
+ {
+  "task_id": "s33-delay-audio-200ms",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": false,
+   "duration_s": 4.2,
+   "offset_ms": 178.7,
+   "implicit_duration_delta_s": 0.2
+  }
+ },
+ {
+  "task_id": "s34-speed-2x",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 10.066667
+  }
+ },
+ {
+  "task_id": "s35-to-30fps",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 10.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "s36-half-speed",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 5.986042
+  }
+ },
+ {
+  "task_id": "m01-trim-vertical-small",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 6.0
+  }
+ },
+ {
+  "task_id": "m02-iphone-first-2s",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 2.0
+  }
+ },
+ {
+  "task_id": "m03-frames-2-to-7",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "frame_count": 5
+  }
+ },
+ {
+  "task_id": "m04-gif-3-to-6-480",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 3.0
+  }
+ },
+ {
+  "task_id": "m06-cut-then-2x",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 9.566667
+  }
+ },
+ {
+  "task_id": "m07-webm-to-720p-mp4",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "implicit_duration_delta_s": -0.008
+  }
+ },
+ {
+  "task_id": "m08-loudnorm-720p",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 4.0,
+   "loudness_lufs": -16.0,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "m09-rotate-cw-30fps",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 10.0,
+   "net_rotation_cw": 90,
+   "implicit_duration_delta_s": 0.0
+  }
+ },
+ {
+  "task_id": "m10-audio-5-to-15-mp3",
+  "passed": true,
+  "failed": [],
+  "measurements": {
+   "re_encoded": true,
+   "duration_s": 10.0
+  }
+ }
+]

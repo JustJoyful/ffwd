@@ -34,3 +34,10 @@ Not part of the Phase 0 verdict. Owner approved (cap $0.02 for paraphrasing, bud
 - Dev tasks only; no test split touched. One DeepSeek paraphrase per task, generated once.
 - A paraphrase is kept only if (a) its digits match the original's exactly and (b) a second DeepSeek call, shown the gold spec, answers YES to "same meaning". Dropped ones are listed with the reason, never regenerated.
 - B0 frozen first (`reports/2026-11-16-paraphrase-robustness/FREEZE.md`). Report B0 and X1 on originals vs paraphrases, same kept task set, Wilson CIs; paired difference by bootstrap.
+
+## Post-hoc section (2026-11-16): spike-v1
+Not part of the Phase 0 verdict, which stays as recorded. After the owner's task review, `data/tasks/dev/spike-v1.jsonl` was derived from spike-v0 (changes: `data/tasks/dev/spike-v1.CHANGES.md`, decision D-025) and the checker became v1.2 (implicit invariants, clockwise rotation measured from content, exact frame counts).
+- spike-v0 stays unchanged (sha256 pinned in `tests/tasks/test_spike_v1.py`); its numbers are never merged with v1's. v0 results were graded by checker v0/v1.1 and are not re-graded.
+- spike-v1 = 49 carried-over tasks (source `spike-v0`) + the owner's new tasks (ids `n01..`, source `spike-v1-new`, plus 2-3 new clips). Every task's reference solution must pass its gold spec under checker v1.2 (`uv run python -m eval.verify_tasks`) before any system is run.
+- Systems to run once the new tasks are in: B0 at the frozen commit (tag `b0-frozen-paraphrase`, hash in `reports/2026-11-16-paraphrase-robustness/FREEZE.md`, unchanged), base Qwen3-1.7B (fair prompt, constrained decoding), and X1 (DeepSeek V4 Flash, loop, thinking off, budget-guarded). Report Wilson 95% intervals for each, split into **original** and **new** tasks, and overall.
+- Limitation declared in advance: the owner wrote the new tasks after seeing the original set and the checker's behaviour; B0's patterns were not touched but the tasks may still resemble them.
