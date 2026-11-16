@@ -69,6 +69,30 @@ PSNR_FLOOR_DB_DEFAULT = 28.0
 # Switch when D-024 is decided.
 LOSSLESS_ROTATE_SPELLING = "display_rotation"
 
+# --- Task generator v1 (training/taskgen/build.py, D-027) ---
+TASKGEN_VERSION = "1.0"
+TASKGEN_SEED = 20261116
+# Target TASK counts per split (EVALUATION §2; test-real is hand-written). Train contents are rendered in several
+# styles, so train tasks = contents x TRAIN_STYLES_PER_CONTENT.
+SPLIT_TARGETS = {
+    "train": 4500,
+    "dev": 300,
+    "test-iid": 500,
+    "test-compositional": 200,
+    "test-phrasing": 200,
+}
+TRAIN_STYLES_PER_CONTENT = 3
+# Content-hash buckets (0-99): <70 train, <75 dev, <90 test-iid, else the held-out-STYLE pool (test-phrasing).
+SPLIT_BUCKETS = (70, 75, 90)
+# Family combinations never generated outside test-compositional (D-027): "unseen combinations" really are unseen.
+HELDOUT_COMBOS = (
+    ("F3", "F4"), ("F5", "F12"), ("F1", "F8"), ("F4", "F10"), ("F6", "F9"), ("F9", "F12"), ("F1", "F4", "F6"),
+)  # fmt: skip
+# Draw mix: share of ambiguous / unsupported tasks, and of 1/2/3/4-family tasks among the rest.
+MIX_AMBIGUOUS = 0.08
+MIX_UNSUPPORTED = 0.08
+MIX_FAMILY_COUNT = (0.55, 0.30, 0.12, 0.03)
+
 # --- Frozen agent format (plan T6, D-026) ---
 SYSTEM_PROMPT_V1 = "system-v1.txt"
 # Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and

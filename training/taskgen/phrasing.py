@@ -7,6 +7,7 @@ polite, verbose, symptom, casual_typos. Digits in slots appear verbatim in every
 """
 
 import random
+import re
 
 BANK: dict[str, dict[str, list[str]]] = {
     "f1.cut_first": {
@@ -503,7 +504,7 @@ _PRE = [
     "so I recorded this clip and I need to ",
     "I've got a file here and I'd like to ",
 ]
-_POST = ["", " thanks!", ", that's all I need.", " it's for a school project."]
+_POST = ["", ", thanks!", ", that's all I need.", ", it's for a school project."]
 _JOIN = [" and ", ", then ", " and then "]
 
 
@@ -527,6 +528,10 @@ def _cores(intents: list[str], slots: dict, rng: random.Random, key: str = "core
 
 
 def render_request(intents: list[str], slots: dict, style: str, rng: random.Random) -> str:
+    return re.sub(r"\b1 seconds\b", "1 second", _render(intents, slots, style, rng))
+
+
+def _render(intents: list[str], slots: dict, style: str, rng: random.Random) -> str:
     if style == "terse":
         return _cores(intents, slots, rng)
     if style == "polite":
