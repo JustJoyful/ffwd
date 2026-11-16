@@ -73,6 +73,23 @@ def draw_candidate(rng: random.Random, ci: ClipIndex) -> dict | None:
     return {"core": core, "intents": draft.intents, "slots": draft.slots}
 
 
+CACHE = config.JOBS_DIR / "taskgen-verify-cache.jsonl"
+
+
+def _cache_key(core: dict) -> str:
+    """Verification depends on the gold spec AND the reference command (and the checker code, so bump on changes)."""
+    blob = json.dumps(
+        [core["content_key"], core["reference_runs"], config.CHECKER_VERSION], sort_keys=True
+    )
+    return hashlib.sha256(blob.encode()).hexdigest()
+
+
+def _load_cache() -> dict[str, bool]:
+    if not CACHE.exists():
+        return {}
+    return {r["k"]: r["ok"] for r in map(json.loads, CACHE.read_text().splitlines())}
+
+
 def _verify_job(args: tuple[dict, dict[str, str]]) -> tuple[str, bool, list]:
     core, corpus = args
     if core["gold_spec"] is None:
@@ -134,6 +151,7 @@ def build(
     have: dict[str, list[dict]] = {s: [] for s in targets}
     seen: set[str] = set()
     dropped: Counter = Counter()
+    cache = _load_cache()
     attempts = 0
     for _round in range(max_rounds):
         if all(len(have[s]) >= need[s] for s in need):
@@ -162,8 +180,15 @@ def build(
             + ", ".join(f"{k}={len(v)}/{need[k]}" for k, v in have.items()),
             flush=True,
         )
+        todo = [(s, c) for s, c in flat if _cache_key(c["core"]) not in cache]
         with ProcessPoolExecutor(workers) as pool:
-            results = list(pool.map(_verify_job, [(c["core"], corpus) for _, c in flat]))
+            fresh = list(pool.map(_verify_job, [(c["core"], corpus) for _, c in todo]))
+        CACHE.parent.mkdir(parents=True, exist_ok=True)
+        with CACHE.open("a") as f:
+            for (_, c), (_, ok, _w) in zip(todo, fresh, strict=True):
+                cache[_cache_key(c["core"])] = ok
+                f.write(json.dumps({"k": _cache_key(c["core"]), "ok": ok}) + "\n")
+        results = [(c["core"]["content_key"], cache[_cache_key(c["core"])], []) for _, c in flat]
         for (s, c), (_, ok, _why) in zip(flat, results, strict=True):
             if ok:
                 have[s].append(c)

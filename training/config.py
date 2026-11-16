@@ -73,6 +73,9 @@ LOSSLESS_ROTATE_SPELLING = "display_rotation"
 
 # --- Task generator v1 (training/taskgen/build.py, D-027) ---
 TASKGEN_VERSION = "1.0"
+CHECKER_VERSION = (
+    "v1.3"  # bump when checker behaviour changes: invalidates the task-verification cache
+)
 TASKGEN_SEED = 20261116
 # Target TASK counts per split (EVALUATION §2; test-real is hand-written). Train contents are rendered in several
 # styles, so train tasks = contents x TRAIN_STYLES_PER_CONTENT.

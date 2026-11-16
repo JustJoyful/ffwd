@@ -21,6 +21,8 @@ TECH = {
     "f10": ["apply a gain / EBU R128 loudness filter to the audio stream"],
     "f11": ["shift the audio stream timestamps relative to the video"],
     "f12": ["change the presentation timestamps or the output frame rate"],
+    "amb": ["an under-specified edit request"],
+    "unsup": ["a request that needs content-aware processing"],
 }
 _GOALS = [
     "I'm posting this online later, so ",

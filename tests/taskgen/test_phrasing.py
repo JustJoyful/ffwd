@@ -101,3 +101,23 @@ def test_heldout_module_is_imported_only_by_phrasing_and_build():
             offenders.append(rel)
     assert offenders == []
     ast.parse(Path(config.REPO_ROOT, "training/taskgen/phrasing.py").read_text())
+
+
+def test_heldout_styles_cover_every_intent_including_ambiguous_and_unsupported():
+    for intent in BANK:
+        slots = {k: "1" for k in "nsedwhmbivfpl"} | {
+            "s_mmss": "0:01",
+            "e_mmss": "0:02",
+            "fmt": "PNG",
+            "res": "720p",
+            "count": "two",
+            "sec": "1",
+            "ms": "100",
+            "db": "6",
+            "lufs": "-16",
+            "fps": "30",
+            "mb": "2",
+            "iv": "2",
+        }
+        for style in HELDOUT_STYLES:
+            assert render_request([intent], slots, style, random.Random(0)), (intent, style)
