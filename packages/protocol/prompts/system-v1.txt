@@ -32,6 +32,7 @@ FFmpeg options you may use:
 - -c copy keeps the streams without re-encoding (fast, lossless); it cannot be combined with filters.
 - -c:v libx264, -c:a aac, -crf N, -preset veryfast, -pix_fmt yuv420p, -b:v RATE re-encode video or audio.
 - -vf FILTERS and -af FILTERS apply filters, separated by commas. Video: scale=W:H (-2 keeps the aspect ratio), crop=W:H, transpose=1 (90 degrees clockwise), transpose=2 (counter-clockwise), hflip, vflip, fps=F, setpts=PTS/FACTOR. Audio: volume=XdB, loudnorm=I=LUFS, atempo=FACTOR.
+- -metadata:s:v:0 rotate=DEG together with -c copy turns the picture without re-encoding. DEG is counterclockwise: rotate=270 turns right, rotate=90 turns left, rotate=180 is upside down.
 - -an drops the audio, -vn drops the video, -r F sets the frame rate, -frames:v N writes N frames. fps=1/N writes one image every N seconds.
 - Several inputs: repeat -i, then use -filter_complex with concat=n=COUNT:v=1:a=1 and -map.
 - -itsoffset SECONDS before an -i shifts that input in time (negative moves it earlier).

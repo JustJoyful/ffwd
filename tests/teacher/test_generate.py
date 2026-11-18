@@ -67,9 +67,16 @@ def test_resume_skips_finished_tasks(corpus, tmp_path):
     assert len((tmp_path / "out" / "trajectories.jsonl").read_text().splitlines()) == 1
 
 
-def test_draft_prompt_and_non_train_splits_are_refused(corpus, tmp_path):
+def test_draft_or_edited_prompt_and_non_train_splits_are_refused(corpus, tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "SYSTEM_PROMPT_V1_SHA256", None)  # a draft prompt
     with pytest.raises(PromptNotFrozen):
         generate([TRIM], tmp_path / "o", ReferenceTeacher(TRIM), None, corpus)
+    monkeypatch.setattr(
+        config, "SYSTEM_PROMPT_V1_SHA256", "0" * 64
+    )  # the file no longer matches its pinned hash
+    with pytest.raises(PromptNotFrozen, match="no longer matches"):
+        generate([TRIM], tmp_path / "o", ReferenceTeacher(TRIM), None, corpus)
+    monkeypatch.undo()
     with pytest.raises(PermissionError):
         _gen(tmp_path, corpus, [dict(TRIM, split="dev")], ReferenceTeacher(TRIM))
 

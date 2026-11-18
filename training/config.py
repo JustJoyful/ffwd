@@ -150,8 +150,10 @@ GRPO_STOP_RULES = {
 # --- Frozen agent format (plan T6, D-026) ---
 SYSTEM_PROMPT_V1 = "system-v1.txt"
 # Pinned once the prompt is frozen: changing it afterwards invalidates teacher data (the cached prefix) and
-# every trained model. None = still a DRAFT (D-024 may add the lossless-rotate spelling); teacher runs refuse a draft.
-SYSTEM_PROMPT_V1_SHA256: str | None = None
+# every trained model. None = still a DRAFT; teacher runs refuse a draft or a prompt file that no longer matches.
+SYSTEM_PROMPT_V1_SHA256: str | None = (
+    "56e7d7217b97c122662235cceb96acbf62bd822c6fec25f880035bfff805c724"  # FROZEN 19 Nov 2026 (D-034): any edit invalidates teacher data
+)
 # Rotation: net clockwise rotation of the displayed picture is measured from content by comparing
 # 32x32 thumbnails (training/env/orientation.py). The best of the 4 candidates must beat the runner-up by
 # this ratio and absolute grey-level gap, else the measurement is None and the field fails (fail closed).
