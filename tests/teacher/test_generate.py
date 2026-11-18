@@ -102,11 +102,36 @@ def test_budget_exceeded_stops_cleanly_keeping_earlier_results(corpus, tmp_path)
     assert s.kept == 1 and s.stopped.startswith("budget")
 
 
-def test_datacard_flags_missing_terms(corpus, tmp_path):
+def test_datacard_flags_missing_terms(corpus, tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "TEACHER_TERMS_URL", None)
+    monkeypatch.setattr(config, "TEACHER_TERMS_SNAPSHOT_SHA256", None)
     s = _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM))
     card = json.loads(build_card(tmp_path / "out", dataclasses.asdict(s)).read_text())
     assert card["status"].startswith("INCOMPLETE") and card["kept_trajectories"] == 1
     assert card["teacher_model"] == config.DEEPSEEK_MODEL_ID
+
+
+def test_datacard_quotes_section_4_2_from_the_saved_snapshot_and_detects_tampering(
+    corpus, tmp_path, monkeypatch
+):
+    s = _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM))
+    card = json.loads(build_card(tmp_path / "out", dataclasses.asdict(s)).read_text())
+    ev = card["terms_evidence"]
+    assert card["status"] == "complete"
+    assert (
+        ev["open_platform_tos_release_date"] == "April 22, 2026"
+        and ev["open_platform_tos_effective_date"] == "April 29, 2026"
+    )
+    assert "(2) We assign any rights, title, and interests" in ev["open_platform_tos_section_4_2"]
+    assert (
+        "training other models (such as model distillation)" in ev["open_platform_tos_section_4_2"]
+    )
+    assert ev["owner_confirmation"].startswith("Read §4.2 myself on 2026-11-19")
+    monkeypatch.setattr(config, "TEACHER_TERMS_SNAPSHOT_SHA256", "0" * 64)
+    assert (
+        build_card(tmp_path / "out", dataclasses.asdict(s)).read_text().count("no longer match")
+        == 1
+    )
 
 
 def test_loop_options_used_by_generate_are_the_phase1_ones(corpus, tmp_path):

@@ -1,0 +1,23 @@
+{
+ "pages": [
+  {
+   "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+   "file": "deepseek-open-platform-terms-of-service.html",
+   "fetched_utc": "2026-11-18T23:03:35Z",
+   "http_status": 200,
+   "bytes": 33904,
+   "sha256": "2b433c53cbac75491959025eba5a27908f9f1886352dce0a05f3d5a936d87790"
+  },
+  {
+   "url": "https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html",
+   "file": "deepseek-terms-of-use.html",
+   "fetched_utc": "2026-11-18T23:03:37Z",
+   "http_status": 200,
+   "bytes": 39095,
+   "sha256": "e5c52c238ff59a6d274cd66c449f939ba6bd3183fe7927397b595df02887a76d"
+  }
+ ],
+ "snapshot_sha256": "e700b82e5f9170d9ac20b0dc1424b718aed76c1ccc6d6b02cb6312f4beab22de",
+ "snapshot_sha256_definition": "sha256 of the per-page sha256 hex digests, one per line, in `pages` order",
+ "owner_confirmation": "Read \u00a74.2 myself on 2026-11-19; outputs may be used to train other models."
+}

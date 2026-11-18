@@ -219,8 +219,17 @@ DEEPSEEK_PEAK_UTC: tuple[tuple[time, time], ...] = (
     (time(1, 0), time(4, 0)),
     (time(6, 0), time(10, 0)),
 )
-TEACHER_TERMS_URL: str | None = None  # the terms page the owner confirmed allow training on outputs
-TEACHER_TERMS_SNAPSHOT_SHA256: str | None = None  # sha256 of the saved terms text
+# DeepSeek Open Platform ToS (release 22 Apr 2026, effective 29 Apr 2026) §4.2(3): outputs may be used for "training other
+# models (such as model distillation)". Snapshot taken 2026-11-19 by training/teacher/fetch_terms.py (raw HTML, HTTP
+# status, fetch time and sha256 per page in terms.json); the owner read §4.2 the same day (confirmation in terms.json).
+TEACHER_TERMS_DIR = REPO_ROOT / "training" / "teacher" / "terms" / "2026-11-19"
+TEACHER_TERMS_URL: str | None = (
+    "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html"
+)
+# sha256 over the per-page sha256 digests of terms.json (fetch_terms.snapshot_sha256); datacard.py re-checks it.
+TEACHER_TERMS_SNAPSHOT_SHA256: str | None = (
+    "e700b82e5f9170d9ac20b0dc1424b718aed76c1ccc6d6b02cb6312f4beab22de"
+)
 
 # GRPO token stream (Qwen3 ChatML, non-thinking). Inserted after each model turn; masked from the
 # loss. The empty think block matches what enable_thinking=False puts in the generation prompt.
