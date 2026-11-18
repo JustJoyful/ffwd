@@ -43,7 +43,8 @@ GRADED = [t for t in TASKS if t["gold_spec"]]
 # spike-v0 is frozen. Its s13 gold encodes the pre-v1.2 rotation value (270 for "90 clockwise"), which the
 # one-convention checker (spike-v1) reads as 90; the v1 file carries the corrected gold.
 V0_SUPERSEDED = {
-    "s13-rotate-cw-lossless": "rotation convention changed in checker v1.2 (see spike-v1)"
+    "s13-rotate-cw-lossless": "rotation convention changed in checker v1.2 (see spike-v1)",
+    "s14-upside-down": "reference uses -display_rotation (FFmpeg >= 6), not runnable on the pinned 5.1.1 (D-024); spike-v1 carries the 5.1 spelling",
 }
 
 

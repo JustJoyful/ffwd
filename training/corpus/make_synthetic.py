@@ -142,12 +142,12 @@ TAGS: dict[str, list[str]] = {
 }
 KNOWN_OFFSET_MS: dict[str, float] = {"av_late_500": 500.0, "av_early_500": -500.0}
 
-# Derived clip: remux hevc_iphone with display rotation 90 (iPhone portrait-style metadata).
-# Verified on FFmpeg 9: `-display_rotation` is an input option; ffprobe then reports rotation 90.
+# Derived clips: remux a base clip with a display-matrix rotation (iPhone portrait-style metadata). Written for the
+# pinned FFmpeg 5.1 (D-024), which has no `-display_rotation`: the `rotate` stream metadata is an OUTPUT option, is
+# counterclockwise, and the mov/mp4 muxer turns it into the display matrix (verified: rotate=90 -> probe rotation 270).
 DERIVED: dict[str, tuple[str, str, list[str]]] = {
-    "hevc_rot90": ("hevc_rot90.mov", "hevc_iphone", ["-display_rotation", "90"]),
-    # Portrait-style H.264 with display-matrix rotation 270 clockwise (FFmpeg `-display_rotation 90`).
-    "h264_rot270": ("h264_rot270.mp4", "h264_aac_1080p", ["-display_rotation", "90"]),
+    "hevc_rot90": ("hevc_rot90.mov", "hevc_iphone", ["-metadata:s:v:0", "rotate=90"]),
+    "h264_rot270": ("h264_rot270.mp4", "h264_aac_1080p", ["-metadata:s:v:0", "rotate=90"]),
 }
 
 
@@ -190,9 +190,9 @@ def make_corpus(out_dir: Path, ids: set[str] | None = None) -> list[ClipRecord]:
             _ffmpeg(args, out_dir / name)
             if ids is None or clip_id in ids:
                 records.append(_record(clip_id, out_dir / name))
-    for clip_id, (name, src_id, input_opts) in derived.items():
+    for clip_id, (name, src_id, output_opts) in derived.items():
         src = out_dir / RECIPES[src_id][0]
-        _ffmpeg([*input_opts, "-i", str(src), "-c", "copy"], out_dir / name)
+        _ffmpeg(["-i", str(src), "-c", "copy", *output_opts], out_dir / name)
         records.append(_record(clip_id, out_dir / name))
     return records
 
@@ -212,6 +212,11 @@ def ensure_corpus(out_dir: Path, ids: set[str] | None = None) -> dict[str, Path]
 def main() -> None:
     out_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else config.CORPUS_DIR
     records = make_corpus(out_dir)
+    old = out_dir / "manifest.json"
+    if old.exists() and {r["id"] for r in json.loads(old.read_text())} - {r["id"] for r in records}:
+        sys.exit(
+            f"{old} holds ingested (non-synthetic) clips; refusing to overwrite it. Pass a scratch directory."
+        )
     (out_dir / "manifest.json").write_text(json.dumps(records, indent=2) + "\n")
     print(f"wrote {len(records)} clips to {out_dir}")
 

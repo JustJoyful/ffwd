@@ -17,6 +17,10 @@ package = false
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+# /tmp is RAM-backed: the default keeps the last 3 runs' temp dirs (~1.6 GB each here), which once grew to 4.9 GB and
+# made systemd-oomd kill the desktop session. Keep only failed tests' dirs, from one run.
+tmp_path_retention_count = 1
+tmp_path_retention_policy = "failed"
 
 [tool.ruff]
 line-length = 100

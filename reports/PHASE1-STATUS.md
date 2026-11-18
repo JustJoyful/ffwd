@@ -82,3 +82,29 @@ Done: D-027 (change a: held-out style `technical` -> `context_first`; change b: 
 - **Then I do, in order:** flip `FFMPEG_PIN_ENFORCED`; switch `LOSSLESS_ROTATE_SPELLING` and the rotated corpus-clip recipes to the 5.1 metadata spelling (and check the allowlist/validator accept it); run the whole suite on 5.1.1 and fix what differs; rebuild all splits once (also picks up `context_first`); diff the per-split sha256 against the old manifest; re-run B0 on dev v1 into a fresh report dir (the frozen B0 emits `-display_rotation`: any change in its score is reported and explained, not patched); leakage audit on the new test-phrasing/test-compositional; write the native-vs-wasm parity test.
 - **D-032 approved** (cap 30%, `source=oracle`, fallback with explicit flag, M1-oracle dev-only ablation refused on test splits by `eval/testlock.py`). **Peak windows** are in `config.DEEPSEEK_PEAK_UTC` (01-04, 06-10 UTC); the bulk gate now refuses during peak.
 - **Teacher pilot (G1, <= $0.05) is approved but not started:** `training/teacher/terms/2026-11-17/` does not exist yet, and `config.TEACHER_TERMS_URL` / `TEACHER_TERMS_SNAPSHOT_SHA256` are still `None`. When the files are there I set both from them and then the pilot can run. The X1 dev run (<= $0.05) follows the same condition, then the kept-rate gate number goes into the preregistration.
+
+## Proposal (NOT started): build FFmpeg 5.1.4 for exact browser-version parity (19 Nov 2026)
+Needed before: the teacher bulk run (G2). Owner asked to propose, not start.
+
+**Why / how much it buys.** The browser runs ffmpeg.wasm core-mt 0.12.10 = FFmpeg 5.1.4; the pin is 5.1.1 (no static 5.1.4 exists). 5.1.2-5.1.4 are bug-fix/security releases. After the pin went active, the whole suite and every conformance case pass on 5.1.1 (the differences found were 9.x-vs-5.1, not 5.1.1-vs-5.1.4), so I expect little behavioural gap. Still, a self-built 5.1.4 makes "same FFmpeg core version in browser and native" literally true.
+
+**Source and trust.** `https://ffmpeg.org/releases/ffmpeg-5.1.4.tar.xz` + its `.asc`, checked with `gpg --verify` against the FFmpeg release signing key. The key fingerprint must be compared with the one printed on ffmpeg.org/download.html (I will not take it from memory). Trust root = ffmpeg.org's key for the source, plus our own sha256 of the resulting artifact (the same pin mechanism as today, new url/sha256/version string).
+
+**Configure flags** (derived from `packages/protocol/allowlist.json`: encoders libx264, libx265, libvpx (vp8+vp9), mpeg4, gif, png, mjpeg, aac, libmp3lame, libopus, libvorbis, flac, pcm_s16le; every listed filter, `loudnorm`, `ebur128`, `palettegen`, `concat`, `select`, ..., is built in; reference solutions actually use libx264, aac, libmp3lame, copy):
+```
+./configure --prefix="$PWD/out" --enable-gpl --enable-static --disable-shared \
+  --disable-autodetect --enable-zlib \
+  --enable-libx264 --enable-libx265 --enable-libvpx --enable-libmp3lame --enable-libopus --enable-libvorbis \
+  --disable-debug --disable-doc --disable-ffplay --disable-indevs --disable-outdevs --disable-network \
+  --pkg-config-flags=--static --extra-ldflags=-static
+```
+`--disable-autodetect` stops accidental links (xcb, vaapi, alsa, sdl); `--disable-network` matches the allowlist (protocols are rejected anyway). Not needed because the allowlist has no filter for them: libass/freetype/fribidi/harfbuzz (subtitles, drawtext), zimg (zscale), libwebp, libtheora (all present in the ffmpeg.wasm build, none reachable). Dependencies built static first, each pinned by version + sha256: x264 (stable branch commit), x265 3.5, libvpx 1.13, lame 3.100, opus 1.4, libogg + libvorbis. The wasm core's own `-buildconf` should be read in the browser spike to confirm the above is a superset of what the allowlist needs (not yet done).
+
+**Effort** (~1 working day, ~3 h of it waiting on compiles): key + source verification 0.5 h; static dependency builds 2 h (x265 is the fiddly one: cmake, 8/10/12-bit); FFmpeg configure + compile 0.5 h (10-15 min on 12 cores); static-link debugging 1-2 h; full suite + conformance on the new binary, diffed against 5.1.1 results, 1 h; package, upload (private HF dataset or a GitHub release), switch the pin (`config.FFMPEG_PIN` url/sha256/version, tests, Kaggle/CI install) 1 h; D-024 and docs 0.5 h. **Blocker: disk.** A build needs about 4 GB; `/home` has 1.6 GB free. Options: free space (e.g. old `data/jobs/*` baseline job dirs, 1.3 GB, owner's call), or build in GitHub Actions / Kaggle and publish the artifact (also gives a reproducible recipe in CI).
+
+**Risks / limits.**
+1. A self-built binary has no publisher signature either; builds are not guaranteed bit-reproducible (record gcc version and flags in the build manifest).
+2. Even 5.1.4 native is not identical to wasm: different codec-library versions, SIMD/asm paths and float math (loudnorm, encoders). Checks use tolerances, not bit-exactness, but the native-vs-wasm **parity test is still required** whatever we build.
+3. Distributing a GPL binary (Phase 3 helper) needs the corresponding source offer; the repo is GPL-3.0 (D-016), so this is fine but must be written down.
+
+**Recommendation.** Write and run the parity test first (every conformance case on native 5.1.1 and ffmpeg.wasm 5.1.4, checker results compared). If it passes, the 5.1.1 pin is enough for Phase 1 and the 5.1.4 build can wait until Phase 3 (helper distribution), where a reproducible CI build is wanted anyway. Build 5.1.4 now only if the parity test finds a patch-level difference or you want the exact-version claim before G2.

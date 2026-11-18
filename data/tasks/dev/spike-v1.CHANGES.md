@@ -15,3 +15,6 @@ all tasks; they need no per-task edits except where listed.
 - `u01-remove-person`: families ['F4'] -> [] ; nearest_supported null (nothing close)
 - `u02-add-subtitles`: families ['F3'] -> [] ; nearest_supported null (nothing close)
 - `u03-cinematic-grade`: families ['F3'] -> [] ; nearest_supported null (nothing close)
+
+## Reference spelling, 19 Nov 2026 (FFmpeg pin, D-024)
+- `s13-rotate-cw-lossless`, `s14-upside-down`: the reference command only changed spelling, `-display_rotation <ccw>` (FFmpeg >= 6) -> `-metadata:s:v:0 rotate=<ccw>` (FFmpeg 5.1.x, the pinned build). Request and gold spec are unchanged. The frozen B0 still emits `-display_rotation`, so its dev result on these two tasks changes on the pinned build; that is reported in the B0 re-run, not patched.

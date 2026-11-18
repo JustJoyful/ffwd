@@ -3,7 +3,7 @@
 One format for all three files: {"name","inputs","spec","args","passed","failed_fields","runtimes"}. Each case
 runs a real FFmpeg recipe on corpus clips and checks the output against `spec`. The TypeScript checker
 (Phase 2) must produce the same pass/fail and failed fields (RULES §4.8). `runtimes` says where the RECIPE
-is valid ("native" = FFmpeg 9 here; "wasm-5.1" = ffmpeg.wasm); this Python runner runs "native" cases.
+is valid ("native" = the pinned FFmpeg 5.1.1 here, D-024; "wasm-5.1" = ffmpeg.wasm); this Python runner runs "native" cases.
 """
 
 import json

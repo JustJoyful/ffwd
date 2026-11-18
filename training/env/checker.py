@@ -85,7 +85,7 @@ def _integrated_loudness(path: Path) -> float | None:
         "-map",
         "0:a:0",
         "-af",
-        "ebur128=framelog=quiet",
+        "ebur128=framelog=-8",  # numeric AV_LOG_QUIET: the name `quiet` does not exist in FFmpeg 5.1 (D-024)
         "-f",
         "null",
         "-",
@@ -96,6 +96,10 @@ def _integrated_loudness(path: Path) -> float | None:
         subprocess.SubprocessError,
         OSError,
     ):  # unmeasurable loudness fails the field, never raises
+        return None
+    if (
+        proc.returncode != 0
+    ):  # a failed filter graph still prints a zero summary: never read it as a measurement
         return None
     found = _LUFS.findall(proc.stderr.decode(errors="replace"))
     return float(found[-1]) if found and found[-1] != "-inf" else None

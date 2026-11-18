@@ -13,7 +13,7 @@ PROTOCOL_VERSION = "0.2.0"  # ARCH §12: shared by web, helper, training
 # patch-level gap is covered by the native-vs-wasm parity test (D-024). Install: `python -m training.env.ffmpeg_pin
 # install` (downloads, verifies the sha256 below, extracts into FFMPEG_PIN_HOME).
 FFMPEG_PIN = {
-    "version": "5.1.1",
+    "version": "5.1.1-static",  # exactly what `ffmpeg -version` prints for this build (the check compares it verbatim)
     "url": "https://johnvansickle.com/ffmpeg/old-releases/ffmpeg-5.1.1-amd64-static.tar.xz",
     "sha256": "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
     "dirname": "ffmpeg-5.1.1-amd64-static",
@@ -21,10 +21,9 @@ FFMPEG_PIN = {
 FFMPEG_PIN_HOME = Path(
     os.environ.get("FFMPEG_AGENT_PIN_HOME", Path.home() / ".cache" / "ffmpeg-agent" / "pin")
 )
-# Staged: the pinned build is downloaded but was not yet runnable in the dev environment (sandbox classifier), so
-# enforcement is switched on in the commit that verifies it. While False the harness still uses the pinned binary
-# when installed, but a mismatching FFmpeg on PATH is not refused. Must be True before any Phase 1 data is built.
-FFMPEG_PIN_ENFORCED = False
+# Enforced since the pinned build was installed and run here (19 Nov 2026): any other FFmpeg is refused fail-closed.
+# (False would still use the pinned binary when installed but tolerate a mismatching one on PATH.)
+FFMPEG_PIN_ENFORCED = True
 
 
 def _pinned_tool(name: str) -> str:
@@ -94,8 +93,8 @@ SSIM_FLOOR_DEFAULT = 0.90
 PSNR_FLOOR_DB_DEFAULT = 28.0
 # Lossless rotation spelling used by REFERENCE solutions (gold specs are identical either way). "display_rotation" =
 # `-display_rotation` (FFmpeg >= 6, native only); "metadata_rotate" = `-metadata:s:v:0 rotate=` (FFmpeg 5.1 / ffmpeg.wasm).
-# Switch when D-024 is decided.
-LOSSLESS_ROTATE_SPELLING = "display_rotation"
+# Switched to metadata_rotate with the D-024 pin (FFmpeg 5.1.x has no -display_rotation; rotate= is counterclockwise).
+LOSSLESS_ROTATE_SPELLING = "metadata_rotate"
 
 # --- Task generator v1 (training/taskgen/build.py, D-027) ---
 TASKGEN_VERSION = "1.0"

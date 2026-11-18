@@ -1,0 +1,33 @@
+{
+ "milestone": "taskgen v1 rebuilt on the pinned FFmpeg after real-clip ingestion",
+ "git_commit": "c33140fe14ef10c1d92bc91278fa12b60766d353",
+ "git_dirty": true,
+ "ffmpeg_version": "5.1.1-static (pinned, enforced)",
+ "ffmpeg_sha256": "2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42",
+ "taskgen_seed": 20261116,
+ "corpus_manifest_sha256": "97ce721e3c52f50a94747dcb4e67ef8d52470b5d96b9df65c7a58a6635dca136",
+ "corpus_clips": 39,
+ "split_sha256": {
+  "dev": "635c5bd9bbf7919a995cf8cfee8622ac168073837f0e6b585c477580a0193a81",
+  "test-compositional": "533dc8702cd0f06d7685730ed9c12940093b308ebf1c941e788d519dce8bb731",
+  "test-iid": "eec486876eb5ac1bd13c8b8b7b87aea7f5331470a722b52be6970cfef79bc3b4",
+  "test-phrasing": "62f2711640ceb882692a93b01dc31bec1712440c27a41ed715a92c513f5783d3",
+  "train": "66992faa310656864568d1da01db26abb07559c36286e699564368a8b9dc0fe3"
+ },
+ "old_split_sha256": {
+  "dev": "bdfc8588373ad54ecfba837789654c0b25a6525d8255e9de0633a9fba37073f5",
+  "test-compositional": "5162309301420dd405cbde389aa138ffb6cb327bf8b7bca6f0a408691f14c5e8",
+  "test-iid": "5a9a8bf5bbfd3cd6f1022dad097a05aa2d97417c1aa5fef3e56984a837b00506",
+  "test-phrasing": "21a3bbca0a17fa28ab5b3274d0417fcfedaf51eb27babd5978119db8e9aa5aed",
+  "train": "4168061d2e1cb3327f66414ef44704df098ff98bcf0b82c38f556347a6ce1cce"
+ },
+ "heldout_styles": [
+  "context_first",
+  "indirect"
+ ],
+ "hardware": {
+  "machine": "local",
+  "cpu_workers": 3
+ },
+ "paid_cost_usd": 0.0
+}
