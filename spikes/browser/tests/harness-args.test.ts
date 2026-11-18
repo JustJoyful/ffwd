@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FFMPEG_THREADS } from "../src/config";
+import { FFMPEG_DECODE_THREADS, FFMPEG_THREADS } from "../src/config";
 import { capThreads, harnessArgs } from "../src/harness-args";
 
 // The thread cap is a HARNESS workaround, never something the model emits: re-encodes deadlock in
@@ -8,6 +8,8 @@ import { capThreads, harnessArgs } from "../src/harness-args";
 describe("thread cap injected by the harness", () => {
   it("inserts -threads N immediately before every output token", () => {
     expect(capThreads(["-i", "{in:a}", "-c:v", "libx264", "{out:o}"], 4)).toEqual([
+      "-threads",
+      "1",
       "-i",
       "{in:a}",
       "-c:v",
@@ -17,6 +19,8 @@ describe("thread cap injected by the harness", () => {
       "{out:o}",
     ]);
     expect(capThreads(["-i", "{in:a}", "{out:a}", "-an", "{out:b}"], 2)).toEqual([
+      "-threads",
+      "1",
       "-i",
       "{in:a}",
       "-threads",
@@ -58,6 +62,8 @@ describe("thread cap injected by the harness", () => {
     ).toEqual([
       "-ss",
       "3",
+      "-threads",
+      String(FFMPEG_DECODE_THREADS),
       "-i",
       "in.mp4",
       "-c",
@@ -66,5 +72,24 @@ describe("thread cap injected by the harness", () => {
       String(FFMPEG_THREADS),
       "o.mp4",
     ]);
+  });
+
+  it("caps decoder threads before EVERY input (two-input concat deadlocks otherwise)", () => {
+    const args = harnessArgs(
+      [
+        "-i",
+        "{in:a}",
+        "-i",
+        "{in:b}",
+        "-filter_complex",
+        "[0:v][1:v]concat=n=2:v=1:a=0[v]",
+        "{out:o}",
+      ],
+      "in.mp4",
+      "o.mp4",
+    );
+    const cap = ["-threads", String(FFMPEG_DECODE_THREADS)];
+    const at = args.flatMap((a, i) => (a === "-i" ? [args.slice(i - 2, i)] : []));
+    expect(at).toEqual([cap, cap]);
   });
 });

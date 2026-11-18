@@ -1,0 +1,1673 @@
+[
+ {
+  "i": 0,
+  "file": "checker-invariants.jsonl",
+  "name": "s07: a 0.1 s H.264 output must FAIL (implicit duration)",
+  "expected": [
+   false,
+   [
+    "implicit.duration_s"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 0.1,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 0.1,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 1,
+  "file": "checker-invariants.jsonl",
+  "name": "s07: a full-length H.264/AAC conversion passes",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 2,
+  "file": "checker-invariants.jsonl",
+  "name": "s08-style conversion that silently drops audio fails (implicit audio presence)",
+  "expected": [
+   false,
+   [
+    "implicit.audio_present"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.audio_present"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.audio_present"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 3,
+  "file": "checker-invariants.jsonl",
+  "name": "explicit audio.present=false permits removing audio",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 4,
+  "file": "checker-invariants.jsonl",
+  "name": "input without audio stays without audio and passes",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 5,
+  "file": "checker-invariants.jsonl",
+  "name": "start_s in the spec lets the duration shrink",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 17.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 17.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 6,
+  "file": "checker-invariants.jsonl",
+  "name": "speed-up with no time field fails (duration halves)",
+  "expected": [
+   false,
+   [
+    "implicit.duration_s"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 10.067,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 10.067,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 7,
+  "file": "checker-invariants.jsonl",
+  "name": "speed-up passes when the spec states the new duration",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 10.067,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 10.067,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 8,
+  "file": "checker-invariants.jsonl",
+  "name": "merge must cover the sum of the inputs",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 6.016,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 6.016,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 9,
+  "file": "checker-invariants.jsonl",
+  "name": "merge output of only the first clip fails",
+  "expected": [
+   false,
+   [
+    "implicit.duration_s"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 3.008,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 3.008,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 10,
+  "file": "checker-invariants.jsonl",
+  "name": "audio-only mp4 labelled kind=video fails (implicit video stream)",
+  "expected": [
+   false,
+   [
+    "implicit.video_stream"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.video_stream"
+   ],
+   "measurements": {
+    "duration_s": 4.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.video_stream"
+   ],
+   "measurements": {
+    "duration_s": 4.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 11,
+  "file": "checker-invariants.jsonl",
+  "name": "fixing a baked 500 ms offset shortens the container by the shift and still passes",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.011,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.011,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 12,
+  "file": "checker-invariants.jsonl",
+  "name": "an offset spec does not excuse a clip that lost most of its length",
+  "expected": [
+   false,
+   [
+    "implicit.duration_s"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 1.003,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s"
+   ],
+   "measurements": {
+    "duration_s": 1.003,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 13,
+  "file": "checker-rotation.jsonl",
+  "name": "transpose=1 (re-encode) is 90 clockwise",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 14,
+  "file": "checker-rotation.jsonl",
+  "name": "transpose=1 is not 270",
+  "expected": [
+   false,
+   [
+    "video.rotation"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 15,
+  "file": "checker-rotation.jsonl",
+  "name": "transpose=2 (re-encode) is 90 counterclockwise = 270",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 16,
+  "file": "checker-rotation.jsonl",
+  "name": "transpose=2 is not 90",
+  "expected": [
+   false,
+   [
+    "video.rotation"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 17,
+  "file": "checker-rotation.jsonl",
+  "name": "hflip,vflip (re-encode) is 180",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 18,
+  "file": "checker-rotation.jsonl",
+  "name": "lossless clockwise 90 by display matrix (FFmpeg 5.1 spelling: rotate=270, i.e. 270 counterclockwise)",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 19,
+  "file": "checker-rotation.jsonl",
+  "name": "lossless counterclockwise 90 by display matrix (rotate=90)",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 20,
+  "file": "checker-rotation.jsonl",
+  "name": "lossless 180 by display matrix (rotate=180)",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 21,
+  "file": "checker-rotation.jsonl",
+  "name": "lossless clockwise 90 request fails when the matrix turned it the other way (rotate=90 turns it counterclockwise)",
+  "expected": [
+   false,
+   [
+    "video.rotation"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 22,
+  "file": "checker-rotation.jsonl",
+  "name": "lossless 90 by display matrix (FFmpeg 5.1 spelling: -metadata rotate=<ccw degrees>)",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 23,
+  "file": "checker-rotation.jsonl",
+  "name": "unchanged copy is rotation 0",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 24,
+  "file": "checker-rotation.jsonl",
+  "name": "unchanged copy fails a 90 request",
+  "expected": [
+   false,
+   [
+    "video.rotation"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "video.rotation"
+   ],
+   "measurements": {
+    "duration_s": 4.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 25,
+  "file": "checker-frames.jsonl",
+  "name": "fps=1/2 on a 10 s clip gives 5 frames: interval + count",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 26,
+  "file": "checker-frames.jsonl",
+  "name": "a wrong explicit count fails (zero tolerance)",
+  "expected": [
+   false,
+   [
+    "frames.expected_count"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "frames.expected_count"
+   ],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "frames.expected_count"
+   ],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 27,
+  "file": "checker-frames.jsonl",
+  "name": "select-based sampling gives the same 5 frames",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 28,
+  "file": "checker-frames.jsonl",
+  "name": "one frame per second between 2 s and 7 s: 5 frames",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 29,
+  "file": "checker-frames.jsonl",
+  "name": "jpg requested: the harness names files .jpg, so format is satisfied",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 30,
+  "file": "checker-frames.jsonl",
+  "name": "boundary: 4 s clip, interval 3: fps filter drops the last slot (1 frame); interval-only spec accepts it",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 31,
+  "file": "checker-frames.jsonl",
+  "name": "boundary: select keeps the last slot (2 frames); interval-only spec accepts it",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 32,
+  "file": "checker-frames.jsonl",
+  "name": "boundary: an explicit expected_count of 2 rejects the fps filter's 1 frame",
+  "expected": [
+   false,
+   [
+    "frames.expected_count"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "frames.expected_count"
+   ],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "frames.expected_count"
+   ],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 33,
+  "file": "checker-frames.jsonl",
+  "name": "far from the boundary the count is exact: interval-only spec rejects 4 frames for a 10 s clip at interval 2",
+  "expected": [
+   false,
+   [
+    "frames.count_for_interval"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "frames.count_for_interval"
+   ],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "frames.count_for_interval"
+   ],
+   "measurements": {
+    "duration_s": null,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 34,
+  "file": "checker-quality.jsonl",
+  "name": "good 1 Mbps compression under the cap passes the default quality floor",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 35,
+  "file": "checker-quality.jsonl",
+  "name": "a mushy 8x4 picture scaled back up meets the size cap but fails both floors",
+  "expected": [
+   false,
+   [
+    "quality.min_ssim",
+    "quality.min_psnr_db"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "quality.min_ssim",
+    "quality.min_psnr_db"
+   ],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "quality.min_ssim",
+    "quality.min_psnr_db"
+   ],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 36,
+  "file": "checker-quality.jsonl",
+  "name": "a 64x36 picture (tiny output) fails the quality floor",
+  "expected": [
+   false,
+   [
+    "quality.min_ssim",
+    "quality.min_psnr_db"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "quality.min_ssim",
+    "quality.min_psnr_db"
+   ],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "quality.min_ssim",
+    "quality.min_psnr_db"
+   ],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 37,
+  "file": "checker-quality.jsonl",
+  "name": "truncated output meets the size cap but fails the implicit duration check (and the floor: past its end the last frame is compared to the rest)",
+  "expected": [
+   false,
+   [
+    "implicit.duration_s",
+    "quality.min_psnr_db"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s",
+    "quality.min_psnr_db"
+   ],
+   "measurements": {
+    "duration_s": 2.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "implicit.duration_s",
+    "quality.min_psnr_db"
+   ],
+   "measurements": {
+    "duration_s": 2.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 38,
+  "file": "checker-quality.jsonl",
+  "name": "an explicit min_ssim of 0.99 rejects a 1 Mbps encode (ssim 0.98)",
+  "expected": [
+   false,
+   [
+    "quality.min_ssim"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "quality.min_ssim"
+   ],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "quality.min_ssim"
+   ],
+   "measurements": {
+    "duration_s": 20.011,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 39,
+  "file": "checker-quality.jsonl",
+  "name": "a trimmed size-target output is exempt from the default floor (frames are not comparable)",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 6.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 6.0,
+    "loudness_lufs": null,
+    "offset_ms": null,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 40,
+  "file": "checker-offset.jsonl",
+  "name": "audio-advanced-by-negative-itsoffset-copy (the X1 s31 false negative)",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 41,
+  "file": "checker-offset.jsonl",
+  "name": "audio-delayed-by-positive-itsoffset-copy",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.5,
+    "loudness_lufs": null,
+    "offset_ms": 478.0,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.5,
+    "loudness_lufs": null,
+    "offset_ms": 478.0,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 42,
+  "file": "checker-offset.jsonl",
+  "name": "video-delayed-by-positive-itsoffset-copy",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.5,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.5,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 43,
+  "file": "checker-offset.jsonl",
+  "name": "negative-itsoffset-with-audio-reencode",
+  "expected": [
+   true,
+   []
+  ],
+  "native": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": true,
+   "failed": [],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 44,
+  "file": "checker-offset.jsonl",
+  "name": "unchanged-file-must-fail-a-500ms-request",
+  "expected": [
+   false,
+   [
+    "audio.offset_ms"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 45,
+  "file": "checker-offset.jsonl",
+  "name": "wrong-direction-must-fail",
+  "expected": [
+   false,
+   [
+    "audio.offset_ms"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.0,
+    "loudness_lufs": null,
+    "offset_ms": -521.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 46,
+  "file": "checker-offset.jsonl",
+  "name": "tolerance-unchanged: 550ms shift misses a 500ms request",
+  "expected": [
+   false,
+   [
+    "audio.offset_ms"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.55,
+    "loudness_lufs": null,
+    "offset_ms": -571.3,
+    "re_encoded": false
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.55,
+    "loudness_lufs": null,
+    "offset_ms": -571.3,
+    "re_encoded": false
+   }
+  },
+  "not_parity": []
+ },
+ {
+  "i": 47,
+  "file": "checker-offset.jsonl",
+  "name": "known-limitation: filter-based delay leaves timestamps unchanged, so it fails rather than passing unverified",
+  "expected": [
+   false,
+   [
+    "audio.offset_ms"
+   ]
+  ],
+  "native": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.508,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": true
+   }
+  },
+  "wasm": {
+   "ok": true,
+   "passed": false,
+   "failed": [
+    "audio.offset_ms"
+   ],
+   "measurements": {
+    "duration_s": 3.508,
+    "loudness_lufs": null,
+    "offset_ms": -21.3,
+    "re_encoded": true
+   }
+  },
+  "not_parity": []
+ }
+]

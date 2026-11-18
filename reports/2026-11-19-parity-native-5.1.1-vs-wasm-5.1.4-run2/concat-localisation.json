@@ -1,0 +1,27 @@
+{
+  "two_inputs_no_filter": {
+    "code": 0,
+    "seconds": 0.4,
+    "tail": "Aborted()"
+  },
+  "concat_video_only": {
+    "code": -2,
+    "seconds": 40,
+    "tail": "hard timeout 40 s"
+  },
+  "concat_audio_only": {
+    "code": 0,
+    "seconds": 0.2,
+    "tail": "Aborted()"
+  },
+  "concat_av_output_threads_only": {
+    "code": -2,
+    "seconds": 40,
+    "tail": "hard timeout 40 s"
+  },
+  "concat_av_input_threads1": {
+    "code": 0,
+    "seconds": 0.7,
+    "tail": "Aborted()"
+  }
+}

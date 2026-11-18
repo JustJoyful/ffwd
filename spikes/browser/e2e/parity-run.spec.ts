@@ -59,7 +59,17 @@ test("run every conformance recipe in ffmpeg.wasm", async ({ page }) => {
             const m = /^\{in:(.+)\}$/.exec(a);
             return m ? (names[m[1] as string] as string) : a;
           });
-          const e = await sp.execLogged(ff, sp.harnessArgs(args, "unused", c.out), 240_000);
+          // Hard stop: a wasm re-encode can deadlock and ffmpeg.wasm's own timeout then never settles.
+          const stuck = new Promise<{ code: number; log: string }>((res) =>
+            setTimeout(
+              () => res({ code: -2, log: "hard timeout: ffmpeg.wasm did not finish in 150 s" }),
+              150_000,
+            ),
+          );
+          const e = await Promise.race([
+            sp.execLogged(ff, sp.harnessArgs(args, "unused", c.out), 120_000),
+            stuck,
+          ]);
           const files: Record<string, string> = {};
           if (e.code === 0) {
             if (c.out.includes("/")) {
@@ -80,6 +90,7 @@ test("run every conformance recipe in ffmpeg.wasm", async ({ page }) => {
       },
       { c, inputs },
     );
+    if (r.code === -2) await page.goto("/"); // a deadlocked core may poison the page: start the next case clean
     for (const [name, data] of Object.entries(r.files)) {
       const p = `${OUT}/${c.i}/${name}`;
       mkdirSync(p.substring(0, p.lastIndexOf("/")), { recursive: true });

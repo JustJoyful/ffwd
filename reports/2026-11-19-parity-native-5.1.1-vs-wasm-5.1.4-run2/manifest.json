@@ -1,0 +1,8 @@
+{
+ "native_ffmpeg": "5.1.1-static",
+ "wasm": "ffmpeg.wasm core-mt 0.12.10 (FFmpeg 5.1.4)",
+ "cases": 48,
+ "parity": 47,
+ "not_parity": 1,
+ "paid_cost_usd": 0.0
+}

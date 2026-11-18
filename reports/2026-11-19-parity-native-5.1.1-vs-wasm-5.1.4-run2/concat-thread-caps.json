@@ -1,0 +1,17 @@
+{
+  "threads1_only": {
+    "code": -2,
+    "seconds": 90,
+    "tail": "hard timeout 90 s"
+  },
+  "filter_complex_threads1": {
+    "code": -2,
+    "seconds": 90,
+    "tail": "hard timeout 90 s"
+  },
+  "filter_threads1_and_complex1": {
+    "code": -2,
+    "seconds": 90,
+    "tail": "hard timeout 90 s"
+  }
+}

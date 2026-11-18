@@ -16,6 +16,9 @@ export const MODEL_IDS = ["Qwen3-0.6B-q4f16_1-MLC", "Qwen3-1.7B-q4f16_1-MLC"] as
 // Re-encodes deadlock in core-mt 0.12.10 when FFmpeg auto-picks threads (found in Phase 0: copy
 // works, every encode hangs). The harness caps threads on every output, like it owns -y.
 export const FFMPEG_THREADS = 4;
+// Decoder threads (an INPUT option, set before every -i). With two video inputs and the concat filter, auto/4 decoder
+// threads deadlock in core-mt 0.12.10: measured in reports/2026-11-19-parity-native-5.1.1-vs-wasm-5.1.4-run2/concat-localisation.json.
+export const FFMPEG_DECODE_THREADS = 1;
 export const MAX_RUNS = 4; // ARCH §3.1
 export const MAX_TURNS = 8;
 export const MAX_TOKENS = 512;
