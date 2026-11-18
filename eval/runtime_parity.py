@@ -179,6 +179,9 @@ def main() -> None:
     ap.add_argument(
         "--out", type=Path, required=True, help="fresh report directory (never overwritten)"
     )
+    ap.add_argument(
+        "--keep-work", action="store_true", help="keep the scratch outputs (about 600 MB)"
+    )
     ap.add_argument("--wasm-dir", type=Path, help="reuse the outputs of an earlier browser run")
     a = ap.parse_args()
     a.out.mkdir(parents=True, exist_ok=False)
@@ -229,6 +232,10 @@ def main() -> None:
         "cases": len(rows), "parity": len(rows) - len(bad), "not_parity": len(bad), "paid_cost_usd": 0.0,
     }, indent=1) + "\n")  # fmt: skip
     print(f"{len(rows) - len(bad)}/{len(rows)} cases at parity")
+    if not a.keep_work:
+        shutil.rmtree(
+            work, ignore_errors=True
+        )  # ~600 MB of outputs; the verdicts are in results.json
 
 
 if __name__ == "__main__":
