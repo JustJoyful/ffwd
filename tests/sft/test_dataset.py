@@ -93,3 +93,29 @@ def test_oracle_share_is_capped_tagged_and_the_cap_can_be_lifted_explicitly():
     assert (
         mix([], [], oracle=oracle, per_family_cap=1.0, seed=1) == []
     )  # default cap with no teacher: nothing
+
+
+def test_invalid_action_turns_are_removed_with_their_error_message_and_counted():
+    from training.sft.dataset import drop_invalid_turns
+
+    sysm, usr = {"role": "system", "content": "s"}, {"role": "user", "content": "{}"}
+    bad = [
+        {"role": "assistant", "content": '{"action": "spec"}'},
+        {"role": "user", "content": '{"error": "invalid action: x"}'},
+    ]
+    good = [
+        {"role": "assistant", "content": '{"action": "spec", "spec": {}}'},
+        {"role": "user", "content": '{"spec": "confirmed"}'},
+    ]
+    failed_run = [
+        {"role": "assistant", "content": '{"action": "run"}'},
+        {"role": "user", "content": '{"run_ok": true, "checks": {"out1": {"passed": false}}}'},
+    ]
+    msgs, n = drop_invalid_turns([sysm, usr, *bad, *good, *failed_run])
+    assert n == 1 and msgs == [
+        sysm,
+        usr,
+        *good,
+        *failed_run,
+    ]  # a failed CHECK is a recovery worth keeping
+    assert drop_invalid_turns([sysm, usr, *good]) == ([sysm, usr, *good], 0)

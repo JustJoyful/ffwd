@@ -1,0 +1,11 @@
+# X1 on the Phase 1 protocol (D-026, D-034): frozen prompt v1, spec-first, stop after a clarification. This is exactly
+# what the teacher sees in the pilot and bulk run, so its dev pass rate is the reference for the kept-rate gate
+# max(40%, X1_dev - 15 pp). Model id, base URL and prices come from training/config.py (single source).
+paid = true
+quant = "api"
+temperature = 0.0
+# Thinking off (RULES 5.3): only this field removes reasoning tokens (verified 2026-11-15).
+extra_body = { thinking = { type = "disabled" } }
+system_prompt = "system-v1.txt"
+require_spec = true
+stop_after_ask = true

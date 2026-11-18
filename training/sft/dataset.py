@@ -25,12 +25,34 @@ def family_key(rec: dict) -> str:
     return "+".join(rec["families"]) or "unsupported"
 
 
+def drop_invalid_turns(messages: list[dict]) -> tuple[list[dict], int]:
+    """Remove (assistant, observation) pairs whose observation is an `invalid action` error: the loss is on every
+    assistant turn, so a schema-invalid turn the teacher later corrected would be learned. The state does not change
+    after an invalid action, so the transcript stays coherent without the pair. Returns (messages, pairs dropped).
+    """
+    head, rest = messages[:2], messages[2:]
+    out, dropped = list(head), 0
+    for i in range(0, len(rest), 2):
+        pair = rest[i : i + 2]
+        try:
+            err = json.loads(pair[1]["content"]).get("error", "") if len(pair) == 2 else ""
+        except (ValueError, AttributeError):
+            err = ""
+        if isinstance(err, str) and err.startswith("invalid action"):
+            dropped += 1
+        else:
+            out += pair
+    return out, dropped
+
+
 def build_examples(
     trajectories: list[dict], tokenizer, max_len: int = config.SFT_MAX_LEN
 ) -> tuple[list[dict], dict]:
     """[{task_id, family, input_ids, labels}], stats. Over-long streams are dropped AND counted (never silently)."""
-    examples, dropped_long, dupes, seen = [], 0, 0, set()
+    examples, dropped_long, dupes, seen, invalid_pairs = [], 0, 0, set(), 0
     for rec in trajectories:
+        rec = rec | dict(zip(("messages", "_n"), drop_invalid_turns(rec["messages"]), strict=True))
+        invalid_pairs += rec.pop("_n")
         digest = hashlib.sha256(json.dumps(rec["messages"], sort_keys=True).encode()).hexdigest()
         if digest in seen:
             dupes += 1
@@ -53,6 +75,7 @@ def build_examples(
         "kept": len(examples),
         "dropped_too_long": dropped_long,
         "duplicates": dupes,
+        "invalid_turn_pairs_removed": invalid_pairs,
         "max_len": max_len,
     }
 

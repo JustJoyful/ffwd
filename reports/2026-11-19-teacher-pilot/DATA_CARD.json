@@ -1,0 +1,91 @@
+{
+ "status": "complete",
+ "created": "2026-11-18T23:14:15.509825+00:00",
+ "teacher_model": "deepseek-flash",
+ "prompt": "system-v1.txt",
+ "prompt_sha256": "56e7d7217b97c122662235cceb96acbf62bd822c6fec25f880035bfff805c724",
+ "terms_url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+ "terms_snapshot_sha256": "e700b82e5f9170d9ac20b0dc1424b718aed76c1ccc6d6b02cb6312f4beab22de",
+ "terms_evidence": {
+  "snapshot_sha256_recomputed": "e700b82e5f9170d9ac20b0dc1424b718aed76c1ccc6d6b02cb6312f4beab22de",
+  "pages": [
+   {
+    "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+    "fetched_utc": "2026-11-18T23:03:35Z",
+    "http_status": 200,
+    "sha256": "2b433c53cbac75491959025eba5a27908f9f1886352dce0a05f3d5a936d87790"
+   },
+   {
+    "url": "https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html",
+    "fetched_utc": "2026-11-18T23:03:37Z",
+    "http_status": 200,
+    "sha256": "e5c52c238ff59a6d274cd66c449f939ba6bd3183fe7927397b595df02887a76d"
+   }
+  ],
+  "open_platform_tos_release_date": "April 22, 2026",
+  "open_platform_tos_effective_date": "April 29, 2026",
+  "open_platform_tos_section_4_2": "4.2 Subject to your compliance to applicable law and our Terms, you have the following rights regarding the Inputs and Outputs of the Services: (1) You retain any rights, title, and interests\u2014if any\u2014in the Inputs you submit; (2) We assign any rights, title, and interests\u2014if any\u2014in the Outputs of the Services to you; (3) You may apply the Inputs and Outputs of the Services to a wide range of use cases, including personal use, academic research, derivative product development, training other models (such as model distillation), etc.",
+  "owner_confirmation": "Read \u00a74.2 myself on 2026-11-19; outputs may be used to train other models."
+ },
+ "prices_usd_per_mtok": {
+  "peak": {
+   "input_cache_hit": 0.006,
+   "input_cache_miss": 0.3,
+   "output": 1.2
+  },
+  "off_peak": {
+   "input_cache_hit": 0.003,
+   "input_cache_miss": 0.15,
+   "output": 0.6
+  }
+ },
+ "prices_checked": "2026-11-15",
+ "taskgen_version": "1.0",
+ "taskgen_seed": 20261116,
+ "kept_trajectories": 19,
+ "kept_by_family": {
+  "F1": 1,
+  "F10": 1,
+  "F11": 1,
+  "F12": 1,
+  "F12+F1+F5": 2,
+  "F2": 1,
+  "F3": 1,
+  "F3+F1": 2,
+  "F3+F4+F1+F12": 2,
+  "F4": 1,
+  "F5": 1,
+  "F6": 1,
+  "F7": 1,
+  "F8": 1,
+  "F9": 1,
+  "unsupported": 1
+ },
+ "summary": {
+  "attempted": 20,
+  "kept": 19,
+  "skipped_done": 0,
+  "cost_usd": 0.012542652000000001,
+  "cache_hit_ratio": 0.8393083167581868,
+  "stopped": null,
+  "by_family": {
+   "F1": "1/1",
+   "F10": "1/1",
+   "F11": "1/1",
+   "F12": "1/1",
+   "F12+F1+F5": "2/2",
+   "F2": "1/1",
+   "F3": "1/1",
+   "F3+F1": "2/2",
+   "F3+F4+F1+F12": "2/2",
+   "F4": "1/1",
+   "F5": "1/1",
+   "F6": "1/2",
+   "F7": "1/1",
+   "F8": "1/1",
+   "F9": "1/1",
+   "unsupported": "1/1"
+  }
+ },
+ "filter": "only trajectories whose final outputs pass the checker against the gold spec are kept"
+}

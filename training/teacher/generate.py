@@ -9,6 +9,7 @@ and it refuses to run on a draft prompt or on any split but train.
 import dataclasses
 import hashlib
 import json
+import shutil
 from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -94,6 +95,7 @@ def generate(
     offpeak_only: bool = False,
     now: Callable[[], datetime] = lambda: datetime.now(UTC),
     max_episodes: int | None = None,
+    keep_jobs: bool = False,
 ) -> GenSummary:
     if any(t["split"] != "train" for t in tasks):
         raise PermissionError("teacher generation reads train tasks only (RULES §4.5)")
@@ -135,6 +137,10 @@ def generate(
         if passed:
             with kept.open("a") as f:
                 f.write(json.dumps(rec) + "\n")
+        if (
+            not keep_jobs
+        ):  # the record holds the whole transcript; outputs of thousands of tasks would fill the disk
+            shutil.rmtree(out_dir / "jobs" / task["id"], ignore_errors=True)
         summary.attempted += 1
         summary.kept += passed
         key = "+".join(task["families"]) or "unsupported"
