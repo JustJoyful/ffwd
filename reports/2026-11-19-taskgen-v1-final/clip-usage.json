@@ -1,0 +1,213 @@
+{
+ "av_early_500": {
+  "train": 3
+ },
+ "av_late_500": {
+  "train": 3
+ },
+ "bbb_4k": {
+  "dev": 4,
+  "train": 33,
+  "test-iid": 3,
+  "test-compositional": 2,
+  "test-phrasing": 2
+ },
+ "clip_a": {
+  "dev": 17,
+  "train": 251,
+  "test-iid": 23,
+  "test-compositional": 6,
+  "test-phrasing": 11
+ },
+ "clip_b": {
+  "dev": 17,
+  "train": 238,
+  "test-iid": 22,
+  "test-compositional": 4,
+  "test-phrasing": 12
+ },
+ "h264_25fps_720p": {
+  "dev": 20,
+  "train": 217,
+  "test-iid": 17,
+  "test-compositional": 9,
+  "test-phrasing": 10
+ },
+ "h264_2s": {
+  "dev": 11,
+  "train": 255,
+  "test-iid": 18,
+  "test-compositional": 4,
+  "test-phrasing": 8
+ },
+ "h264_4x3": {
+  "dev": 8,
+  "train": 184,
+  "test-iid": 21,
+  "test-compositional": 11,
+  "test-phrasing": 7
+ },
+ "h264_aac_1080p": {
+  "dev": 17,
+  "train": 224,
+  "test-iid": 18,
+  "test-compositional": 9,
+  "test-phrasing": 13
+ },
+ "h264_long": {
+  "dev": 22,
+  "train": 364,
+  "test-iid": 49,
+  "test-compositional": 10,
+  "test-phrasing": 17
+ },
+ "h264_mkv": {
+  "dev": 13,
+  "train": 240,
+  "test-iid": 23,
+  "test-compositional": 15,
+  "test-phrasing": 7
+ },
+ "h264_mono_44k": {
+  "dev": 12,
+  "train": 234,
+  "test-iid": 23,
+  "test-compositional": 13,
+  "test-phrasing": 7
+ },
+ "h264_noaudio": {
+  "dev": 6,
+  "train": 80,
+  "test-iid": 11,
+  "test-compositional": 7,
+  "test-phrasing": 2
+ },
+ "h264_noisy": {
+  "dev": 27,
+  "train": 351,
+  "test-iid": 41,
+  "test-compositional": 16,
+  "test-phrasing": 12
+ },
+ "h264_quiet": {
+  "dev": 20,
+  "train": 302,
+  "test-iid": 40,
+  "test-compositional": 11,
+  "test-phrasing": 14
+ },
+ "h264_vertical": {
+  "dev": 1,
+  "train": 30,
+  "test-iid": 3
+ },
+ "hevc_iphone": {
+  "dev": 3,
+  "train": 27,
+  "test-iid": 4,
+  "test-compositional": 4,
+  "test-phrasing": 1
+ },
+ "hevc_rot90": {
+  "dev": 2,
+  "train": 30,
+  "test-iid": 5,
+  "test-compositional": 2,
+  "test-phrasing": 2
+ },
+ "mpeg4_avi": {
+  "train": 27,
+  "test-iid": 1,
+  "test-compositional": 2,
+  "test-phrasing": 3
+ },
+ "prores_lite": {
+  "dev": 3,
+  "train": 18,
+  "test-iid": 2,
+  "test-phrasing": 3
+ },
+ "tos_720_mrg": {
+  "dev": 15,
+  "train": 199,
+  "test-iid": 22,
+  "test-compositional": 5,
+  "test-phrasing": 8
+ },
+ "tos_base": {
+  "dev": 14,
+  "train": 231,
+  "test-iid": 27,
+  "test-compositional": 7,
+  "test-phrasing": 6
+ },
+ "tos_cine": {
+  "dev": 9,
+  "train": 180,
+  "test-iid": 20,
+  "test-compositional": 9,
+  "test-phrasing": 7
+ },
+ "tos_land": {
+  "dev": 10,
+  "train": 194,
+  "test-iid": 25,
+  "test-compositional": 6,
+  "test-phrasing": 9
+ },
+ "tos_mrg_a": {
+  "dev": 10,
+  "train": 183,
+  "test-iid": 27,
+  "test-compositional": 9,
+  "test-phrasing": 13
+ },
+ "tos_mrg_b": {
+  "dev": 12,
+  "train": 177,
+  "test-iid": 22,
+  "test-compositional": 3,
+  "test-phrasing": 11
+ },
+ "tos_mrg_c": {
+  "dev": 17,
+  "train": 195,
+  "test-iid": 24,
+  "test-compositional": 8,
+  "test-phrasing": 9
+ },
+ "tos_multiaud": {
+  "dev": 26,
+  "train": 249,
+  "test-iid": 25,
+  "test-compositional": 13,
+  "test-phrasing": 10
+ },
+ "tos_prores": {
+  "dev": 5,
+  "train": 21,
+  "test-iid": 7,
+  "test-compositional": 2,
+  "test-phrasing": 3
+ },
+ "tos_quiet": {
+  "dev": 13,
+  "train": 214,
+  "test-iid": 18,
+  "test-compositional": 8,
+  "test-phrasing": 10
+ },
+ "tos_webm": {
+  "dev": 3,
+  "train": 27,
+  "test-iid": 3,
+  "test-compositional": 3,
+  "test-phrasing": 3
+ },
+ "vp9_opus_webm": {
+  "dev": 1,
+  "train": 21,
+  "test-iid": 7,
+  "test-compositional": 2
+ }
+}

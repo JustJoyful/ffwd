@@ -22,7 +22,7 @@ from training import config
 from training.env.ffmpeg_version import ffmpeg_version
 from training.protocol import validate
 from training.taskgen import phrasing
-from training.taskgen.clips import ClipIndex
+from training.taskgen.clips import ClipIndex, visible_records
 from training.taskgen.compose import sample_composition
 from training.taskgen.families import SAMPLERS
 from training.taskgen.phrasing_heldout import HELDOUT_STYLES
@@ -72,6 +72,13 @@ def draw_candidate(rng: random.Random, ci: ClipIndex) -> dict | None:
         "flags": {"ambiguous": False, "unsupported": False},
     }
     return {"core": core, "intents": draft.intents, "slots": draft.slots}
+
+
+def corpus_hash(manifest: Path = config.CORPUS_DIR / "manifest.json") -> str:
+    """Hash of the clips task generation can see. Adding a test-real (or restricted) clip leaves it, and so every
+    split, unchanged (owner rule, 19 Nov 2026)."""
+    blob = json.dumps(visible_records(manifest), sort_keys=True)
+    return hashlib.sha256(blob.encode()).hexdigest()
 
 
 CACHE = config.JOBS_DIR / "taskgen-verify-cache.jsonl"
@@ -202,7 +209,7 @@ def build(
         "generator_version": config.TASKGEN_VERSION, "seed": seed, "attempts": attempts, "dropped": dict(dropped),
         "heldout_combos": [list(c) for c in config.HELDOUT_COMBOS], "train_styles": list(phrasing.TRAIN_STYLES),
         "heldout_styles": list(HELDOUT_STYLES),
-        "corpus_manifest_sha256": hashlib.sha256((config.CORPUS_DIR / "manifest.json").read_bytes()).hexdigest(),
+        "corpus_manifest_sha256": corpus_hash(),
         "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
         "splits": {},
     }  # fmt: skip

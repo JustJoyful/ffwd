@@ -9,6 +9,17 @@ from training.env.checker import _integrated_loudness
 from training.env.probe import display_size
 
 
+def visible_records(manifest: Path = config.CORPUS_DIR / "manifest.json") -> list[dict]:
+    """The manifest records task generation may use. `test-real` clips (D-027b) and `restricted` clips (licence
+    unverified, D-033) are invisible to it: adding one must change no generated split, so it must not change the
+    corpus hash that build.py records either."""
+    return [
+        r
+        for r in json.loads(manifest.read_text())
+        if r.get("role", config.CLIP_ROLE_DEFAULT) != "test-real" and not r.get("restricted")
+    ]
+
+
 @dataclass(frozen=True)
 class Clip:
     id: str
@@ -29,11 +40,7 @@ class ClipIndex:
     def __init__(self, manifest: Path = config.CORPUS_DIR / "manifest.json"):
         self.clips: dict[str, Clip] = {}
         self._lufs: dict[str, float | None] = {}
-        for r in json.loads(manifest.read_text()):
-            if r.get("role", config.CLIP_ROLE_DEFAULT) == "test-real":
-                continue  # D-027(b): never an input of generated tasks
-            if r.get("restricted"):
-                continue  # licence unverified: no generated task, in any split, until the owner confirms
+        for r in visible_records(manifest):
             p = r["probe"]
             v = next((s for s in p["streams"] if s["type"] == "video"), None)
             w, h = display_size(v) if v else (0, 0)

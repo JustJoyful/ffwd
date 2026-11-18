@@ -1,0 +1,235 @@
+{
+ "attempts": 16817,
+ "corpus_manifest_sha256": "7055b86b3308c377c88c005550ee4a701b0f969cc2b7a10d2d0eb5957e6c5d19",
+ "dropped": {
+  "duplicate": 7504,
+  "no_draft": 976,
+  "verify_failed:F1": 5,
+  "verify_failed:F1+F10": 3,
+  "verify_failed:F1+F10+F4": 1,
+  "verify_failed:F1+F12+F5": 2,
+  "verify_failed:F1+F12+F5+F9": 1,
+  "verify_failed:F1+F5": 7,
+  "verify_failed:F1+F5+F12": 2,
+  "verify_failed:F1+F5+F9": 1,
+  "verify_failed:F1+F9": 1,
+  "verify_failed:F1+F9+F12+F5": 1,
+  "verify_failed:F1+F9+F5": 1,
+  "verify_failed:F10": 4,
+  "verify_failed:F10+F1": 1,
+  "verify_failed:F10+F1+F4": 2,
+  "verify_failed:F10+F4": 1,
+  "verify_failed:F12+F1+F9+F5": 2,
+  "verify_failed:F12+F5+F1": 2,
+  "verify_failed:F12+F9+F1+F5": 1,
+  "verify_failed:F2+F3+F4": 5,
+  "verify_failed:F2+F4": 5,
+  "verify_failed:F2+F4+F3": 4,
+  "verify_failed:F2+F4+F9": 1,
+  "verify_failed:F2+F9": 23,
+  "verify_failed:F2+F9+F4": 1,
+  "verify_failed:F3": 1,
+  "verify_failed:F3+F12+F4+F1": 1,
+  "verify_failed:F4+F1+F10": 1,
+  "verify_failed:F4+F10": 1,
+  "verify_failed:F4+F10+F1": 1,
+  "verify_failed:F4+F12+F5+F1": 1,
+  "verify_failed:F5+F1": 21,
+  "verify_failed:F5+F1+F12": 2,
+  "verify_failed:F5+F12+F1": 1,
+  "verify_failed:F5+F9+F1": 2,
+  "verify_failed:F5+F9+F4+F12": 1,
+  "verify_failed:F6": 5,
+  "verify_failed:F9+F1+F5": 1,
+  "verify_failed:F9+F12+F5+F1": 1,
+  "verify_failed:F9+F4+F12+F5": 1,
+  "verify_failed:F9+F5+F1": 1,
+  "verify_failed:F9+F5+F12+F1": 1
+ },
+ "generator_version": "1.0",
+ "git_commit": "8f68b9e1631bbff9716daf8c854a47af810caca5",
+ "heldout_combos": [
+  [
+   "F3",
+   "F4"
+  ],
+  [
+   "F5",
+   "F12"
+  ],
+  [
+   "F1",
+   "F8"
+  ],
+  [
+   "F4",
+   "F10"
+  ],
+  [
+   "F6",
+   "F9"
+  ],
+  [
+   "F9",
+   "F12"
+  ],
+  [
+   "F1",
+   "F4",
+   "F6"
+  ]
+ ],
+ "heldout_styles": [
+  "context_first",
+  "indirect"
+ ],
+ "seed": 20261116,
+ "splits": {
+  "dev": {
+   "ambiguous": 2,
+   "contents": 300,
+   "difficulty": {
+    "1": 72,
+    "2": 127,
+    "3": 71,
+    "4": 30
+   },
+   "families": {
+    "F1": 171,
+    "F10": 26,
+    "F11": 1,
+    "F12": 97,
+    "F2": 26,
+    "F3": 50,
+    "F4": 116,
+    "F5": 34,
+    "F6": 22,
+    "F7": 12,
+    "F8": 10,
+    "F9": 85,
+    "unsupported": 9
+   },
+   "sha256": "784c8017f96275cd952133a2ab6065218cdd10c8e548d5d48a3255e575ac2585",
+   "target": 300,
+   "tasks": 300,
+   "unsupported": 9
+  },
+  "test-compositional": {
+   "ambiguous": 0,
+   "contents": 200,
+   "difficulty": {
+    "2": 190,
+    "3": 10
+   },
+   "families": {
+    "F1": 46,
+    "F10": 38,
+    "F12": 65,
+    "F3": 26,
+    "F4": 74,
+    "F5": 29,
+    "F6": 35,
+    "F8": 36,
+    "F9": 61
+   },
+   "sha256": "19f599f1c570a19f7d41925dc4e1fa0232e3118f7defaadb71ef4faa50f17c9e",
+   "target": 200,
+   "tasks": 200,
+   "unsupported": 0
+  },
+  "test-iid": {
+   "ambiguous": 20,
+   "contents": 500,
+   "difficulty": {
+    "1": 177,
+    "2": 195,
+    "3": 105,
+    "4": 23
+   },
+   "families": {
+    "F1": 221,
+    "F10": 47,
+    "F11": 10,
+    "F12": 149,
+    "F2": 32,
+    "F3": 58,
+    "F4": 162,
+    "F5": 80,
+    "F6": 31,
+    "F7": 25,
+    "F8": 11,
+    "F9": 126,
+    "unsupported": 22
+   },
+   "sha256": "bd01e887c032921949e1eb6f373fd41164e72ac6b956424ed0a55e7bd1f83470",
+   "target": 500,
+   "tasks": 500,
+   "unsupported": 22
+  },
+  "test-phrasing": {
+   "ambiguous": 14,
+   "contents": 200,
+   "difficulty": {
+    "1": 98,
+    "2": 64,
+    "3": 32,
+    "4": 6
+   },
+   "families": {
+    "F1": 85,
+    "F10": 18,
+    "F11": 8,
+    "F12": 46,
+    "F2": 15,
+    "F3": 29,
+    "F4": 49,
+    "F5": 28,
+    "F6": 13,
+    "F7": 6,
+    "F8": 2,
+    "F9": 37,
+    "unsupported": 10
+   },
+   "sha256": "86188225ded5abb8749690e465a7079c6900272ede113e3c10e3d7ee6748212e",
+   "target": 200,
+   "tasks": 200,
+   "unsupported": 10
+  },
+  "train": {
+   "ambiguous": 201,
+   "contents": 1500,
+   "difficulty": {
+    "1": 2113,
+    "2": 1439,
+    "3": 755,
+    "4": 165
+   },
+   "families": {
+    "F1": 1784,
+    "F10": 389,
+    "F11": 100,
+    "F12": 1076,
+    "F2": 371,
+    "F3": 478,
+    "F4": 1199,
+    "F5": 557,
+    "F6": 320,
+    "F7": 189,
+    "F8": 120,
+    "F9": 1027,
+    "unsupported": 306
+   },
+   "sha256": "1651d8addfc901ef5189c46fa97e7ba9f93010c887537293cb4f9dc12382e6aa",
+   "target": 4500,
+   "tasks": 4472,
+   "unsupported": 306
+  }
+ },
+ "train_styles": [
+  "terse",
+  "polite",
+  "verbose",
+  "symptom",
+  "casual_typos"
+ ]
+}

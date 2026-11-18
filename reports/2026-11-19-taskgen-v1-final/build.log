@@ -1,0 +1,54 @@
+round 0: verifying 120; have train=0/1500, dev=0/300, test-iid=0/500, test-compositional=0/200, test-phrasing=0/200
+round 1: verifying 120; have train=76/1500, dev=4/300, test-iid=18/500, test-compositional=5/200, test-phrasing=8/200
+round 2: verifying 120; have train=149/1500, dev=7/300, test-iid=39/500, test-compositional=11/200, test-phrasing=22/200
+round 3: verifying 120; have train=226/1500, dev=12/300, test-iid=54/500, test-compositional=18/200, test-phrasing=35/200
+round 4: verifying 120; have train=304/1500, dev=17/300, test-iid=73/500, test-compositional=23/200, test-phrasing=46/200
+round 5: verifying 120; have train=376/1500, dev=25/300, test-iid=88/500, test-compositional=30/200, test-phrasing=61/200
+round 6: verifying 120; have train=449/1500, dev=34/300, test-iid=100/500, test-compositional=44/200, test-phrasing=69/200
+round 7: verifying 120; have train=528/1500, dev=42/300, test-iid=117/500, test-compositional=51/200, test-phrasing=74/200
+round 8: verifying 120; have train=603/1500, dev=46/300, test-iid=133/500, test-compositional=61/200, test-phrasing=86/200
+round 9: verifying 120; have train=679/1500, dev=50/300, test-iid=150/500, test-compositional=67/200, test-phrasing=100/200
+round 10: verifying 120; have train=750/1500, dev=54/300, test-iid=162/500, test-compositional=76/200, test-phrasing=114/200
+round 11: verifying 120; have train=826/1500, dev=62/300, test-iid=175/500, test-compositional=91/200, test-phrasing=118/200
+round 12: verifying 120; have train=898/1500, dev=66/300, test-iid=195/500, test-compositional=103/200, test-phrasing=128/200
+round 13: verifying 120; have train=966/1500, dev=74/300, test-iid=212/500, test-compositional=114/200, test-phrasing=139/200
+round 14: verifying 120; have train=1038/1500, dev=78/300, test-iid=223/500, test-compositional=132/200, test-phrasing=147/200
+round 15: verifying 120; have train=1112/1500, dev=85/300, test-iid=234/500, test-compositional=142/200, test-phrasing=162/200
+round 16: verifying 120; have train=1178/1500, dev=91/300, test-iid=253/500, test-compositional=156/200, test-phrasing=175/200
+round 17: verifying 120; have train=1249/1500, dev=95/300, test-iid=270/500, test-compositional=170/200, test-phrasing=182/200
+round 18: verifying 120; have train=1323/1500, dev=99/300, test-iid=286/500, test-compositional=178/200, test-phrasing=195/200
+round 19: verifying 120; have train=1400/1500, dev=107/300, test-iid=298/500, test-compositional=185/200, test-phrasing=200/200
+round 20: verifying 63; have train=1478/1500, dev=114/300, test-iid=315/500, test-compositional=196/200, test-phrasing=200/200
+round 21: verifying 41; have train=1498/1500, dev=126/300, test-iid=338/500, test-compositional=200/200, test-phrasing=200/200
+round 22: verifying 34; have train=1500/1500, dev=136/300, test-iid=362/500, test-compositional=200/200, test-phrasing=200/200
+round 23: verifying 33; have train=1500/1500, dev=146/300, test-iid=385/500, test-compositional=200/200, test-phrasing=200/200
+round 24: verifying 33; have train=1500/1500, dev=157/300, test-iid=406/500, test-compositional=200/200, test-phrasing=200/200
+round 25: verifying 40; have train=1500/1500, dev=166/300, test-iid=430/500, test-compositional=200/200, test-phrasing=200/200
+round 26: verifying 33; have train=1500/1500, dev=182/300, test-iid=452/500, test-compositional=200/200, test-phrasing=200/200
+round 27: verifying 23; have train=1500/1500, dev=186/300, test-iid=478/500, test-compositional=200/200, test-phrasing=200/200
+round 28: verifying 12; have train=1500/1500, dev=190/300, test-iid=497/500, test-compositional=200/200, test-phrasing=200/200
+round 29: verifying 5; have train=1500/1500, dev=199/300, test-iid=499/500, test-compositional=200/200, test-phrasing=200/200
+round 30: verifying 4; have train=1500/1500, dev=203/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 31: verifying 14; have train=1500/1500, dev=206/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 32: verifying 7; have train=1500/1500, dev=220/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 33: verifying 6; have train=1500/1500, dev=226/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 34: verifying 6; have train=1500/1500, dev=232/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 35: verifying 8; have train=1500/1500, dev=237/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 36: verifying 5; have train=1500/1500, dev=245/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 37: verifying 8; have train=1500/1500, dev=250/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 38: verifying 5; have train=1500/1500, dev=258/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 39: verifying 9; have train=1500/1500, dev=263/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 40: verifying 3; have train=1500/1500, dev=272/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 41: verifying 4; have train=1500/1500, dev=275/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 42: verifying 8; have train=1500/1500, dev=278/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 43: verifying 11; have train=1500/1500, dev=286/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 44: verifying 2; have train=1500/1500, dev=297/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 45: verifying 2; have train=1500/1500, dev=298/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+round 46: verifying 1; have train=1500/1500, dev=299/300, test-iid=500/500, test-compositional=200/200, test-phrasing=200/200
+train 4472 tasks 1500 contents {1: 2113, 2: 1439, 3: 755, 4: 165}
+dev 300 tasks 300 contents {1: 72, 2: 127, 3: 71, 4: 30}
+test-iid 500 tasks 500 contents {1: 177, 2: 195, 3: 105, 4: 23}
+test-compositional 200 tasks 200 contents {2: 190, 3: 10}
+test-phrasing 200 tasks 200 contents {1: 98, 2: 64, 3: 32, 4: 6}
+dropped: {'no_draft': 976, 'duplicate': 7504, 'verify_failed:F6': 5, 'verify_failed:F1+F12+F5': 2, 'verify_failed:F1+F5': 7, 'verify_failed:F10': 4, 'verify_failed:F4+F10': 1, 'verify_failed:F3': 1, 'verify_failed:F1': 5, 'verify_failed:F2+F9': 23, 'verify_failed:F1+F9': 1, 'verify_failed:F5+F1': 21, 'verify_failed:F1+F10': 3, 'verify_failed:F10+F4': 1, 'verify_failed:F1+F9+F5': 1, 'verify_failed:F4+F1+F10': 1, 'verify_failed:F2+F4': 5, 'verify_failed:F5+F12+F1': 1, 'verify_failed:F1+F5+F12': 2, 'verify_failed:F1+F12+F5+F9': 1, 'verify_failed:F2+F3+F4': 5, 'verify_failed:F5+F1+F12': 2, 'verify_failed:F2+F4+F3': 4, 'verify_failed:F5+F9+F1': 2, 'verify_failed:F12+F1+F9+F5': 2, 'verify_failed:F4+F12+F5+F1': 1, 'verify_failed:F1+F5+F9': 1, 'verify_failed:F10+F1+F4': 2, 'verify_failed:F9+F5+F12+F1': 1, 'verify_failed:F12+F9+F1+F5': 1, 'verify_failed:F3+F12+F4+F1': 1, 'verify_failed:F1+F10+F4': 1, 'verify_failed:F10+F1': 1, 'verify_failed:F9+F1+F5': 1, 'verify_failed:F9+F4+F12+F5': 1, 'verify_failed:F12+F5+F1': 2, 'verify_failed:F4+F10+F1': 1, 'verify_failed:F2+F9+F4': 1, 'verify_failed:F1+F9+F12+F5': 1, 'verify_failed:F9+F5+F1': 1, 'verify_failed:F9+F12+F5+F1': 1, 'verify_failed:F2+F4+F9': 1, 'verify_failed:F5+F9+F4+F12': 1}
+exit 0

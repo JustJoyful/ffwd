@@ -1,0 +1,23 @@
+{
+ "milestone": "final Phase 1 splits: protocol 0.3.0, F3 webm VP8+VP9, probes from the pinned ffprobe, corpus hash over generation-visible clips",
+ "git_commit": "8f68b9e1631bbff9716daf8c854a47af810caca5",
+ "git_dirty": true,
+ "ffmpeg": "5.1.1-static (pinned, enforced)",
+ "taskgen_seed": 20261116,
+ "corpus_manifest_sha256": "7055b86b3308c377c88c005550ee4a701b0f969cc2b7a10d2d0eb5957e6c5d19",
+ "split_sha256": {
+  "dev": "784c8017f96275cd952133a2ab6065218cdd10c8e548d5d48a3255e575ac2585",
+  "test-compositional": "19f599f1c570a19f7d41925dc4e1fa0232e3118f7defaadb71ef4faa50f17c9e",
+  "test-iid": "bd01e887c032921949e1eb6f373fd41164e72ac6b956424ed0a55e7bd1f83470",
+  "test-phrasing": "86188225ded5abb8749690e465a7079c6900272ede113e3c10e3d7ee6748212e",
+  "train": "1651d8addfc901ef5189c46fa97e7ba9f93010c887537293cb4f9dc12382e6aa"
+ },
+ "previous_split_sha256": {
+  "dev": "635c5bd9bbf7919a995cf8cfee8622ac168073837f0e6b585c477580a0193a81",
+  "test-compositional": "533dc8702cd0f06d7685730ed9c12940093b308ebf1c941e788d519dce8bb731",
+  "test-iid": "eec486876eb5ac1bd13c8b8b7b87aea7f5331470a722b52be6970cfef79bc3b4",
+  "test-phrasing": "62f2711640ceb882692a93b01dc31bec1712440c27a41ed715a92c513f5783d3",
+  "train": "66992faa310656864568d1da01db26abb07559c36286e699564368a8b9dc0fe3"
+ },
+ "paid_cost_usd": 0.0
+}
