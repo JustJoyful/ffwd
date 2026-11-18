@@ -108,3 +108,10 @@ Needed before: the teacher bulk run (G2). Owner asked to propose, not start.
 3. Distributing a GPL binary (Phase 3 helper) needs the corresponding source offer; the repo is GPL-3.0 (D-016), so this is fine but must be written down.
 
 **Recommendation.** Write and run the parity test first (every conformance case on native 5.1.1 and ffmpeg.wasm 5.1.4, checker results compared). If it passes, the 5.1.1 pin is enough for Phase 1 and the 5.1.4 build can wait until Phase 3 (helper distribution), where a reproducible CI build is wanted anyway. Build 5.1.4 now only if the parity test finds a patch-level difference or you want the exact-version claim before G2.
+
+## 19 Nov 2026 (evening): pin active, protocol 0.3.0, splits final, prompt frozen, pilot done, STOPPED at the pilot gate
+- Commits: f175332 corpus ingest, 9046422 pin + rebuild, 8f68b9e protocol 0.3.0, 912fe29 final splits, e19b88b terms snapshot, e8c32c0 prompt freeze (D-034), 5831cc1 pilot + X1 dev, 9ef5543 decoder-thread cap + parity.
+- Splits (final, seed 20261115, FFmpeg 5.1.1-static): train 4472 / dev 300 / test-iid 500 / test-compositional 200 / test-phrasing 200 (`reports/2026-11-19-taskgen-v1-final/`). New test-real clips change no split.
+- Native 5.1.1 vs ffmpeg.wasm 5.1.4: 48/48 conformance recipes at parity; the 5.1.4 build is not needed for Phase 1 (`reports/2026-11-19-parity-.../run4-fresh-build`).
+- Teacher: terms snapshot taken and pinned; prompt v1 frozen; X1 dev 58/60 (gate 82%); pilot 19/20 kept, cache-hit 84%, $0.0125. **Stopped before bulk: the 10-trajectory hand-read found (1) invalid-action turns in 5/19 kept trajectories (SFT now drops them) and (2) a wrong `nearest_supported` that the scorer does not check (owner decision a/b/c, see `reports/2026-11-19-teacher-pilot/summary.md`).**
+- Spend: $0.112 of $4. Not done / waiting: owner decision on the pilot findings, pricing-page re-check before bulk, Kaggle kill-and-resume confirmation (Hub evidence from 17 Nov shows a clean resume) for SFT on Kaggle, GRPO (G3), test run (G4).
