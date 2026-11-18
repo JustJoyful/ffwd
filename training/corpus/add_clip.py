@@ -27,6 +27,10 @@ def add_clip(
     source: str,
     role: str,
     corpus_dir: Path = config.CORPUS_DIR,
+    *,
+    tags: tuple[str, ...] = (),
+    known_offset_ms: float | None = None,
+    extra: dict | None = None,
 ) -> dict:
     if role not in config.CLIP_ROLES:
         raise ValueError(
@@ -50,6 +54,9 @@ def add_clip(
         "source": source,
         "role": role,
         "probe": probe(dest),
+        "tags": list(tags),
+        "known_offset_ms": known_offset_ms,
+        **(extra or {}),
     }
     manifest.write_text(json.dumps([*records, record], indent=2) + "\n")
     return record

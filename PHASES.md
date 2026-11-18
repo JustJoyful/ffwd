@@ -62,7 +62,7 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 
 ### Tasks
 - [ ] Task generator v1: templates for F1–F12, compositions (2–4 families), ambiguous/unsupported flags, paraphrases; **hash-pinned splits**
-- [ ] Corpus v1 (licence-clean, manifested); checker v1 (loudness, frame interval/count, offset, quality floor)
+- [ ] Corpus v1 (licence-clean, manifested; **any extra real clips (own recordings, real VFR/HDR) must be ingested BEFORE teacher generation: adding a clip changes the corpus hash and rebuilds every split, which would invalidate teacher data built on the old splits**); checker v1 (loudness, frame interval/count, offset, quality floor)
 - [ ] Conformance suite v1 (golden cases that both the Python and later TS checkers must pass)
 - [ ] Teacher generation: budget-guarded DeepSeek client; off-peak bulk on `train`; keep **only check-passing** trajectories; data card
 - [ ] Rejection sampling for easy tasks from base Qwen3 (free)

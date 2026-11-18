@@ -62,6 +62,10 @@ Target resume bullets (fill with real numbers at the end):
 
 ---
 
+## Known limitations
+- **No real VFR or HDR input in test-real.** The real clips (`test-real`) are 3 own recordings; none is variable-frame-rate in the sense of a low-light phone clip, and none is HDR (the files supplied as "HDR PQ" are 8-bit h264 with no colour tags, so they were not labelled HDR). A synthetic VFR clip exists (`h264_vfr`) and trains/dev-tests VFR handling, but results on real VFR or HDR footage are untested.
+- Most real downloaded clips come from one film (Tears of Steel), so scene content is narrower than the clip count suggests.
+
 ## Licence
 
 The project is open source under **GPL-3.0** (see DECISIONS D-016), because the browser build ships an FFmpeg core containing GPL components. Model weights are released under terms compatible with the base model's licence (verify the Qwen3 licence at release time).

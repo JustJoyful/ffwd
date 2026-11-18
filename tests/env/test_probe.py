@@ -34,3 +34,15 @@ def test_display_size_swaps_on_rotation():
 def test_probe_missing_file_raises(tmp_path: Path):
     with pytest.raises(FileNotFoundError):
         probe(tmp_path / "nope.mp4")
+
+
+def test_stream_fps_falls_back_to_r_frame_rate_when_the_average_is_junk():
+    from training.env.probe import stream_fps
+
+    assert (
+        stream_fps({"avg_frame_rate": "30000/1", "r_frame_rate": "60/1"}) == 60.0
+    )  # BBB webm header
+    assert stream_fps(
+        {"avg_frame_rate": "75960000/1275383", "r_frame_rate": "59/1"}
+    ) == pytest.approx(59.56, abs=0.01)
+    assert stream_fps({"avg_frame_rate": "0/0", "r_frame_rate": "25/1"}) == 25.0

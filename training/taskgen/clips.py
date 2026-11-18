@@ -32,6 +32,8 @@ class ClipIndex:
         for r in json.loads(manifest.read_text()):
             if r.get("role", config.CLIP_ROLE_DEFAULT) == "test-real":
                 continue  # D-027(b): never an input of generated tasks
+            if r.get("restricted"):
+                continue  # licence unverified: no generated task, in any split, until the owner confirms
             p = r["probe"]
             v = next((s for s in p["streams"] if s["type"] == "video"), None)
             w, h = display_size(v) if v else (0, 0)

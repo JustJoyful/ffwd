@@ -38,3 +38,11 @@ def test_add_clip_requires_an_explicit_valid_role(corpus, tmp_path):
     src = next(iter(corpus.values()))
     with pytest.raises(ValueError, match="role"):
         add_clip(src, "mine1", "own, CC0", "owner", "whatever", corpus_dir=tmp_path)
+
+
+def test_no_restricted_clip_in_any_task_file():
+    """Licence-unverified clips (manifest `restricted: true`) never feed any generated or hand-written task."""
+    records = json.loads((config.CORPUS_DIR / "manifest.json").read_text())
+    restricted = {r["id"] for r in records if r.get("restricted")}
+    assert restricted  # the guard is not vacuous: meridian_4k is restricted
+    assert violations(config.DATA_DIR / "tasks", restricted) == []

@@ -289,12 +289,16 @@ def f10(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | N
 
 @family("F11")
 def f11(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | None:
-    baked = ci.pool(audio=True, only_tags=("av_offset",))
+    # av_skew clips carry inherent first-packet skew from a copy cut; the checker's offset window is absolute
+    # (+-40 ms), so a plain-clip gold of 0 ms or a baked 500 ms would not hold on them.
+    baked = ci.pool(audio=True, only_tags=("av_offset",), exclude_tags=("av_skew",))
     plain = [
         c
         for c in _h264(ci, audio=True, min_s=2)
-        if c.known_offset_ms is None and c.container == "mov"
+        if c.known_offset_ms is None and c.container == "mov" and "av_skew" not in c.tags
     ]
+    if not baked or not plain:
+        return None
     if rng.random() < 0.4:
         c = rng.choice(baked)
         late = c.known_offset_ms > 0  # audio starts after the video

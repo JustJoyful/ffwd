@@ -81,6 +81,8 @@ LOUDNESS_TOLERANCE_LU = 2.0
 # early = exactly one AAC frame of encoder priming (1024 samples at 48 kHz). The window of OFFSET_PACKET_WINDOW
 # packets absorbs B-frame reordering. 40 ms covers that priming with margin and stays well under the ~100 ms
 # humans notice and the 200-500 ms offsets F11 requests, so a wrong shift cannot pass.
+# Above this, ffprobe's avg_frame_rate is container junk (seen: 30000/1 on a 60 fps VP8 webm); use r_frame_rate.
+PROBE_MAX_FPS = 1000.0
 OFFSET_PACKET_WINDOW = 16
 OFFSET_TOLERANCE_MS = 40.0
 # Quality floor for size-target outputs that keep the input's timeline and framing (training/env/quality.py).

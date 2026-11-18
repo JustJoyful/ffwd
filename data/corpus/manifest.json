@@ -865,5 +865,1333 @@
       "portrait"
     ],
     "known_offset_ms": null
+  },
+  {
+    "id": "tos_land",
+    "file": "tos_land.mov",
+    "sha256": "2f930e6d2b34d285d06a555e020cb0a2a0b9d2436db6711117aaeb9ea6aabe71",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 12.717611,
+      "size_bytes": 6598707,
+      "bit_rate": 4150909,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.050944,
+          "duration_s": 12.666667
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 12.69551
+        }
+      ]
+    },
+    "tags": [
+      "h264_landscape",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "measured_offset_ms": -50.9,
+    "provenance": {
+      "source_file": "_extract/tos_mov/tears_of_steel_1080p.mov",
+      "source_sha256": "99486359be7e3681168a0fe94e1cbb0284c48b57b2a3ce7df4fa75e185987a15",
+      "archive": {
+        "name": "tears_of_steel_1080p.mov.zip",
+        "sha256": "d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5"
+      },
+      "cut_start_s": 60,
+      "cut_duration_s": 12,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "60",
+        "-i",
+        "{videos}/_extract/tos_mov/tears_of_steel_1080p.mov",
+        "-t",
+        "12",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_mrg_a",
+    "file": "tos_mrg_a.mov",
+    "sha256": "aaa38f11274c10ec68df343c8262c5c83399fc80729dc7517316258e38e515cc",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 7.542969,
+      "size_bytes": 6164559,
+      "bit_rate": 6538071,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.042969,
+          "duration_s": 7.5
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 7.523265
+        }
+      ]
+    },
+    "tags": [
+      "merge_part",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "measured_offset_ms": -43.0,
+    "provenance": {
+      "source_file": "_extract/tos_mov/tears_of_steel_1080p.mov",
+      "source_sha256": "99486359be7e3681168a0fe94e1cbb0284c48b57b2a3ce7df4fa75e185987a15",
+      "archive": {
+        "name": "tears_of_steel_1080p.mov.zip",
+        "sha256": "d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5"
+      },
+      "cut_start_s": 150,
+      "cut_duration_s": 7,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "150",
+        "-i",
+        "{videos}/_extract/tos_mov/tears_of_steel_1080p.mov",
+        "-t",
+        "7",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_mrg_b",
+    "file": "tos_mrg_b.mov",
+    "sha256": "b1f1e7088defa9c2371474781bef74b44746a499a0cd070a9e73b09d3d2dda66",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 7.600098,
+      "size_bytes": 6404689,
+      "bit_rate": 6741690,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.058431,
+          "duration_s": 7.541667
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 7.57551
+        }
+      ]
+    },
+    "tags": [
+      "merge_part",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "measured_offset_ms": -58.4,
+    "provenance": {
+      "source_file": "_extract/tos_mov/tears_of_steel_1080p.mov",
+      "source_sha256": "99486359be7e3681168a0fe94e1cbb0284c48b57b2a3ce7df4fa75e185987a15",
+      "archive": {
+        "name": "tears_of_steel_1080p.mov.zip",
+        "sha256": "d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5"
+      },
+      "cut_start_s": 300,
+      "cut_duration_s": 7,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "300",
+        "-i",
+        "{videos}/_extract/tos_mov/tears_of_steel_1080p.mov",
+        "-t",
+        "7",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_mrg_c",
+    "file": "tos_mrg_c.mov",
+    "sha256": "65b9b195326e4a8ee85f28416e83e95605be31e782b92244df56200cd343e1b9",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 7.709473,
+      "size_bytes": 6428355,
+      "bit_rate": 6670603,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.042806,
+          "duration_s": 7.666667
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 7.68
+        }
+      ]
+    },
+    "tags": [
+      "merge_part",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "measured_offset_ms": -42.8,
+    "provenance": {
+      "source_file": "_extract/tos_mov/tears_of_steel_1080p.mov",
+      "source_sha256": "99486359be7e3681168a0fe94e1cbb0284c48b57b2a3ce7df4fa75e185987a15",
+      "archive": {
+        "name": "tears_of_steel_1080p.mov.zip",
+        "sha256": "d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5"
+      },
+      "cut_start_s": 450,
+      "cut_duration_s": 7,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "450",
+        "-i",
+        "{videos}/_extract/tos_mov/tears_of_steel_1080p.mov",
+        "-t",
+        "7",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_cine",
+    "file": "tos_cine.mov",
+    "sha256": "47d2df5470702aa84599e93d1c8d43805242fb5be38c731ca0a42134a90bf38b",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 10.629476,
+      "size_bytes": 8904067,
+      "bit_rate": 6701415,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.046143,
+          "duration_s": 10.583333
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 10.605714
+        }
+      ]
+    },
+    "tags": [
+      "cinema_aspect",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "measured_offset_ms": -46.1,
+    "provenance": {
+      "source_file": "_extract/tos_mov/tears_of_steel_1080p.mov",
+      "source_sha256": "99486359be7e3681168a0fe94e1cbb0284c48b57b2a3ce7df4fa75e185987a15",
+      "archive": {
+        "name": "tears_of_steel_1080p.mov.zip",
+        "sha256": "d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5"
+      },
+      "cut_start_s": 560,
+      "cut_duration_s": 10,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "560",
+        "-i",
+        "{videos}/_extract/tos_mov/tears_of_steel_1080p.mov",
+        "-t",
+        "10",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_720_mrg",
+    "file": "tos_720_mrg.mov",
+    "sha256": "8d30c9b69e1c30ff7d904393a5008c0b9472315b968f217bd0424b1708b9a6c9",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_720p.mov",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 10.384603,
+      "size_bytes": 5483146,
+      "bit_rate": 4224058,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1280,
+          "height": 534,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.05127,
+          "duration_s": 10.333333
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 10.34449
+        }
+      ]
+    },
+    "tags": [
+      "merge_mismatch",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_720p.mov",
+    "measured_offset_ms": -51.3,
+    "provenance": {
+      "source_file": "tears_of_steel_720p.mov",
+      "source_sha256": "efa9062d9cdb7a338e40ad530dfdf234806743f29ae6a1a136b97ece4e588e8f",
+      "archive": null,
+      "cut_start_s": 100,
+      "cut_duration_s": 10,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "100",
+        "-i",
+        "{videos}/tears_of_steel_720p.mov",
+        "-t",
+        "10",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_webm",
+    "file": "tos_webm.webm",
+    "sha256": "545db15741a85d725ae82b5cecf58265979545792a77b50c8c9a816233078809",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.webm.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "matroska,webm",
+      "duration_s": 11.511,
+      "size_bytes": 8285642,
+      "bit_rate": 5758416,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "vp8",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": null
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "vorbis",
+          "sample_rate": 48000,
+          "channels": 2,
+          "start_time_s": 0.004,
+          "duration_s": null
+        }
+      ]
+    },
+    "tags": [
+      "webm",
+      "vp8"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.webm.zip",
+    "measured_offset_ms": 4.0,
+    "provenance": {
+      "source_file": "_extract/tos_webm/tears_of_steel_1080p.webm",
+      "source_sha256": "328253280a05e6b14a92f1f43d818d9b7d38ab5d3f6d5d98606198fd3daef2ff",
+      "archive": {
+        "name": "tears_of_steel_1080p.webm.zip",
+        "sha256": "992ce5ea61b17f0e1b1c0ad8912bc6dd351a6ee7cf4c1612916e6f1a2442619a"
+      },
+      "cut_start_s": 200,
+      "cut_duration_s": 10,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "200",
+        "-i",
+        "{videos}/_extract/tos_webm/tears_of_steel_1080p.webm",
+        "-t",
+        "10",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "bbb_4k",
+    "file": "bbb_4k.webm",
+    "sha256": "eb9c6f5043b3f68d01210d8d778a1b7245fed8c7eaf1e70e8c765589e782b0dd",
+    "licence": "CC BY 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Big_Buck_Bunny_4K.webm",
+    "role": "taskgen",
+    "probe": {
+      "container": "matroska,webm",
+      "duration_s": 15.008,
+      "size_bytes": 66503767,
+      "bit_rate": 35449769,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "vp8",
+          "width": 4000,
+          "height": 2250,
+          "fps": 60.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": null
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "vorbis",
+          "sample_rate": 48000,
+          "channels": 6,
+          "start_time_s": 0.006,
+          "duration_s": null
+        }
+      ]
+    },
+    "tags": [
+      "4k",
+      "high_fps",
+      "webm",
+      "vp8",
+      "surround_5_1"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | peach.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://commons.wikimedia.org/wiki/File:Big_Buck_Bunny_4K.webm",
+    "measured_offset_ms": 6.0,
+    "provenance": {
+      "source_file": "Big_Buck_Bunny_4K.webm",
+      "source_sha256": "ff388098b2daf9f3a7d24816e55a76ced338bfa709025c2eee5d27fb5bf5b9be",
+      "archive": null,
+      "cut_start_s": 14.22,
+      "cut_duration_s": 15,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "14.22",
+        "-i",
+        "{videos}/Big_Buck_Bunny_4K.webm",
+        "-t",
+        "15",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "meridian_4k",
+    "file": "meridian_4k.mp4",
+    "sha256": "faa26a1c625baddb28eb0a681a17a2a063b7e7216a95022912780e6757bb4564",
+    "licence": "UNVERIFIED: Netflix Open Content says CC BY 4.0, Wikipedia says CC BY-NC-ND 4.0",
+    "source": "downloaded",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 13.029683,
+      "size_bytes": 14367203,
+      "bit_rate": 8821214,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 3840,
+          "height": 2160,
+          "fps": 59.94005994005994,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.033367,
+          "duration_s": 13.029683
+        }
+      ]
+    },
+    "tags": [
+      "high_fps",
+      "no_audio"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": true,
+    "attribution": "Netflix Open Content (Meridian)",
+    "consent": null,
+    "parent": null,
+    "source_url": null,
+    "measured_offset_ms": null,
+    "provenance": {
+      "source_file": "Meridian_UHD4k5994_HDR_P3PQ.mp4",
+      "source_sha256": "e14ff5ab8ce4cc90269e8ed45babcf6e25d7a073b71438b3e7ffee5901a7177e",
+      "archive": null,
+      "cut_start_s": 300,
+      "cut_duration_s": 12,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "300",
+        "-i",
+        "{videos}/Meridian_UHD4k5994_HDR_P3PQ.mp4",
+        "-t",
+        "12",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "hevc_phone",
+    "file": "hevc_phone.mp4",
+    "sha256": "147f83a45ef48baa4efe3188ea5da805145e169d9765f9b23e5aeb76e9d65e2f",
+    "licence": "own recording (owner Joydeep Das)",
+    "source": "own-recording",
+    "role": "test-real",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 14.186667,
+      "size_bytes": 125440475,
+      "bit_rate": 70737108,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "hevc",
+          "width": 3840,
+          "height": 2160,
+          "fps": 60.07097587916866,
+          "pix_fmt": "yuv420p",
+          "rotation": 90,
+          "start_time_s": 0.0,
+          "duration_s": 14.1832
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 14.186667
+        }
+      ]
+    },
+    "tags": [
+      "hevc_portrait",
+      "hevc",
+      "rotation",
+      "portrait"
+    ],
+    "known_offset_ms": null,
+    "origin": "own-recording",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "Joydeep Das",
+    "consent": null,
+    "parent": null,
+    "source_url": null,
+    "measured_offset_ms": 0.0,
+    "provenance": {
+      "source_file": "hevc-check.mp4",
+      "source_sha256": "147f83a45ef48baa4efe3188ea5da805145e169d9765f9b23e5aeb76e9d65e2f",
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": null,
+      "ffmpeg_version": null
+    },
+    "gold": null
+  },
+  {
+    "id": "screen_rec",
+    "file": "screen_rec.mp4",
+    "sha256": "ca91c71cd546806a39ac45f751eb65b6a8f4e4dbfbb3d5f0c8ef8add99d12cc8",
+    "licence": "own recording (owner Joydeep Das)",
+    "source": "own-recording",
+    "role": "test-real",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 12.05,
+      "size_bytes": 2508159,
+      "bit_rate": 1665167,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 1080,
+          "fps": 60.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 12.05
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 12.032
+        }
+      ]
+    },
+    "tags": [
+      "silent_audio"
+    ],
+    "known_offset_ms": null,
+    "origin": "own-recording",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "Joydeep Das",
+    "consent": null,
+    "parent": null,
+    "source_url": null,
+    "measured_offset_ms": -21.3,
+    "provenance": {
+      "source_file": "browsing--desktop-noaudio.mp4",
+      "source_sha256": "ca91c71cd546806a39ac45f751eb65b6a8f4e4dbfbb3d5f0c8ef8add99d12cc8",
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": null,
+      "ffmpeg_version": null
+    },
+    "gold": null
+  },
+  {
+    "id": "wa_compressed",
+    "file": "wa_compressed.mp4",
+    "sha256": "96a6ec942280275cf15fe0c9cf62b72118591785ea71d92f08bffd5dbd5eebca",
+    "licence": "own recording (owner Joydeep Das)",
+    "source": "own-recording",
+    "role": "test-real",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 14.170922,
+      "size_bytes": 3413187,
+      "bit_rate": 1926867,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 478,
+          "height": 850,
+          "fps": 59.55857965803214,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.0,
+          "duration_s": 14.170922
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 14.153896
+        }
+      ]
+    },
+    "tags": [
+      "already_compressed",
+      "portrait"
+    ],
+    "known_offset_ms": null,
+    "origin": "own-recording",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "Joydeep Das",
+    "consent": "friend agreed",
+    "parent": null,
+    "source_url": null,
+    "measured_offset_ms": 0.0,
+    "provenance": {
+      "source_file": "already-compressed-whatsapp.mp4",
+      "source_sha256": "96a6ec942280275cf15fe0c9cf62b72118591785ea71d92f08bffd5dbd5eebca",
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": null,
+      "ffmpeg_version": null
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_base",
+    "file": "tos_base.mov",
+    "sha256": "63d04c80df0ffa624832bda01cca9b908474b78530220e0c980e93cac3a49e3f",
+    "licence": "CC BY 3.0",
+    "source": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 10.720866,
+      "size_bytes": 8996661,
+      "bit_rate": 6713383,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.054199,
+          "duration_s": 10.666667
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 10.684082
+        }
+      ]
+    },
+    "tags": [
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "downloaded",
+    "synthetic": false,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": null,
+    "source_url": "https://download.blender.org/demo/movies/ToS/tears_of_steel_1080p.mov.zip",
+    "measured_offset_ms": -54.2,
+    "provenance": {
+      "source_file": "_extract/tos_mov/tears_of_steel_1080p.mov",
+      "source_sha256": "99486359be7e3681168a0fe94e1cbb0284c48b57b2a3ce7df4fa75e185987a15",
+      "archive": {
+        "name": "tears_of_steel_1080p.mov.zip",
+        "sha256": "d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5"
+      },
+      "cut_start_s": 640,
+      "cut_duration_s": 10,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-ss",
+        "640",
+        "-i",
+        "{videos}/_extract/tos_mov/tears_of_steel_1080p.mov",
+        "-t",
+        "10",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a?",
+        "-c",
+        "copy",
+        "-avoid_negative_ts",
+        "make_zero",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": null
+  },
+  {
+    "id": "tos_prores",
+    "file": "tos_prores.mov",
+    "sha256": "b6f97ec56dac6a63d94fd00d021f272a935be2a736cf17fffdacbbe6a371cab8",
+    "licence": "CC BY 3.0 (derived from tos_base)",
+    "source": "derived",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 10.75,
+      "size_bytes": 94105764,
+      "bit_rate": 70032196,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "prores",
+          "width": 1920,
+          "height": 800,
+          "fps": 23.90661478599222,
+          "pix_fmt": "yuv422p10le",
+          "rotation": 0,
+          "start_time_s": 0.041667,
+          "duration_s": 10.708333
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "pcm_s16le",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 10.684082
+        }
+      ]
+    },
+    "tags": [
+      "prores",
+      "mov",
+      "pcm_audio",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "derived",
+    "synthetic": true,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": "tos_base",
+    "source_url": null,
+    "measured_offset_ms": -41.7,
+    "provenance": {
+      "source_file": null,
+      "source_sha256": null,
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-i",
+        "{corpus}/tos_base.mov",
+        "-c:v",
+        "prores_ks",
+        "-profile:v",
+        "1",
+        "-c:a",
+        "pcm_s16le",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": {
+      "prores_profile": "LT"
+    }
+  },
+  {
+    "id": "tos_multiaud",
+    "file": "tos_multiaud.mkv",
+    "sha256": "6bcffc6576f6e95b413c5d58cd33c6aab5a67c96a17f7cc221f4964ef9b016c1",
+    "licence": "CC BY 3.0 (derived from tos_base)",
+    "source": "derived",
+    "role": "taskgen",
+    "probe": {
+      "container": "matroska,webm",
+      "duration_s": 10.687,
+      "size_bytes": 9057632,
+      "bit_rate": 6780299,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.054,
+          "duration_s": null
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": null
+        },
+        {
+          "index": 2,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1,
+          "start_time_s": 0.0,
+          "duration_s": null
+        }
+      ]
+    },
+    "tags": [
+      "multi_audio",
+      "mkv",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "derived",
+    "synthetic": true,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": "tos_base",
+    "source_url": null,
+    "measured_offset_ms": -75.0,
+    "provenance": {
+      "source_file": null,
+      "source_sha256": null,
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-i",
+        "{corpus}/tos_base.mov",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a:0",
+        "-map",
+        "1:a:0",
+        "-c:v",
+        "copy",
+        "-c:a:0",
+        "copy",
+        "-c:a:1",
+        "aac",
+        "-metadata:s:a:1",
+        "title=commentary",
+        "-shortest",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": {
+      "audio_tracks": 2
+    }
+  },
+  {
+    "id": "tos_quiet",
+    "file": "tos_quiet.mp4",
+    "sha256": "eab67a9242b12fa20d14d9c350eff1069f5b86633db285dd0a9ba6e6f2c531e9",
+    "licence": "CC BY 3.0 (derived from tos_base)",
+    "source": "derived",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 10.720866,
+      "size_bytes": 8912879,
+      "bit_rate": 6650864,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.054199,
+          "duration_s": 10.666667
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "aac",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.0,
+          "duration_s": 10.684082
+        }
+      ]
+    },
+    "tags": [
+      "quiet_audio",
+      "av_skew"
+    ],
+    "known_offset_ms": null,
+    "origin": "derived",
+    "synthetic": true,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": "tos_base",
+    "source_url": null,
+    "measured_offset_ms": -77.4,
+    "provenance": {
+      "source_file": null,
+      "source_sha256": null,
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-i",
+        "{corpus}/tos_base.mov",
+        "-c:v",
+        "copy",
+        "-af",
+        "volume=-25dB",
+        "-c:a",
+        "aac",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": {
+      "gain_db": -25
+    }
+  },
+  {
+    "id": "tos_avoff",
+    "file": "tos_avoff.mov",
+    "sha256": "d9678da8dea66401babd67338edef89a36cda43220ac81563b31d40599688b59",
+    "licence": "CC BY 3.0 (derived from tos_base)",
+    "source": "derived",
+    "role": "taskgen",
+    "probe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "duration_s": 11.129883,
+      "size_bytes": 8996473,
+      "bit_rate": 6466535,
+      "streams": [
+        {
+          "index": 0,
+          "type": "video",
+          "codec": "h264",
+          "width": 1920,
+          "height": 800,
+          "fps": 24.0,
+          "pix_fmt": "yuv420p",
+          "rotation": 0,
+          "start_time_s": 0.054199,
+          "duration_s": 10.666667
+        },
+        {
+          "index": 1,
+          "type": "audio",
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "start_time_s": 0.5,
+          "duration_s": 10.684082
+        }
+      ]
+    },
+    "tags": [
+      "av_offset",
+      "av_skew"
+    ],
+    "known_offset_ms": 500.0,
+    "origin": "derived",
+    "synthetic": true,
+    "restricted": false,
+    "attribution": "(CC) Blender Foundation | mango.blender.org",
+    "consent": null,
+    "parent": "tos_base",
+    "source_url": null,
+    "measured_offset_ms": 445.8,
+    "provenance": {
+      "source_file": null,
+      "source_sha256": null,
+      "archive": null,
+      "cut_start_s": null,
+      "cut_duration_s": null,
+      "command": [
+        "-nostdin",
+        "-v",
+        "error",
+        "-y",
+        "-i",
+        "{corpus}/tos_base.mov",
+        "-itsoffset",
+        "0.5",
+        "-i",
+        "{corpus}/tos_base.mov",
+        "-map",
+        "0:v:0",
+        "-map",
+        "1:a:0",
+        "-c",
+        "copy",
+        "{out}"
+      ],
+      "ffmpeg_version": "9.0.2"
+    },
+    "gold": {
+      "audio_delay_s": 0.5
+    }
   }
 ]

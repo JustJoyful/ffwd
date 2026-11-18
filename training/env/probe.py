@@ -29,6 +29,14 @@ def _fps(rate: str | None) -> float | None:
     return float(Fraction(rate))
 
 
+def stream_fps(stream: dict) -> float | None:
+    """Average frame rate, or r_frame_rate when the average is junk (a 60 fps VP8 webm reports avg=30000/1)."""
+    avg = _fps(stream.get("avg_frame_rate"))
+    if avg is not None and avg <= config.PROBE_MAX_FPS:
+        return avg
+    return _fps(stream.get("r_frame_rate"))
+
+
 def _rotation(stream: dict) -> int:
     # Convention (packages/protocol spec.schema.json): CLOCKWISE degrees a player applies. ffprobe reports
     # the displaymatrix angle counterclockwise (-90 on iPhone portrait clips), so negate it.
@@ -46,7 +54,7 @@ def _stream(s: dict) -> dict:
         out |= {
             "width": s.get("width"),
             "height": s.get("height"),
-            "fps": _fps(s.get("avg_frame_rate")),
+            "fps": stream_fps(s),
             "pix_fmt": s.get("pix_fmt"),
             "rotation": _rotation(s),
         }
