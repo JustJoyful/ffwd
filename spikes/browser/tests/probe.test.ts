@@ -49,3 +49,14 @@ describe("browser probe parser agrees with the Python probe", () => {
     expect(() => parseFfmpegProbe("not an ffmpeg log")).toThrow(/no input/i);
   });
 });
+
+describe("frame rate fallback (mirrors Python stream_fps)", () => {
+  const line = (rates: string) =>
+    `Input #0, matroska,webm, from 'x.webm':\n  Duration: 00:00:01.00, start: 0.000000, bitrate: 1000 kb/s\n  Stream #0:0: Video: vp8, yuv420p(progressive), 640x360, ${rates} (default)\n`;
+  it("uses tbr when the average is junk (30k fps)", () => {
+    expect(parseFfmpegProbe(line("30k fps, 60 tbr, 1k tbn")).streams[0]?.fps).toBe(60);
+  });
+  it("keeps a sane average even when tbr differs (variable frame rate)", () => {
+    expect(parseFfmpegProbe(line("13.15 fps, 30 tbr, 1k tbn")).streams[0]?.fps).toBe(13.15);
+  });
+});

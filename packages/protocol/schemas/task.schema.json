@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ffmpeg-agent.dev/protocol/v0.2.0/task",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.3.0/task",
   "title": "Benchmark/training task (ARCHITECTURE §7.2). gold_spec is null only for ambiguous/unsupported tasks.",
   "type": "object",
   "additionalProperties": false,

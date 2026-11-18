@@ -104,6 +104,7 @@ def f3(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | No
     kinds = {
         "hevc": "f3.iphone",
         "vp9": "f3.webm",
+        "vp8": "f3.webm",  # WebM is VP8 or VP9 (the real ToS/BBB clips are VP8)
         "mpeg4": "f3.avi",
         "prores": "f3.prores",
         "h264": "f3.mkv",
@@ -120,9 +121,14 @@ def f3(rng: random.Random, ci: ClipIndex, clip: str | None = None) -> Draft | No
     d.spec = {"video": {"codec": "h264", "pix_fmt": "yuv420p"}, "audio": {"codec": "aac"}}
     d.copy_mode = "stream" if c.vcodec == "h264" else "auto"  # mkv h264/aac remuxes losslessly
     d.slots = {
-        "fmt": {"hevc": "HEVC", "vp9": "WebM", "mpeg4": "AVI", "prores": "ProRes", "h264": "MKV"}[
-            c.vcodec
-        ]
+        "fmt": {
+            "hevc": "HEVC",
+            "vp9": "WebM",
+            "vp8": "WebM",
+            "mpeg4": "AVI",
+            "prores": "ProRes",
+            "h264": "MKV",
+        }[c.vcodec]
     }
     return d
 

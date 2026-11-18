@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ffmpeg-agent.dev/protocol/v0.2.0/probe",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.3.0/probe",
   "title": "Normalised probe result (ARCHITECTURE §3.3); same schema in both runtimes.",
   "type": "object",
   "additionalProperties": false,

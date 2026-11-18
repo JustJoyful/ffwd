@@ -9,8 +9,6 @@ define the "unnecessary re-encode" ground truth (EVALUATION §4.1).
 import copy
 from dataclasses import dataclass, field
 
-from training import config
-
 # vf ordering: trim happens at input; then speed/fps, crop/scale, rotation.
 ORDER = {"fps": 10, "speed": 15, "scale": 20, "rotate": 30}
 
@@ -26,7 +24,9 @@ class Draft:
     vf: list[tuple[str, str]] = field(default_factory=list)  # (stage, filter)
     af: list[str] = field(default_factory=list)
     drop_audio: bool = False
-    copy_mode: str = "auto"  # auto | stream (lossless remux) | display_rotation
+    copy_mode: str = (
+        "auto"  # auto | stream (lossless remux) | display_rotation (lossless rotate by metadata)
+    )
     rotation_cw: int | None = None  # lossless metadata rotation to write
     merge: bool = False
     offset_shift_ms: float | None = (
@@ -81,11 +81,8 @@ def _vf_chain(d: Draft) -> list[str]:
     return [f for _, f in sorted(d.vf, key=lambda sf: ORDER[sf[0]])]
 
 
-def build_args(
-    d: Draft, has_audio: dict[str, bool], rotate_spelling: str | None = None
-) -> list[str]:
+def build_args(d: Draft, has_audio: dict[str, bool]) -> list[str]:
     """The reference command (arguments without `ffmpeg`)."""
-    rotate_spelling = rotate_spelling or config.LOSSLESS_ROTATE_SPELLING
     out = [f"{{out:{d.output_id}}}"]
     ins = [f"{{in:{c}}}" for c in d.inputs]
     ss = []
@@ -163,16 +160,15 @@ def build_args(
         and d.bitrate_kbps is None
     )
     if lossless_copy:
-        pre = []
-        if d.copy_mode == "display_rotation" and d.rotation_cw is not None:
-            ccw = (-d.rotation_cw) % 360  # FFmpeg's matrix angle is counterclockwise
-            ccw = ccw - 360 if ccw > 180 else ccw
-            if rotate_spelling == "display_rotation":
-                pre = ["-display_rotation", str(ccw)]
-        mid = ["-metadata:s:v:0", f"rotate={(-d.rotation_cw) % 360}"] if (
-            d.copy_mode == "display_rotation" and rotate_spelling == "metadata_rotate") else []  # fmt: skip
+        # Lossless rotation: the `rotate` stream metadata, counterclockwise degrees (the only spelling FFmpeg 5.1.x
+        # native and ffmpeg.wasm 5.1.4 both accept; tested in reports/2026-11-19-rotation-spelling).
+        mid = (
+            ["-metadata:s:v:0", f"rotate={(-d.rotation_cw) % 360}"]
+            if d.copy_mode == "display_rotation" and d.rotation_cw is not None
+            else []
+        )
         drop = ["-an"] if d.drop_audio else []
-        return [*pre, *ss, "-i", ins[0], *tl, *drop, "-c", "copy", *mid, *out]
+        return [*ss, "-i", ins[0], *tl, *drop, "-c", "copy", *mid, *out]
     vfa = ["-vf", ",".join(vf)] if vf else []
     afa = ["-af", ",".join(af)] if (af and audio) else []
     return [*ss, "-i", ins[0], *tl, *vfa, *afa, *_codec(d, False, audio), *out]

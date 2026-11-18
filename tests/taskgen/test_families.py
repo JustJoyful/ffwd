@@ -92,3 +92,21 @@ def test_baked_offset_clips_only_appear_in_f11(ci):
             continue
         for d in _drafts(fid, ci, 6):
             assert not any(ci[c].known_offset_ms for c in d.inputs), (fid, d.inputs)
+
+
+def test_f3_draws_vp8_webm_clips_as_well_as_vp9(corpus_records, tmp_path):
+    """Real WebM sources (Tears of Steel, Big Buck Bunny) are VP8; F3's webm intent must not require VP9."""
+    import json
+
+    out, records = corpus_records
+    for r in records:
+        if r["id"] == "vp9_opus_webm":
+            for s in r["probe"]["streams"]:
+                if s["type"] == "video":
+                    s["codec"] = "vp8"
+    (out / "manifest.json").write_text(json.dumps(records))
+    index = ClipIndex(out / "manifest.json")
+    drafts = [SAMPLERS["F3"](random.Random(i), index) for i in range(80)]
+    assert any(
+        d is not None and d.intents == ["f3.webm"] and d.slots["fmt"] == "WebM" for d in drafts
+    )

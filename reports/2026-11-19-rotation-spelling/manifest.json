@@ -1,0 +1,8 @@
+{
+ "milestone": "lossless rotation spelling, native 5.1.1 vs wasm 5.1.4",
+ "git_base": "9046422",
+ "native": "5.1.1-static (pinned)",
+ "wasm": "ffmpeg.wasm core-mt 0.12.10 = FFmpeg 5.1.4 (Chromium via Playwright)",
+ "input": "data/corpus/h264_aac_1080p.mp4",
+ "paid_cost_usd": 0.0
+}

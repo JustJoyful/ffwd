@@ -1,0 +1,35 @@
+{
+  "version": "ffmpeg version 5.1.4 Copyright (c) 2000-2023 the FFmpeg developers",
+  "rows": {
+    "display_rotation_90": {
+      "exit_code": 1,
+      "error_tail": "Error splitting the argument list: Option not found | Aborted()",
+      "displaymatrix_ccw": null,
+      "size": null
+    },
+    "rotate_0": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": null,
+      "size": "1920x1080"
+    },
+    "rotate_90": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": "90.00",
+      "size": "1920x1080"
+    },
+    "rotate_180": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": "-180.00",
+      "size": "1920x1080"
+    },
+    "rotate_270": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": "-90.00",
+      "size": "1920x1080"
+    }
+  }
+}

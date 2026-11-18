@@ -1,12 +1,12 @@
 {
-  "_doc": "FFmpeg allowlist v0.1.0 (RULES §1.2). Option keys are base names; a ':stream-spec' suffix is stripped before lookup. Value kinds: flag (no value), time, number, int, bitrate, codec, filtergraph, map, pix_fmt, muxer, metadata, enum:<a,b,...>. Files are never option values: they appear only as {in:<id>} after -i and {out:<id>} as positionals. Filters that read files (movie, amovie, subtitles, ass, drawtext, lut3d, ...) are deliberately absent.",
+  "_doc": "FFmpeg allowlist v0.2.0 (RULES §1.2; protocol 0.3.0: `-display_rotation` removed, it does not exist in FFmpeg 5.1.x native or ffmpeg.wasm 5.1.4, so lossless rotation is `-metadata:s:v:0 rotate=<counterclockwise degrees>`, D-024). Option keys are base names; a ':stream-spec' suffix is stripped before lookup. Value kinds: flag (no value), time, number, int, bitrate, codec, filtergraph, map, pix_fmt, muxer, metadata, enum:<a,b,...>. Files are never option values: they appear only as {in:<id>} after -i and {out:<id>} as positionals. Filters that read files (movie, amovie, subtitles, ass, drawtext, lut3d, ...) are deliberately absent.",
   "options": {
     "-ss": "time", "-t": "time", "-to": "time", "-itsoffset": "time",
     "-c": "codec", "-codec": "codec", "-vcodec": "codec", "-acodec": "codec",
     "-b": "bitrate", "-maxrate": "bitrate", "-minrate": "bitrate", "-bufsize": "bitrate",
     "-vf": "filtergraph", "-af": "filtergraph", "-filter": "filtergraph", "-filter_complex": "filtergraph",
     "-map": "map", "-map_metadata": "map", "-map_chapters": "map",
-    "-r": "number", "-display_rotation": "number", "-aspect": "number", "-level": "number",
+    "-r": "number", "-aspect": "number", "-level": "number",
     "-an": "flag", "-vn": "flag", "-sn": "flag", "-dn": "flag", "-shortest": "flag", "-noautorotate": "flag", "-copyts": "flag",
     "-crf": "int", "-qp": "int", "-q": "int", "-g": "int", "-frames": "int", "-vframes": "int",
     "-ar": "int", "-ac": "int", "-loop": "int", "-start_number": "int", "-threads": "int", "-update": "int",

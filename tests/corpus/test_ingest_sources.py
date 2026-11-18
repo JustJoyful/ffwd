@@ -129,6 +129,16 @@ def test_f11_never_draws_av_skew_clips(corpus_records):
     assert all(SAMPLERS["F11"](random.Random(i), ci) is None for i in range(30))
 
 
+def test_reprobe_refreshes_a_stale_probe_and_is_then_a_no_op(env):
+    videos, cdir, work = env
+    rec = ing.build_clip(row(), videos, cdir, work)
+    stale = json.loads((cdir / "manifest.json").read_text())
+    stale[0]["probe"]["duration_s"] += 0.05  # what a probe taken by another FFmpeg build looks like
+    (cdir / "manifest.json").write_text(json.dumps(stale))
+    assert ing.reprobe(cdir) == [rec["id"]]
+    assert manifest(cdir)[0]["probe"] == rec["probe"] and ing.reprobe(cdir) == []
+
+
 def test_clip_index_skips_restricted_clips(corpus_records):
     out, records = corpus_records
     records = [records[0] | {"restricted": True}, *records[1:]]

@@ -1,4 +1,5 @@
 import type { FFmpeg } from "@ffmpeg/ffmpeg";
+import { PROBE_MAX_FPS } from "./config";
 import { execLogged } from "./ffmpeg-check";
 
 // Browser probe: parses `ffmpeg -hide_banner -i <file>` output (exits 1 "no output file", by design)
@@ -82,8 +83,16 @@ export function parseFfmpegProbe(log: string): BrowserProbe {
         const size = parts.map((p) => /^(\d{2,5})x(\d{2,5})/.exec(p)).find(Boolean);
         s.width = size ? Number(size[1]) : undefined;
         s.height = size ? Number(size[2]) : undefined;
-        const fps = parts.map((p) => /^(\d+(?:\.\d+)?) fps/.exec(p)).find(Boolean);
-        s.fps = fps ? Number(fps[1]) : null;
+        // Mirrors training/env/probe.py stream_fps: the average rate ("fps"), or the base rate ("tbr") when the
+        // average is missing or junk (a 60 fps VP8 webm logs "30k fps, 60 tbr").
+        const rate = (label: string): number | null => {
+          const m = parts
+            .map((p) => new RegExp(`^(\\d+(?:\\.\\d+)?)(k?) ${label}`).exec(p))
+            .find(Boolean);
+          return m ? Number(m[1]) * (m[2] ? 1000 : 1) : null;
+        };
+        const avg = rate("fps");
+        s.fps = avg !== null && avg <= PROBE_MAX_FPS ? avg : rate("tbr");
         s.rotation = 0;
       } else if (type === "audio") {
         const hz = parts.map((p) => /^(\d+) Hz/.exec(p)).find(Boolean);

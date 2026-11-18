@@ -1,0 +1,33 @@
+{
+  "version": "ffmpeg version 5.1.1-static",
+  "rows": {
+    "display_rotation_90": {
+      "exit_code": 1,
+      "error_tail": "Unrecognized option 'display_rotation'. | Error splitting the argument list: Option not found"
+    },
+    "rotate_0": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": null,
+      "probe_rotation_cw": 0
+    },
+    "rotate_90": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": "90.00",
+      "probe_rotation_cw": 270
+    },
+    "rotate_180": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": "180.00",
+      "probe_rotation_cw": 180
+    },
+    "rotate_270": {
+      "exit_code": 0,
+      "error_tail": null,
+      "displaymatrix_ccw": "-90.00",
+      "probe_rotation_cw": 90
+    }
+  }
+}

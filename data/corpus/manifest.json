@@ -257,7 +257,7 @@
           "codec": "opus",
           "sample_rate": 48000,
           "channels": 1,
-          "start_time_s": 0.0,
+          "start_time_s": -0.007,
           "duration_s": null
         }
       ]
@@ -574,7 +574,7 @@
           "codec": "aac",
           "sample_rate": 48000,
           "channels": 1,
-          "start_time_s": 0.0,
+          "start_time_s": -0.021,
           "duration_s": null
         }
       ]
@@ -875,9 +875,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 12.717611,
+      "duration_s": 12.759286,
       "size_bytes": 6598707,
-      "bit_rate": 4150909,
+      "bit_rate": 4137351,
       "streams": [
         {
           "index": 0,
@@ -958,9 +958,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 7.542969,
+      "duration_s": 7.542971,
       "size_bytes": 6164559,
-      "bit_rate": 6538071,
+      "bit_rate": 6538069,
       "streams": [
         {
           "index": 0,
@@ -1041,9 +1041,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 7.600098,
+      "duration_s": 7.600102,
       "size_bytes": 6404689,
-      "bit_rate": 6741690,
+      "bit_rate": 6741687,
       "streams": [
         {
           "index": 0,
@@ -1124,9 +1124,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 7.709473,
+      "duration_s": 7.709478,
       "size_bytes": 6428355,
-      "bit_rate": 6670603,
+      "bit_rate": 6670599,
       "streams": [
         {
           "index": 0,
@@ -1207,9 +1207,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 10.629476,
+      "duration_s": 10.671145,
       "size_bytes": 8904067,
-      "bit_rate": 6701415,
+      "bit_rate": 6675247,
       "streams": [
         {
           "index": 0,
@@ -1290,9 +1290,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 10.384603,
+      "duration_s": 10.42627,
       "size_bytes": 5483146,
-      "bit_rate": 4224058,
+      "bit_rate": 4207177,
       "streams": [
         {
           "index": 0,
@@ -1536,9 +1536,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 13.029683,
+      "duration_s": 13.06305,
       "size_bytes": 14367203,
-      "bit_rate": 8821214,
+      "bit_rate": 8798682,
       "streams": [
         {
           "index": 0,
@@ -1607,9 +1607,9 @@
     "role": "test-real",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 14.186667,
+      "duration_s": 14.1867,
       "size_bytes": 125440475,
-      "bit_rate": 70737108,
+      "bit_rate": 70736943,
       "streams": [
         {
           "index": 0,
@@ -1788,9 +1788,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 10.720866,
+      "duration_s": 10.76254,
       "size_bytes": 8996661,
-      "bit_rate": 6713383,
+      "bit_rate": 6687388,
       "streams": [
         {
           "index": 0,
@@ -1979,7 +1979,7 @@
           "codec": "aac",
           "sample_rate": 48000,
           "channels": 1,
-          "start_time_s": 0.0,
+          "start_time_s": -0.021,
           "duration_s": null
         }
       ]
@@ -2047,9 +2047,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 10.720866,
+      "duration_s": 10.762533,
       "size_bytes": 8912879,
-      "bit_rate": 6650864,
+      "bit_rate": 6625116,
       "streams": [
         {
           "index": 0,
@@ -2123,9 +2123,9 @@
     "role": "taskgen",
     "probe": {
       "container": "mov,mp4,m4a,3gp,3g2,mj2",
-      "duration_s": 11.129883,
+      "duration_s": 11.184082,
       "size_bytes": 8996473,
-      "bit_rate": 6466535,
+      "bit_rate": 6435198,
       "streams": [
         {
           "index": 0,

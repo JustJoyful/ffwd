@@ -288,14 +288,35 @@ def rebuild_verdict(rec: dict, videos: Path, corpus: Path, work: Path) -> str:
         out.unlink(missing_ok=True)
 
 
+def reprobe(corpus: Path) -> list[str]:
+    """Refresh every manifest `probe` with the pinned ffprobe (D-029: one build's numbers only); ids that changed."""
+    path = corpus / "manifest.json"
+    records = json.loads(path.read_text())
+    changed = []
+    for r in records:
+        new = probe(corpus / r["file"])
+        if new != r["probe"]:
+            r["probe"] = new
+            changed.append(r["id"])
+    if changed:
+        path.write_text(json.dumps(records, indent=2) + "\n")
+    return changed
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", nargs="*", default=None, help="build only these clip ids")
     ap.add_argument(
         "--rebuild-check", action="store_true", help="re-run recorded commands and compare sha256"
     )
+    ap.add_argument(
+        "--reprobe", action="store_true", help="refresh manifest probes with the pinned ffprobe"
+    )
     ap.add_argument("--videos", type=Path, default=VIDEOS_DIR)
     a = ap.parse_args()
+    if a.reprobe:
+        print("probe changed for:", reprobe(config.CORPUS_DIR) or "nothing")
+        return
     work = a.videos / "_work"
     work.mkdir(exist_ok=True)
     if a.rebuild_check:

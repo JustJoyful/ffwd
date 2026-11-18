@@ -1,7 +1,9 @@
 import benchJobs from "../../../packages/protocol/conformance/bench-jobs.json";
 
 // Single config module for the browser spike (RULES §6.2).
-export const PROTOCOL_VERSION = "0.2.0";
+export const PROTOCOL_VERSION = "0.3.0";
+// Above this a logged average frame rate is container junk; use tbr (mirrors PROBE_MAX_FPS in training/config.py).
+export const PROBE_MAX_FPS = 1000;
 // Cloudflare Pages rejects files > 25 MiB and ffmpeg-core.wasm is 31 MiB, so production loads the
 // pinned core from jsDelivr (CORS-enabled, so it works under COEP credentialless). Dev and the
 // local-preview e2e use the copy made by scripts/copy-core.mjs. shortcut: the CDN sees visitor IPs

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ffmpeg-agent.dev/protocol/v0.2.0/spec",
+  "$id": "https://ffmpeg-agent.dev/protocol/v0.3.0/spec",
   "title": "Output spec (ARCHITECTURE §3.2). null = unconstrained; the checker verifies only set fields.",
   "type": "object",
   "additionalProperties": false,

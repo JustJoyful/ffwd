@@ -6,7 +6,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PROTOCOL_DIR = REPO_ROOT / "packages" / "protocol"
-PROTOCOL_VERSION = "0.2.0"  # ARCH §12: shared by web, helper, training
+PROTOCOL_VERSION = "0.3.0"  # ARCH §12: shared by web, helper, training
 
 # D-024/D-029: ONE pinned static FFmpeg for the checker, the executor and every reference run, everywhere (local,
 # Kaggle, CI). The browser runs ffmpeg.wasm 5.1.4; no static native 5.1.4 exists, so the pin is 5.1.1 and the
@@ -91,10 +91,6 @@ OFFSET_TOLERANCE_MS = 40.0
 QUALITY_SAMPLE_FPS = 2
 SSIM_FLOOR_DEFAULT = 0.90
 PSNR_FLOOR_DB_DEFAULT = 28.0
-# Lossless rotation spelling used by REFERENCE solutions (gold specs are identical either way). "display_rotation" =
-# `-display_rotation` (FFmpeg >= 6, native only); "metadata_rotate" = `-metadata:s:v:0 rotate=` (FFmpeg 5.1 / ffmpeg.wasm).
-# Switched to metadata_rotate with the D-024 pin (FFmpeg 5.1.x has no -display_rotation; rotate= is counterclockwise).
-LOSSLESS_ROTATE_SPELLING = "metadata_rotate"
 
 # --- Task generator v1 (training/taskgen/build.py, D-027) ---
 TASKGEN_VERSION = "1.0"
