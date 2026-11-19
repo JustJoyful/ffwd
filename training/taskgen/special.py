@@ -56,6 +56,19 @@ def unsupported_intent(task: dict) -> str | None:
     )
 
 
+def ambiguous_intent(task: dict) -> str | None:
+    """The intent behind a stored ambiguous task (content key = sha256(families, inputs, {"amb": intent, "answer": a}))."""
+    return next(
+        (
+            i
+            for i, (fam, answer) in AMBIGUOUS.items()
+            if content_key([fam], task["inputs"], {"amb": i, "answer": answer})
+            == task["content_key"]
+        ),
+        None,
+    )
+
+
 def nearest_ok(task: dict, given: str | None) -> bool:
     """Is the teacher's `nearest_supported` acceptable for this unsupported task? Unknown intent -> not ok."""
     intent = unsupported_intent(task)

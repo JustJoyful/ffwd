@@ -20,6 +20,11 @@ def main() -> None:
     ap.add_argument(
         "--teacher", type=Path, help="kept DeepSeek trajectories (omit only with --oracle-only)"
     )
+    ap.add_argument(
+        "--paraphrases",
+        type=Path,
+        help="train paraphrases of kept teacher trajectories (training.taskgen.paraphrase)",
+    )
     ap.add_argument("--rejection", type=Path)
     ap.add_argument(
         "--oracle",
@@ -43,6 +48,7 @@ def main() -> None:
     if bool(a.teacher) == a.oracle_only or (a.oracle_only and not a.oracle):
         raise SystemExit("give --teacher, or --oracle-only together with --oracle")
     ts = ds.load_trajectories(a.teacher) if a.teacher else []
+    ts += ds.load_trajectories(a.paraphrases) if a.paraphrases else []
     rs = ds.load_trajectories(a.rejection) if a.rejection else []
     os_ = ds.load_trajectories(a.oracle) if a.oracle else []
     for rec in [*ts, *rs, *os_]:

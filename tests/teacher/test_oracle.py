@@ -54,3 +54,29 @@ def test_oracle_runs_through_the_phase1_loop_options(corpus, tmp_path):
         stop_after_ask=True,
     )
     assert score(TRIM, ep) and ep.emitted_spec == TRIM["gold_spec"] and ep.invalid_turns == 0
+
+
+def test_select_oracle_tops_up_unsupported_categories_within_the_share_cap():
+    import json as _json
+    from collections import Counter
+
+    from training import config
+    from training.taskgen.special import unsupported_intent
+    from training.teacher.oracle import select_oracle
+
+    tasks = [
+        _json.loads(x)
+        for x in (config.DATA_DIR / "tasks" / "train" / "v1.jsonl").read_text().splitlines()
+    ]
+    plain = [t for t in tasks if not t["flags"]["unsupported"]][:1000]
+    kept = [
+        {"task_id": t["id"]} for t in plain
+    ]  # a teacher that solved 1000 supported tasks and no unsupported ones
+    picked = select_oracle(tasks, kept, min_per_category=20)
+    assert len(picked) == int(0.29 * 1000 / 0.71) and len({t["id"] for t in picked}) == len(picked)
+    per = Counter(unsupported_intent(t) for t in picked if t["flags"]["unsupported"])
+    assert len(per) == 9 and all(v >= 20 for v in per.values())
+    assert len(picked) / (len(picked) + len(kept)) <= 0.30
+    assert [t["id"] for t in picked] == [
+        t["id"] for t in select_oracle(tasks, kept, min_per_category=20)
+    ]

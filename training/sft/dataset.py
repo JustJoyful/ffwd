@@ -67,6 +67,7 @@ def build_examples(
             {
                 "task_id": rec["task_id"],
                 "family": family_key(rec),
+                **({"source": rec["source"]} if "source" in rec else {}),
                 "input_ids": ids,
                 "labels": labels,
             }
@@ -128,7 +129,8 @@ def validation_split(
 
     def held(ex):
         return (
-            int(hashlib.sha256(content_keys[ex["task_id"]].encode()).hexdigest(), 16) % 1000
+            int(hashlib.sha256(content_keys[ex["task_id"].split("+")[0]].encode()).hexdigest(), 16)
+            % 1000  # a paraphrase `<id>+pK` goes with its source
             < fraction * 1000
         )
 
