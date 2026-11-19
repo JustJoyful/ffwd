@@ -1,0 +1,16 @@
+{
+ "created": "2026-11-19T20:24:36+00:00",
+ "source_run": "reports/2026-11-20-m1-dev/M1-0.6b-q8",
+ "source_commit": "69f692b3b30ea93ea245f0d6dd8d49d0b92929cd",
+ "tasks": "data/tasks/dev/v1.jsonl",
+ "cost_usd": 0.0,
+ "failures": [
+  "dv-12ea3f96c9-terse",
+  "dv-5fb9d249d9-polit",
+  "dv-658939d89a-sympt",
+  "dv-958fbe818c-terse",
+  "dv-b7e8c4b492-polit",
+  "dv-f1923afb25-verbo",
+  "dv-f383406e52-sympt"
+ ]
+}
