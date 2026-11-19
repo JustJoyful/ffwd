@@ -49,7 +49,9 @@ if not found:
     sys.exit("examples.jsonl not found under /kaggle/input: the dataset is not attached")
 IN = os.path.dirname(found[0])
 print("data dir:", IN, flush=True)
-dest = "/kaggle/working/ffmpeg-agent"
+# Code and its uv venv (several GB) live OUTSIDE /kaggle/working: everything in working is the kernel's output and is
+# what `kaggle kernels output` downloads. Only the adapter, checkpoints, trainer state and log belong there.
+dest = ("/kaggle/temp" if os.path.isdir("/kaggle/temp") else "/tmp") + "/ffmpeg-agent"
 if os.path.isdir(IN + "/code"):  # Kaggle unpacks .tar files in datasets into a folder of the same name
     shutil.copytree(IN + "/code", dest)
 else:
@@ -60,7 +62,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 def sh(cmd):
     print("$", cmd, flush=True)
-    rc = subprocess.run(cmd, shell=True, cwd=dest).returncode
+    rc = subprocess.run(["bash", "-o", "pipefail", "-c", cmd], cwd=dest).returncode
     print("exit code:", rc, flush=True)
     if rc:
         sys.exit(rc)
@@ -71,12 +73,15 @@ sh("uv sync --group train")
 sh("uv run --group train python -c \\"import torch; assert torch.cuda.is_available(); print('cuda ok', torch.__version__)\\"")
 out = "/kaggle/working/sft"
 sh("uv run --group train python -m training.sft.train --data " + IN + "/examples.jsonl --val " + IN + "/val.jsonl"
-   " --ckpt-dir " + out + " --epochs {epochs} --save-steps {save_steps} --per-device-batch 2 --grad-accum 8")
+   " --ckpt-dir " + out + " --epochs {epochs} --save-steps {save_steps} --per-device-batch 2 --grad-accum 8"
+   " 2>&1 | tee /kaggle/working/train.log")
 shutil.copytree(out + "/adapter-final", "/kaggle/working/adapter-final")
-shutil.copy(IN + "/stats.json", "/kaggle/working/stats.json")
-for name in os.listdir(out):  # keep the output small: the adapter is what we need, not optimizer states
-    if name.startswith("checkpoint-"):
-        shutil.rmtree(os.path.join(out, name))
+shutil.copy(IN + "/stats.json", "/kaggle/working/stats.json")  # the DATASET's stats, not training's
+# Never delete the final checkpoints or the logs (they hold the loss curve): Trainer keeps at most save_total_limit=2
+# LoRA checkpoints, which are small. trainer_state.json (log_history: train/eval loss per step) is also copied out flat.
+ckpts = sorted((n for n in os.listdir(out) if n.startswith("checkpoint-")), key=lambda n: int(n.split("-")[1]))
+if ckpts and os.path.exists(os.path.join(out, ckpts[-1], "trainer_state.json")):
+    shutil.copy(os.path.join(out, ckpts[-1], "trainer_state.json"), "/kaggle/working/trainer_state.json")
 print("SFT DONE")
 """
 

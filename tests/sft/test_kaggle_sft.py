@@ -28,3 +28,12 @@ def test_kernel_script_is_valid_python_and_handles_both_dataset_layouts():
     src = SCRIPT.format(epochs=2, save_steps=50)
     compile(src, "run.py", "exec")  # a syntax slip would only show up after the Kaggle queue
     assert "examples.jsonl" in src and "/code" in src and "code.tar" in src
+
+
+def test_kernel_script_keeps_checkpoints_and_logs_and_ships_no_venv():
+    """20 Nov 2026: the first run deleted its checkpoints (loss curve lost) and shipped a multi-GB .venv in its output."""
+    src = SCRIPT.format(epochs=2, save_steps=50)
+    compile(src, "run.py", "exec")
+    assert "rmtree" not in src.split("shutil.copytree(out")[1]  # nothing deleted after training
+    assert "tee /kaggle/working/train.log" in src and "trainer_state.json" in src
+    assert 'dest = ("/kaggle/temp"' in src and '"/kaggle/working/ffmpeg-agent"' not in src
