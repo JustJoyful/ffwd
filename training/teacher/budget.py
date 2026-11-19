@@ -6,6 +6,7 @@ full reserved value forever, so a dying process can never make the ledger under-
 """
 
 import json
+import threading
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
@@ -65,6 +66,9 @@ class BudgetGuard:
     ):
         self.ledger, self.lifetime_cap, self.run_cap = ledger, lifetime_cap_usd, run_cap_usd
         self.run_id, self.dry_run = run_id, dry_run
+        # Workers share one guard: the lock makes check-then-reserve atomic (no cap overshoot), and the per-thread
+        # meter lets a worker read what ITS episode cost (a ledger difference would mix in the other workers).
+        self._lock, self._tl = threading.Lock(), threading.local()
 
     def _records(self) -> list[dict]:
         if not self.ledger.exists():
@@ -95,6 +99,17 @@ class BudgetGuard:
         )
 
     def reserve(self, max_cost_usd: float) -> str:
+        with self._lock:
+            return self._reserve(max_cost_usd)
+
+    def thread_cost(self, reset: bool = False) -> float:
+        """Settled cost of the calls made by THIS thread since the last reset."""
+        cost = getattr(self._tl, "cost", 0.0)
+        if reset:
+            self._tl.cost = 0.0
+        return cost
+
+    def _reserve(self, max_cost_usd: float) -> str:
         if self.spent() + max_cost_usd > self.lifetime_cap:
             raise BudgetExceeded(f"lifetime cap ${self.lifetime_cap:.2f} would be exceeded")
         if self.spent(run_only=True) + max_cost_usd > self.run_cap:
@@ -105,8 +120,13 @@ class BudgetGuard:
         return rid
 
     def settle(self, reservation_id: str, usage: dict, cost_usd: float) -> None:
+        self._tl.cost = getattr(self._tl, "cost", 0.0) + cost_usd
         if self.dry_run:
             return
+        with self._lock:
+            self._settle(reservation_id, usage, cost_usd)
+
+    def _settle(self, reservation_id: str, usage: dict, cost_usd: float) -> None:
         self._append(
             {
                 "kind": "settle",

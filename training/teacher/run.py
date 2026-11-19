@@ -13,6 +13,8 @@ import argparse
 import dataclasses
 import json
 import shutil
+import sys
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -22,7 +24,7 @@ from training.taskgen.clips import visible_records
 from training.taskgen.loader import load_tasks
 from training.teacher.budget import BudgetGuard
 from training.teacher.datacard import build_card
-from training.teacher.generate import generate, is_offpeak
+from training.teacher.generate import generate, is_offpeak, seconds_until_offpeak
 
 MODEL_CONFIG = config.REPO_ROOT / "eval" / "configs" / "x1-deepseek-v1.toml"
 PILOT_COMPOSITIONS = {
@@ -55,8 +57,62 @@ def pilot_selection(tasks: list[dict]) -> list[dict]:
     return picked
 
 
+def _finished(work: Path) -> set[str]:
+    f = work / "trajectories.jsonl"
+    return {json.loads(x)["task_id"] for x in f.read_text().splitlines()} if f.exists() else set()
+
+
 def corpus() -> dict[str, Path]:
     return {r["id"]: config.CORPUS_DIR / r["file"] for r in visible_records()}
+
+
+def bulk(
+    tasks, work, policy, guard, *, workers, chunk, gate, gate_min_n, sleep=time.sleep, now=None
+) -> str:
+    """Chunked bulk run. Returns why it ended: complete | budget | gate | errors. A peak window is not an end: the loop
+    sleeps until the next off-peak minute and resumes (finished task ids are skipped, so it is also safe to restart).
+    """
+    now = now or (lambda: datetime.now(UTC))
+    log, failures, n = work / "chunks.jsonl", 0, 0
+    while True:
+        if wait := seconds_until_offpeak(now()):
+            print(f"[{now():%d %b %H:%M}Z] peak window: sleeping {wait // 60} min", flush=True)
+            sleep(wait)
+            continue
+        before = guard.spent(run_only=True)
+        s = generate(
+            tasks, work, policy, guard, corpus(), offpeak_only=True, max_episodes=chunk, workers=workers,
+            stop_on_peak=True,
+        )  # fmt: skip
+        n += 1
+        rate = s.passed / s.attempted if s.attempted else float("nan")
+        row = {
+            "chunk": n, "at": now().isoformat(timespec="seconds"), "attempted": s.attempted, "passed": s.passed,
+            "kept_rate": round(rate, 4), "kept": s.kept, "label_rejected": s.label_rejected, "errors": s.errors,
+            "chunk_cost_usd": round(s.cost_usd - before, 6), "running_cost_usd": round(s.cost_usd, 6),
+            "cache_hit": round(s.cache_hit_ratio, 4), "stopped": s.stopped, "remaining": len(tasks) - s.skipped_done - s.attempted,
+            "by_family": s.by_family, "last_error": s.last_error,
+        }  # fmt: skip
+        with log.open("a") as f:
+            f.write(json.dumps(row) + "\n")
+        print(
+            f"[chunk {n}] {s.attempted} run, kept-rate {rate:.1%} ({s.passed} passed, {s.kept} kept, "
+            f"{s.label_rejected} label-rejected, {s.errors} errors), chunk ${row['chunk_cost_usd']:.4f}, "
+            f"running ${s.cost_usd:.4f}, cache-hit {s.cache_hit_ratio:.1%}, remaining {row['remaining']}"
+            + (f", stopped: {s.stopped}" if s.stopped else ""),
+            flush=True,
+        )
+        if s.stopped and s.stopped.startswith("budget"):
+            return "budget"
+        if s.attempted >= gate_min_n and rate < gate:
+            return "gate"
+        failures = failures + 1 if s.errors and not s.attempted else 0
+        if failures >= 5:
+            return "errors"
+        if s.errors and not s.attempted:
+            sleep(60)
+        elif not s.attempted and not s.stopped and not s.errors:
+            return "complete"
 
 
 def main() -> None:
@@ -81,9 +137,20 @@ def main() -> None:
     work = config.DATA_DIR / "teacher" / a.name
     guard = BudgetGuard(config.LEDGER_PATH, config.BUDGET_LIFETIME_USD, a.budget_usd, a.name)
     policy = policy_from_config(MODEL_CONFIG, guard)
-    summary = generate(
-        tasks, work, policy, guard, corpus(), offpeak_only=True, max_episodes=a.limit if a.mode == "bulk" else None
-    )  # fmt: skip
+    if a.mode == "bulk":
+        if a.limit:
+            tasks = tasks[: a.limit + len(_finished(work))]  # smoke runs: --limit N new tasks
+        why = bulk(
+            tasks, work, policy, guard, workers=config.TEACHER_WORKERS, chunk=config.TEACHER_CHUNK,
+            gate=config.TEACHER_KEPT_GATE, gate_min_n=config.TEACHER_GATE_MIN_N,
+        )  # fmt: skip
+        (work / "END.json").write_text(
+            json.dumps({"why": why, "at": datetime.now(UTC).isoformat()})
+        )
+        print(f"bulk ended: {why}", flush=True)
+        build_card(work, {"ended": why})
+        sys.exit(0 if why in ("complete", "budget") else 2)
+    summary = generate(tasks, work, policy, guard, corpus(), offpeak_only=True)
     card = build_card(work, dataclasses.asdict(summary))
     print(json.dumps(dataclasses.asdict(summary), indent=1))
     if a.report_dir:

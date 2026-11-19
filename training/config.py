@@ -208,15 +208,28 @@ DEEPSEEK_PRICES_USD_PER_MTOK = {
     "peak": {"input_cache_hit": 0.006, "input_cache_miss": 0.30, "output": 1.20},
     "off_peak": {"input_cache_hit": 0.003, "input_cache_miss": 0.15, "output": 0.60},
 }
-DEEPSEEK_PRICES_CHECKED = "2026-11-15"
+DEEPSEEK_PRICES_CHECKED = "2026-11-19"  # unchanged since 15 Nov (page re-read before the bulk run)
 DEEPSEEK_MODEL_ID: str | None = "deepseek-flash"  # owner-supplied 2026-11-15
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 DEEPSEEK_API_KEY_ENV = "DEEPSEEK_API_KEY"  # key lives only in the environment (RULES §5.6)
-DEEPSEEK_CONCURRENCY_LIMIT = 3  # account limit per pricing page; runners are sequential anyway
+DEEPSEEK_CONCURRENCY_LIMIT = (
+    2500  # deepseek-flash account limit per the pricing page of 19 Nov (was 3 on 15 Nov)
+)
+# What the pricing page said `deepseek-flash` resolves to on 2026-11-19 (the alias moves; recorded in the data card).
+DEEPSEEK_MODEL_VERSION_SEEN = "DeepSeek-V4.1-Flash-1017"
+TEACHER_WORKERS = 4  # parallel episodes (local ffmpeg is the limit, not the API)
+TEACHER_CHUNK = 500  # tasks per bulk chunk; the kept-rate gate is evaluated per chunk
+TEACHER_KEPT_GATE = (
+    0.82  # preregistered: max(40%, X1_dev 97% - 15 pp); measured on the checker verdict (`passed`)
+)
+TEACHER_GATE_MIN_N = (
+    100  # a chunk cut short by a peak window or the cap is only gated if it has at least this many
+)
 TEACHER_MAX_OUTPUT_TOKENS = 512
 # DeepSeek peak windows, UTC (owner-supplied 17 Nov 2026, in force since 16 Aug 2026): 01:00-04:00 and 06:00-10:00
 # are peak; every other hour is off-peak. Bulk teacher runs are refused during peak (RULES 5.3). Windows do not
-# wrap midnight. Re-check the official pricing page before each bulk run: DeepSeek changed these several times.
+# wrap midnight. (The 19 Nov page says peak applies Monday-Friday only, excluding Chinese public holidays; we keep
+# treating every day as peak-windowed: safer, and the billing guard always charges peak rates.) Re-check the official pricing page before each bulk run: DeepSeek changed these several times.
 DEEPSEEK_PEAK_UTC: tuple[tuple[time, time], ...] = (
     (time(1, 0), time(4, 0)),
     (time(6, 0), time(10, 0)),

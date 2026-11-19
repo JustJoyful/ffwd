@@ -75,6 +75,7 @@ def build_card(out_dir: Path, summary: dict) -> Path:
         "status": "INCOMPLETE: " + ", ".join(missing) if missing else "complete",
         "created": datetime.now(UTC).isoformat(),
         "teacher_model": config.DEEPSEEK_MODEL_ID,
+        "teacher_model_version_seen": config.DEEPSEEK_MODEL_VERSION_SEEN,
         "prompt": config.SYSTEM_PROMPT_V1,
         "prompt_sha256": config.SYSTEM_PROMPT_V1_SHA256,
         "terms_url": config.TEACHER_TERMS_URL,
@@ -87,7 +88,12 @@ def build_card(out_dir: Path, summary: dict) -> Path:
         "kept_trajectories": len(kept),
         "kept_by_family": dict(sorted(fam.items())),
         "summary": summary,
-        "filter": "only trajectories whose final outputs pass the checker against the gold spec are kept",
+        "filter": (
+            "kept.jsonl = trajectories whose final outputs pass the checker against the gold spec AND, for unsupported "
+            "tasks, whose `nearest_supported` is accepted by special.NEAREST_ACCEPTED (label_ok). trajectories.jsonl "
+            "holds every episode unedited. The SFT builder additionally drops schema-invalid assistant turns "
+            "(drop_invalid_turns) and never edits what the teacher wrote."
+        ),
     }  # fmt: skip
     path = out_dir / "DATA_CARD.json"
     path.write_text(json.dumps(card, indent=1) + "\n")

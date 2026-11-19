@@ -8,6 +8,7 @@ is the closest family the agent may name (or null).
 import random
 
 from training.taskgen.clips import ClipIndex
+from training.taskgen.verify import content_key
 
 # intent -> (nominal family for bookkeeping, simulated user's answer)
 AMBIGUOUS = {
@@ -29,6 +30,34 @@ UNSUPPORTED: dict[str, str | None] = {
     "unsup.stabilize": None,
     "unsup.blur_faces": None,
 }
+
+# Labels a teacher may give as `nearest_supported` (D-009; teacher pilot 19 Nov 2026). Strict by default: only the
+# canonical value above. "upscale ... to 4K" really is the F4 resize (scale) with the AI part refused, while "make this
+# blurry footage sharp" has no supported neighbour (no sharpen/denoise filter in the allowlist), so that one intent
+# accepts both. The pilot's "blur everyone's face" -> F4 stays a mismatch: cropping does not blur.
+NEAREST_ACCEPTED: dict[str, frozenset[str | None]] = {
+    intent: frozenset({near}) for intent, near in UNSUPPORTED.items()
+} | {"unsup.upscale": frozenset({"F4", None})}
+
+
+def unsupported_intent(task: dict) -> str | None:
+    """The intent behind a stored unsupported task. The task files keep neither the intent nor `nearest_supported`, but
+    the content key is sha256(families, inputs, {"unsup": intent}), so the intent is recovered exactly (no rebuild).
+    """
+    return next(
+        (
+            i
+            for i in UNSUPPORTED
+            if content_key([], task["inputs"], {"unsup": i}) == task["content_key"]
+        ),
+        None,
+    )
+
+
+def nearest_ok(task: dict, given: str | None) -> bool:
+    """Is the teacher's `nearest_supported` acceptable for this unsupported task? Unknown intent -> not ok."""
+    intent = unsupported_intent(task)
+    return intent is not None and given in NEAREST_ACCEPTED[intent]
 
 
 def sample_ambiguous(rng: random.Random, ci: ClipIndex) -> dict:

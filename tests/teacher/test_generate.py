@@ -1,12 +1,19 @@
 import dataclasses
 import json
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from fakes import TRIM, ReferenceTeacher  # noqa: E402
 
 from training import config
 from training.env.loop import run_episode
+from training.taskgen.special import (
+    NEAREST_ACCEPTED,
+    UNSUPPORTED,
+    nearest_ok,
+    unsupported_intent,
+)
+from training.taskgen.verify import content_key
 from training.teacher.budget import BudgetExceeded
 from training.teacher.datacard import build_card
 from training.teacher.generate import OffPeakRequired, PromptNotFrozen, generate, is_offpeak
@@ -151,3 +158,96 @@ def test_loop_options_used_by_generate_are_the_phase1_ones(corpus, tmp_path):
         stop_after_ask=True,
     )
     assert ep.end_reason == "finish" and ep.emitted_spec == TRIM["gold_spec"]
+
+
+# --- bulk-run additions: nearest_supported filter, workers, clean stop at peak ------------------------------------
+
+
+def _unsup(intent: str, tid: str) -> dict:
+    return dict(
+        TRIM, id=tid, request=f"do {intent}", flags={"ambiguous": False, "unsupported": True}, gold_spec=None,
+        reference_runs=None, families=[], content_key=content_key([], TRIM["inputs"], {"unsup": intent}),
+    )  # fmt: skip
+
+
+def _says(near):
+    return lambda messages: json.dumps(
+        {"action": "unsupported", "reason": "no", "nearest_supported": near}
+    )
+
+
+def test_unsupported_label_is_filtered_not_edited(corpus, tmp_path):
+    blur = _unsup(
+        "unsup.blur_faces", "tr-blur000000-terse"
+    )  # gold null, the pilot's wrong answer was F4
+    s = _gen(tmp_path, corpus, [blur], _says("F4"))
+    assert (s.attempted, s.passed, s.kept, s.label_rejected) == (1, 1, 0, 1)
+    rec = json.loads((tmp_path / "out" / "trajectories.jsonl").read_text())
+    assert (
+        rec["passed"] and not rec["label_ok"]
+    )  # the raw record keeps the teacher's answer verbatim
+    assert "F4" in rec["messages"][2]["content"] and not (tmp_path / "out" / "kept.jsonl").exists()
+    ok = _gen(tmp_path / "b", corpus, [blur], _says(None))
+    assert (ok.passed, ok.kept, ok.label_rejected) == (1, 1, 0)
+
+
+def test_upscale_accepts_f4_or_null_everything_else_is_strict():
+    assert NEAREST_ACCEPTED["unsup.upscale"] == {"F4", None}
+    assert all(NEAREST_ACCEPTED[i] == {UNSUPPORTED[i]} for i in UNSUPPORTED if i != "unsup.upscale")
+
+
+def test_every_unsupported_train_task_resolves_to_an_intent():
+    rows = [
+        json.loads(x)
+        for x in (config.DATA_DIR / "tasks" / "train" / "v1.jsonl").read_text().splitlines()
+    ]
+    uns = [t for t in rows if t["flags"]["unsupported"]]
+    assert uns and all(unsupported_intent(t) in UNSUPPORTED for t in uns)
+    assert not nearest_ok(uns[0], "F9")
+
+
+def test_parallel_workers_match_sequential_and_cost_is_per_episode(corpus, tmp_path):
+    tasks = [
+        dict(TRIM, id=f"tr-{i:010d}-terse", request=f"cut the first {i} seconds")
+        for i in range(1, 5)
+    ]
+    a = generate(
+        tasks, tmp_path / "a", Switch(tasks), None, corpus, allow_draft_prompt=True, workers=1
+    )
+    b = generate(
+        tasks, tmp_path / "b", Switch(tasks), None, corpus, allow_draft_prompt=True, workers=3
+    )
+    assert (a.attempted, a.kept) == (b.attempted, b.kept) == (4, 4)
+
+    def ids(d):
+        return [
+            json.loads(x)["task_id"]
+            for x in (tmp_path / d / "trajectories.jsonl").read_text().splitlines()
+        ]
+
+    assert ids("a") == ids("b")
+
+
+def test_stop_on_peak_is_clean_and_resumable(corpus, tmp_path):
+    peak = datetime(
+        2026, 11, 20, 0, 58, tzinfo=UTC
+    )  # inside the 5-minute margin before the 01:00 window
+    s = _gen(
+        tmp_path,
+        corpus,
+        [TRIM],
+        ReferenceTeacher(TRIM),
+        offpeak_only=True,
+        now=lambda: peak,
+        stop_on_peak=True,
+    )
+    assert s.stopped == "peak window" and s.attempted == 0
+    with pytest.raises(OffPeakRequired):
+        _gen(tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM), offpeak_only=True, now=lambda: peak)
+    later = peak - timedelta(minutes=30)
+    assert (
+        _gen(
+            tmp_path, corpus, [TRIM], ReferenceTeacher(TRIM), offpeak_only=True, now=lambda: later
+        ).kept
+        == 1
+    )

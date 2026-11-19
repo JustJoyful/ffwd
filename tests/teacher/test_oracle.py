@@ -3,6 +3,7 @@ import json
 from fakes import TRIM
 
 from training.env.loop import run_episode, score
+from training.taskgen.verify import content_key
 from training.teacher.generate import generate
 from training.teacher.oracle import OraclePolicy
 
@@ -24,6 +25,8 @@ UNS = dict(
     reference_runs=None,
     families=[],
     nearest_supported=None,
+    # the label check recovers the intent from the content key, so a synthetic task needs a real one
+    content_key=content_key([], TRIM["inputs"], {"unsup": "unsup.subtitles"}),
 )
 
 
