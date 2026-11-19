@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 from pathlib import Path
 
 from training import config
@@ -117,6 +118,14 @@ def push(pkg: Path, epochs: int, save_steps: int) -> int:
     print(r.stdout, r.stderr)
     if r.returncode:
         return r.returncode
+    # a kernel pushed while the dataset is still processing silently loses it ("not valid dataset sources")
+    for _ in range(40):
+        if "ready" in kaggle("datasets", "status", DATASET, check=False).stdout.lower():
+            break
+        time.sleep(15)
+    else:
+        print("dataset not ready after 10 min", file=sys.stderr)
+        return 1
     with tempfile.TemporaryDirectory(prefix="kernel-") as d:
         (Path(d) / "run.py").write_text(SCRIPT.format(epochs=epochs, save_steps=save_steps))
         (Path(d) / "kernel-metadata.json").write_text(
