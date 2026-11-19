@@ -115,3 +115,9 @@ Needed before: the teacher bulk run (G2). Owner asked to propose, not start.
 - Native 5.1.1 vs ffmpeg.wasm 5.1.4: 48/48 conformance recipes at parity; the 5.1.4 build is not needed for Phase 1 (`reports/2026-11-19-parity-.../run4-fresh-build`).
 - Teacher: terms snapshot taken and pinned; prompt v1 frozen; X1 dev 58/60 (gate 82%); pilot 19/20 kept, cache-hit 84%, $0.0125. **Stopped before bulk: the 10-trajectory hand-read found (1) invalid-action turns in 5/19 kept trajectories (SFT now drops them) and (2) a wrong `nearest_supported` that the scorer does not check (owner decision a/b/c, see `reports/2026-11-19-teacher-pilot/summary.md`).**
 - Spend: $0.112 of $4. Not done / waiting: owner decision on the pilot findings, pricing-page re-check before bulk, Kaggle kill-and-resume confirmation (Hub evidence from 17 Nov shows a clean resume) for SFT on Kaggle, GRPO (G3), test run (G4).
+
+## 20 Nov 2026 (night): bulk teacher done, SFT done, M1 dev eval done, STOPPED before GRPO
+- Teacher bulk: 3490 episodes, kept 3199 after the label filter, $2.30, cache-hit 84% (`reports/2026-11-19-teacher-bulk/`). Paraphrases + oracle mix -> 6032 train / 333 val examples (`reports/2026-11-19-sft-data/`). DeepSeek ledger $2.675 of $4.
+- SFT 0.6B on Kaggle T4: 2 epochs, 2 x 8 batch, ~5 h, adapter fetched. Final losses were not captured (see the report).
+- GGUF path proven (b12032, D-036). **M1 (Q8_0) on final dev: 293/300 = 98% [95%, 99%] vs B0 178/300 = 59%**; 0 invalid turns; all 7 failures are the 4-run limit on multi-family tasks. Dev is in-distribution; leakage check done (`reports/2026-11-20-m1-dev/summary.md`).
+- **Waiting for the owner:** G3 (GRPO + shuffled-reward control, <= 15 GPU-h), G4 (preregistration FINAL + the single test run, owner's own clips and ~100 test-real requests). Also open: decision on `remove_object` -> F4 label strictness; whether to run a 1.7B SFT; HF-vs-GGUF parity of M1.
