@@ -1,0 +1,40 @@
+{
+ "created": "2026-11-19T22:11:58+00:00",
+ "created_ist": "2026-11-20 03:41 IST",
+ "milestone": "Phase 1: M1 (SFT 0.6B) trained and evaluated on dev; pre-GRPO checks",
+ "supersedes_nothing": true,
+ "sub_reports": [
+  "reports/2026-11-19-teacher-bulk",
+  "reports/2026-11-19-sft-data",
+  "reports/2026-11-20-m1-dev",
+  "reports/2026-11-20-m1-parity",
+  "reports/2026-11-20-m1-dev-failures",
+  "reports/2026-11-20-leakage-audit",
+  "reports/2026-11-20-t18-pass-rates"
+ ],
+ "commits": [
+  "fb1576b",
+  "6b5a222",
+  "5cc3af1",
+  "049bbdf",
+  "1c88f83",
+  "dc1a147",
+  "b5f2d0d",
+  "3b63b8e"
+ ],
+ "decisions": [
+  "D-037",
+  "D-038",
+  "D-039"
+ ],
+ "test_splits_run": false,
+ "cost_usd": 0.0,
+ "deepseek_ledger_total_usd": 2.675,
+ "headline": {
+  "M1_dev": "293/300",
+  "B0_dev": "178/300",
+  "parity_agreement": "99/100",
+  "t18_in_band": "9/302",
+  "t18_unseen_in_band": "7/110"
+ }
+}

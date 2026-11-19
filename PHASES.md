@@ -5,7 +5,7 @@
 | Phase | Name | Status |
 |---|---|---|
 | 0 | Go/no-go spike | ✅ **GO** (16 Nov 2026; owner items open, see reports/2026-11-15-phase-0/summary.md) |
-| 1 | Core model | 🔄 **In progress** (plan approved 17 Nov; paid steps gated; see `reports/PHASE1-STATUS.md`) |
+| 1 | Core model | 🔄 **In progress**: M1 (SFT 0.6B) trained, dev 98%; stopped before GRPO (G3) and the test run (G4), both need the owner; see `reports/PHASE1-STATUS.md` and `reports/2026-11-20-m1-milestone/` |
 | 2 | Website v1 | ⬜ Not started |
 | 3 | Helper app | ⬜ Not started |
 | 4 | Science & polish | ⬜ Not started |
@@ -61,15 +61,15 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 **Goal:** a trained agent with an honest results table.
 
 ### Tasks
-- [ ] Task generator v1: templates for F1–F12, compositions (2–4 families), ambiguous/unsupported flags, paraphrases; **hash-pinned splits**
-- [ ] Corpus v1 (licence-clean, manifested; **any extra real clips (own recordings, real VFR/HDR) must be ingested BEFORE teacher generation: adding a clip changes the corpus hash and rebuilds every split, which would invalidate teacher data built on the old splits**); checker v1 (loudness, frame interval/count, offset, quality floor)
-- [ ] Conformance suite v1 (golden cases that both the Python and later TS checkers must pass)
-- [ ] Teacher generation: budget-guarded DeepSeek client; off-peak bulk on `train`; keep **only check-passing** trajectories; data card
-- [ ] Rejection sampling for easy tasks from base Qwen3 (free)
-- [ ] SFT (LoRA → merged) for 0.6B (and 1.7B if compute allows)
-- [ ] Multi-turn GRPO environment + one main run (checkpoint/resume), reward v1, telemetry logging
+- [x] Task generator v1: templates for F1–F12, compositions (2–4 families), ambiguous/unsupported flags, paraphrases; **hash-pinned splits**
+- [x] Corpus v1 (licence-clean, manifested; **any extra real clips (own recordings, real VFR/HDR) must be ingested BEFORE teacher generation: adding a clip changes the corpus hash and rebuilds every split, which would invalidate teacher data built on the old splits**); checker v1 (loudness, frame interval/count, offset, quality floor)
+- [x] Conformance suite v1 (golden cases that both the Python and later TS checkers must pass)
+- [x] Teacher generation: budget-guarded DeepSeek client; off-peak bulk on `train`; keep **only check-passing** trajectories; data card
+- [x] Rejection sampling for easy tasks from base Qwen3 (free) (nothing to keep: stock Qwen3-0.6B scores 0/300 on dev)
+- [x] SFT (LoRA → merged) for 0.6B (M1, dev 98%; 1.7B not started)
+- [ ] Multi-turn GRPO environment + one main run (checkpoint/resume), reward v1, telemetry logging (environment, driver, telemetry and resume are built and smoke-tested; the main run and shuffled control wait for the owner's G3)
 - [ ] Eval on dev → checkpoint selection → **single** run on test splits
-- [ ] Export GGUF; simple CLI (`ffmpeg-agent "<request>" file.mp4`) using llama.cpp + native FFmpeg; parity eval
+- [ ] Export GGUF (done for M1: Q8_0, HF-vs-GGUF parity 99%); simple CLI (`ffmpeg-agent "<request>" file.mp4`) using llama.cpp + native FFmpeg; parity eval
 - [ ] Model + data card on Hugging Face
 
 ### Exit criteria

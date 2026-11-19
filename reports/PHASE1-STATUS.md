@@ -4,7 +4,28 @@ Plan: `docs/superpowers/plans/2026-11-16-phase-1-core-model.md`. Rule while the 
 (DeepSeek spend incl. paraphrases/teacher/X1, the main GRPO run + shuffled control, the single test run, publishing beyond private repos).
 No questions to the owner; conservative defaults, documented. All work is on `main` (commits tagged by task).
 
-## Done (code + tests, all ungated)
+## CURRENT STATE (20 Nov 2026, 03:30 IST): M1 trained and evaluated; STOPPED before GRPO
+The sections further down are the autonomous-run history from 16-19 Nov and are **superseded** by this block and by the dated entries at the end. Full detail: `reports/2026-11-20-m1-milestone/summary.md`.
+
+| Step | State |
+|---|---|
+| Task generator v1, corpus v1 (22 clips), checker, conformance, FFmpeg 5.1.1 pin, splits (train 4472 / dev 300 / test-iid 500 / test-compositional 200 / test-phrasing 200) | done |
+| Teacher pilot, bulk ($2.30), paraphrases, oracle mix (G1/G2 done); ledger $2.675 of $4 | done |
+| Rejection sampling | nothing to keep: stock Qwen3-0.6B scores 0/300 on dev |
+| SFT 0.6B (M1) on Kaggle T4, 2 epochs, 2 x 8 (D-037); final losses not captured | done |
+| GGUF Q8_0 path (llama.cpp b12032, D-036) and HF-vs-GGUF parity | done: 99% agreement, McNemar p=1.0 |
+| **M1 dev: 293/300 = 98% [95, 99]** vs B0 178/300 = 59% [54, 65] ("SFT nearly sufficient", per the preregistration) | done |
+| Leakage: exact duplicates vs train (test-iid 104/500, compositional 0, phrasing 0); test-iid reported full + dedup (D-039) | done, preregistration amended |
+| `unsupported` graded on the action only (D-038) | done, preregistration amended |
+| T18 train pass-rate table: in-band 3% [2, 6] (302-task sample), 6% [3, 13] on never-trained-on tasks | done (partial sample); widened train set proposed, not built |
+| GRPO main run + shuffled control (G3), checkpoint selection on dev | **not started: needs owner** |
+| Single test run (G4), results table with CIs on test-iid / compositional / phrasing / real | **not started: needs owner** |
+| 1.7B SFT | not started (owner: not for now) |
+| Hub pushes (corpus, model), HF model card, CLI check on the owner's machine, phase report | not done |
+
+**Waiting for the owner:** (1) G3: GRPO, or the widened train set first, or stop at M1; (2) G4: preregistration FINAL + test run + own clips (~10) and ~100 test-real requests; (3) confirm Holm stays on the full test-iid (dedup is a descriptive column); (4) paste the Kaggle log tail for M1's final losses; (5) `remove_object` -> F4 label strictness.
+
+## HISTORICAL (16-19 Nov): done list
 | Task | What |
 |---|---|
 | T1 | protocol 0.2.0, split-purpose guard (`training/taskgen/loader.py`): training code cannot read test splits |
@@ -25,7 +46,7 @@ No questions to the owner; conservative defaults, documented. All work is on `ma
 | T24/T25 | results report builder (Holm, denominators, test-lock checks), model/data card builders, licence audit |
 | extra | D-032 proposal: free programmatic "oracle" trajectories (`training/teacher/oracle.py`) |
 
-## Smoke tests run (local RTX 3050, free, tiny; NOT the gated runs)
+## HISTORICAL (16 Nov): smoke tests run (local RTX 3050, free, tiny; NOT the gated runs)
 - Task build v1 finished: 4486 train / 300 dev / 500 test-iid / 200 test-compositional / 200 test-phrasing (`reports/2026-11-16-taskgen-v1/`): held-out splits pass the leakage gate (max Jaccard 0.69 / 0.74 < 0.9). Limitations there (single-family content space is small; few ambiguous/unsupported dev tasks).
 - Oracle trajectories: 60/60 train tasks solved through the real spec-first loop (draft prompt). SFT examples are ~1.6k tokens each (only ~220 trained): `SFT_MAX_LEN` raised to 3072; default batch 2 x 8.
 - SFT: 3 steps on the local GPU ran (eval loss 0.705), adapter saved, merged model carries the agent template (`tests/export`).
@@ -37,7 +58,7 @@ The pushed kernel `justjoyful/ffmpeg-agent-resume-auto` waited ~2 h in the GPU q
 Kernels pushed from the CLI have no secrets attached, and I will not embed tokens in pushed code. **Owner step:** open https://www.kaggle.com/code/justjoyful/ffmpeg-agent-resume-auto -> Add-ons -> Secrets -> tick `HF_TOKEN` and `GITHUB_TOKEN`. Then either re-run
 `uv run python -m training.grpo.kaggle_kernel push --mode train` (I can do this on the next wakeup once told) or click Save & Run. The log is in `reports/2026-11-16-phase1-dev-baselines/kaggle-session1-error.log`. D-022's Kaggle verification stays open.
 
-## Waiting on the owner
+## HISTORICAL (16 Nov): waiting on the owner (G0-G2 and the freeze are resolved; see CURRENT STATE)
 1. **G0:** Kaggle kill-and-resume result (kernel `justjoyful/ffmpeg-agent-resume-auto` still QUEUED), D-024 FFmpeg pin decision, D-025-D-031 proposals in the plan, D-032, your ~20 new spike-v1 tasks + 2-3 clips.
 2. **G-terms:** read DeepSeek's terms (training on outputs) and send the off-peak window (`config.DEEPSEEK_OFFPEAK_UTC`, `TEACHER_TERMS_URL`).
 3. **G1/G2:** approve the teacher pilot (<= $0.05) then bulk (<= $2.30); approve the paraphrase spend (<= $0.30).
@@ -45,7 +66,7 @@ Kernels pushed from the CLI have no secrets attached, and I will not embed token
 5. **G4:** preregistration FINAL + the single test run. Your ~10 own clips + ~100 test-real requests.
 6. Freeze prompt v1 (set `SYSTEM_PROMPT_V1_SHA256`) after D-024.
 
-## Not done / blocked
+## HISTORICAL (16 Nov): not done / blocked (resolved or superseded; see CURRENT STATE)
 - Real SFT, M1, GRPO: need data (gated) and a GPU (Kaggle queued; local RTX 3050 is for smoke tests only).
 - B0 v2 (patterns from train phrasing only) and dev baselines on the new splits.
 - Dual-runtime (ffmpeg.wasm) conformance run: Phase 2.

@@ -14,7 +14,7 @@ You are helping build **ffmpeg-agent**: a browser-first video utility driven by 
 7. `DECISIONS.md`: don't re-litigate settled decisions (D-001…); propose a new entry instead
 
 ## Current state
-Phase 0 done (GO, D-020); **Phase 1 in progress** (plan `docs/superpowers/plans/2026-11-16-phase-1-core-model.md`, status `reports/PHASE1-STATUS.md`; nothing paid runs until the owner confirms the DeepSeek terms file). Work happens on `main`. Phase 0 plan: `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
+Phase 0 done (GO, D-020); **Phase 1 in progress** (plan `docs/superpowers/plans/2026-11-16-phase-1-core-model.md`, status `reports/PHASE1-STATUS.md`; M1 (SFT 0.6B) is trained and scores 98% on dev, the DeepSeek ledger is $2.675 of $4; GRPO (G3) and the single test run (G4) need the owner's go-ahead, and no system has been run on a test split). Work happens on `main`. Phase 0 plan: `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
 
 ## Commands
 - `uv sync`: install the Python env (Python 3.11 pinned in `.python-version`; `training/` and `eval/` import from the repo root, no build step)
@@ -27,6 +27,10 @@ Phase 0 done (GO, D-020); **Phase 1 in progress** (plan `docs/superpowers/plans/
 - `uv run python -m training.corpus.add_clip <file> --id <id> --licence "..." --source "..."`: register an extra clip in the corpus manifest (licence required)
 - `uv run python -m apps.cli.ffmpeg_agent_cli "<request>" file.mp4 --model m.gguf --llama-server /path/to/llama-server`: the CLI (spec confirmation, then run/check; success only when a check passed)
 - `uv run python -m training.taskgen.build --workers 3`: regenerate the hash-pinned task splits into `data/tasks/` (writes `MANIFEST.json`)
+- `uv run python -m eval.run_baseline --system M1 --model-config eval/configs/m1-0.6b-q8.toml --tasks data/tasks/dev/v1.jsonl --out reports/<date>-<name>/<run>`: run a system through the harness (needs `llama-server` up with the config's `server_args`; test splits need `--checkpoint` and the single-run lock)
+- GGUF export: `uv run --group train python -m training.export.merge --adapter <dir> --out <dir>`, then `training.export.gguf.to_gguf(...)` with `LLAMA_CPP_DIR`, `LLAMA_QUANTIZE`, `LLAMA_CONVERT_PYTHON` pointing at the llama.cpp b12032 tools (D-036); `uv run --group train python -m eval.hf_parity --model-dir <merged> --gguf-run <dir> --out <dir>` compares HF fp16 with the GGUF on 100 seeded dev tasks
+- `uv run python -m eval.leakage --train data/tasks/train/v1.jsonl --test data/tasks/<split>/v1.jsonl ... --exact-out <file>`: n-gram and exact-duplicate leakage audit; `uv run python -m training.grpo.taskfilter ... --workers 4 --sample N` + `uv run python -m eval.passrate_report ...`: K-sample pass-rate table on TRAIN tasks and its by-group report (resumable)
+- `uv run python -m training.sft.kaggle_sft package|push|status|fetch`: SFT on a Kaggle T4 through a private dataset (see D-037); use `kaggle kernels output ... --file-pattern` to fetch single files
 - Tests need `ffmpeg`/`ffprobe` on PATH; corpus clips are generated into a temp dir by the `corpus` fixture
 
 ## Big-picture architecture (spans several docs)
