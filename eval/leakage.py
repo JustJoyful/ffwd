@@ -56,16 +56,49 @@ def leakage_report(
     }
 
 
+def normalize(text: str) -> str:
+    """Request identity for the exact-duplicate audit: lowercase word tokens, so case/punctuation/spacing don't hide a copy."""
+    words = (
+        w.strip(".:") for w in _WORD.findall(text.lower())
+    )  # "2s." == "2s", but "0.5x" stays whole
+    return " ".join(w for w in words if w)
+
+
+def exact_duplicates(train: list[str], test: list[dict]) -> dict:
+    """Test tasks whose request is word-for-word (after `normalize`) a train request. `test` = task rows (need id, request).
+    `dedup_ids` is the deduplicated subset the preregistration reports next to the full split."""
+    seen = {normalize(t) for t in train}
+    dup = sorted(t["id"] for t in test if normalize(t["request"]) in seen)
+    dupset = set(dup)
+    return {
+        "tests": len(test),
+        "exact_duplicates": len(dup),
+        "share": round(len(dup) / len(test), 4) if test else 0.0,
+        "dedup_ids": sorted(t["id"] for t in test if t["id"] not in dupset),
+        "duplicate_ids": dup,
+    }
+
+
 def _requests(path: Path) -> list[str]:
     return [json.loads(x)["request"] for x in path.read_text().splitlines()]
+
+
+def _rows(path: Path) -> list[dict]:
+    return [json.loads(x) for x in path.read_text().splitlines()]
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--train", type=Path, nargs="+", required=True)
     ap.add_argument("--test", type=Path, nargs="+", required=True)
+    ap.add_argument(
+        "--exact-out",
+        type=Path,
+        help="write the exact-duplicate audit (counts + dedup id lists) here",
+    )
     a = ap.parse_args()
     train = [r for p in a.train for r in _requests(p)]
+    exact = {}
     for p in a.test:
         r = leakage_report(train, _requests(p))
         print(
@@ -74,6 +107,13 @@ def main() -> None:
             len(r["pairs_over_threshold"]),
             "over",
         )
+        exact[p.parent.name] = exact_duplicates(train, _rows(p))
+        print(
+            p.parent.name, {k: v for k, v in exact[p.parent.name].items() if not k.endswith("ids")}
+        )
+    if a.exact_out:
+        a.exact_out.parent.mkdir(parents=True, exist_ok=True)
+        a.exact_out.write_text(json.dumps(exact, indent=1) + "\n")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,34 @@
+{
+ "test-iid": {
+  "n": 500,
+  "dup_vs_train_requests": 104,
+  "dup_vs_sft_paraphrase_requests": 2,
+  "dup_vs_train_or_paraphrase": 104,
+  "same_inputs_and_gold_spec_as_a_train_task": 42,
+  "dup_request_AND_same_task_content": 27
+ },
+ "test-compositional": {
+  "n": 200,
+  "dup_vs_train_requests": 0,
+  "dup_vs_sft_paraphrase_requests": 0,
+  "dup_vs_train_or_paraphrase": 0,
+  "same_inputs_and_gold_spec_as_a_train_task": 0,
+  "dup_request_AND_same_task_content": 0
+ },
+ "test-phrasing": {
+  "n": 200,
+  "dup_vs_train_requests": 0,
+  "dup_vs_sft_paraphrase_requests": 0,
+  "dup_vs_train_or_paraphrase": 0,
+  "same_inputs_and_gold_spec_as_a_train_task": 24,
+  "dup_request_AND_same_task_content": 0
+ },
+ "dev": {
+  "n": 300,
+  "dup_vs_train_requests": 45,
+  "dup_vs_sft_paraphrase_requests": 0,
+  "dup_vs_train_or_paraphrase": 45,
+  "same_inputs_and_gold_spec_as_a_train_task": 11,
+  "dup_request_AND_same_task_content": 8
+ }
+}

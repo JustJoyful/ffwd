@@ -71,7 +71,12 @@ def final_report(
     ledger: Path | None = None,
     checkpoints: dict[str, str] | None = None,
     single_seed: bool = True,
+    iid_dedup_ids: frozenset[str] | None = None,
 ) -> Path:
+    """`iid_dedup_ids`: the test-iid tasks whose request is not word-for-word a train request (eval.leakage,
+    reports/2026-11-20-leakage-audit). The report then shows test-iid on the FULL split and on this subset side by side;
+    Holm and the preregistered comparisons stay on the full split, the dedup differences are descriptive.
+    """
     if out.exists():
         raise FileExistsError(out)
     loaded: dict[str, dict[str, tuple[dict, dict]]] = {
@@ -101,8 +106,12 @@ def final_report(
         for s, by in runs.items()
     }
     splits = sorted({sp for by in runs.values() for sp in by})
+    dedup = "test-iid" in splits and iid_dedup_ids is not None
+    if dedup and not iid_dedup_ids <= set(tasks_by_split["test-iid"]):
+        raise ValueError("iid_dedup_ids names tasks that are not in test-iid")
+    cols = splits + (["test-iid (dedup)"] if dedup else [])
     lines = ["# Phase 1 results", "", "Wilson 95% CIs; failed, timed-out, malformed and errored episodes count as failures.", "",
-             "| System | " + " | ".join(splits) + " | runs/task (iid) | re-encode rate |", "|---|" + "---|" * (len(splits) + 2)]  # fmt: skip
+             "| System | " + " | ".join(cols) + " | runs/task (iid) | re-encode rate |", "|---|" + "---|" * (len(cols) + 2)]  # fmt: skip
     results_json: dict = {"systems": {}, "comparisons": []}
     for s in runs:
         cells, entry = [], {}
@@ -114,6 +123,12 @@ def final_report(
             p, lo, hi = wilson_ci(k, n)
             cells.append(f"{k}/{n} = {p:.0%} [{lo:.0%}, {hi:.0%}]")
             entry[sp] = {"k": k, "n": n, "rate": p, "ci95": [lo, hi]}
+        if dedup:
+            sub = [ok for t, ok in success[s]["test-iid"].items() if t in iid_dedup_ids]
+            k, n = sum(sub), len(sub)
+            p, lo, hi = wilson_ci(k, n)
+            cells.append(f"{k}/{n} = {p:.0%} [{lo:.0%}, {hi:.0%}]")
+            entry["test-iid (dedup)"] = {"k": k, "n": n, "rate": p, "ci95": [lo, hi]}
         iid = loaded[s].get("test-iid")
         rpt = (sum(r["runs"] for r in iid[0].values()) / len(iid[0])) if iid else None
         rer = reencode_rate(*iid, tasks_by_split["test-iid"]) if iid else None
@@ -133,6 +148,19 @@ def final_report(
         results_json["comparisons"].append(
             {"name": name, "split": sp, "a": a, "b": b, "diff_b_minus_a": d, "ci95": [lo, hi]}
         )
+        if (
+            dedup and sp == "test-iid"
+        ):  # same comparison on the deduplicated subset: descriptive, outside Holm
+            sub = lambda m: {t: v for t, v in m.items() if t in iid_dedup_ids}  # noqa: E731
+            dd, dlo, dhi = paired_diff_ci(sub(success[b][sp]), sub(success[a][sp]))
+            results_json.setdefault("descriptive", []).append(
+                {
+                    "name": name,
+                    "split": "test-iid (dedup)",
+                    "diff_b_minus_a": dd,
+                    "ci95": [dlo, dhi],
+                }
+            )
         if "+" in sp:  # descriptive only: never enters Holm
             for part in sp.split("+"):
                 dd, dlo, dhi = paired_diff_ci(success[b][part], success[a][part])
@@ -147,7 +175,7 @@ def final_report(
             f"| {c['name']} | {c['split']} | {c['diff_b_minus_a'] * 100:+.1f} [{c['ci95'][0] * 100:+.1f}, {c['ci95'][1] * 100:+.1f}] | {c['p_raw']:.4f} | {c['p_holm']:.4f} |"
         )
     if results_json.get("descriptive"):
-        lines += ["", "Descriptive only (not in Holm): the pooled comparison split by component.", "", "| Comparison | split | diff (pp) [95% CI] |", "|---|---|---|"]  # fmt: skip
+        lines += ["", "Descriptive only (not in Holm): pooled comparisons split by component; test-iid comparisons on the deduplicated subset.", "", "| Comparison | split | diff (pp) [95% CI] |", "|---|---|---|"]  # fmt: skip
         lines += [
             f"| {c['name']} | {c['split']} | {c['diff_b_minus_a'] * 100:+.1f} [{c['ci95'][0] * 100:+.1f}, {c['ci95'][1] * 100:+.1f}] |"
             for c in results_json["descriptive"]

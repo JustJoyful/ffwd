@@ -147,3 +147,23 @@ def test_pooled_comparison_is_one_holm_entry_plus_descriptive_rows(tmp_path):
     )
     assert {c["split"] for c in res["descriptive"]} == {"test-iid", "test-phrasing"}
     assert "Descriptive only" in (out / "summary.md").read_text()
+
+
+def test_dedup_subset_is_a_second_iid_column_with_descriptive_diffs(tmp_path):
+    tasks = make_tasks()
+    runs = runs_for(
+        tmp_path, tasks, {"M1": (lambda i: i % 4 != 0, False), "B2": (lambda i: False, True)}
+    )
+    dedup = frozenset(list(tasks["test-iid"])[:30])
+    out = final_report(
+        runs, tasks, [("Q2", "B2", "M1", "test-iid")], tmp_path / "rep", iid_dedup_ids=dedup
+    )
+    text = (out / "summary.md").read_text()
+    res = json.loads((out / "results.json").read_text())
+    assert "test-iid (dedup)" in text.splitlines()[4]  # header row
+    assert res["systems"]["M1"]["test-iid (dedup)"]["n"] == 30
+    assert res["systems"]["M1"]["test-iid"]["n"] == 40  # the full split is still reported
+    assert [c["split"] for c in res["comparisons"]] == ["test-iid"]  # Holm family untouched
+    assert [d["split"] for d in res["descriptive"]] == ["test-iid (dedup)"]
+    with pytest.raises(ValueError, match="not in test-iid"):
+        final_report(runs, tasks, [], tmp_path / "rep2", iid_dedup_ids=frozenset({"nope"}))
