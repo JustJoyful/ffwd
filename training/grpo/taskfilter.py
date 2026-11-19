@@ -15,9 +15,13 @@ Never run on dev/test tasks: the table would leak their difficulty into training
 import argparse
 import hashlib
 import json
+import random
+import shutil
 import sys
+import threading
 import uuid
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -38,30 +42,45 @@ def episode_sampler(
 ) -> Sampler:
     """Sample by running real episodes (probe -> run -> check) with a fresh policy for each one."""
 
-    def sample(task: dict, k: int) -> list[bool]:
-        return [
-            score(
+    def one(task: dict) -> bool:
+        job = jobs_root / uuid.uuid4().hex
+        try:
+            return score(
                 task,
                 run_episode(
                     task,
                     policy_factory(),
                     corpus=corpus,
-                    job_dir=jobs_root / uuid.uuid4().hex,
+                    job_dir=job,
                     max_runs=max_runs,
                     system_prompt_text=system_prompt_text,
                     require_spec=require_spec,
                     stop_after_ask=stop_after_ask,
                 ),
             )
-            for _ in range(k)
-        ]
+        finally:  # thousands of episodes: only the pass/fail is kept, so outputs must not pile up on disk
+            shutil.rmtree(job, ignore_errors=True)
+
+    def sample(task: dict, k: int) -> list[bool]:
+        return [one(task) for _ in range(k)]
 
     return sample
 
 
 def pass_rate_table(
-    tasks: list[dict], sample: Sampler, k: int, band: tuple[float, float], meta: dict
+    tasks: list[dict],
+    sample: Sampler,
+    k: int,
+    band: tuple[float, float],
+    meta: dict,
+    *,
+    workers: int = 1,
+    done: dict[str, int] | None = None,
+    on_row: Callable[[str, int], None] | None = None,
 ) -> dict:
+    """`workers` tasks are sampled at once (the sampler must be thread-safe). `done` (task id -> passes) are reused
+    instead of re-sampled; `on_row(task_id, passes)` is called as each task finishes (the CLI appends to rows.jsonl so
+    a killed multi-hour run resumes). The table is identical for any `workers`."""
     lo, hi = band
     if not 0.0 <= lo <= hi <= 1.0:
         raise ValueError(f"band must satisfy 0 <= lo <= hi <= 1, got {band}")
@@ -70,9 +89,20 @@ def pass_rate_table(
             raise ValueError(
                 f"task {t['id']} has split {t['split']!r}; only {config.PASS_RATE_ALLOWED_SPLITS} may be filtered"
             )
+    done = done or {}
+
+    def passes_of(t: dict) -> int:
+        if t["id"] in done:
+            return done[t["id"]]
+        n = sum(sample(t, k))
+        if on_row:
+            on_row(t["id"], n)
+        return n
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        all_passes = list(pool.map(passes_of, tasks))
     rows: dict[str, dict] = {}
-    for t in tasks:
-        passes = sum(sample(t, k))
+    for t, passes in zip(tasks, all_passes, strict=True):
         rate = passes / k
         reason = "too_hard" if rate < lo else "too_easy" if rate > hi else "in_band"
         rows[t["id"]] = {
@@ -145,6 +175,14 @@ def main(argv: list[str] | None = None) -> None:
         help="must be > 0: K identical samples would measure nothing",
     )
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument(
+        "--workers", type=int, default=1, help="tasks sampled in parallel (match llama-server -np)"
+    )
+    ap.add_argument(
+        "--sample",
+        type=int,
+        help="use a seeded random sample of this many tasks (a subset table: say so wherever it is quoted)",
+    )
     ap.add_argument("--seed", type=int, default=config.BOOTSTRAP_SEED)
     ap.add_argument(
         "--phase1",
@@ -157,6 +195,8 @@ def main(argv: list[str] | None = None) -> None:
         sys.exit("--temperature must be > 0")
     raw = a.tasks.read_bytes()
     tasks = [json.loads(x) for x in raw.decode().splitlines() if x.strip()]
+    if a.sample:
+        tasks = random.Random(a.seed).sample(sorted(tasks, key=lambda t: t["id"]), a.sample)
     corpus = ensure_corpus(config.CORPUS_DIR, ids={c for t in tasks for c in t["inputs"]})
     policy = policy_from_config(a.policy_config, None)
     policy.temperature = a.temperature
@@ -168,6 +208,21 @@ def main(argv: list[str] | None = None) -> None:
         require_spec=a.phase1,
         stop_after_ask=a.phase1,
     )
+    rows_file, lock = (
+        a.out / "rows.jsonl",
+        threading.Lock(),
+    )  # resumable: one line per finished task
+    a.out.mkdir(parents=True, exist_ok=True)
+    done = (
+        {r["id"]: r["passes"] for r in map(json.loads, rows_file.read_text().splitlines())}
+        if rows_file.exists()
+        else {}
+    )
+
+    def on_row(tid: str, passes: int) -> None:
+        with lock, rows_file.open("a") as f:
+            f.write(json.dumps({"id": tid, "passes": passes}) + "\n")
+
     table = pass_rate_table(
         tasks,
         sampler,
@@ -179,7 +234,13 @@ def main(argv: list[str] | None = None) -> None:
             "temperature": a.temperature,
             "seed": a.seed,
             "tasks_sha256": hashlib.sha256(raw).hexdigest(),
+            "sample": a.sample,
+            "n_tasks": len(tasks),
+            "workers": a.workers,
         },
+        workers=a.workers,
+        done=done,
+        on_row=on_row,
     )
     save_table(table, a.out / "pass_rates.json")
     kept = select_tasks(tasks, table)  # fails loudly if the band is empty

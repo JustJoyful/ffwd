@@ -89,6 +89,9 @@ def test_episode_sampler_runs_real_episodes_through_the_checker(corpus, tmp_path
     always = episode_sampler(lambda: replay_reference, corpus, tmp_path / "a")(tasks[0], 2)
     never = episode_sampler(lambda: refuse, corpus, tmp_path / "b")(tasks[0], 2)
     assert always == [True, True] and never == [False, False]
+    assert not [
+        p for d in ("a", "b") if (tmp_path / d).exists() for p in (tmp_path / d).iterdir()
+    ]  # job dirs removed
 
 
 def test_apply_filter_selects_in_band_tasks_and_stores_the_table_with_the_run(tmp_path):
@@ -102,3 +105,34 @@ def test_apply_filter_selects_in_band_tasks_and_stores_the_table_with_the_run(tm
     kept = apply_filter(TASKS, saved, run_dir)
     assert [t["id"] for t in kept] == ["t2", "t3", "t4", "t6"]
     assert json.loads((run_dir / "pass_rates.json").read_text()) == table
+
+
+def test_parallel_workers_resume_and_row_callback_give_the_same_table():
+    serial = pass_rate_table(TASKS, sampler, k=10, band=(0.2, 0.8), meta={})
+    seen = []
+    parallel = pass_rate_table(
+        TASKS,
+        sampler,
+        k=10,
+        band=(0.2, 0.8),
+        meta={},
+        workers=4,
+        on_row=lambda t, n: seen.append((t, n)),
+    )
+    assert parallel["tasks"] == serial["tasks"] and parallel["summary"] == serial["summary"]
+    assert sorted(seen) == sorted((t["id"], PASSES[t["id"]]) for t in TASKS)
+    calls = []
+
+    def counting(task, k):
+        calls.append(task["id"])
+        return sampler(task, k)
+
+    resumed = pass_rate_table(
+        TASKS,
+        counting,
+        k=10,
+        band=(0.2, 0.8),
+        meta={},
+        done={t: PASSES[t] for t in ("t0", "t1", "t2")},
+    )
+    assert resumed["tasks"] == serial["tasks"] and sorted(calls) == ["t3", "t4", "t5", "t6"]
