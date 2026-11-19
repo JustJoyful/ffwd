@@ -11,6 +11,7 @@
   "bulk": 2.2968,
   "paraphrases": 0.2661
  },
- "ledger_total_usd_est": 2.4429,
- "tokenizer": "Qwen/Qwen3-0.6B + agent chat template (D-026)"
+ "ledger_total_usd_est": 2.675,
+ "tokenizer": "Qwen/Qwen3-0.6B + agent chat template (D-026)",
+ "ledger_total_note": "BudgetGuard.spent() over the whole ledger, 19 Nov after the paraphrases (lifetime cap $4.00)"
 }
