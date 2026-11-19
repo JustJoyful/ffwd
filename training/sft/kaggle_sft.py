@@ -42,17 +42,20 @@ DATA_FILES = ("examples.jsonl", "val.jsonl", "stats.json")
 SCRIPT = """
 import glob, os, shutil, subprocess, sys, tarfile
 
-found = glob.glob("/kaggle/input/**/code.tar", recursive=True)  # the mount path differs between Kaggle layouts
+found = glob.glob("/kaggle/input/**/examples.jsonl", recursive=True)  # the mount path differs between Kaggle layouts
 if not found:
     for root, dirs, files in os.walk("/kaggle/input"):
         print(root, files, flush=True)
-    sys.exit("code.tar not found under /kaggle/input: the dataset is not attached")
+    sys.exit("examples.jsonl not found under /kaggle/input: the dataset is not attached")
 IN = os.path.dirname(found[0])
 print("data dir:", IN, flush=True)
 dest = "/kaggle/working/ffmpeg-agent"
-os.makedirs(dest, exist_ok=True)
-with tarfile.open(IN + "/code.tar") as t:
-    t.extractall(dest, filter="data")
+if os.path.isdir(IN + "/code"):  # Kaggle unpacks .tar files in datasets into a folder of the same name
+    shutil.copytree(IN + "/code", dest)
+else:
+    os.makedirs(dest, exist_ok=True)
+    with tarfile.open(IN + "/code.tar") as t:
+        t.extractall(dest, filter="data")
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 def sh(cmd):
