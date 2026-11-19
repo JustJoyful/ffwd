@@ -1,0 +1,29 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  16%|█▋        | 51/310 [00:00<00:00, 494.49it/s]Loading weights:  44%|████▎     | 135/310 [00:00<00:00, 694.67it/s]Loading weights:  66%|██████▌   | 205/310 [00:00<00:00, 647.23it/s]Loading weights:  87%|████████▋ | 271/310 [00:00<00:00, 610.66it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 652.81it/s]
+{
+ "n": 100,
+ "agreement": 0.99,
+ "a": [
+  0.98,
+  0.929988209271456,
+  0.9944980324498376
+ ],
+ "b": [
+  0.99,
+  0.9455138038212947,
+  0.9982325679358592
+ ],
+ "only_a_passes": 0,
+ "only_b_passes": 1,
+ "mcnemar_p": 1.0,
+ "b_minus_a": {
+  "diff": 0.01,
+  "ci95": [
+   0.0,
+   0.03
+  ]
+ },
+ "first_turn_identical": 0.86,
+ "transcript_identical": 0.65
+}
+EXIT 0

@@ -1,0 +1,49 @@
+{
+ "created": "2026-11-19T20:23:54+00:00",
+ "created_ist": "2026-11-20 01:53 IST",
+ "milestone": "M1 HF fp16 vs GGUF Q8_0 parity (dev sample of 100)",
+ "code_commit": "1c88f832e2328aee91e756262223a987bb0bd2c7",
+ "hf_run_git_dirty": true,
+ "note": "hf_parity.py and hf_policy.py were untracked while the run executed; they are committed with this report",
+ "dev_tasks_sha256": "784c8017f96275cd952133a2ab6065218cdd10c8e548d5d48a3255e575ac2585",
+ "sample": {
+  "n": 100,
+  "seed": 20261115,
+  "method": "random.Random(seed).sample(sorted dev ids, 100)"
+ },
+ "artifacts": {
+  "merged_hf_model_sha256": "ab21f28d1cf7205977d51fe5d164e5adf4590cb4474c1737d8c5a9c891452c89",
+  "gguf_q8_0_sha256": "c461e0b04f391d96ff8b19b65a7d5be4e2de0b8f180ec4f440b962f078c95f3d"
+ },
+ "gguf_side": "reports/2026-11-20-m1-dev/M1-0.6b-q8 (not re-run; the 100 sampled tasks of the full dev run)",
+ "hf_side": {
+  "dtype": "float16",
+  "decoding": "greedy, 512 new tokens, stop <|im_end|>, agent chat template packages/protocol/prompts/chat-template.jinja"
+ },
+ "hardware": {
+  "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+  "cpu": "x86_64",
+  "cpu_count": 12,
+  "ram_gb": 15.3,
+  "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+ },
+ "hf_started": "2026-11-19T20:07:09.016236+00:00",
+ "hf_finished": "2026-11-19T20:19:32.275404+00:00",
+ "cost_usd": 0.0,
+ "result": {
+  "n": 100,
+  "agreement": 0.99,
+  "only_a_passes": 0,
+  "only_b_passes": 1,
+  "mcnemar_p": 1.0,
+  "b_minus_a": {
+   "diff": 0.01,
+   "ci95": [
+    0.0,
+    0.03
+   ]
+  },
+  "first_turn_identical": 0.86,
+  "transcript_identical": 0.65
+ }
+}
