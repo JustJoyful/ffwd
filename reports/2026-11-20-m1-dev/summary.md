@@ -46,3 +46,11 @@ Eval took 18.5 minutes for 300 tasks on an RTX 3050 6 GB laptop GPU. Spend: $0 (
 * Parity check of the fine-tuned HF model vs the GGUF (the Q8_0 path is what was evaluated; HF-vs-GGUF agreement is not measured).
 * No 1.7B SFT. No rejection-sampling data (stock model 0/300).
 * GRPO, the test run and the preregistration FINAL remain with the owner (G3, G4).
+
+## Addendum (20 Nov 2026, from the Kaggle log the owner pasted): SFT losses and the reason for 2 epochs
+
+* **Reason for 2 epochs instead of 3 (owner): to save time.** Batch 2 x grad-accum 8 was for T4 memory (effective batch unchanged at 16).
+* **Final losses:** train loss averaged **0.0997** over the run (first logged 0.826 at epoch 0.01, last logged 0.050 at epoch 1.99); **eval loss on the 333 validation examples 0.0777** at step 754 (the end).
+* **Eval loss curve (every 50 steps, 333 val examples):** 0.2356 (step 50), 0.1647 (100), 0.1335 (150), 0.1144 (200), 0.1030 (250), 0.0958 (300), 0.0901 (350), 0.0868 (400), 0.0851 (450), 0.0822 (500), 0.0814 (550), 0.0792 (600), 0.0784 (650), 0.0778 (700), 0.0777 (750), 0.0777 (754). It fell at every evaluation and had flattened by the end (-0.0015 over the last 150 steps), with no sign of over-fitting; a third epoch would have bought very little.
+* **Run:** `train_runtime` 17,340 s (4.82 h), 754 steps at about 20.7 s per step plus 16 evaluations of about 100 s each; fp16 on one Tesla T4 (the kernel saw two, `CUDA_VISIBLE_DEVICES=0`); Kaggle env torch 2.15.0+cu132, transformers 5.23.0, peft 0.21.3, trl 1.18.0, Python 3.11.18; the dataset's code snapshot was commit `4b185a8`. Exit code 0, "SFT DONE".
+* Only the log tail was shared, not the file; the numbers above are copied from it, not re-measured.

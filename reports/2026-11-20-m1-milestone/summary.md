@@ -4,7 +4,7 @@ Everything since the bulk teacher run, in one place. Dev only; **no system has b
 
 ## 1. What M1 is and how it was made
 * Data (`reports/2026-11-19-teacher-bulk/`, `reports/2026-11-19-sft-data/`): teacher bulk 3490 episodes, 3199 kept after the label filter ($2.30, cache-hit 84%); paraphrases; oracle trajectories (D-032). SFT set 6032 train / 333 val examples: 50% teacher, 31% teacher paraphrases, 18% oracle.
-* SFT on a Kaggle T4: Qwen3-0.6B, all-linear LoRA r16/alpha32, lr 1e-4, **2 epochs, batch 2 x accum 8 (effective 16)**, 754 steps, about 5 h (19:00-00:02 IST). The config default is 3 epochs, 4 x 4; the deviation is recorded in D-037 (T4 memory for the batch; the reason for 3 -> 2 epochs was not recorded). **Final train/eval loss not captured** (the script deleted its checkpoints; fixed in `049bbdf`): waiting for the owner to paste the Kaggle log tail.
+* SFT on a Kaggle T4: Qwen3-0.6B, all-linear LoRA r16/alpha32, lr 1e-4, **2 epochs, batch 2 x accum 8 (effective 16)**, 754 steps, about 5 h (19:00-00:02 IST). The config default is 3 epochs, 4 x 4; the deviation is recorded in D-037 (T4 memory for the batch; the reason for 3 -> 2 epochs was not recorded). Final losses (from the Kaggle log the owner pasted): train loss 0.0997 (run mean), **eval loss 0.0777**, flat at the end; reason for 2 epochs: to save time (owner). Details in the addendum of `reports/2026-11-20-m1-dev/summary.md`. (The script had deleted its checkpoints; fixed in `049bbdf`.)
 * Export: merged fp16 model, then llama.cpp b12032 `convert_hf_to_gguf.py` and `llama-quantize` to Q8_0 (640 MB), served by `llama-server` with the agent chat template (D-026, D-036). Hashes in `reports/2026-11-20-m1-dev/manifest.json`.
 
 ## 2. Results (dev v1, 300 tasks; Wilson 95% CIs; failed/invalid episodes count as failures)
@@ -39,7 +39,7 @@ K=8 at temperature 1.0 on train tasks: **in-band (20-80%) share 3% [2%, 6%]** (3
 1. **G3:** approve GRPO (<= 15 GPU-h) and the 30-step shuffled-reward control, or first the widened train set (about a day of work plus the pilot), or stop at M1 given 98% dev.
 2. **G4:** preregistration FINAL, the single test run, your ~10 own clips and ~100 test-real requests.
 3. Holm on the full vs deduplicated test-iid (default kept: full).
-4. Paste the Kaggle log tail (final train/eval loss) for M1.
+4. ~~Paste the Kaggle log tail~~ done 20 Nov (see section 1).
 5. Decide `remove_object` -> F4 label strictness (affects data hygiene only after D-038); whether to run a 1.7B SFT (not started, per the owner).
 6. Hub pushes (corpus, model) and the HF model card are not done.
 

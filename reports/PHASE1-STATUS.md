@@ -12,7 +12,7 @@ The sections further down are the autonomous-run history from 16-19 Nov and are 
 | Task generator v1, corpus v1 (22 clips), checker, conformance, FFmpeg 5.1.1 pin, splits (train 4472 / dev 300 / test-iid 500 / test-compositional 200 / test-phrasing 200) | done |
 | Teacher pilot, bulk ($2.30), paraphrases, oracle mix (G1/G2 done); ledger $2.675 of $4 | done |
 | Rejection sampling | nothing to keep: stock Qwen3-0.6B scores 0/300 on dev |
-| SFT 0.6B (M1) on Kaggle T4, 2 epochs, 2 x 8 (D-037); final losses not captured | done |
+| SFT 0.6B (M1) on Kaggle T4, 2 epochs (to save time), 2 x 8 (D-037); eval loss 0.0777, train loss mean 0.0997 | done |
 | GGUF Q8_0 path (llama.cpp b12032, D-036) and HF-vs-GGUF parity | done: 99% agreement, McNemar p=1.0 |
 | **M1 dev: 293/300 = 98% [95, 99]** vs B0 178/300 = 59% [54, 65] ("SFT nearly sufficient", per the preregistration) | done |
 | Leakage: exact duplicates vs train (test-iid 104/500, compositional 0, phrasing 0); test-iid reported full + dedup (D-039) | done, preregistration amended |
@@ -23,7 +23,7 @@ The sections further down are the autonomous-run history from 16-19 Nov and are 
 | 1.7B SFT | not started (owner: not for now) |
 | Hub pushes (corpus, model), HF model card, CLI check on the owner's machine, phase report | not done |
 
-**Waiting for the owner:** (1) G3: GRPO, or the widened train set first, or stop at M1; (2) G4: preregistration FINAL + test run + own clips (~10) and ~100 test-real requests; (3) confirm Holm stays on the full test-iid (dedup is a descriptive column); (4) paste the Kaggle log tail for M1's final losses; (5) `remove_object` -> F4 label strictness.
+**Waiting for the owner:** (1) G3: GRPO, or the widened train set first, or stop at M1; (2) G4: preregistration FINAL + test run + own clips (~10) and ~100 test-real requests; (3) confirm Holm stays on the full test-iid (dedup is a descriptive column); (5) `remove_object` -> F4 label strictness.
 
 ## HISTORICAL (16-19 Nov): done list
 | Task | What |
