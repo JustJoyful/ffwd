@@ -7,6 +7,7 @@ nobody asks for "extract frames AND compress to 2 MB". Unlisted pairs are never 
 
 import itertools
 import random
+from collections.abc import Callable
 
 from training.env.checker import expected_frame_range
 from training.taskgen.clips import ClipIndex
@@ -144,14 +145,24 @@ def compose(drafts: list[Draft], ci: ClipIndex) -> Draft | None:
 
 
 def sample_composition(
-    rng: random.Random, ci: ClipIndex, n_families: int, tries: int = 40
+    rng: random.Random,
+    ci: ClipIndex,
+    n_families: int,
+    tries: int = 40,
+    combo_weight: Callable[[tuple[str, ...]], float] | None = None,
 ) -> Draft | None:
-    """2-4 families on one input; None if no valid, verifiable-looking composition was found."""
+    """2-4 families on one input; None if no valid, verifiable-looking composition was found.
+    `combo_weight` (hard-variant pool only) biases which valid combination is drawn; the default path is unchanged.
+    """
     combos = valid_combos(n_families)
     if not combos:
         return None
     for _ in range(tries):
-        combo = list(rng.choice(combos))
+        combo = list(
+            rng.choice(combos)
+            if combo_weight is None
+            else rng.choices(combos, weights=[combo_weight(c) for c in combos])[0]
+        )
         rng.shuffle(combo)  # which family anchors the clip choice varies
         base = SAMPLERS[combo[0]](rng, ci)
         if base is None:

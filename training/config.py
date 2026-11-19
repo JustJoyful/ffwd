@@ -273,6 +273,37 @@ PASS_RATE_BAND = (0.2, 0.8)  # inclusive; tasks the model always/never solves gi
 PASS_RATE_SAMPLES = 8
 PASS_RATE_ALLOWED_SPLITS = ("train", "toy")  # never filter on dev/test tasks (RULES §4.5)
 
+# --- Hard-variant train pool + recovery-start tasks (pilot, owner instruction 20 Nov 2026) ---
+# T18 found only 3-6% of train tasks in the 20-80% band. The pool reweights the generator's draw toward the patterns M1
+# fails or flip-flops on (reports/2026-11-20-t18-pass-rates/summary.md); parameter distributions are unchanged. Train
+# styles and train combos only: a draw is kept only if assign_split() puts its content in `train`, so it cannot collide
+# with dev or a test split, and no dev/test file is read to guarantee that.
+HARD_POOL_SEED = 20261120
+HARD_FAMILIES = (
+    "F2",
+    "F6",
+    "F7",
+    "F8",
+    "F10",
+    "F11",
+)  # join, size cap, frames, gif, loudness/gain, audio delay
+HARD_FAMILY_COUNT_WEIGHTS = (
+    0.10,
+    0.20,
+    0.40,
+    0.30,
+)  # share of 1/2/3/4-family draws (natural mix: MIX_FAMILY_COUNT)
+HARD_PILOT_N = 300  # candidate tasks per pilot (widened, recovery-start)
+HARD_FULL_SCALE_N = (
+    3000  # candidates of the full widened + recovery set; "full scale" in the G3 criterion (a)
+)
+# G3 criterion (a), owner 20 Nov 2026: pooled in-band share of the two pilots, and the implied in-band task count.
+G3_MIN_IN_BAND_SHARE = 0.25
+G3_MIN_IN_BAND_TASKS = 400
+# A recovery-start task replays a scripted opening (the gold spec, then a PERTURBED reference run that the checker
+# verifiably fails); the policy must produce the fix. The run budget (MAX_RUNS_PER_JOB) includes the scripted run.
+RECOVERY_MAX_OPERATOR_TRIES = 4
+
 # GRPO telemetry (T6): hand-inspect the top-reward trajectories every N steps (reward-hacking guard)
 TELEMETRY_SPOTCHECK_EVERY = 10
 TELEMETRY_SPOTCHECK_TOP_K = 3

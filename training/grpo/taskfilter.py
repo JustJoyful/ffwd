@@ -190,6 +190,11 @@ def main(argv: list[str] | None = None) -> None:
         help="prompt v1, spec-first, stop after a clarification (the Phase 1 protocol)",
     )
     ap.add_argument("--allow-draft-prompt", action="store_true")
+    ap.add_argument(
+        "--openings",
+        type=Path,
+        help="recovery.jsonl (training.taskgen.recovery): replay each task's scripted opening, then sample the policy",
+    )
     a = ap.parse_args(argv)
     if a.temperature <= 0:
         sys.exit("--temperature must be > 0")
@@ -200,6 +205,11 @@ def main(argv: list[str] | None = None) -> None:
     corpus = ensure_corpus(config.CORPUS_DIR, ids={c for t in tasks for c in t["inputs"]})
     policy = policy_from_config(a.policy_config, None)
     policy.temperature = a.temperature
+    if a.openings:
+        from training.taskgen.recovery import OpeningPolicy, openings_for
+
+        rows = [json.loads(x) for x in a.openings.read_text().splitlines()]
+        policy = OpeningPolicy(policy, openings_for(tasks, rows))
     sampler = episode_sampler(
         lambda: policy,
         corpus,
@@ -230,7 +240,7 @@ def main(argv: list[str] | None = None) -> None:
         tuple(a.band),
         {
             "policy_config": str(a.policy_config),
-            "model": policy.model,
+            "model": getattr(policy, "model", None) or policy.policy.model,
             "temperature": a.temperature,
             "seed": a.seed,
             "tasks_sha256": hashlib.sha256(raw).hexdigest(),
