@@ -121,3 +121,11 @@ Needed before: the teacher bulk run (G2). Owner asked to propose, not start.
 - SFT 0.6B on Kaggle T4: 2 epochs, 2 x 8 batch, ~5 h, adapter fetched. Final losses were not captured (see the report).
 - GGUF path proven (b12032, D-036). **M1 (Q8_0) on final dev: 293/300 = 98% [95%, 99%] vs B0 178/300 = 59%**; 0 invalid turns; all 7 failures are the 4-run limit on multi-family tasks. Dev is in-distribution; leakage check done (`reports/2026-11-20-m1-dev/summary.md`).
 - **Waiting for the owner:** G3 (GRPO + shuffled-reward control, <= 15 GPU-h), G4 (preregistration FINAL + the single test run, owner's own clips and ~100 test-real requests). Also open: decision on `remove_object` -> F4 label strictness; whether to run a 1.7B SFT; HF-vs-GGUF parity of M1.
+
+## 20 Nov 2026 (early morning IST): follow-ups 1-6 done; STOPPED before G3
+- Parity (`reports/2026-11-20-m1-parity/`): HF fp16 vs GGUF Q8_0, 100 seeded dev tasks, 99/100 agreement, McNemar p=1.0, paired diff +1 pp [0, +3]; transcripts byte-identical on 65% (first turn 86%).
+- Dev failures (`reports/2026-11-20-m1-dev-failures/`): 7 model errors, 0 checker false negatives; one generator wording ambiguity (speed-before-trim); F2+F9 (join + remove sound) is the capability gap (0/3).
+- Leakage (`reports/2026-11-20-leakage-audit/`): exact-duplicate requests vs train: test-iid 104/500 (20.8%), test-compositional 0/200, test-phrasing 0/200, dev 45/300. test-iid reported on full AND dedup (396) subset (preregistration amended; D-039).
+- T18 (`reports/2026-11-20-t18-pass-rates/`): in-band share 3% [2%, 6%] (302-task sample), 6% [3%, 13%] on the 110 never-trained-on train tasks; far below 30%. A difficulty-widened train set is proposed with an estimate, NOT built.
+- D-037 (SFT config deviation, Kaggle script fix), D-038 (`unsupported` graded on the action only), D-039 (test-iid dedup reporting). No system was run on any test split; no 1.7B SFT.
+- **Waiting for the owner:** G3 (GRPO + shuffled-reward control), G4 (preregistration FINAL + single test run + own clips/test-real requests); Holm-on-full-vs-dedup choice; whether to build the widened train set first; the Kaggle log tail for M1's final losses. The preregistration requires the phrase "SFT nearly sufficient" in the report (M1 dev 98%).

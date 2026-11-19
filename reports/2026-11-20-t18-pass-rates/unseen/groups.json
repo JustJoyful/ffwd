@@ -1,0 +1,200 @@
+{
+ "ALL": {
+  "n": 110,
+  "in_band": 7,
+  "too_easy": 96,
+  "too_hard": 7,
+  "share_in_band": 0.06363636363636363,
+  "ci_lo": 0.031164518014477623,
+  "ci_hi": 0.12555746188210204
+ },
+ "difficulty: 1": {
+  "n": 54,
+  "in_band": 2,
+  "too_easy": 52,
+  "too_hard": 0,
+  "share_in_band": 0.037037037037037035,
+  "ci_lo": 0.010216367948445597,
+  "ci_hi": 0.12535176917275476
+ },
+ "difficulty: 2": {
+  "n": 32,
+  "in_band": 2,
+  "too_easy": 27,
+  "too_hard": 3,
+  "share_in_band": 0.0625,
+  "ci_lo": 0.01731056703164098,
+  "ci_hi": 0.20147123144154577
+ },
+ "difficulty: 3": {
+  "n": 13,
+  "in_band": 1,
+  "too_easy": 9,
+  "too_hard": 3,
+  "share_in_band": 0.07692307692307693,
+  "ci_lo": 0.013710421242556586,
+  "ci_hi": 0.3331395092109958
+ },
+ "difficulty: 4": {
+  "n": 11,
+  "in_band": 2,
+  "too_easy": 8,
+  "too_hard": 1,
+  "share_in_band": 0.18181818181818182,
+  "ci_lo": 0.051367689746085105,
+  "ci_hi": 0.47698056196084415
+ },
+ "families: 1": {
+  "n": 8,
+  "in_band": 0,
+  "too_easy": 8,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.3244075648838801
+ },
+ "families: 2": {
+  "n": 32,
+  "in_band": 2,
+  "too_easy": 27,
+  "too_hard": 3,
+  "share_in_band": 0.0625,
+  "ci_lo": 0.01731056703164098,
+  "ci_hi": 0.20147123144154577
+ },
+ "families: 3": {
+  "n": 13,
+  "in_band": 1,
+  "too_easy": 9,
+  "too_hard": 3,
+  "share_in_band": 0.07692307692307693,
+  "ci_lo": 0.013710421242556586,
+  "ci_hi": 0.3331395092109958
+ },
+ "families: 4": {
+  "n": 11,
+  "in_band": 2,
+  "too_easy": 8,
+  "too_hard": 1,
+  "share_in_band": 0.18181818181818182,
+  "ci_lo": 0.051367689746085105,
+  "ci_hi": 0.47698056196084415
+ },
+ "involves F1": {
+  "n": 49,
+  "in_band": 5,
+  "too_easy": 38,
+  "too_hard": 6,
+  "share_in_band": 0.10204081632653061,
+  "ci_lo": 0.04437954674476266,
+  "ci_hi": 0.21756361549195893
+ },
+ "involves F10": {
+  "n": 4,
+  "in_band": 1,
+  "too_easy": 0,
+  "too_hard": 3,
+  "share_in_band": 0.25,
+  "ci_lo": 0.0455872608097006,
+  "ci_hi": 0.699358157417598
+ },
+ "involves F11": {
+  "n": 2,
+  "in_band": 0,
+  "too_easy": 2,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.6576197724933468
+ },
+ "involves F12": {
+  "n": 28,
+  "in_band": 3,
+  "too_easy": 22,
+  "too_hard": 3,
+  "share_in_band": 0.10714285714285714,
+  "ci_lo": 0.03711836682930002,
+  "ci_hi": 0.2719585154867215
+ },
+ "involves F2": {
+  "n": 1,
+  "in_band": 0,
+  "too_easy": 1,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.7934506856227626
+ },
+ "involves F3": {
+  "n": 12,
+  "in_band": 1,
+  "too_easy": 10,
+  "too_hard": 1,
+  "share_in_band": 0.08333333333333333,
+  "ci_lo": 0.014865094404917123,
+  "ci_hi": 0.3538799111411169
+ },
+ "involves F4": {
+  "n": 15,
+  "in_band": 1,
+  "too_easy": 11,
+  "too_hard": 3,
+  "share_in_band": 0.06666666666666667,
+  "ci_lo": 0.011866895493268581,
+  "ci_hi": 0.2981652987378002
+ },
+ "involves F5": {
+  "n": 24,
+  "in_band": 3,
+  "too_easy": 19,
+  "too_hard": 2,
+  "share_in_band": 0.125,
+  "ci_lo": 0.04344334080123444,
+  "ci_hi": 0.31003881270500067
+ },
+ "involves F6": {
+  "n": 10,
+  "in_band": 0,
+  "too_easy": 10,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 2.7755575615628914e-17,
+  "ci_hi": 0.27753279986288915
+ },
+ "involves F7": {
+  "n": 4,
+  "in_band": 0,
+  "too_easy": 4,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.4898908364545972
+ },
+ "involves F9": {
+  "n": 23,
+  "in_band": 2,
+  "too_easy": 20,
+  "too_hard": 1,
+  "share_in_band": 0.08695652173913043,
+  "ci_lo": 0.024180004484220377,
+  "ci_hi": 0.2679598107574366
+ },
+ "kind: ambiguous": {
+  "n": 17,
+  "in_band": 1,
+  "too_easy": 16,
+  "too_hard": 0,
+  "share_in_band": 0.058823529411764705,
+  "ci_lo": 0.010460400984997592,
+  "ci_hi": 0.26982030637575394
+ },
+ "kind: unsupported": {
+  "n": 29,
+  "in_band": 1,
+  "too_easy": 28,
+  "too_hard": 0,
+  "share_in_band": 0.034482758620689655,
+  "ci_lo": 0.006113214292762653,
+  "ci_hi": 0.17175521879320282
+ }
+}

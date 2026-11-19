@@ -1,0 +1,227 @@
+{
+ "ALL": {
+  "n": 302,
+  "in_band": 9,
+  "too_easy": 285,
+  "too_hard": 8,
+  "share_in_band": 0.029801324503311258,
+  "ci_lo": 0.015756287394571824,
+  "ci_hi": 0.05565802937240098
+ },
+ "NOT in M1's SFT data": {
+  "n": 8,
+  "in_band": 0,
+  "too_easy": 6,
+  "too_hard": 2,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.3244075648838801
+ },
+ "difficulty: 1": {
+  "n": 144,
+  "in_band": 4,
+  "too_easy": 136,
+  "too_hard": 4,
+  "share_in_band": 0.027777777777777776,
+  "ci_lo": 0.01085411795640967,
+  "ci_hi": 0.06924153934534724
+ },
+ "difficulty: 2": {
+  "n": 96,
+  "in_band": 1,
+  "too_easy": 93,
+  "too_hard": 2,
+  "share_in_band": 0.010416666666666666,
+  "ci_lo": 0.0018411702168162555,
+  "ci_hi": 0.05666617622715784
+ },
+ "difficulty: 3": {
+  "n": 50,
+  "in_band": 4,
+  "too_easy": 45,
+  "too_hard": 1,
+  "share_in_band": 0.08,
+  "ci_lo": 0.03154951408859297,
+  "ci_hi": 0.18838246918342832
+ },
+ "difficulty: 4": {
+  "n": 12,
+  "in_band": 0,
+  "too_easy": 11,
+  "too_hard": 1,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.2424940066552408
+ },
+ "families: 1": {
+  "n": 104,
+  "in_band": 4,
+  "too_easy": 96,
+  "too_hard": 4,
+  "share_in_band": 0.038461538461538464,
+  "ci_lo": 0.015056813343976884,
+  "ci_hi": 0.09474751376905563
+ },
+ "families: 2": {
+  "n": 96,
+  "in_band": 1,
+  "too_easy": 93,
+  "too_hard": 2,
+  "share_in_band": 0.010416666666666666,
+  "ci_lo": 0.0018411702168162555,
+  "ci_hi": 0.05666617622715784
+ },
+ "families: 3": {
+  "n": 50,
+  "in_band": 4,
+  "too_easy": 45,
+  "too_hard": 1,
+  "share_in_band": 0.08,
+  "ci_lo": 0.03154951408859297,
+  "ci_hi": 0.18838246918342832
+ },
+ "families: 4": {
+  "n": 12,
+  "in_band": 0,
+  "too_easy": 11,
+  "too_hard": 1,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.2424940066552408
+ },
+ "in M1's SFT data": {
+  "n": 294,
+  "in_band": 9,
+  "too_easy": 279,
+  "too_hard": 6,
+  "share_in_band": 0.030612244897959183,
+  "ci_lo": 0.01618721494388896,
+  "ci_hi": 0.057145285196204265
+ },
+ "involves F1": {
+  "n": 112,
+  "in_band": 0,
+  "too_easy": 110,
+  "too_hard": 2,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.03316134706694386
+ },
+ "involves F10": {
+  "n": 31,
+  "in_band": 1,
+  "too_easy": 28,
+  "too_hard": 2,
+  "share_in_band": 0.03225806451612903,
+  "ci_lo": 0.005717221525416816,
+  "ci_hi": 0.16194105164724903
+ },
+ "involves F11": {
+  "n": 11,
+  "in_band": 0,
+  "too_easy": 10,
+  "too_hard": 1,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.25883296696803165
+ },
+ "involves F12": {
+  "n": 78,
+  "in_band": 4,
+  "too_easy": 73,
+  "too_hard": 1,
+  "share_in_band": 0.05128205128205128,
+  "ci_lo": 0.020121012473896145,
+  "ci_hi": 0.12456676547294487
+ },
+ "involves F2": {
+  "n": 15,
+  "in_band": 0,
+  "too_easy": 13,
+  "too_hard": 2,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.20388330103584854
+ },
+ "involves F3": {
+  "n": 25,
+  "in_band": 1,
+  "too_easy": 24,
+  "too_hard": 0,
+  "share_in_band": 0.04,
+  "ci_lo": 0.007096233501987251,
+  "ci_hi": 0.19544063736193729
+ },
+ "involves F4": {
+  "n": 77,
+  "in_band": 5,
+  "too_easy": 70,
+  "too_hard": 2,
+  "share_in_band": 0.06493506493506493,
+  "ci_lo": 0.028053080447716178,
+  "ci_hi": 0.14316425064219396
+ },
+ "involves F5": {
+  "n": 40,
+  "in_band": 1,
+  "too_easy": 38,
+  "too_hard": 1,
+  "share_in_band": 0.025,
+  "ci_lo": 0.004426831502681396,
+  "ci_hi": 0.12881368963474088
+ },
+ "involves F6": {
+  "n": 25,
+  "in_band": 2,
+  "too_easy": 23,
+  "too_hard": 0,
+  "share_in_band": 0.08,
+  "ci_lo": 0.02222040128484759,
+  "ci_hi": 0.2496610895039531
+ },
+ "involves F7": {
+  "n": 15,
+  "in_band": 0,
+  "too_easy": 13,
+  "too_hard": 2,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.20388330103584854
+ },
+ "involves F8": {
+  "n": 7,
+  "in_band": 1,
+  "too_easy": 6,
+  "too_hard": 0,
+  "share_in_band": 0.14285714285714285,
+  "ci_lo": 0.02567962434474355,
+  "ci_hi": 0.5131278292743188
+ },
+ "involves F9": {
+  "n": 74,
+  "in_band": 3,
+  "too_easy": 69,
+  "too_hard": 2,
+  "share_in_band": 0.04054054054054054,
+  "ci_lo": 0.01388243122197886,
+  "ci_hi": 0.11254709579091646
+ },
+ "kind: ambiguous": {
+  "n": 16,
+  "in_band": 0,
+  "too_easy": 16,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.19360768053443644
+ },
+ "kind: unsupported": {
+  "n": 24,
+  "in_band": 0,
+  "too_easy": 24,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.13797620467498012
+ }
+}

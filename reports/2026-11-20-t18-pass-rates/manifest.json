@@ -1,0 +1,27 @@
+{
+ "created": "2026-11-19T21:32:09+00:00",
+ "created_ist": "2026-11-20 03:02 IST",
+ "code_commit_at_run": "1c88f83",
+ "note": "taskfilter, passrate_report committed in 1c88f83; this report is committed afterwards",
+ "model": "ffmpeg-agent-m1-0.6b GGUF Q8_0",
+ "gguf_sha256": "c461e0b04f391d96ff8b19b65a7d5be4e2de0b8f180ec4f440b962f078c95f3d",
+ "server": "llama-server b12032, -c 32768 -np 4, seed 20261115",
+ "k": 8,
+ "temperature": 1.0,
+ "band": [
+  0.2,
+  0.8
+ ],
+ "train_tasks_sha256": "1651d8addfc901ef5189c46fa97e7ba9f93010c887537293cb4f9dc12382e6aa",
+ "sample_seed": 20261115,
+ "seeded_sample_size": 1000,
+ "sampled_tasks": 302,
+ "unseen_tasks": 110,
+ "tables": {
+  "sample": "4c9d32957245a92bcd14a880cb5ddafa2d7675a6d7ef16a1287197b0f56a9651",
+  "unseen": "5445ace7b6279bfc1512cce7ad87bb6a111bd223d77b5ce953c82f67ea42d4d5"
+ },
+ "hardware": "RTX 3050 6GB laptop, 12 cores",
+ "cost_usd": 0.0,
+ "deepseek_ledger_total_usd": 2.675
+}
