@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from training.env.loop import run_episode, score
 
 TRIM_GOLD = {
@@ -121,6 +123,20 @@ def test_unsupported_scored_without_runs(tmp_path, corpus):
     ep = run_episode(t, Scripted([refuse]), corpus=corpus, job_dir=tmp_path)
     assert ep.refused and ep.end_reason == "unsupported" and score(t, ep)
     assert not score(_task(), ep)  # refusing a supported task is a failure
+
+
+@pytest.mark.parametrize("nearest", [None, "F4", "F9", "F12"])
+def test_unsupported_score_and_reward_ignore_nearest_supported(tmp_path, corpus, nearest):
+    """Owner decision 20 Nov 2026: only the `unsupported` action is graded; the label is descriptive."""
+    from training import config
+    from training.grpo.telemetry import grpo_reward
+
+    t = _task(gold=None, unsupported=True)
+    refuse = json.dumps({"action": "unsupported", "reason": "x", "nearest_supported": nearest})
+    ep = run_episode(t, Scripted([refuse]), corpus=corpus, job_dir=tmp_path)
+    assert score(t, ep) and ep.invalid_turns == 0
+    assert grpo_reward(t, ep).terms["clarify"] == 1.0
+    assert config.REWARD_SCORES_NEAREST_SUPPORTED is False
 
 
 def test_finish_before_pass_rejected(tmp_path, corpus):

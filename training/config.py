@@ -254,6 +254,10 @@ QWEN3_OBSERVATION_TEMPLATE = (
 
 # GRPO reward v1 DRAFT: ARCHITECTURE §7.4 initial weights (tune on dev only, RULES §4.5). Terms are
 # computed in training/grpo/telemetry.py; `invalid` is a per-action penalty, capped per episode.
+# 20 Nov 2026 (owner, dev-only change): an `unsupported` task is graded on the action alone (refused, nothing run).
+# `nearest_supported` is descriptive and is not scored by the eval (loop.score) or the reward (telemetry.grpo_reward);
+# tests/env/test_loop.py pins that the outcome is the same for any label. See eval/PREREGISTRATION.md, DECISIONS.
+REWARD_SCORES_NEAREST_SUPPORTED = False
 REWARD_WEIGHTS = {
     "pass": 1.0,
     "partial": 0.3,
