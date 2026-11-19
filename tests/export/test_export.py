@@ -46,3 +46,9 @@ def test_merged_model_carries_the_agent_template():
     from training.env.chat_template import AGENT_CHAT_TEMPLATE
 
     assert template.strip() == AGENT_CHAT_TEMPLATE.strip()
+
+
+def test_convert_argv_uses_the_given_converter_python(tmp_path):
+    (tmp_path / "convert_hf_to_gguf.py").write_text("")
+    argv = convert_argv(tmp_path / "m", tmp_path / "o.gguf", tmp_path, "/venv/bin/python")
+    assert argv[0] == "/venv/bin/python" and argv[1].endswith("convert_hf_to_gguf.py")

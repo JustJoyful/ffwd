@@ -1,0 +1,23 @@
+{
+ "created": "2026-11-19",
+ "commit": "c4b564c (+ uncommitted export/teacher edits at run time)",
+ "llama_cpp_tag": "b12032",
+ "llama_cpp_source_commit": "dde879bc4f954b809892fd0d660515f42536394a",
+ "llama_server_release": "b12032 ubuntu-vulkan-x64 (config sha256 f75e7107f945...)",
+ "converter_env": {
+  "python": "3.11",
+  "torch": "2.11.0+cpu",
+  "transformers": "4.57.6",
+  "numpy": "2.2.x",
+  "gguf": "from PyPI (llama.cpp requirements)"
+ },
+ "hf_snapshot": "Qwen/Qwen3-0.6B@c1899de289a04d12100db370d81485cdf75e47ca",
+ "converted_q8_0_sha256": "7cb85262dcec9d4b9721696592d87d8a5bb40d408e30abae1887313e167c9f77",
+ "official_q8_0_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+ "hardware": "RTX 3050 6GB Laptop, 12 cores, 15 GiB RAM",
+ "seeds": {
+  "llama_server": 20261115
+ },
+ "tasks": "data/tasks/dev/v1.jsonl --limit 5",
+ "cost_usd": 0
+}

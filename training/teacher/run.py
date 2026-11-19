@@ -24,7 +24,7 @@ from training.taskgen.clips import visible_records
 from training.taskgen.loader import load_tasks
 from training.teacher.budget import BudgetGuard
 from training.teacher.datacard import build_card
-from training.teacher.generate import generate, is_offpeak, seconds_until_offpeak
+from training.teacher.generate import generate, is_offpeak, refilter, seconds_until_offpeak
 
 MODEL_CONFIG = config.REPO_ROOT / "eval" / "configs" / "x1-deepseek-v1.toml"
 PILOT_COMPOSITIONS = {
@@ -117,9 +117,9 @@ def bulk(
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["pilot", "bulk"])
+    ap.add_argument("mode", choices=["pilot", "bulk", "refilter"])
     ap.add_argument("--name", required=True, help="unique run name (also the ledger run id)")
-    ap.add_argument("--budget-usd", type=float, required=True)
+    ap.add_argument("--budget-usd", type=float, default=0.0)
     ap.add_argument(
         "--limit", type=int, default=None, help="bulk: stop after this many new episodes"
     )
@@ -127,6 +127,13 @@ def main() -> None:
         "--report-dir", type=Path, default=None, help="pilot: where to copy the small artifacts"
     )
     a = ap.parse_args()
+    if a.mode == "refilter":  # no API call: recompute kept.jsonl from the raw trajectories
+        work = config.DATA_DIR / "teacher" / a.name
+        print(json.dumps(refilter(work, load_tasks("train", purpose="teacher"))))
+        build_card(work, {"refiltered": True})
+        return
+    if a.budget_usd <= 0:
+        raise SystemExit("--budget-usd is required for pilot and bulk")
     if not is_offpeak(datetime.now(UTC)):
         raise SystemExit("inside a DeepSeek peak window (config.DEEPSEEK_PEAK_UTC): not running")
     tasks = load_tasks("train", purpose="teacher")

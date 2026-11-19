@@ -34,10 +34,12 @@ UNSUPPORTED: dict[str, str | None] = {
 # Labels a teacher may give as `nearest_supported` (D-009; teacher pilot 19 Nov 2026). Strict by default: only the
 # canonical value above. "upscale ... to 4K" really is the F4 resize (scale) with the AI part refused, while "make this
 # blurry footage sharp" has no supported neighbour (no sharpen/denoise filter in the allowlist), so that one intent
-# accepts both. The pilot's "blur everyone's face" -> F4 stays a mismatch: cropping does not blur.
+# accepts both. "Give me a transcript" also accepts F9: extracting the audio is the supported step toward it (the bulk
+# teacher answered F9 on 3/3). The pilot's "blur everyone's face" -> F4 stays a mismatch: cropping does not blur; so do
+# colour grade -> F3 and background -> F3/F4 (the bulk teacher's other habits): nothing supported is close there.
 NEAREST_ACCEPTED: dict[str, frozenset[str | None]] = {
     intent: frozenset({near}) for intent, near in UNSUPPORTED.items()
-} | {"unsup.upscale": frozenset({"F4", None})}
+} | {"unsup.upscale": frozenset({"F4", None}), "unsup.transcribe": frozenset({"F9", None})}
 
 
 def unsupported_intent(task: dict) -> str | None:

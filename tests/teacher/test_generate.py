@@ -191,9 +191,11 @@ def test_unsupported_label_is_filtered_not_edited(corpus, tmp_path):
     assert (ok.passed, ok.kept, ok.label_rejected) == (1, 1, 0)
 
 
-def test_upscale_accepts_f4_or_null_everything_else_is_strict():
+def test_upscale_and_transcribe_accept_their_family_or_null_everything_else_is_strict():
     assert NEAREST_ACCEPTED["unsup.upscale"] == {"F4", None}
-    assert all(NEAREST_ACCEPTED[i] == {UNSUPPORTED[i]} for i in UNSUPPORTED if i != "unsup.upscale")
+    assert NEAREST_ACCEPTED["unsup.transcribe"] == {"F9", None}
+    loose = {"unsup.upscale", "unsup.transcribe"}
+    assert all(NEAREST_ACCEPTED[i] == {UNSUPPORTED[i]} for i in UNSUPPORTED if i not in loose)
 
 
 def test_every_unsupported_train_task_resolves_to_an_intent():
@@ -251,3 +253,25 @@ def test_stop_on_peak_is_clean_and_resumable(corpus, tmp_path):
         ).kept
         == 1
     )
+
+
+def test_refilter_rebuilds_kept_from_raw_with_the_current_rules(corpus, tmp_path):
+    from training.teacher.generate import refilter
+
+    talk = _unsup("unsup.transcribe", "tr-talk000000-terse")
+    blur = _unsup("unsup.blur_faces", "tr-blur000000-terse")
+    for t, near in ((talk, "F9"), (blur, "F4")):
+        _gen(
+            tmp_path, corpus, [t], _says(near)
+        )  # same out dir: the second call appends, the first is skipped
+    out = tmp_path / "out"
+    (out / "kept.jsonl").write_text("stale")  # e.g. written by a run that started with older rules
+    raw_before = (out / "trajectories.jsonl").read_text()
+    counts = refilter(out, [talk, blur])
+    assert counts == {"episodes": 2, "passed": 2, "kept": 1, "label_rejected": 1}
+    assert [json.loads(x)["task_id"] for x in (out / "kept.jsonl").read_text().splitlines()] == [
+        talk["id"]
+    ]
+    assert (
+        out / "trajectories.jsonl"
+    ).read_text() == raw_before  # the teacher's output is never edited

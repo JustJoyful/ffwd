@@ -78,6 +78,41 @@ def teacher_nearest(ep) -> str | None:
     return None
 
 
+def nearest_in_messages(messages: list[dict]) -> str | None:
+    """Same as teacher_nearest, from a stored record's messages (the conversation after the 2 head messages)."""
+    for m in messages[2:]:
+        if m["role"] != "assistant":
+            continue
+        a = parse_action(m["content"])
+        if not isinstance(a, ParseError) and a.get("action") == "unsupported":
+            return a.get("nearest_supported")
+    return None
+
+
+def refilter(out_dir: Path, tasks: list[dict]) -> dict:
+    """Rebuild kept.jsonl from the untouched trajectories.jsonl with the CURRENT label rules (passed AND label_ok).
+    kept.jsonl is derived data: a run in progress writes it with the mapping it was started with; this makes the final
+    file independent of that. Atomic replace. Returns counts."""
+    by_id = {t["id"]: t for t in tasks}
+    rows = [json.loads(x) for x in (out_dir / "trajectories.jsonl").read_text().splitlines()]
+    kept, rejected = [], 0
+    for r in rows:
+        t = by_id[r["task_id"]]
+        ok = not t["flags"]["unsupported"] or nearest_ok(t, nearest_in_messages(r["messages"]))
+        if r["passed"] and ok:
+            kept.append(r | {"label_ok": True})
+        rejected += r["passed"] and not ok
+    tmp = out_dir / "kept.jsonl.tmp"
+    tmp.write_text("".join(json.dumps(r) + "\n" for r in kept))
+    tmp.replace(out_dir / "kept.jsonl")
+    return {
+        "episodes": len(rows),
+        "passed": sum(r["passed"] for r in rows),
+        "kept": len(kept),
+        "label_rejected": rejected,
+    }
+
+
 def label_ok(task: dict, ep) -> bool:
     """Only unsupported tasks carry a checkable label: the teacher's `nearest_supported` must be one the generator
     accepts (special.NEAREST_ACCEPTED). `score()` does not look at it; the trajectory is filtered, never edited.
