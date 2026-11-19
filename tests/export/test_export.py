@@ -52,3 +52,24 @@ def test_convert_argv_uses_the_given_converter_python(tmp_path):
     (tmp_path / "convert_hf_to_gguf.py").write_text("")
     argv = convert_argv(tmp_path / "m", tmp_path / "o.gguf", tmp_path, "/venv/bin/python")
     assert argv[0] == "/venv/bin/python" and argv[1].endswith("convert_hf_to_gguf.py")
+
+
+def test_merged_tokenizer_config_is_readable_by_the_converters_transformers(tmp_path):
+    import json
+
+    from training.export.merge import converter_compatible_tokenizer
+
+    f = tmp_path / "tokenizer_config.json"
+    f.write_text(
+        json.dumps(
+            {"eos_token": "<|im_end|>", "extra_special_tokens": ["<|im_start|>", "<|im_end|>"]}
+        )
+    )
+    converter_compatible_tokenizer(tmp_path)
+    cfg = json.loads(f.read_text())
+    assert (
+        cfg["additional_special_tokens"] == ["<|im_start|>", "<|im_end|>"]
+        and "extra_special_tokens" not in cfg
+    )
+    converter_compatible_tokenizer(tmp_path)  # idempotent
+    assert json.loads(f.read_text()) == cfg

@@ -1,0 +1,11 @@
+{
+ "created": "2026-11-19",
+ "commit": "90077c1 (+ merge.py tokenizer fix, configs -c 8192 at commit time)",
+ "llama_cpp": "b12032",
+ "converter_env": "data/tools/llama-convert-venv (torch 2.11.0+cpu, transformers 4.57.6)",
+ "train_env": "uv --group train, transformers 5.x",
+ "data": "data/teacher/smoke = first 900 episodes of bulk-20261119, refiltered; oracle 343; not used for any result",
+ "hardware": "RTX 3050 6GB Laptop",
+ "cost_usd": 0,
+ "tasks": "data/tasks/dev/v1.jsonl --limit 5"
+}

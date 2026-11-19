@@ -7,7 +7,19 @@ the agent template so every downstream runtime (llama.cpp GGUF metadata, MLC con
 """
 
 import argparse
+import json
 from pathlib import Path
+
+
+def converter_compatible_tokenizer(model_dir: Path) -> None:
+    """transformers 5 writes `extra_special_tokens` as a list; the converter env pins transformers 4.57 (the tag's own
+    requirements), which expects a dict there and crashes. The same tokens under the 4.x key `additional_special_tokens`
+    load in both, so rename the key (nothing else changes)."""
+    f = model_dir / "tokenizer_config.json"
+    cfg = json.loads(f.read_text())
+    if isinstance(cfg.get("extra_special_tokens"), list):
+        cfg["additional_special_tokens"] = cfg.pop("extra_special_tokens")
+        f.write_text(json.dumps(cfg, indent=2) + "\n")
 
 
 def merge_lora(base: str, adapter: Path, out: Path, dtype: str = "float16") -> Path:
@@ -22,6 +34,7 @@ def merge_lora(base: str, adapter: Path, out: Path, dtype: str = "float16") -> P
     out.mkdir(parents=True, exist_ok=False)  # never overwrite an earlier export
     merged.save_pretrained(out, safe_serialization=True)
     install(AutoTokenizer.from_pretrained(base)).save_pretrained(out)
+    converter_compatible_tokenizer(out)
     return out
 
 
