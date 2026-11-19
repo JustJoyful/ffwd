@@ -3,7 +3,8 @@
 API-pushed kernels cannot read Kaggle secrets (the 16-17 Nov kill-and-resume attempts, reports/PHASE1-STATUS.md), so this
 path needs none: the code at ONE git commit plus the SFT examples go up as a PRIVATE Kaggle dataset, the kernel trains
 from /kaggle/input and leaves the LoRA adapter in /kaggle/working, and `fetch` downloads that kernel output.
-Checkpoints (adapter + optimizer + trainer state) are written every `--save-steps`, so the Trainer resumes inside a
+Batch 2 x accumulation 8 (= the config's effective 16): the loss upcasts a (batch x ~2-3k tokens x 152k vocab) logits tensor
+to fp32, which with batch 4 is ~7 GB on a 15 GB T4. Checkpoints (adapter + optimizer + trainer state) are written every `--save-steps`, so the Trainer resumes inside a
 session; there is no off-box sync here because that would need an HF token on the box (D-022 covers the token path;
 this run is ~1-2 h against a 12 h limit). The base model is public.
 
@@ -60,7 +61,7 @@ sh("uv sync --group train")
 sh("uv run --group train python -c \\"import torch; assert torch.cuda.is_available(); print('cuda ok', torch.__version__)\\"")
 out = "/kaggle/working/sft"
 sh("uv run --group train python -m training.sft.train --data " + IN + "/examples.jsonl --val " + IN + "/val.jsonl"
-   " --ckpt-dir " + out + " --epochs {epochs} --save-steps {save_steps}")
+   " --ckpt-dir " + out + " --epochs {epochs} --save-steps {save_steps} --per-device-batch 2 --grad-accum 8")
 shutil.copytree(out + "/adapter-final", "/kaggle/working/adapter-final")
 shutil.copy(IN + "/stats.json", "/kaggle/working/stats.json")
 for name in os.listdir(out):  # keep the output small: the adapter is what we need, not optimizer states
