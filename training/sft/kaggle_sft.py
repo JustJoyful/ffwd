@@ -40,9 +40,15 @@ CODE_PATHS = (
 DATA_FILES = ("examples.jsonl", "val.jsonl", "stats.json")
 
 SCRIPT = """
-import os, shutil, subprocess, sys, tarfile
+import glob, os, shutil, subprocess, sys, tarfile
 
-IN = "/kaggle/input/ffmpeg-agent-sft-v1"
+found = glob.glob("/kaggle/input/**/code.tar", recursive=True)  # the mount path differs between Kaggle layouts
+if not found:
+    for root, dirs, files in os.walk("/kaggle/input"):
+        print(root, files, flush=True)
+    sys.exit("code.tar not found under /kaggle/input: the dataset is not attached")
+IN = os.path.dirname(found[0])
+print("data dir:", IN, flush=True)
 dest = "/kaggle/working/ffmpeg-agent"
 os.makedirs(dest, exist_ok=True)
 with tarfile.open(IN + "/code.tar") as t:
