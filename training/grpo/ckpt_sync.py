@@ -99,6 +99,9 @@ class HubRemote:
             repo_id=self.repo_id,
             path_in_repo=f"{self.PREFIX}/{ckpt_dir.name}",
             commit_message=f"{ckpt_dir.name}",
+            # PEFT writes a README.md whose `base_model` is the local --init path, which the Hub rejects as invalid
+            # metadata (found by the 2-step smoke run); the checkpoint does not need it to resume.
+            ignore_patterns=["README.md"],
         )
 
     def latest(self) -> str | None:
@@ -176,6 +179,8 @@ class SyncCallback:
     def on_save(self, args, state, control, **kw):
         ckpt = Path(args.output_dir) / f"checkpoint-{state.global_step}"
         self.remote.push(ckpt, self.extra_paths)
+        where = getattr(self.remote, "repo_id", None) or getattr(self.remote, "root", "remote")
+        print(f"checkpoint-{state.global_step} pushed to {where}", flush=True)  # log evidence
         if self.crash_after is not None and state.global_step >= self.crash_after:
             # Test hook: die right after the push, like a killed session (no cleanup, no final save).
             os._exit(42)

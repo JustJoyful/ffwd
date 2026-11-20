@@ -1,0 +1,14 @@
+{
+ "report": "main-run-smoke",
+ "date": "2026-11-20",
+ "purpose": "pipeline test of training.grpo.main_run (2 steps) and the Kaggle web-UI notebook; not a training result",
+ "model_init": "data/models/m1-merged/ffmpeg-agent-m1-0.6b (merged from the SFT adapter, sha256 of model.safetensors matches the Hub rebuild)",
+ "args": "--steps 2 --save-steps 1 --num-generations 2 --prompts-per-step 1 --max-new-tokens 128 --max-runs 2 --pass-rates reports/2026-11-20-t18-pass-rates/taskfilter/pass_rates.json --pass-rates-subset --hub-repo JustJoyful/ffmpeg-agent-ckpt-smoke",
+ "split_used": "train only (9 in-band tasks from the T18 sample)",
+ "hardware": "RTX 3050 6 GB laptop GPU, bf16",
+ "hub": {"repo": "JustJoyful/ffmpeg-agent-ckpt-smoke", "private": true, "checkpoints": ["checkpoint-1", "checkpoint-2"]},
+ "evidence_lines": ["ffmpeg pinned build verified: 5.1.1-static (pinned 5.1.1-static)", "checkpoint-1 pushed to JustJoyful/ffmpeg-agent-ckpt-smoke", "checkpoint-2 pushed to JustJoyful/ffmpeg-agent-ckpt-smoke"],
+ "notebook": "training/grpo/kaggle_main_run.ipynb (not yet run on Kaggle)",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}

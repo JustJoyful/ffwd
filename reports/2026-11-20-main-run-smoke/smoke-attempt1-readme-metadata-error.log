@@ -1,0 +1,74 @@
+ffmpeg pinned build verified: 5.1.1-static (pinned 5.1.1-static)
+precision plan: {'bf16': True, 'fp16': False, 'model_dtype': torch.bfloat16, 'mixed_out_gemm': True}; 9 train tasks
+/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/training_args.py:1541: FutureWarning: `gradient_checkpointing` is deprecated and will be removed in v6. Use `activation_checkpointing` instead.
+  warnings.warn(f"`{old}` is deprecated and will be removed in v6. Use `{new}` instead.", FutureWarning)
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:33,  3.32it/s]Loading weights:  26%|██▋       | 82/310 [00:00<00:00, 262.29it/s]Loading weights:  48%|████▊     | 148/310 [00:00<00:00, 386.28it/s]Loading weights:  71%|███████   | 220/310 [00:00<00:00, 488.44it/s]Loading weights:  94%|█████████▍| 291/310 [00:00<00:00, 552.89it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 432.79it/s]
+/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/modeling_utils.py:3303: FutureWarning: `is_gradient_checkpointing` is deprecated and will be removed in v6. Use `is_activation_checkpointing` instead.
+  warnings.warn(
+  0%|          | 0/2 [00:00<?, ?it/s] 50%|█████     | 1/2 [00:15<00:15, 15.70s/it]                                              50%|█████     | 1/2 [00:15<00:15, 15.70s/it]Traceback (most recent call last):
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/utils/_http.py", line 866, in hf_raise_for_status
+    response.raise_for_status()
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/httpx2/_models.py", line 828, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx2.HTTPStatusError: Client error '400 Bad Request' for url 'https://huggingface.co/api/validate-yaml'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/hf_api.py", line 11715, in _validate_yaml
+    hf_raise_for_status(response)
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/utils/_http.py", line 959, in hf_raise_for_status
+    raise _format(BadRequestError, message, response) from e
+huggingface_hub.errors.BadRequestError: (Request ID: Root=1-6b003ecf-39ea8e3346fb227f37b80845;585c9127-3ae0-4494-ac95-12f94a9d6c94)
+
+Bad request:
+"base_model.0" with value "data/models/m1-merged/ffmpeg-agent-m1-0.6b" is not valid. Use a model id from https://hf.co/models.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/joydeep/Projects/ffmpeg-agent/training/grpo/main_run.py", line 194, in <module>
+    main()
+  File "/home/joydeep/Projects/ffmpeg-agent/training/grpo/main_run.py", line 190, in main
+    trainer.train(resume_from_checkpoint=resume)
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 1576, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 1660, in _inner_training_loop
+    self._run_epoch(
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 1950, in _run_epoch
+    self._maybe_log_save_evaluate(
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 2278, in _maybe_log_save_evaluate
+    self.control = self.callback_handler.on_save(self.args, self.state, self.control)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/trainer_callback.py", line 531, in on_save
+    return self.call_event("on_save", args, state, control, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/transformers/trainer_callback.py", line 545, in call_event
+    result = getattr(callback, event)(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/training/grpo/ckpt_sync.py", line 178, in on_save
+    self.remote.push(ckpt, self.extra_paths)
+  File "/home/joydeep/Projects/ffmpeg-agent/training/grpo/ckpt_sync.py", line 97, in push
+    self.api.upload_folder(
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/hf_api.py", line 2036, in _inner
+    return fn(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/hf_api.py", line 5987, in upload_folder
+    add_operations = self._prepare_upload_folder_additions(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/hf_api.py", line 11666, in _prepare_upload_folder_additions
+    self._validate_yaml(
+  File "/home/joydeep/Projects/ffmpeg-agent/.venv/lib/python3.11/site-packages/huggingface_hub/hf_api.py", line 11719, in _validate_yaml
+    raise ValueError(f"Invalid metadata in README.md.\n{message}") from e
+ValueError: Invalid metadata in README.md.
+- "base_model.0" with value "data/models/m1-merged/ffmpeg-agent-m1-0.6b" is not valid. Use a model id from https://hf.co/models.
+{'loss': '0.008958', 'grad_norm': '0.4061', 'learning_rate': '1e-05', 'num_tokens': '3395', 'completions/mean_length': '274.5', 'completions/min_length': '271', 'completions/max_length': '278', 'completions/clipped_ratio': '0', 'completions/mean_terminated_length': '274.5', 'completions/min_terminated_length': '271', 'completions/max_terminated_length': '278', 'rewards/<lambda>/mean': '1.253', 'rewards/<lambda>/std': '0.01664', 'reward': '1.253', 'reward_std': '0.01664', 'frac_reward_zero_std': '0', 'entropy': '0.05067', 'clip_ratio/low_mean': '0', 'clip_ratio/high_mean': '0', 'clip_ratio/region_mean': '0', 'clip_ratio/low_min': '0', 'clip_ratio/high_max': '0', 'step_time': '15.23', 'epoch': '0.1111'}
+ 50%|█████     | 1/2 [00:17<00:17, 17.15s/it]
+EXIT 1

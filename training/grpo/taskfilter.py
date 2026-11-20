@@ -125,8 +125,12 @@ def pass_rate_table(
     }
 
 
-def select_tasks(tasks: list[dict], table: dict) -> list[dict]:
-    kept = [t for t in tasks if table["tasks"][t["id"]]["keep"]]
+def select_tasks(tasks: list[dict], table: dict, *, subset: bool = False) -> list[dict]:
+    """In-band tasks. By default the table must cover every task (a missing id is a KeyError, so nothing unmeasured
+    slips through). `subset=True` is the explicit opt-in for a partial table: tasks it never measured are EXCLUDED.
+    """
+    covered = table["tasks"]
+    kept = [t for t in tasks if (t["id"] in covered or not subset) and covered[t["id"]]["keep"]]
     if not kept:
         raise ValueError(
             "no tasks inside the pass-rate band: widen the band or check the model/sampler before training"
@@ -134,11 +138,13 @@ def select_tasks(tasks: list[dict], table: dict) -> list[dict]:
     return kept
 
 
-def apply_filter(tasks: list[dict], table_path: Path, run_dir: Path) -> list[dict]:
+def apply_filter(
+    tasks: list[dict], table_path: Path, run_dir: Path, *, subset: bool = False
+) -> list[dict]:
     """In-band tasks from a saved table; the table is copied into the run dir so it is stored (and
     synced with checkpoints) alongside the run it shaped."""
     table = load_table(table_path)
-    kept = select_tasks(tasks, table)
+    kept = select_tasks(tasks, table, subset=subset)
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "pass_rates.json").write_text(table_path.read_text())
     return kept

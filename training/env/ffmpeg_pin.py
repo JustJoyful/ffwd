@@ -63,6 +63,8 @@ def install(tarball: Path | None = None, home: Path = config.FFMPEG_PIN_HOME) ->
         raise PinMismatch(
             f"sha256 mismatch for {tarball}: {got} != pinned {config.FFMPEG_PIN['sha256']}"
         )
+    # the evidence a remote run's log carries (G3 criterion d): the check ran and passed
+    print(f"ffmpeg pin: sha256 {got} == pinned ({config.FFMPEG_PIN['version']}): OK", flush=True)
     with tarfile.open(tarball) as t:
         t.extractall(
             home, filter="data"

@@ -22,6 +22,8 @@ from trl import GRPOConfig, GRPOTrainer
 from training import config
 from training.corpus.hub import pull_corpus, verify_corpus
 from training.env.chat_template import install
+from training.env.ffmpeg_pin import require_pinned
+from training.env.ffmpeg_version import ffmpeg_version
 from training.grpo.ckpt_sync import (
     SyncCallback,
     local_latest,
@@ -79,6 +81,11 @@ def main(argv: list[str] | None = None) -> None:
         help="pass_rates.json from training.grpo.taskfilter (M1, train tasks only)",
     )
     ap.add_argument(
+        "--pass-rates-subset",
+        action="store_true",
+        help="the table measured only some train tasks: train on its in-band tasks, exclude the unmeasured ones",
+    )
+    ap.add_argument(
         "--corpus-repo", default=None, help="HF dataset repo with the hash-verified corpus tarball"
     )
     ap.add_argument("--hub-repo")
@@ -99,6 +106,12 @@ def main(argv: list[str] | None = None) -> None:
     a = ap.parse_args(argv)
     if not torch.cuda.is_available():
         raise SystemExit("no CUDA GPU visible; refusing to run GRPO")
+    require_pinned()  # fail closed on any other FFmpeg, and leave the evidence in the run log (G3 criterion d)
+    print(
+        f"ffmpeg pinned build verified: {ffmpeg_version(config.FFMPEG_BIN)} "
+        f"(pinned {config.FFMPEG_PIN['version']})",
+        flush=True,
+    )
 
     prompt = load_prompt_v1(a.allow_draft_prompt)
     tasks = load_tasks("train", "grpo")
@@ -110,7 +123,7 @@ def main(argv: list[str] | None = None) -> None:
     )
     a.ckpt_dir.mkdir(parents=True, exist_ok=True)
     if a.pass_rates:
-        tasks = apply_filter(tasks, a.pass_rates, a.ckpt_dir)
+        tasks = apply_filter(tasks, a.pass_rates, a.ckpt_dir, subset=a.pass_rates_subset)
     tok = install(AutoTokenizer.from_pretrained(a.init))
     dataset = Dataset.from_list([{"prompt": prompt_messages(t, corpus, prompt)} for t in tasks])
     plan = precision_plan(a.precision, native_bf16())

@@ -69,6 +69,13 @@ def test_bad_bands_are_rejected(band):
         pass_rate_table(TASKS, sampler, k=10, band=band, meta={})
 
 
+def test_partial_table_is_an_error_unless_subset_is_requested_and_unmeasured_tasks_are_excluded():
+    table = pass_rate_table(TASKS[:4], sampler, k=10, band=(0.2, 0.8), meta={})  # t0..t3 measured
+    with pytest.raises(KeyError):
+        select_tasks(TASKS, table)  # strict by default: t4..t6 were never measured
+    assert [t["id"] for t in select_tasks(TASKS, table, subset=True)] == ["t2", "t3"]
+
+
 def test_selecting_from_an_empty_band_fails_loudly():
     table = pass_rate_table(TASKS[:1], sampler, k=10, band=(0.2, 0.8), meta={})  # t0: 0/10
     with pytest.raises(ValueError, match="no tasks"):

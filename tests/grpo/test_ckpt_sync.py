@@ -105,6 +105,9 @@ def test_hub_remote_uses_private_repo_and_one_commit_per_checkpoint(tmp_path):
             calls.append(("create_repo", repo_id, k.get("private"), k.get("exist_ok")))
 
         def upload_folder(self, **k):
+            assert k["ignore_patterns"] == [
+                "README.md"
+            ]  # the PEFT README breaks Hub metadata validation
             calls.append(("upload_folder", k["path_in_repo"], k["repo_id"]))
 
         def list_repo_files(self, repo_id, **k):
