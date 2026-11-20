@@ -1,0 +1,17 @@
+{
+ "candidates": 1813,
+ "sha256": "6954a22e17ae1196d94af3de52500f880ada612d225cb42b5f49da363a4d1048",
+ "order_seed": 20261120,
+ "sources": {
+  "train/v1": 1513,
+  "hard-v1": 300
+ },
+ "categories": {
+  "train": 1513,
+  "speed": 797,
+  "hard-v1": 300,
+  "copy": 696,
+  "frame_interval": 133
+ },
+ "rule": "train/v1: copy-eligible (reference is stream-copy only) or speed (setpts/atempo) or frame interval (fps=1/N); hard-v1: all"
+}

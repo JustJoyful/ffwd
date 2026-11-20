@@ -29,6 +29,14 @@ class Remote(Protocol):
     def pull(self, name: str, dest_root: Path) -> Path: ...
 
 
+def _copy_extra(src: Path, dest_dir: Path) -> None:
+    """A file or a whole directory (e.g. spotcheck/, the top-reward transcripts) copied next to the checkpoint."""
+    if src.is_dir():
+        shutil.copytree(src, dest_dir / src.name, dirs_exist_ok=True)
+    else:
+        shutil.copy2(src, dest_dir / src.name)
+
+
 class DirRemote:
     """A directory acting as the remote (tests, local runs). Uploads land in `<name>.tmp` and are
     renamed only when complete, so a half-copied checkpoint can never be picked as the latest."""
@@ -44,7 +52,7 @@ class DirRemote:
         shutil.copytree(ckpt_dir, tmp)
         for f in extra_files or []:
             if f.exists():
-                shutil.copy2(f, tmp / f.name)
+                _copy_extra(f, tmp)
         if final.exists():
             shutil.rmtree(final)
         tmp.rename(final)
@@ -91,9 +99,9 @@ class HubRemote:
         self._ensure_repo()
         for f in extra_files or []:
             if f.exists() and f.parent != ckpt_dir:
-                shutil.copy2(
-                    f, ckpt_dir / f.name
-                )  # the metrics file travels inside the checkpoint commit
+                _copy_extra(
+                    f, ckpt_dir
+                )  # metrics, telemetry and spotcheck/ travel inside the checkpoint commit
         self.api.upload_folder(
             folder_path=str(ckpt_dir),
             repo_id=self.repo_id,

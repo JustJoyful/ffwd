@@ -9,6 +9,7 @@ Reads TRAIN tasks only (training.taskgen.loader purpose "grpo"). Never run witho
 """
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -88,6 +89,11 @@ def main(argv: list[str] | None = None) -> None:
         help="also train on data/tasks/train/NAME.jsonl (hash pinned in MANIFEST.json extra_train)",
     )
     ap.add_argument(
+        "--pool-ids",
+        type=Path,
+        help="train task ids to train on, one per line (the reward-variance pool); every id must exist",
+    )
+    ap.add_argument(
         "--pass-rates-subset",
         action="store_true",
         help="the table measured only some train tasks: train on its in-band tasks, exclude the unmeasured ones",
@@ -127,6 +133,21 @@ def main(argv: list[str] | None = None) -> None:
     ) in a.extra_train:  # hash-pinned extra TRAIN files, e.g. hard-v1 (training.taskgen.register)
         tasks += load_extra_train(name, "grpo")
     assert len({t["id"] for t in tasks}) == len(tasks), "duplicate task ids across the train files"
+    a.ckpt_dir.mkdir(parents=True, exist_ok=True)
+    if a.pool_ids:
+        wanted, by_id = a.pool_ids.read_text().split(), {t["id"]: t for t in tasks}
+        if missing := [i for i in wanted if i not in by_id]:
+            raise SystemExit(
+                f"{len(missing)} pool ids are not in the train files, e.g. {missing[:3]}"
+            )
+        tasks = [by_id[i] for i in wanted]
+        (a.ckpt_dir / "pool-ids.txt").write_text(
+            a.pool_ids.read_text()
+        )  # travels with the checkpoints
+        digest = hashlib.sha256(a.pool_ids.read_bytes()).hexdigest()
+        print(
+            f"pool: {len(tasks)} train tasks from {a.pool_ids.name} (sha256 {digest})", flush=True
+        )
     needed = {c for t in tasks for c in t["inputs"]}
     corpus = (
         pull_corpus(a.corpus_repo, config.CORPUS_DIR)
@@ -186,6 +207,8 @@ def main(argv: list[str] | None = None) -> None:
             a.ckpt_dir / "telemetry.jsonl",
             a.ckpt_dir / "pass_rates.json",
             a.ckpt_dir / "stopped.json",
+            a.ckpt_dir / "pool-ids.txt",
+            a.ckpt_dir / "spotcheck",  # the top-reward transcripts the owner reviews
         ]
         trainer.add_callback(SyncCallback(remote, extras, a.crash_after))
     resume = None

@@ -1,0 +1,10 @@
+{
+ "report": "prereg-m3-efficiency-draft",
+ "date": "2026-11-20",
+ "status": "DRAFT, not applied: eval/PREREGISTRATION.md, training/config.py and the tests are unchanged",
+ "file": "amendment-draft.md",
+ "endpoints": {"Q3a": "needless-re-encode-or-fail rate on copy-eligible tasks, pooled test-iid + test-phrasing", "Q3b": "mean runs per supported task, test-iid", "guard": "success M3-M1 non-inferior within 2 pp, pooled test-iid + test-compositional + test-phrasing, one-sided 97.5%", "family": "Holm m=5: Q2, Q3a, Q3b, Q4, Q7"},
+ "inputs": {"dev_copy_eligible": "31 of 300 (exact)", "train_copy_eligible": "688 renderings = 232 contents of 1500 (exact)", "test_splits": "estimated from dev and train rates; no test file read"},
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}

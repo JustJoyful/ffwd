@@ -68,6 +68,31 @@ def test_zero_spec_acc_weight_removes_spec_only_signal_but_keeps_the_rest():
     assert "spec_acc" not in out["pass_constant_groups_signal_terms"]
 
 
+def test_pool_has_tasks_with_nonzero_reward_variance_without_spec_acc_and_counts_unique_contents():
+    from eval.reward_variance import build_pool
+
+    recs = (
+        [rec("same")] * 8  # no variance
+        + [rec("style")] * 7
+        + [rec("style", spec=0.5)]  # spec_acc only: not in the pool at weight 0
+        + [rec("runs")] * 7
+        + [rec("runs", runs=2)]  # efficiency/runs: in the pool
+        + [rec("runs2")] * 6
+        + [rec("runs2", runs=3)] * 2  # same content as "runs", also in
+        + [rec("flip")] * 4
+        + [rec("flip", passed=False)] * 4  # pass variance: in
+    )
+    keys = {"same": "k1", "style": "k2", "runs": "k3", "runs2": "k3", "flip": "k4"}
+    cats = {"runs": ["copy"], "runs2": ["copy", "speed"], "same": ["copy"], "flip": ["speed"]}
+    ids, s = build_pool(recs, keys, cats)
+    assert ids == ["runs", "runs2", "flip"] and s["pool_tasks"] == 3 and s["groups_sampled"] == 5
+    assert s["pool_unique_contents"] == 2 and s["sampled_unique_contents"] == 4
+    assert "spec_acc" not in s["varying_term_in_pool"] and s["pass_varies_in_pool"] == 1
+    assert s["by_category"]["copy"] == {"sampled": 3, "in_pool": 2, "share": 2 / 3}
+    ids_old, _ = build_pool(recs, keys, cats, OLD)
+    assert "style" in ids_old  # under the old weights the style-only group counted
+
+
 def test_analyse_counts_groups_not_samples():
     recs = [rec("a")] * 8 + [rec("b")] * 7 + [rec("b", runs=2)] + [rec("c", passed=False)] * 8
     out = analyse(recs)

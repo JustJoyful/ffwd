@@ -127,6 +127,17 @@ def test_hub_remote_uses_private_repo_and_one_commit_per_checkpoint(tmp_path):
     assert remote.latest() == "checkpoint-4"
 
 
+def test_a_directory_extra_such_as_spotcheck_travels_with_the_checkpoint(tmp_path):
+    ckpt = make_ckpt(tmp_path, 2)
+    spot = tmp_path / "spotcheck"
+    spot.mkdir()
+    (spot / "step-10.jsonl").write_text("top-reward transcript\n")
+    DirRemote(tmp_path / "remote").push(ckpt, [spot])
+    assert (tmp_path / "remote" / "checkpoint-2" / "spotcheck" / "step-10.jsonl").read_text() == (
+        "top-reward transcript\n"
+    )
+
+
 def test_verify_resume_passes_for_a_continuous_run():
     rows = [{"step": s} for s in range(1, 11)]
     lr = {s: 1e-5 * (1 - (s - 1) / 10) for s in range(1, 11)}

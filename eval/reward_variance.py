@@ -122,6 +122,48 @@ def analyse(records: list[dict], weights: dict[str, float] | None = None) -> dic
     }
 
 
+def build_pool(
+    records: list[dict],
+    content_keys: dict[str, str],
+    categories: dict[str, list[str]],
+    weights: dict[str, float] | None = None,
+) -> tuple[list[str], dict]:
+    """The GRPO pool = tasks whose K=8 group has nonzero reward variance under `weights` (default: the config, where
+    spec_acc is 0, so style-only variance does not count), in first-seen order, plus the yield and its breakdown.
+    """
+    by_task: dict[str, list[dict]] = {}
+    for r in records:
+        by_task.setdefault(r["task_id"], []).append(r)
+    causes = {tid: group_causes(rs, weights) for tid, rs in by_task.items()}
+    ids = [tid for tid, c in causes.items() if c["signal"]]
+    p, lo, hi = wilson_ci(len(ids), len(by_task))
+    in_pool = [causes[i] for i in ids]
+    idset, cat_n, cat_k = set(ids), Counter(), Counter()
+    for tid in by_task:
+        for cat in categories.get(tid, []):
+            cat_n[cat] += 1
+            cat_k[cat] += tid in idset
+    return ids, {
+        "groups_sampled": len(by_task),
+        "pool_tasks": len(ids),
+        "pool_share": p,
+        "pool_share_ci95": [lo, hi],
+        "sampled_unique_contents": len({content_keys[t] for t in by_task}),
+        "pool_unique_contents": len({content_keys[t] for t in ids}),
+        "varying_term_in_pool": dict(Counter(t for c in in_pool for t in c["varying"])),
+        "primary_term_in_pool": dict(Counter(c["primary"] for c in in_pool)),
+        "only_term_in_pool": dict(Counter(c["only"] for c in in_pool if c["only"])),
+        "efficiency_sources_in_pool": dict(
+            Counter(s for c in in_pool for s in c["efficiency_sources"])
+        ),
+        "pass_varies_in_pool": sum(c["pass_varies"] for c in in_pool),
+        "by_category": {
+            cat: {"sampled": cat_n[cat], "in_pool": cat_k[cat], "share": cat_k[cat] / cat_n[cat]}
+            for cat in sorted(cat_n)
+        },
+    }
+
+
 def _is_copy_task(task: dict) -> bool:
     refs = task.get("reference_runs")
     return bool(refs) and uses_stream_copy_only(refs[-1]["args"])
@@ -217,11 +259,31 @@ def main() -> None:
     an.add_argument(
         "--weight", nargs="*", default=[], metavar="TERM=VALUE", help="override a reward weight"
     )
+    pl = sub.add_parser(
+        "pool", help="the GRPO pool from a sampling run (reward variance without spec_acc)"
+    )
+    pl.add_argument("--records", type=Path, required=True)
+    pl.add_argument("--tasks", type=Path, nargs="+", required=True, help="the train files sampled")
+    pl.add_argument("--categories", type=Path, help="{task id: [categories]} json")
+    pl.add_argument("--out", type=Path, required=True)
     d = sub.add_parser("dev")
     d.add_argument("--run", type=Path, required=True)
     d.add_argument("--tasks", type=Path, required=True)
     a = ap.parse_args()
 
+    if a.cmd == "pool":
+        keys = {
+            t["id"]: t["content_key"]
+            for f in a.tasks
+            for t in map(json.loads, f.read_text().splitlines())
+        }
+        cats = json.loads(a.categories.read_text()) if a.categories else {}
+        ids, summary = build_pool(_load_records([a.records]), keys, cats)
+        a.out.mkdir(parents=True)
+        (a.out / "pool-ids.txt").write_text("".join(f"{i}\n" for i in ids))
+        (a.out / "pool-summary.json").write_text(json.dumps(summary, indent=1) + "\n")
+        print(json.dumps(summary, indent=1))
+        return
     if a.cmd == "analyse":
         w = config.REWARD_WEIGHTS | {k: float(v) for k, v in (x.split("=") for x in a.weight)}
         print(json.dumps(analyse(_load_records(a.records), w), indent=1))
