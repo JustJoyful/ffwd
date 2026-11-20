@@ -51,7 +51,8 @@ def params(mode: str, *, steps: int | None = None, resume: bool = False) -> dict
         p |= {"steps": 2, "save_steps": 1, "num_generations": 2, "prompts_per_step": 1,
               "max_new_tokens": 128, "max_runs": 2, "hub_repo": f"{HUB}-smoke-kaggle"}  # fmt: skip
     elif mode in ("control", "main"):
-        p |= {"pool_ids": POOL_IDS, "extra_train": ["hard-v1"]}
+        # 60 main steps = 1.9 epochs over the pool's 249 unique contents (reports/2026-11-20-grpo-pool); the control is 30
+        p |= {"pool_ids": POOL_IDS, "extra_train": ["hard-v1"], "steps": steps or 60}
         if mode == "control":
             p |= {"steps": steps or 30, "shuffle_seed": 20261115, "hub_repo": f"{HUB}-grpo-control"}
     return p

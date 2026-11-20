@@ -49,6 +49,7 @@ def test_smoke_uses_its_own_repo_and_the_t18_table_and_never_the_pool():
 
 
 def test_control_shuffles_rewards_and_main_does_not_and_each_has_its_own_repo():
+    assert kg.params("main")["steps"] == 60 and kg.params("control")["steps"] == 30
     c, m = kg.params("control"), kg.params("main", steps=80)
     assert c["steps"] == 30 and c["shuffle_seed"] == 20261115 and m["shuffle_seed"] is None
     assert m["steps"] == 80 and c["hub_repo"] != m["hub_repo"]

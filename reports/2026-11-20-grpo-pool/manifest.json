@@ -1,0 +1,31 @@
+{
+ "report": "grpo-pool",
+ "date": "2026-11-20/21",
+ "pool": {
+  "file": "pool-ids.txt",
+  "prompts": 358,
+  "unique_contents": 249,
+  "sha256_prefix": "83b4401c75e28b53"
+ },
+ "candidates": {
+  "count": 1813,
+  "unique_contents": 808,
+  "sha256": "6954a22e17ae1196d94af3de52500f880ada612d225cb42b5f49da363a4d1048",
+  "order_seed": 20261120
+ },
+ "sampling": {
+  "k": 8,
+  "temperature": 1.0,
+  "episodes": 14504,
+  "model_gguf_sha256": "c461e0b04f391d96ff8b19b65a7d5be4e2de0b8f180ec4f440b962f078c95f3d",
+  "split": "train"
+ },
+ "defined_by": "reward variance in the K=8 group without spec_acc (D-043)",
+ "proposed_steps": {
+  "control": 30,
+  "main": 60
+ },
+ "result": "358 of 1813 (19.7%), 249 unique contents; needless-re-encode variance in only 48 groups (37 contents)",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}

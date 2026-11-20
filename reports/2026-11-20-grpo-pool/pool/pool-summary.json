@@ -1,0 +1,62 @@
+{
+ "groups_sampled": 1813,
+ "pool_tasks": 358,
+ "pool_share": 0.19746276889134032,
+ "pool_share_ci95": [
+  0.17978647706867557,
+  0.2164184065913114
+ ],
+ "sampled_unique_contents": 808,
+ "pool_unique_contents": 249,
+ "varying_term_in_pool": {
+  "efficiency": 329,
+  "invalid": 34,
+  "pass": 179,
+  "partial": 143,
+  "clarify": 3
+ },
+ "primary_term_in_pool": {
+  "efficiency": 145,
+  "invalid": 27,
+  "pass": 168,
+  "partial": 18
+ },
+ "only_term_in_pool": {
+  "efficiency": 145,
+  "invalid": 8,
+  "partial": 18
+ },
+ "efficiency_sources_in_pool": {
+  "runs": 187,
+  "pass_differs": 177,
+  "re_encode": 48
+ },
+ "pass_varies_in_pool": 179,
+ "by_category": {
+  "copy": {
+   "sampled": 696,
+   "in_pool": 166,
+   "share": 0.23850574712643677
+  },
+  "frame_interval": {
+   "sampled": 133,
+   "in_pool": 10,
+   "share": 0.07518796992481203
+  },
+  "hard-v1": {
+   "sampled": 300,
+   "in_pool": 74,
+   "share": 0.24666666666666667
+  },
+  "speed": {
+   "sampled": 797,
+   "in_pool": 150,
+   "share": 0.18820577164366373
+  },
+  "train": {
+   "sampled": 1513,
+   "in_pool": 284,
+   "share": 0.1877065432914739
+  }
+ }
+}
