@@ -1,0 +1,182 @@
+{
+ "ALL": {
+  "n": 300,
+  "in_band": 30,
+  "too_easy": 228,
+  "too_hard": 42,
+  "share_in_band": 0.1,
+  "ci_lo": 0.07094791459501533,
+  "ci_hi": 0.1391664623846215
+ },
+ "difficulty: 1": {
+  "n": 5,
+  "in_band": 0,
+  "too_easy": 5,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 2.7755575615628914e-17,
+  "ci_hi": 0.43448246478317465
+ },
+ "difficulty: 2": {
+  "n": 30,
+  "in_band": 4,
+  "too_easy": 24,
+  "too_hard": 2,
+  "share_in_band": 0.13333333333333333,
+  "ci_lo": 0.053096554840547455,
+  "ci_hi": 0.2968132668203629
+ },
+ "difficulty: 3": {
+  "n": 149,
+  "in_band": 14,
+  "too_easy": 115,
+  "too_hard": 20,
+  "share_in_band": 0.09395973154362416,
+  "ci_lo": 0.056796174436903706,
+  "ci_hi": 0.15153381054478188
+ },
+ "difficulty: 4": {
+  "n": 116,
+  "in_band": 12,
+  "too_easy": 84,
+  "too_hard": 20,
+  "share_in_band": 0.10344827586206896,
+  "ci_lo": 0.06017269863017608,
+  "ci_hi": 0.17214639273160634
+ },
+ "families: 1": {
+  "n": 5,
+  "in_band": 0,
+  "too_easy": 5,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 2.7755575615628914e-17,
+  "ci_hi": 0.43448246478317465
+ },
+ "families: 2": {
+  "n": 30,
+  "in_band": 4,
+  "too_easy": 24,
+  "too_hard": 2,
+  "share_in_band": 0.13333333333333333,
+  "ci_lo": 0.053096554840547455,
+  "ci_hi": 0.2968132668203629
+ },
+ "families: 3": {
+  "n": 149,
+  "in_band": 14,
+  "too_easy": 115,
+  "too_hard": 20,
+  "share_in_band": 0.09395973154362416,
+  "ci_lo": 0.056796174436903706,
+  "ci_hi": 0.15153381054478188
+ },
+ "families: 4": {
+  "n": 116,
+  "in_band": 12,
+  "too_easy": 84,
+  "too_hard": 20,
+  "share_in_band": 0.10344827586206896,
+  "ci_lo": 0.06017269863017608,
+  "ci_hi": 0.17214639273160634
+ },
+ "involves F1": {
+  "n": 234,
+  "in_band": 25,
+  "too_easy": 175,
+  "too_hard": 34,
+  "share_in_band": 0.10683760683760683,
+  "ci_lo": 0.07341914319860629,
+  "ci_hi": 0.15295627127984493
+ },
+ "involves F10": {
+  "n": 48,
+  "in_band": 6,
+  "too_easy": 36,
+  "too_hard": 6,
+  "share_in_band": 0.125,
+  "ci_lo": 0.05857051438571978,
+  "ci_hi": 0.2470045828638683
+ },
+ "involves F12": {
+  "n": 159,
+  "in_band": 16,
+  "too_easy": 114,
+  "too_hard": 29,
+  "share_in_band": 0.10062893081761007,
+  "ci_lo": 0.06289366475055361,
+  "ci_hi": 0.15720666522843174
+ },
+ "involves F2": {
+  "n": 11,
+  "in_band": 0,
+  "too_easy": 8,
+  "too_hard": 3,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.25883296696803165
+ },
+ "involves F3": {
+  "n": 43,
+  "in_band": 6,
+  "too_easy": 36,
+  "too_hard": 1,
+  "share_in_band": 0.13953488372093023,
+  "ci_lo": 0.06555723427964881,
+  "ci_hi": 0.2726358796738285
+ },
+ "involves F4": {
+  "n": 185,
+  "in_band": 18,
+  "too_easy": 144,
+  "too_hard": 23,
+  "share_in_band": 0.0972972972972973,
+  "ci_lo": 0.06243366425842315,
+  "ci_hi": 0.14854468270787408
+ },
+ "involves F5": {
+  "n": 54,
+  "in_band": 5,
+  "too_easy": 34,
+  "too_hard": 15,
+  "share_in_band": 0.09259259259259259,
+  "ci_lo": 0.040201134757029466,
+  "ci_hi": 0.19909882590962685
+ },
+ "involves F6": {
+  "n": 36,
+  "in_band": 7,
+  "too_easy": 29,
+  "too_hard": 0,
+  "share_in_band": 0.19444444444444445,
+  "ci_lo": 0.09753095418928728,
+  "ci_hi": 0.3502804299517738
+ },
+ "involves F7": {
+  "n": 3,
+  "in_band": 1,
+  "too_easy": 1,
+  "too_hard": 1,
+  "share_in_band": 0.3333333333333333,
+  "ci_lo": 0.06149194472039632,
+  "ci_hi": 0.7923403991979523
+ },
+ "involves F8": {
+  "n": 4,
+  "in_band": 0,
+  "too_easy": 4,
+  "too_hard": 0,
+  "share_in_band": 0.0,
+  "ci_lo": 0.0,
+  "ci_hi": 0.4898908364545972
+ },
+ "involves F9": {
+  "n": 199,
+  "in_band": 14,
+  "too_easy": 153,
+  "too_hard": 32,
+  "share_in_band": 0.07035175879396985,
+  "ci_lo": 0.04236634404532921,
+  "ci_hi": 0.11461073059127666
+ }
+}

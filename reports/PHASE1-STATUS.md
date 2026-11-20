@@ -18,7 +18,8 @@ The sections further down are the autonomous-run history from 16-19 Nov and are 
 | Leakage: exact duplicates vs train (test-iid 104/500, compositional 0, phrasing 0); test-iid reported full + dedup (D-039) | done, preregistration amended |
 | `unsupported` graded on the action only (D-038) | done, preregistration amended |
 | T18 train pass-rate table: in-band 3% [2, 6] (302-task sample), 6% [3, 13] on never-trained-on tasks | done (partial sample); widened train set proposed, not built |
-| GRPO main run + shuffled control (G3), checkpoint selection on dev | **not started: needs owner** |
+| G3 pilots (widened + recovery-start, K=8): in band 53/600 = 8.8%; criteria (a) and (d) fail, (b), (c) hold; **stopped by the owner's rule** (D-040, `reports/2026-11-20-g3-pilots/`). M1 dev recovery from a failing start 225/250 = 90% | done |
+| GRPO main run + shuffled control (G3), checkpoint selection on dev | **not started: needs owner** (my recommendation: stop at M1 and prepare G4; alternatives in the pilots report) |
 | Single test run (G4), results table with CIs on test-iid / compositional / phrasing / real | **not started: needs owner** |
 | 1.7B SFT | not started (owner: not for now) |
 | Hub pushes (corpus, model), HF model card, CLI check on the owner's machine, phase report | not done |

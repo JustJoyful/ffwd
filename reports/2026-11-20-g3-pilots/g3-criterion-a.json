@@ -1,0 +1,21 @@
+{
+ "pilot_tasks": 600,
+ "in_band": 53,
+ "share": 0.08833333333333333,
+ "share_ci95": [
+  0.06816693228172024,
+  0.11373753488622668
+ ],
+ "share_threshold": 0.25,
+ "share_ok": false,
+ "full_scale_candidates": 3000,
+ "estimated_in_band_tasks": 265.0,
+ "estimated_in_band_tasks_ci95": [
+  204.50079684516072,
+  341.21260465868005
+ ],
+ "tasks_threshold": 400,
+ "tasks_ok": false,
+ "estimated_at_upper_full_scale": 353.3333333333333,
+ "verdict": "fail"
+}

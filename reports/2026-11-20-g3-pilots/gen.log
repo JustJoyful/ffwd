@@ -1,0 +1,20 @@
+verified so far 51/300 (attempts 110)
+verified so far 105/300 (attempts 216)
+verified so far 162/300 (attempts 309)
+verified so far 218/300 (attempts 417)
+verified so far 276/300 (attempts 511)
+verified so far 297/300 (attempts 545)
+verified so far 300/300 (attempts 550)
+{"n": 300, "family_count": {"1": 13, "2": 51, "3": 134, "4": 102}, "attempts": 550, "dropped": {"not_train_bucket": 178, "duplicate_or_in_train": 25, "no_draft": 20, "verify_failed:F9+F1+F10": 1, "verify_failed:F5+F1": 1, "verify_failed:F12+F1+F9+F5": 1, "verify_failed:F1+F5+F9+F12": 1, "verify_failed:F1+F9+F12+F5": 1, "verify_failed:F2+F9": 3, "verify_failed:F9+F12+F1+F5": 2, "verify_failed:F1+F5+F9": 1, "verify_failed:F2+F4": 2, "verify_failed:F10+F1+F4": 2, "verify_failed:F2+F3+F4": 1, "verify_failed:F12+F5+F1+F9": 1, "verify_failed:F2+F4+F3": 1, "verify_failed:F5+F1+F9": 2, "verify_failed:F5+F9+F12+F1": 1, "verify_failed:F9+F1+F5": 2, "verify_failed:F1+F9+F5": 1, "verify_failed:F9+F5+F12+F1": 1, "verify_failed:F12+F4+F5+F9": 1, "verify_failed:F10+F1": 1}}
+verified so far 56/420 (attempts 98)
+verified so far 112/420 (attempts 199)
+verified so far 169/420 (attempts 309)
+verified so far 225/420 (attempts 419)
+verified so far 284/420 (attempts 533)
+verified so far 342/420 (attempts 654)
+verified so far 397/420 (attempts 751)
+verified so far 419/420 (attempts 790)
+verified so far 420/420 (attempts 791)
+{"n": 420, "family_count": {"1": 13, "2": 52, "3": 204, "4": 151}, "attempts": 791, "dropped": {"not_train_bucket": 265, "duplicate_or_in_train": 47, "no_draft": 35, "verify_failed:F12+F1+F5+F9": 1, "verify_failed:F1+F5+F9": 1, "verify_failed:F10+F1+F4": 1, "verify_failed:F1+F5": 1, "verify_failed:F9+F1+F10": 1, "verify_failed:F4+F10+F1": 2, "verify_failed:F2+F3+F4": 1, "verify_failed:F9+F5+F1": 1, "verify_failed:F9+F12+F5+F1": 1, "verify_failed:F1+F12+F5+F9": 1, "verify_failed:F9+F5+F1+F12": 1, "verify_failed:F1+F5+F9+F12": 1, "verify_failed:F2+F9": 2, "verify_failed:F2+F9+F4": 1, "verify_failed:F12+F1+F5": 1, "verify_failed:F2+F4+F3": 2, "verify_failed:F9+F5+F12+F1": 1, "verify_failed:F12+F9+F1+F5": 1, "verify_failed:F5+F12+F1": 1, "verify_failed:F1+F5+F4+F12": 1, "verify_failed:F2+F4+F9": 1}}
+{"base_tasks": 420, "emitted": 300, "operators": {"drop_an": 80, "shift_ss": 40, "rotate_wrong": 4, "drop_af": 23, "fps_wrong": 19, "crop_wrong": 31, "halve_t": 41, "loudnorm_target": 13, "speed_wrong": 22, "swap_acodec": 25, "frames_interval": 2}}
+GEN EXIT 0

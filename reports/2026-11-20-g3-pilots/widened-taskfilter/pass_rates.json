@@ -1,0 +1,2126 @@
+{
+  "meta": {
+    "policy_config": "eval/configs/m1-0.6b-q8.toml",
+    "model": "ffmpeg-agent-m1-0.6b",
+    "temperature": 1.0,
+    "seed": 20261115,
+    "tasks_sha256": "e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca",
+    "sample": null,
+    "n_tasks": 300,
+    "workers": 4,
+    "k": 8,
+    "band": [
+      0.2,
+      0.8
+    ],
+    "date": "2026-11-20T00:03:57.842726+00:00"
+  },
+  "summary": {
+    "total": 300,
+    "kept": 23,
+    "too_easy": 256,
+    "too_hard": 21
+  },
+  "tasks": {
+    "tr-001361f3ff-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-001a23ed77-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0229c2d966-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-022a754e24-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0284be5a24-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-02c73c56c5-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-04d0f9d67e-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-054aed3239-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-06633c06d6-verbo": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-06e603676a-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-06edc2a644-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0768046a13-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0790d4377e-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-084253da1d-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-086fde1b15-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-098095ab85-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0983537da3-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-09e0026e55-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0ac29c122f-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0b4341a6b5-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0bc30110b2-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0beb4497a9-verbo": {
+      "passes": 6,
+      "k": 8,
+      "rate": 0.75,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-0c737efa7c-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0c8ec894b3-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0d4fbab6d0-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-0f2694ed5a-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-13778e5d03-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-1585c5859f-casua": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-1601167949-sympt": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-168c681506-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-185e4861ce-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-18b252a7e2-casua": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-18b78bbb8d-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-18f0a5a706-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-19c60919ed-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-19f40ad2a7-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-1a4b0c9d3d-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-1a5af6ba65-casua": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-1ada5e5192-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-1af74da6e6-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-1bad925a06-casua": {
+      "passes": 4,
+      "k": 8,
+      "rate": 0.5,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-1e94d300db-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-1feeb51111-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-206531538e-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-20c4602517-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-210524c63e-polit": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2189298ad2-sympt": {
+      "passes": 5,
+      "k": 8,
+      "rate": 0.625,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-21a9255a6f-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-22c349352d-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2353184615-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-250f33b334-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-25c41bf8bb-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-26669f529d-casua": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-26fec7781b-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-27ffa9046b-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2958011cb3-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2a61b65eed-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2a76cebe03-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2aa48885d2-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2af9f4a450-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2b196cf0b7-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2b61c74cae-verbo": {
+      "passes": 2,
+      "k": 8,
+      "rate": 0.25,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-2bfb8f732a-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2c4bbe8fc8-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2d411b3bf4-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-2f30bc60d9-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-321d1e87c2-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-322bf596c0-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-33277e3126-casua": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-3427721453-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-34e344a91d-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-35163706f8-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3555490c29-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-35cb3aadf6-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-35cc5ceeb8-casua": {
+      "passes": 6,
+      "k": 8,
+      "rate": 0.75,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-386bba8887-sympt": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-386d3a73d4-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3952af5323-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-396bf62ab7-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3adafa08e0-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3b61c976c8-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3c1404a178-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3c5f1d6374-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3d1e97b742-casua": {
+      "passes": 1,
+      "k": 8,
+      "rate": 0.125,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-3dbf2833fe-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3e990d6eec-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3fd67f9b07-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-3ffcd816d9-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-408176fc73-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-40b46ff5f2-sympt": {
+      "passes": 2,
+      "k": 8,
+      "rate": 0.25,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-4267f667da-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-42b4739f3f-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-43d9bd3d92-sympt": {
+      "passes": 2,
+      "k": 8,
+      "rate": 0.25,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-4418906af3-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-44c0b63fa3-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-459a9da253-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-45d2932e98-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4777a40482-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-48a1d82110-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-495716c40a-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4a6467c14f-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4afc7b3ce4-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4b1f169add-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4b60ae3e1b-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4cd69e78b2-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4ce35f2788-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4f0ad58422-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4fbdfe6e9f-casua": {
+      "passes": 5,
+      "k": 8,
+      "rate": 0.625,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-4fc939a1ec-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-4fdd288722-polit": {
+      "passes": 4,
+      "k": 8,
+      "rate": 0.5,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-50966083e2-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-50c617349f-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-510ee561bb-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-5399981ba3-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-53cb094c75-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-55024d6881-sympt": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-5720032934-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-572ea1ec78-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-57d719d1b2-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-59904b063f-terse": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-5b1e8d27d9-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-5b206da65b-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-5d4e6d2101-sympt": {
+      "passes": 5,
+      "k": 8,
+      "rate": 0.625,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-5f415ae5e9-casua": {
+      "passes": 3,
+      "k": 8,
+      "rate": 0.375,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-5f817415bf-verbo": {
+      "passes": 2,
+      "k": 8,
+      "rate": 0.25,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-5fcc36e346-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-5ff039933d-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-5ffd4003aa-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-60f0d4e27c-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-62203aa379-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-623a88bcaa-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-640f220fd1-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-655a3f8746-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-65d6d586f8-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6685591a0b-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6753820a26-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-681a47d25e-polit": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6a4dd41bd1-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6a9353d7d6-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6b3b9b08f3-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6da1b7ac6e-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-6f8a745a6a-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-702100d129-terse": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-71f39c8910-terse": {
+      "passes": 2,
+      "k": 8,
+      "rate": 0.25,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-72019872b6-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-727864cd9f-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-737ad3007b-casua": {
+      "passes": 6,
+      "k": 8,
+      "rate": 0.75,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-7546b8d069-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-755b3bda11-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-76a8309716-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-778e65c46c-casua": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-787e2819d1-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-78b3f5e5d7-sympt": {
+      "passes": 6,
+      "k": 8,
+      "rate": 0.75,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-79c5c066e0-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-79f43d170e-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7a14c2f5b1-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7a22a6d712-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7b461d6725-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7b6c6eaf80-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7c5bdea76c-casua": {
+      "passes": 1,
+      "k": 8,
+      "rate": 0.125,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-7c77948a2d-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7c88d91f16-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7e8746e210-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7f628b3d6c-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-7ffc15ec8d-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-807c9ec3e3-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-817f192daa-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-82a0c819ce-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-82fb13a73e-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-83d6427669-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-84ba7b4444-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-84be63290a-polit": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-85ea025afa-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-86622192ff-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-8683697e0f-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-86a3195f1a-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-87e4dfdc89-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-89cecd8720-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-89db87e32d-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-8a40d368a7-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-8b0fe1d7f8-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-8b9b946174-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-8c29d9293b-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-8f2d8d5fbc-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-90818758f5-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-920b3ea250-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9245cbd3ca-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-92b72b284e-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-92c917dac7-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-937ec9e985-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-93d1c510ad-polit": {
+      "passes": 3,
+      "k": 8,
+      "rate": 0.375,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-94976099ea-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-94bfbd5e38-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9674f14f8d-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-980416099b-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-983400639b-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9a680b68ee-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9b08b4f088-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9b1204b508-terse": {
+      "passes": 3,
+      "k": 8,
+      "rate": 0.375,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-9b6bdfdc1c-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9c77ab76dd-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-9ecf616ace-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a293ae7078-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a63452c044-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a6f34d6e82-sympt": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-a751511d1c-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a8148b4908-verbo": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a83c448483-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a84a1e1171-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a8661a700b-verbo": {
+      "passes": 1,
+      "k": 8,
+      "rate": 0.125,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-a8d4cecdcb-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a8e9fc49a5-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-a93fd821d4-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ab1d2b7da3-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ab3a29c031-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ac69ac97eb-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ae6c9850f6-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-aebafa5041-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-af42bc6f19-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b00e9c27dc-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b2eddc1d11-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b3176c60c9-verbo": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-b3351546d0-verbo": {
+      "passes": 5,
+      "k": 8,
+      "rate": 0.625,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-b4b61e4c9c-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b51c78a793-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b58cc5cc10-verbo": {
+      "passes": 4,
+      "k": 8,
+      "rate": 0.5,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-b62efa81a1-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b8a72dac4c-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-b9b9445f41-verbo": {
+      "passes": 5,
+      "k": 8,
+      "rate": 0.625,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-b9e118dd33-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ba62b1f8cb-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-bad714a5be-casua": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-bcf6272000-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-bd87016b05-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-be3d418668-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-bed835809b-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-bee99fd2f7-polit": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-bfaae619a8-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c05486497a-verbo": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-c09b015632-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c0a0ea09aa-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c0a43e0718-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c1c9f00552-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c34756a60a-polit": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-c357cf9a7a-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c4357cabcd-terse": {
+      "passes": 6,
+      "k": 8,
+      "rate": 0.75,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-c6094d52cb-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c67eb29cb2-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c702a14525-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c790106e6e-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-c9211ee74c-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cafcacbbe3-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cb2270f40b-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cb99c0c71f-terse": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cbe230b719-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cc0d3e983e-terse": {
+      "passes": 3,
+      "k": 8,
+      "rate": 0.375,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-cc2c71f7be-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cd8814eb2d-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-cf4832a432-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-d4bb777956-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-d726ed2d41-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-d80c076afe-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-d82f79172e-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-d8511389b0-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-db5d6fb5e0-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e03796c856-terse": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e12b9a7226-polit": {
+      "passes": 1,
+      "k": 8,
+      "rate": 0.125,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-e230d13727-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e307d3b138-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e3a2952147-sympt": {
+      "passes": 1,
+      "k": 8,
+      "rate": 0.125,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-e467ff0d54-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e59c6d6538-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e637b139b2-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-e7fded7e0e-sympt": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-ea137acd81-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-eae9140414-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ed0f649bef-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-edf35b6f29-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f06099d67e-casua": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-f16b049ac1-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f4bf6da082-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f518b2fe48-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f59a8e6c41-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f5a7b314d4-polit": {
+      "passes": 7,
+      "k": 8,
+      "rate": 0.875,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f5e1f8fb48-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f6eec4e95b-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-f97e3ad69b-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fb6695c87b-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fb6ac748da-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fca886654d-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fd3664d532-casua": {
+      "passes": 6,
+      "k": 8,
+      "rate": 0.75,
+      "keep": true,
+      "reason": "in_band"
+    },
+    "tr-fd6d7efd4d-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fda02fc56c-terse": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fe08fd665c-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fe95f89f15-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ff502d199e-polit": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ff865a871a-terse": {
+      "passes": 0,
+      "k": 8,
+      "rate": 0.0,
+      "keep": false,
+      "reason": "too_hard"
+    },
+    "tr-ffa89efdcc-sympt": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-ffd94b80b7-verbo": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    },
+    "tr-fff6034003-casua": {
+      "passes": 8,
+      "k": 8,
+      "rate": 1.0,
+      "keep": false,
+      "reason": "too_easy"
+    }
+  }
+}

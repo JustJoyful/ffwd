@@ -1,0 +1,79 @@
+{
+ "attempts": 550,
+ "corpus_manifest_sha256": "7055b86b3308c377c88c005550ee4a701b0f969cc2b7a10d2d0eb5957e6c5d19",
+ "dropped": {
+  "duplicate_or_in_train": 25,
+  "no_draft": 20,
+  "not_train_bucket": 178,
+  "verify_failed:F1+F5+F9": 1,
+  "verify_failed:F1+F5+F9+F12": 1,
+  "verify_failed:F1+F9+F12+F5": 1,
+  "verify_failed:F1+F9+F5": 1,
+  "verify_failed:F10+F1": 1,
+  "verify_failed:F10+F1+F4": 2,
+  "verify_failed:F12+F1+F9+F5": 1,
+  "verify_failed:F12+F4+F5+F9": 1,
+  "verify_failed:F12+F5+F1+F9": 1,
+  "verify_failed:F2+F3+F4": 1,
+  "verify_failed:F2+F4": 2,
+  "verify_failed:F2+F4+F3": 1,
+  "verify_failed:F2+F9": 3,
+  "verify_failed:F5+F1": 1,
+  "verify_failed:F5+F1+F9": 2,
+  "verify_failed:F5+F9+F12+F1": 1,
+  "verify_failed:F9+F1+F10": 1,
+  "verify_failed:F9+F1+F5": 2,
+  "verify_failed:F9+F12+F1+F5": 2,
+  "verify_failed:F9+F5+F12+F1": 1
+ },
+ "families": {
+  "F1": 220,
+  "F10": 51,
+  "F12": 149,
+  "F2": 22,
+  "F3": 47,
+  "F4": 173,
+  "F5": 43,
+  "F6": 32,
+  "F7": 7,
+  "F8": 2,
+  "F9": 179
+ },
+ "family_count": {
+  "1": 13,
+  "2": 51,
+  "3": 134,
+  "4": 102
+ },
+ "generator_version": "1.0",
+ "git_commit": "9a4fc4212fdafd9ef5723d37d824f4698ffd8066",
+ "n": 300,
+ "pool": "hard-variant",
+ "seed": 20261120,
+ "styles": {
+  "casual_typos": 62,
+  "polite": 59,
+  "symptom": 54,
+  "terse": 62,
+  "verbose": 63
+ },
+ "taskgen_seed": 20261116,
+ "tasks_sha256": "e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca",
+ "train_tasks_file_sha256": "1651d8addfc901ef5189c46fa97e7ba9f93010c887537293cb4f9dc12382e6aa",
+ "weights": {
+  "family_count": [
+   0.1,
+   0.2,
+   0.4,
+   0.3
+  ],
+  "hard_families": [
+   "F2",
+   "F6",
+   "F7",
+   "F8",
+   "F10",
+   "F11"
+  ]
+ }
+}

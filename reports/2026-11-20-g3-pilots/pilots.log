@@ -1,0 +1,4 @@
+{"base_tasks": 300, "emitted": 250, "operators": {"drop_af": 22, "shift_ss": 47, "drop_an": 32, "halve_t": 56, "crop_wrong": 29, "swap_acodec": 26, "speed_wrong": 7, "rotate_wrong": 3, "loudnorm_target": 9, "fps_wrong": 13, "frames_interval": 6}}
+{"total": 300, "kept": 23, "too_easy": 256, "too_hard": 21}
+{"total": 300, "kept": 30, "too_easy": 228, "too_hard": 42}
+PILOTS EXIT 0

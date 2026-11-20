@@ -1,0 +1,35 @@
+{
+ "all_references_passed": true,
+ "base_tasks": 300,
+ "base_tasks_sha256": "784c8017f96275cd952133a2ab6065218cdd10c8e548d5d48a3255e575ac2585",
+ "emitted": 250,
+ "failed_fields": {
+  "audio.codec": 26,
+  "audio.loudness_lufs": 17,
+  "audio.present": 32,
+  "frames.expected_count": 7,
+  "size_max_bytes": 2,
+  "time.duration_s": 124,
+  "video.fps": 13,
+  "video.height": 29,
+  "video.rotation": 5,
+  "video.width": 29
+ },
+ "git_commit": "603c789df0b133f38dbee4fd3daab1e0dab3fb26",
+ "max_operator_tries": 4,
+ "no_verified_perturbation": 50,
+ "operators": {
+  "crop_wrong": 29,
+  "drop_af": 22,
+  "drop_an": 32,
+  "fps_wrong": 13,
+  "frames_interval": 6,
+  "halve_t": 56,
+  "loudnorm_target": 9,
+  "rotate_wrong": 3,
+  "shift_ss": 47,
+  "speed_wrong": 7,
+  "swap_acodec": 26
+ },
+ "pool": "recovery-start"
+}

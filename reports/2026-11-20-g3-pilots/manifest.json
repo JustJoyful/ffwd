@@ -1,0 +1,32 @@
+{
+ "report": "g3-pilots",
+ "date": "2026-11-20",
+ "git_commit_code": "603c789df0b133f38dbee4fd3daab1e0dab3fb26",
+ "outcome": "G3 auto-go not triggered: criterion (a) fail, (d) fail, (b) and (c) hold; stopped after the pilots",
+ "model": {
+  "name": "ffmpeg-agent-m1-0.6b",
+  "gguf": "data/models/m1-gguf/ffmpeg-agent-m1-0.6b-q8_0.gguf",
+  "gguf_sha256": "c461e0b04f391d96ff8b19b65a7d5be4e2de0b8f180ec4f440b962f078c95f3d",
+  "serving": "llama.cpp b12032 (dde879bc), Vulkan, -c 32768 -np 4 -ngl 99 --cache-ram 0 --seed 20261115, agent chat template"
+ },
+ "hardware": "RTX 3050 6 GB laptop GPU, local",
+ "seeds": {"hard_pool": 20261120, "sampling_seed": 20261115, "taskgen": "config.TASKGEN_SEED"},
+ "sampling": {"k": 8, "temperature": 1.0, "band": [0.2, 0.8], "split_used": "train (pilots), dev (recovery eval)"},
+ "data": {
+  "widened_pilot_tasks_sha256": "e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca",
+  "recovery_pilot": "pilot-data/recovery/manifest.json",
+  "dev_recovery": "pilot-data/dev-recovery/manifest.json (base: data/tasks/dev/v1.jsonl, sha256 784c8017f96275cd952133a2ab6065218cdd10c8e548d5d48a3255e575ac2585)"
+ },
+ "results": {
+  "criterion_a": "g3-criterion-a.json",
+  "pooled_in_band": "53/600",
+  "widened_in_band": "23/300",
+  "recovery_in_band": "30/300",
+  "dev_recovery_perturbed_start": "225/250",
+  "dev_recovery_natural": "15/22"
+ },
+ "tests": "151 passed: tests/taskgen tests/grpo tests/eval/test_g3_criteria.py tests/eval/test_recovery_eval.py",
+ "test_splits_read": false,
+ "cost_usd": 0.0,
+ "deepseek_ledger_usd": 2.675
+}

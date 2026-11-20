@@ -1,0 +1,35 @@
+{
+ "natural": {
+  "tasks_with_a_failed_first_run": 22,
+  "recovered": 15,
+  "of_tasks": 300,
+  "rate": 0.6818181818181818,
+  "ci95": [
+   0.4731859774104276,
+   0.8363940681864375
+  ]
+ },
+ "perturbed_start": {
+  "n": 250,
+  "recovered": 225,
+  "rate": 0.9,
+  "ci95": [
+   0.8565482893919354,
+   0.9313450710117088
+  ],
+  "by_operator": {
+   "crop_wrong": "24/29",
+   "drop_af": "19/22",
+   "drop_an": "30/32",
+   "fps_wrong": "13/13",
+   "frames_interval": "1/6",
+   "halve_t": "55/56",
+   "loudnorm_target": "8/9",
+   "rotate_wrong": "3/3",
+   "shift_ss": "45/47",
+   "speed_wrong": "1/7",
+   "swap_acodec": "26/26"
+  },
+  "mean_runs": 2.22
+ }
+}
