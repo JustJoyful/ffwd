@@ -49,3 +49,7 @@ Pooled Q3a population (test-iid + test-phrasing): about **73 to 108** tasks. The
 3. Whether I may run the counts-only script on the test task files, or you prefer to keep them unread until the freeze.
 4. Whether to keep Q4 and Q7 as success comparisons for M3, given M3 is expected to be about as successful as M1 (they remain valid questions about the final system).
 5. The unexplained dev vs train copy-eligible share.
+
+
+---
+**Superseded (20 Nov 2026) by `amendment-draft-v2.md`:** Holm over m = 5 is replaced by a fixed-sequence procedure at alpha 0.05 (Q2, Q7, Q3a, Q3b, Q4), the guard and Q3a are pooled as decided, the exact test counts replace the estimates, and the power table is recomputed. This file is kept as written.

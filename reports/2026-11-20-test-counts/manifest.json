@@ -1,0 +1,14 @@
+{
+ "report": "test-counts",
+ "purpose": "copy-eligible counts per test split, for the M3 preregistration draft power section",
+ "approval": "owner, 20 Nov 2026: exact test counts, copy-eligible flags only, no outcomes",
+ "reader": "training.taskgen.loader.load_tasks(split, \"test-eval\"); no task id, request, command or outcome kept or printed",
+ "task_file_sha256": {
+  "test-iid": "bd01e887c032921949e1eb6f373fd41164e72ac6b956424ed0a55e7bd1f83470",
+  "test-compositional": "19f599f1c570a19f7d41925dc4e1fa0232e3118f7defaadb71ef4faa50f17c9e",
+  "test-phrasing": "86188225ded5abb8749690e465a7079c6900272ede113e3c10e3d7ee6748212e"
+ },
+ "git_commit": "47715febe46ae3bda6330c5204cf3449da0e243c",
+ "utc": "2026-11-20T17:13:55+00:00",
+ "systems_run": []
+}

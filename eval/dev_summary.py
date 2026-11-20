@@ -8,6 +8,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+from eval import spec_errors
 from eval.stats import wilson_ci
 
 
@@ -16,7 +17,7 @@ def _fmt(k: int, n: int) -> str:
     return f"{k}/{n} = {p:.0%} [{lo:.0%}, {hi:.0%}]"
 
 
-def summarize(runs: dict[str, Path], title: str) -> str:
+def summarize(runs: dict[str, Path], title: str, tasks: dict[str, dict] | None = None) -> str:
     data = {
         s: [json.loads(x) for x in (d / "results.jsonl").read_text().splitlines()]
         for s, d in runs.items()
@@ -45,6 +46,16 @@ def summarize(runs: dict[str, Path], title: str) -> str:
         "",
         "End reasons: " + "; ".join(f"{s}: {dict(sorted(e.items()))}" for s, e in ends.items()),
     ]
+    if (
+        tasks
+    ):  # the material spec error rate (eval.spec_errors, D-043): descriptive, lower is better
+        lines += ["", "Material spec error rate (container, resolution, time range, lossless, requested codec; lower is better):", "",
+                  "| System | rate | by field |", "|---|---|---|"]  # fmt: skip
+        for s, d in runs.items():
+            m = spec_errors.summarize(tasks, spec_errors.load_episodes(d))
+            lines.append(
+                f"| {s} | {spec_errors.fmt(m)} | {m['by_field'] if m['emits_spec'] else '-'} |"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -52,11 +63,17 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--title", default="Dev baselines")
+    ap.add_argument("--tasks", type=Path, help="dev tasks file: adds the material spec error rate")
     ap.add_argument("runs", nargs="+", help="LABEL=run_dir")
     a = ap.parse_args()
     if a.out.exists():
         raise SystemExit(f"refusing to overwrite {a.out}")
-    text = summarize({k: Path(v) for k, v in (x.split("=", 1) for x in a.runs)}, a.title)
+    tasks = (
+        {t["id"]: t for t in map(json.loads, a.tasks.read_text().splitlines())} if a.tasks else None
+    )
+    if tasks and any(t["split"] != "dev" for t in tasks.values()):
+        raise SystemExit("dev_summary reads dev tasks only")
+    text = summarize({k: Path(v) for k, v in (x.split("=", 1) for x in a.runs)}, a.title, tasks)
     a.out.write_text(text)
     print(text)
 

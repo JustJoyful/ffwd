@@ -22,6 +22,7 @@ The sections further down are the autonomous-run history from 16-19 Nov and are 
 | Reward variance (full reward, K=8 re-sample): 32% of groups have signal vs 10% on pass alone; 2/3 of the extra is `spec_acc` (`reports/2026-11-20-reward-variance`) | done |
 | Corpus (36 clips, no test-real) and M1 (GGUF + adapter) on private HF repos; `main` pushed to private GitHub; Kaggle web-UI notebook + 2-step local smoke run (D-041, `reports/2026-11-20-main-run-smoke`) | done; notebook not yet run on Kaggle |
 | Draft preregistration amendment for the no-M3 case (variants A: Q2 only, B: Q2 + Q4' + Q7', Holm recomputed): `reports/2026-11-20-prereg-no-m3-draft`; test-real template + commands: `eval/test-real/` | drafted, NOT applied |
+| Material spec error rate (metric, M1 dev 26% [21, 31]; two known M1 spec bugs), exact test copy-eligible counts, M3 draft v2 with fixed-sequence procedure, Kaggle API runner (D-044) | done; draft not applied |
 | GRPO main run + shuffled control (G3), checkpoint selection on dev | **not started: needs owner** (my recommendation: stop at M1 and prepare G4; alternatives in the pilots report) |
 | Single test run (G4), results table with CIs on test-iid / compositional / phrasing / real | **not started: needs owner** |
 | 1.7B SFT | not started (owner: not for now) |

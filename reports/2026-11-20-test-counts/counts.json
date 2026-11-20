@@ -1,0 +1,29 @@
+{
+ "per_split": {
+  "test-iid": {
+   "tasks": 500,
+   "graded": 458,
+   "copy_eligible": 55
+  },
+  "test-iid-dedup": {
+   "tasks": 396,
+   "graded": 381,
+   "copy_eligible": 36
+  },
+  "test-compositional": {
+   "tasks": 200,
+   "graded": 200,
+   "copy_eligible": 0
+  },
+  "test-phrasing": {
+   "tasks": 200,
+   "graded": 176,
+   "copy_eligible": 35
+  }
+ },
+ "q3a_pooled_test_iid_plus_phrasing": {
+  "tasks": 700,
+  "graded": 634,
+  "copy_eligible": 90
+ }
+}

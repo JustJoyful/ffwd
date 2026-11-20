@@ -3,8 +3,26 @@
  "date": "2026-11-20",
  "status": "DRAFT, not applied: eval/PREREGISTRATION.md, training/config.py and the tests are unchanged",
  "file": "amendment-draft.md",
- "endpoints": {"Q3a": "needless-re-encode-or-fail rate on copy-eligible tasks, pooled test-iid + test-phrasing", "Q3b": "mean runs per supported task, test-iid", "guard": "success M3-M1 non-inferior within 2 pp, pooled test-iid + test-compositional + test-phrasing, one-sided 97.5%", "family": "Holm m=5: Q2, Q3a, Q3b, Q4, Q7"},
- "inputs": {"dev_copy_eligible": "31 of 300 (exact)", "train_copy_eligible": "688 renderings = 232 contents of 1500 (exact)", "test_splits": "estimated from dev and train rates; no test file read"},
+ "endpoints": {
+  "Q3a": "needless-re-encode-or-fail rate on copy-eligible tasks, pooled test-iid + test-phrasing",
+  "Q3b": "mean runs per supported task, test-iid",
+  "guard": "success M3-M1 non-inferior within 2 pp, pooled test-iid + test-compositional + test-phrasing, one-sided 97.5%",
+  "family": "Holm m=5: Q2, Q3a, Q3b, Q4, Q7"
+ },
+ "inputs": {
+  "dev_copy_eligible": "31 of 300 (exact)",
+  "train_copy_eligible": "688 renderings = 232 contents of 1500 (exact)",
+  "test_splits": "exact counts-only run (owner approval), no outcomes; reports/2026-11-20-test-counts"
+ },
  "test_splits_read": false,
- "cost_usd": 0.0
+ "cost_usd": 0.0,
+ "files": [
+  "amendment-draft.md (v1, superseded)",
+  "amendment-draft-v2.md (current draft)"
+ ],
+ "v2": {
+  "procedure": "fixed sequence at alpha 0.05: Q2, Q7, Q3a, Q3b, Q4 (stop at the first non-rejection)",
+  "guard": "pooled generated splits, n=900, margin 2 pp",
+  "q3a": "pooled; exact copy-eligible counts: test-iid 55, test-phrasing 35, test-compositional 0 (reports/2026-11-20-test-counts)"
+ }
 }

@@ -8,6 +8,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+from eval import spec_errors
 from eval.stats import holm, paired_diff_ci, paired_diff_pvalue, wilson_ci
 from training import config
 from training.env.validator import uses_stream_copy_only
@@ -140,6 +141,22 @@ def final_report(
             + f" | {rpt:.2f} | {('%.0f%%' % (100 * rer)) if rer is not None else 'n/a'} |"
             if rpt is not None
             else f"| {s} | " + " | ".join(cells) + " | - | - |"
+        )
+    # material spec error rate (eval.spec_errors, D-043): descriptive, outside the preregistered family, lower is better
+    lines += ["", "## Material spec error rate (container, resolution, time range, lossless, requested codec; lower is better)", "",
+              "| System | " + " | ".join(splits) + " |", "|---|" + "---|" * len(splits)]  # fmt: skip
+    results_json["material_spec_errors"] = {}
+    for s in runs:
+        row = {
+            sp: spec_errors.summarize(tasks_by_split[sp], loaded[s][sp][1])
+            for sp in splits
+            if sp in loaded[s]
+        }
+        results_json["material_spec_errors"][s] = row
+        lines.append(
+            f"| {s} | "
+            + " | ".join(spec_errors.fmt(row[sp]) if sp in row else "-" for sp in splits)
+            + " |"
         )
     raw = {}
     for name, a, b, sp in comparisons:
