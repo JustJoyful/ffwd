@@ -249,36 +249,6 @@
   }
  },
  {
-  "id": "meridian_4k",
-  "origin": "downloaded",
-  "src": "Meridian_UHD4k5994_HDR_P3PQ.mp4",
-  "source_url": null,
-  "archive": null,
-  "licence": "UNVERIFIED: Netflix Open Content says CC BY 4.0, Wikipedia says CC BY-NC-ND 4.0",
-  "attribution": "Netflix Open Content (Meridian)",
-  "role": "taskgen",
-  "tags": [
-   "high_fps",
-   "no_audio"
-  ],
-  "restricted": true,
-  "synthetic": false,
-  "consent": null,
-  "cut": {
-   "start": 300,
-   "duration": 12
-  },
-  "must": {
-   "video_codec": "h264",
-   "min_width": 3840,
-   "fps": [
-    59.5,
-    60.0
-   ],
-   "audio": false
-  }
- },
- {
   "id": "hevc_phone",
   "origin": "own-recording",
   "src": "hevc-check.mp4",

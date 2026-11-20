@@ -44,7 +44,8 @@ def test_no_restricted_clip_in_any_task_file():
     """Licence-unverified clips (manifest `restricted: true`) never feed any generated or hand-written task."""
     records = json.loads((config.CORPUS_DIR / "manifest.json").read_text())
     restricted = {r["id"] for r in records if r.get("restricted")}
-    assert restricted  # the guard is not vacuous: meridian_4k is restricted
+    # there may be no restricted clip right now (meridian_4k was removed, D-042); `violations` itself is proven
+    # to catch a planted clip by test_a_planted_violation_is_caught, so an empty set is not a silent pass
     assert violations(config.DATA_DIR / "tasks", restricted) == []
 
 
