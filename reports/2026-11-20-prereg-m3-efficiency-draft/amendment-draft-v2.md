@@ -60,3 +60,7 @@ What changed against v1 (Holm, m = 5): each step now uses alpha 0.05 instead of 
 
 1. Q3a pooled over test-iid + test-phrasing + test-real (my reading of "Q3a pooled" together with the new test-real copy-eligible guidance), or generated splits only.
 2. The order itself (Q2, Q7, Q3a, Q3b, Q4) is yours; I only note that it puts the efficiency claim behind Q7.
+
+
+---
+**Superseded (21 Nov 2026) by `amendment-draft-v3.md`:** the order becomes Q2, Q7, Q3b, Q3a, Q4 (runs before re-encode, justified by the train-side pool breakdown), Q3a pools test-real, and the power table is recomputed. This file is kept as written.

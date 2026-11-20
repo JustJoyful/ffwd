@@ -18,11 +18,18 @@
  "cost_usd": 0.0,
  "files": [
   "amendment-draft.md (v1, superseded)",
-  "amendment-draft-v2.md (current draft)"
+  "amendment-draft-v2.md (v2, superseded)",
+  "amendment-draft-v3.md (current draft)"
  ],
  "v2": {
   "procedure": "fixed sequence at alpha 0.05: Q2, Q7, Q3a, Q3b, Q4 (stop at the first non-rejection)",
   "guard": "pooled generated splits, n=900, margin 2 pp",
   "q3a": "pooled; exact copy-eligible counts: test-iid 55, test-phrasing 35, test-compositional 0 (reports/2026-11-20-test-counts)"
+ },
+ "v3": {
+  "procedure": "fixed sequence at alpha 0.05: Q2, Q7, Q3b, Q3a, Q4 (stop at the first non-rejection)",
+  "order_reason": "train-side pool: runs variance 187 groups vs needless re-encode 48 groups / 37 unique contents (reports/2026-11-20-grpo-pool)",
+  "q3a": "pooled over test-iid, test-phrasing, test-real",
+  "guard": "pooled generated splits, n=900, margin 2 pp"
  }
 }
