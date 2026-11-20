@@ -3,7 +3,29 @@
 from training.grpo.lockstep import BatchGenerate
 
 
-def hf_batch_generator_for(temperature: float, max_batch: int = 32):
+def run_chunks(reqs, one_chunk, max_batch: int, is_oom, on_oom=lambda: None):
+    """Decode `reqs` in chunks of at most `max_batch`. A chunk that runs out of GPU memory is split in half and retried
+    (a lone request that still does not fit raises): the 20 Nov 2026 control run died of one OOM at step 2 after hours of
+    setup, and `output_scores=True` keeps the full-vocabulary scores of every new token of every sequence in the chunk.
+    """
+
+    def attempt(chunk):
+        try:
+            return one_chunk(chunk)
+        except Exception as e:  # noqa: BLE001
+            if not is_oom(e) or len(chunk) == 1:
+                raise
+            on_oom()
+            half = len(chunk) // 2
+            return attempt(chunk[:half]) + attempt(chunk[half:])
+
+    out = []
+    for i in range(0, len(reqs), max_batch):
+        out += attempt(reqs[i : i + max_batch])
+    return out
+
+
+def hf_batch_generator_for(temperature: float, max_batch: int = 8):
     def factory(trainer) -> BatchGenerate:
         import torch  # noqa: PLC0415
 
@@ -53,13 +75,19 @@ def hf_batch_generator_for(temperature: float, max_batch: int = 32):
                     for t, tok_id in enumerate(new)
                 ]
                 results.append((new, lps))
+            del out  # the per-token full-vocabulary scores are the big allocation: release them before the next chunk
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
             return results
 
         def generate_batch(reqs):
-            out = []
-            for i in range(0, len(reqs), max_batch):
-                out += one_chunk(reqs[i : i + max_batch])
-            return out
+            return run_chunks(
+                reqs,
+                one_chunk,
+                max_batch,
+                is_oom=lambda e: isinstance(e, torch.OutOfMemoryError),
+                on_oom=torch.cuda.empty_cache,
+            )
 
         return generate_batch
 

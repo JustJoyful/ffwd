@@ -76,5 +76,9 @@ def test_push_saves_without_running_unless_asked(monkeypatch):
     assert "--accelerator" in seen[0]  # GPU kernels still request the T4
 
 
+def test_the_kernel_sets_the_allocator_option_that_the_oom_message_recommended():
+    assert "expandable_segments:True" in kg.script(kg.params("control"))
+
+
 def test_smoke_repo_is_not_the_deleted_one():
     assert kg.params("smoke")["hub_repo"] != "JustJoyful/ffmpeg-agent-ckpt-smoke"

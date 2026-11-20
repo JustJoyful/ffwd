@@ -106,6 +106,8 @@ def main() -> None:
             "Secrets are not attached to this kernel: attach HF_TOKEN and GITHUB_TOKEN once in the Kaggle web UI"
         )
     os.environ.update(HF_TOKEN=hf, CUDA_VISIBLE_DEVICES="0", TRL_EXPERIMENTAL_SILENCE="1")
+    # the first control run died of an OOM with 4.2 GiB "reserved but unallocated" (fragmentation); PyTorch's own advice
+    os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
     if not os.path.exists(DEST):
         url = f"https://x-access-token:{gh}@github.com/{P['repo']}.git"
         # partial + sparse clone: the held-out splits are neither checked out nor downloaded; the token stays in the URL until
