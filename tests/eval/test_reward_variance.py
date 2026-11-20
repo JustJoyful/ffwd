@@ -2,6 +2,7 @@ from eval.reward_variance import analyse, group_causes
 from training import config
 
 W = config.REWARD_WEIGHTS
+OLD = W | {"spec_acc": 0.2}  # the pre-D-043 weights: the term the 20 Nov analysis was about
 
 
 def rec(tid, *, passed=True, runs=1, reenc=False, spec=1.0, partial=0.0, supported=True):
@@ -41,7 +42,7 @@ def test_needless_reencode_is_its_own_source():
 
 
 def test_spec_accuracy_alone_can_create_signal():
-    c = group_causes([rec("a")] * 7 + [rec("a", spec=0.5)])
+    c = group_causes([rec("a")] * 7 + [rec("a", spec=0.5)], OLD)
     assert c["signal"] and c["only"] == "spec_acc"
 
 
@@ -54,6 +55,17 @@ def test_pass_difference_is_primary_and_not_counted_as_efficiency_cause():
     c = group_causes([rec("a")] * 4 + [rec("a", passed=False)] * 4)
     assert c["pass_varies"] and c["primary"] == "pass"
     assert c["efficiency_sources"] == ["pass_differs"]
+
+
+def test_zero_spec_acc_weight_removes_spec_only_signal_but_keeps_the_rest():
+    spec_only = [rec("a")] * 7 + [rec("a", spec=0.5)]
+    runs = [rec("b")] * 7 + [rec("b", runs=2)]
+    w0 = OLD | {"spec_acc": 0.0}
+    assert group_causes(spec_only, OLD)["signal"] and not group_causes(spec_only, w0)["signal"]
+    assert group_causes(runs, w0)["signal"]
+    out = analyse(spec_only + runs, w0)
+    assert out["signal_total_reward"]["n"] == 1
+    assert "spec_acc" not in out["pass_constant_groups_signal_terms"]
 
 
 def test_analyse_counts_groups_not_samples():

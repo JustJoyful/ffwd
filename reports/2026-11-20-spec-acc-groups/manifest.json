@@ -1,0 +1,12 @@
+{
+ "report": "spec-acc-groups",
+ "date": "2026-11-20",
+ "question": "in groups where spec_acc is the only varying reward term, are the differences real spec errors or equivalent alternatives?",
+ "method": "re-sampled K=8 (M1 Q8_0 GGUF, T=1.0, prompt v1, spec first) on the 40 tasks (28 widened pilot + 12 T18 sample) whose group had spec_acc as the only varying term; kept groups where it was again the only term (27 of 40); read the first 20 by task id",
+ "result": {"equivalent": 12, "real_error_in_variance": 8, "of": 20, "shared_real_error_only": [3, 18, 20]},
+ "classification_is": "the engineer's reading, auditable in groups-dump.md",
+ "decision": "D-043: spec_acc weight 0",
+ "split_used": "train",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}

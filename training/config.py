@@ -258,10 +258,13 @@ QWEN3_OBSERVATION_TEMPLATE = (
 # `nearest_supported` is descriptive and is not scored by the eval (loop.score) or the reward (telemetry.grpo_reward);
 # tests/env/test_loop.py pins that the outcome is the same for any label. See eval/PREREGISTRATION.md, DECISIONS.
 REWARD_SCORES_NEAREST_SUPPORTED = False
+# 20 Nov 2026 (owner, before any GRPO run, D-043): spec_acc weight 0.2 -> 0. Its within-group variance was mostly style
+# (over-specification, tolerances), not real errors (reports/2026-11-20-spec-acc-groups). The term is still computed and
+# logged every step, and spec accuracy stays an eval metric; it just no longer pays.
 REWARD_WEIGHTS = {
     "pass": 1.0,
     "partial": 0.3,
-    "spec_acc": 0.2,
+    "spec_acc": 0.0,
     "efficiency": 0.1,
     "clarify": 0.5,
     "invalid": -0.5,

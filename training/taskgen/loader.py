@@ -6,6 +6,7 @@ raises SplitAccessError before any file is opened. Only purpose "test-eval" read
 final test run additionally goes through eval/testlock.py.
 """
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -18,6 +19,21 @@ class SplitAccessError(PermissionError):
 
 def tasks_path(split: str, version: str) -> Path:
     return config.DATA_DIR / "tasks" / split / f"{version}.jsonl"
+
+
+def load_extra_train(name: str, purpose: str = "grpo") -> list[dict]:
+    """An extra TRAIN file (e.g. the hard-variant pool, training.taskgen.register) whose sha256 is pinned under
+    MANIFEST.json["extra_train"]; a mismatch is a hard error. Goes through load_tasks, so the purpose guard applies.
+    """
+    meta = json.loads((config.DATA_DIR / "tasks" / "MANIFEST.json").read_text())["extra_train"][
+        name
+    ]
+    got = hashlib.sha256(tasks_path("train", name).read_bytes()).hexdigest()
+    if got != meta["sha256"]:
+        raise ValueError(
+            f"train/{name}.jsonl does not match its pinned hash ({got} != {meta['sha256']})"
+        )
+    return load_tasks("train", purpose, version=name)
 
 
 def load_tasks(split: str, purpose: str, *, version: str = "v1") -> list[dict]:

@@ -39,7 +39,7 @@ from training.grpo.telemetry import TelemetryLog, grpo_reward
 from training.grpo.toy_spike import StepTimer
 from training.precision import native_bf16, precision_plan
 from training.sft.train import load_jsonl  # noqa: F401  (kept for symmetry with the SFT driver)
-from training.taskgen.loader import load_tasks
+from training.taskgen.loader import load_extra_train, load_tasks
 from training.teacher.generate import load_prompt_v1
 
 
@@ -81,6 +81,13 @@ def main(argv: list[str] | None = None) -> None:
         help="pass_rates.json from training.grpo.taskfilter (M1, train tasks only)",
     )
     ap.add_argument(
+        "--extra-train",
+        action="append",
+        default=[],
+        metavar="NAME",
+        help="also train on data/tasks/train/NAME.jsonl (hash pinned in MANIFEST.json extra_train)",
+    )
+    ap.add_argument(
         "--pass-rates-subset",
         action="store_true",
         help="the table measured only some train tasks: train on its in-band tasks, exclude the unmeasured ones",
@@ -115,6 +122,11 @@ def main(argv: list[str] | None = None) -> None:
 
     prompt = load_prompt_v1(a.allow_draft_prompt)
     tasks = load_tasks("train", "grpo")
+    for (
+        name
+    ) in a.extra_train:  # hash-pinned extra TRAIN files, e.g. hard-v1 (training.taskgen.register)
+        tasks += load_extra_train(name, "grpo")
+    assert len({t["id"] for t in tasks}) == len(tasks), "duplicate task ids across the train files"
     needed = {c for t in tasks for c in t["inputs"]}
     corpus = (
         pull_corpus(a.corpus_repo, config.CORPUS_DIR)

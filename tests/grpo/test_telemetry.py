@@ -71,15 +71,22 @@ def ep(**kw):
     return Episode(**(base | kw))
 
 
-def test_weights_come_from_config_and_match_the_architecture_table():
+def test_weights_come_from_config_and_match_the_architecture_table_except_spec_acc_which_is_0():
+    # ARCHITECTURE 7.4 had spec_acc 0.2; D-043 (20 Nov 2026, before any GRPO run) set it to 0: the term is logged, not paid
     assert config.REWARD_WEIGHTS == {
         "pass": 1.0,
         "partial": 0.3,
-        "spec_acc": 0.2,
+        "spec_acc": 0.0,
         "efficiency": 0.1,
         "clarify": 0.5,
         "invalid": -0.5,
     }
+
+
+def test_spec_acc_is_logged_but_does_not_change_the_reward():
+    exact, empty = grpo_reward(task(), ep(emitted_spec=GOLD)), grpo_reward(task(), ep())
+    assert exact.terms["spec_acc"] == 1.0 and empty.terms["spec_acc"] == 0.0
+    assert exact.total == pytest.approx(empty.total)  # weight 0 (D-043): style no longer pays
 
 
 def test_pass_gets_pass_and_efficiency_but_no_partial():

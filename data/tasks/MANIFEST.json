@@ -46,6 +46,28 @@
   "verify_failed:F9+F5+F1": 1,
   "verify_failed:F9+F5+F12+F1": 1
  },
+ "extra_train": {
+  "hard-v1": {
+   "family_count": {
+    "1": 13,
+    "2": 51,
+    "3": 134,
+    "4": 102
+   },
+   "file": "train/hard-v1.jsonl",
+   "generator": "1.0",
+   "pool_manifest_sha256": "a335f9debe2e02f0813874fc73418eb14a4f1b3504131372b3fb297fa765182f",
+   "sha256": "e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca",
+   "styles": {
+    "casual_typos": 62,
+    "polite": 59,
+    "symptom": 54,
+    "terse": 62,
+    "verbose": 63
+   },
+   "tasks": 300
+  }
+ },
  "generator_version": "1.0",
  "git_commit": "8f68b9e1631bbff9716daf8c854a47af810caca5",
  "heldout_combos": [

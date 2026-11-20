@@ -31,22 +31,36 @@ TERMS = ("pass", "partial", "spec_acc", "efficiency", "clarify", "invalid")
 EPS = 1e-12
 
 
-def episode_record(task: dict, ep: Episode) -> dict:
-    """One sample's flat reward record plus the re-encode flag (the efficiency term's other input)."""
-    return record_for(task, ep, grpo_reward(task, ep), task["id"]) | {
+def episode_record(task: dict, ep: Episode, detail: bool = False) -> dict:
+    """One sample's flat reward record plus the re-encode flag (the efficiency term's other input).
+    `detail` also keeps what a human needs to judge the sample: request, gold and emitted spec, the run commands.
+    """
+    rec = record_for(task, ep, grpo_reward(task, ep), task["id"]) | {
         "needless_reencode": _needless_reencode(task, ep)
     }
+    if detail:
+        runs = [json.loads(t["assistant"]) for t in ep.turns if '"action": "run"' in t["assistant"]]
+        rec |= {
+            "request": task["request"],
+            "gold_spec": task.get("gold_spec"),
+            "emitted_spec": ep.emitted_spec,
+            "run_args": [r.get("args") for r in runs],
+        }
+    return rec
 
 
-def _spread(records: list[dict], term: str) -> float:
+def _spread(records: list[dict], term: str, w: dict[str, float]) -> float:
     vals = [r["terms"][term] for r in records]
-    return abs(config.REWARD_WEIGHTS[term]) * (max(vals) - min(vals))
+    return abs(w[term]) * (max(vals) - min(vals))
 
 
-def group_causes(records: list[dict]) -> dict:
-    """For one group: does the total vary, which terms vary (weighted range), and why efficiency varies."""
-    totals = [r["total"] for r in records]
-    spreads = {t: _spread(records, t) for t in TERMS}
+def group_causes(records: list[dict], weights: dict[str, float] | None = None) -> dict:
+    """For one group: does the total vary, which terms vary (weighted range), and why efficiency varies.
+    The total is recomputed from the stored terms with `weights` (default: the current config), so records sampled
+    under one reward can be re-read under another (e.g. spec_acc weight 0)."""
+    w = weights or config.REWARD_WEIGHTS
+    totals = [sum(w[t] * r["terms"][t] for t in TERMS) for r in records]
+    spreads = {t: _spread(records, t, w) for t in TERMS}
     varying = [t for t in TERMS if spreads[t] > EPS]
     passed = [r for r in records if r["terms"]["pass"] > 0]
     eff_sources = []
@@ -73,11 +87,11 @@ def _rate(rs: list[dict], key: str) -> dict:
     return {"n": len(rs), "k": k, "rate": p, "ci95": [lo, hi]}
 
 
-def analyse(records: list[dict]) -> dict:
+def analyse(records: list[dict], weights: dict[str, float] | None = None) -> dict:
     by_task: dict[str, list[dict]] = {}
     for r in records:
         by_task.setdefault(r["task_id"], []).append(r)
-    causes = [group_causes(g) for g in by_task.values()]
+    causes = [group_causes(g, weights) for g in by_task.values()]
     n = len(causes)
 
     def share(k: int) -> dict:
@@ -149,6 +163,7 @@ def sample_records(
     workers: int,
     on_task=None,
     done: frozenset[str] = frozenset(),
+    detail: bool = False,
     **loop_kwargs,
 ) -> list[dict]:
     """K full episodes per task (tasks in parallel); every sample's reward record is kept."""
@@ -164,7 +179,7 @@ def sample_records(
                 max_runs=config.MAX_RUNS_PER_JOB,
                 **loop_kwargs,
             )
-            return episode_record(task, ep)
+            return episode_record(task, ep, detail)
         finally:
             shutil.rmtree(job, ignore_errors=True)
 
@@ -187,25 +202,32 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("sample")
-    s.add_argument("--tasks", type=Path, required=True)
+    s.add_argument("--tasks", type=Path, nargs="+", required=True, help="one or more train files")
     s.add_argument("--policy-config", type=Path, required=True)
     s.add_argument("--k", type=int, default=config.PASS_RATE_SAMPLES)
     s.add_argument("--workers", type=int, default=1)
     s.add_argument("--sample", type=int)
     s.add_argument("--seed", type=int, default=config.BOOTSTRAP_SEED)
     s.add_argument("--openings", type=Path)
+    s.add_argument("--ids-file", type=Path, help="only these task ids (one per line)")
+    s.add_argument("--detail", action="store_true", help="keep request, specs and run commands")
     s.add_argument("--out", type=Path, required=True)
     an = sub.add_parser("analyse")
     an.add_argument("--records", type=Path, nargs="+", required=True)
+    an.add_argument(
+        "--weight", nargs="*", default=[], metavar="TERM=VALUE", help="override a reward weight"
+    )
     d = sub.add_parser("dev")
     d.add_argument("--run", type=Path, required=True)
     d.add_argument("--tasks", type=Path, required=True)
     a = ap.parse_args()
 
     if a.cmd == "analyse":
-        print(json.dumps(analyse(_load_records(a.records)), indent=1))
+        w = config.REWARD_WEIGHTS | {k: float(v) for k, v in (x.split("=") for x in a.weight)}
+        print(json.dumps(analyse(_load_records(a.records), w), indent=1))
         return
-    tasks = [json.loads(x) for x in a.tasks.read_text().splitlines() if x.strip()]
+    files = a.tasks if isinstance(a.tasks, list) else [a.tasks]
+    tasks = [json.loads(x) for f in files for x in f.read_text().splitlines() if x.strip()]
     if a.cmd == "dev":
         if any(t["split"] != "dev" for t in tasks):
             raise SystemExit("dev summary reads dev tasks only")
@@ -218,6 +240,9 @@ def main() -> None:
 
     if any(t["split"] != "train" for t in tasks):
         raise SystemExit("reward-variance sampling is on train tasks only (RULES 4.5)")
+    if a.ids_file:
+        keep = set(a.ids_file.read_text().split())
+        tasks = [t for t in tasks if t["id"] in keep]
     if a.sample:
         tasks = random.Random(a.seed).sample(sorted(tasks, key=lambda t: t["id"]), a.sample)
     corpus = ensure_corpus(config.CORPUS_DIR, ids={c for t in tasks for c in t["inputs"]})
@@ -245,6 +270,7 @@ def main() -> None:
         a.workers,
         on_task=on_task,
         done=done,
+        detail=a.detail,
         system_prompt_text=load_prompt_v1(False),
         require_spec=True,
         stop_after_ask=True,

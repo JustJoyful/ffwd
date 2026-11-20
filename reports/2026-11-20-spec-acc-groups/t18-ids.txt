@@ -1,0 +1,12 @@
+tr-1952cc9efb-terse
+tr-34d9e19875-terse
+tr-34ed49f0f1-polit
+tr-3838945b73-polit
+tr-38cbd958db-verbo
+tr-4368bf81c7-casua
+tr-6b2e4250fe-terse
+tr-6cac188978-casua
+tr-79d985b8a9-casua
+tr-cb8e3aba99-terse
+tr-d89c3a4ca4-verbo
+tr-de6da22277-casua
