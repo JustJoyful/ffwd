@@ -138,6 +138,27 @@ def test_a_directory_extra_such_as_spotcheck_travels_with_the_checkpoint(tmp_pat
     )
 
 
+def test_stop_requested_on_the_dir_and_hub_remotes_and_network_errors_do_not_stop_a_run(tmp_path):
+    d = DirRemote(tmp_path / "remote")
+    assert d.stop_requested() is False
+    (tmp_path / "remote" / "STOP").write_text("")
+    assert d.stop_requested() is True
+
+    class Api:
+        def __init__(self, answer):
+            self.answer = answer
+
+        def file_exists(self, repo_id, filename):
+            assert filename == "STOP"
+            if isinstance(self.answer, Exception):
+                raise self.answer
+            return self.answer
+
+    assert HubRemote("me/x", api=Api(True)).stop_requested() is True
+    assert HubRemote("me/x", api=Api(False)).stop_requested() is False
+    assert HubRemote("me/x", api=Api(OSError("network"))).stop_requested() is False
+
+
 def test_verify_resume_passes_for_a_continuous_run():
     rows = [{"step": s} for s in range(1, 11)]
     lr = {s: 1e-5 * (1 - (s - 1) / 10) for s in range(1, 11)}

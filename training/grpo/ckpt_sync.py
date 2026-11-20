@@ -27,6 +27,7 @@ class Remote(Protocol):
     def push(self, ckpt_dir: Path, extra_files: list[Path] | None = None) -> None: ...
     def latest(self) -> str | None: ...
     def pull(self, name: str, dest_root: Path) -> Path: ...
+    def stop_requested(self) -> bool: ...
 
 
 def _copy_extra(src: Path, dest_dir: Path) -> None:
@@ -72,6 +73,9 @@ class DirRemote:
         shutil.copytree(self.root / name, dest)
         return dest
 
+    def stop_requested(self) -> bool:
+        return (self.root / "STOP").exists()
+
 
 class HubRemote:
     """A private Hugging Face Hub repo: one commit per checkpoint under checkpoints/checkpoint-N/.
@@ -111,6 +115,14 @@ class HubRemote:
             # metadata (found by the 2-step smoke run); the checkpoint does not need it to resume.
             ignore_patterns=["README.md"],
         )
+
+    def stop_requested(self) -> bool:
+        """A file `STOP` at the repo root asks the run to stop after the current step (the Kaggle API cannot cancel a run
+        started from the web UI). The last pushed checkpoint stays the last clean one."""
+        try:
+            return bool(self.api.file_exists(self.repo_id, "STOP"))
+        except Exception:  # a network blip must neither stop nor crash the run
+            return False
 
     def latest(self) -> str | None:
         try:

@@ -47,8 +47,9 @@ from training.teacher.generate import load_prompt_v1
 class StopCallback(TrainerCallback):
     """Stops the Trainer when a preregistered rule fires or the GPU-hour cap is reached; records why."""
 
-    def __init__(self, out: Path, max_gpu_hours: float):
+    def __init__(self, out: Path, max_gpu_hours: float, stop_check=None):
         self.out, self.max_gpu_hours, self.reason, self.t0 = out, max_gpu_hours, None, time.time()
+        self.stop_check = stop_check  # () -> bool: a STOP file in the checkpoint repo (the owner or engineer asks to stop)
 
     def request(self, reason: str) -> None:
         self.reason = self.reason or reason
@@ -56,7 +57,10 @@ class StopCallback(TrainerCallback):
     def on_step_end(self, args, state, control, **kw):
         if self.reason is None and (time.time() - self.t0) / 3600 >= self.max_gpu_hours:
             self.reason = f"gpu_hour_cap:{self.max_gpu_hours}"
+        if self.reason is None and self.stop_check is not None and self.stop_check():
+            self.reason = "stop_file"
         if self.reason:
+            print(f"STOPPING after step {state.global_step}: {self.reason}", flush=True)
             control.should_training_stop = True
             (self.out / "stopped.json").write_text(
                 json.dumps({"step": state.global_step, "reason": self.reason}) + "\n"
@@ -202,6 +206,7 @@ def main(argv: list[str] | None = None) -> None:
     trainer.add_callback(stop)
     remote = remote_from_args(a.hub_repo, a.sync_dir, a.keep_last)
     if remote is not None:
+        stop.stop_check = remote.stop_requested
         extras = [
             metrics_path,
             a.ckpt_dir / "telemetry.jsonl",
