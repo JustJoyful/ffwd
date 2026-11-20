@@ -21,6 +21,7 @@ The sections further down are the autonomous-run history from 16-19 Nov and are 
 | G3 pilots (widened + recovery-start, K=8): in band 53/600 = 8.8%; criteria (a) and (d) fail, (b), (c) hold; **stopped by the owner's rule** (D-040, `reports/2026-11-20-g3-pilots/`). M1 dev recovery from a failing start 225/250 = 90% | done |
 | Reward variance (full reward, K=8 re-sample): 32% of groups have signal vs 10% on pass alone; 2/3 of the extra is `spec_acc` (`reports/2026-11-20-reward-variance`) | done |
 | Corpus (36 clips, no test-real) and M1 (GGUF + adapter) on private HF repos; `main` pushed to private GitHub; Kaggle web-UI notebook + 2-step local smoke run (D-041, `reports/2026-11-20-main-run-smoke`) | done; notebook not yet run on Kaggle |
+| Draft preregistration amendment for the no-M3 case (variants A: Q2 only, B: Q2 + Q4' + Q7', Holm recomputed): `reports/2026-11-20-prereg-no-m3-draft`; test-real template + commands: `eval/test-real/` | drafted, NOT applied |
 | GRPO main run + shuffled control (G3), checkpoint selection on dev | **not started: needs owner** (my recommendation: stop at M1 and prepare G4; alternatives in the pilots report) |
 | Single test run (G4), results table with CIs on test-iid / compositional / phrasing / real | **not started: needs owner** |
 | 1.7B SFT | not started (owner: not for now) |

@@ -1,0 +1,10 @@
+{
+ "report": "prereg-no-m3-draft",
+ "date": "2026-11-20",
+ "status": "DRAFT, not applied: eval/PREREGISTRATION.md, training/config.py and the tests are unchanged",
+ "file": "amendment-draft.md",
+ "variants": {"A": "family = {Q2}, m=1", "B": "family = {Q2, Q4' M1-X1 test-iid, Q7' M1-B0 test-real+test-phrasing}, m=3 (recommended)"},
+ "detectable_differences_source": "eval.stats.detectable_difference, alpha=0.05/m, power 0.8",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}
