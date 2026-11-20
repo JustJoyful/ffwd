@@ -1,0 +1,2 @@
+{"step": 1, "seconds": 98.909, "gpu_hours": 0.027475, "n_gpus": 1, "mean_reward": -1.75, "reward_std": 0.3535533845424652}
+{"step": 2, "seconds": 30.501, "gpu_hours": 0.008473, "n_gpus": 1, "mean_reward": 1.0750000476837158, "reward_std": 0.03535538911819458}

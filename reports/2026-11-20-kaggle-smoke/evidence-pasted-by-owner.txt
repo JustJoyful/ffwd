@@ -1,0 +1,11 @@
+(lines pasted by the owner from the Kaggle web-UI "Run All" of kernel justjoyful/ffmpeg-agent-grpo-auto version 2, mode=smoke, 20 Nov 2026; not the full log)
+218    checkpoint-1 pushed to JustJoyful/ffmpeg-agent-ckpt-smoke-kaggle
+220    checkpoint-2 pushed to JustJoyful/ffmpeg-agent-ckpt-smoke-kaggle
+222    {'train_runtime': '138.6', 'train_loss': '0.06857', 'epoch': '0.2222'}   (2 steps; step_time 30.3 s on the T4)
+223    exit code: 0
+224    $ grep -E "ffmpeg pin: sha256|ffmpeg pinned build verified|ASSERT OK|pushed to" /kaggle/working/run.log | tee /kaggle/working/evidence.txt
+225    ffmpeg pin: sha256 2d848c37f7f276be0262d9123a84fbfe72bb159921ffcce3bd7106f143d29f42 == pinned (5.1.1-static): OK
+226    ffmpeg pinned build verified: 5.1.1-static (pinned 5.1.1-static)
+227    checkpoint-1 pushed to JustJoyful/ffmpeg-agent-ckpt-smoke-kaggle
+228    checkpoint-2 pushed to JustJoyful/ffmpeg-agent-ckpt-smoke-kaggle
+230    RUN DONE: mode=smoke

@@ -62,11 +62,13 @@ def assert_no_heldout_data() -> None:
         f for f in glob.glob(f"{DEST}/data/corpus/*") if os.path.basename(f).split(".")[0] in real
     ]
     assert not clips, "a test-real clip is on this machine"
-    print(
+    msg = (
         f"ASSERT OK: no test-* task file or blob and no test-real clip on this machine; "
-        f"{len(test_files)} test files stay on GitHub only",
-        flush=True,
+        f"{len(test_files)} test files stay on GitHub only"
     )
+    print(msg, flush=True)
+    with open(LOG, "a") as f:  # the evidence file greps run.log, so the line must be there too
+        f.write(msg + "\n")
 
 
 def main_run_args() -> str:

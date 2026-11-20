@@ -1,0 +1,12 @@
+{
+ "report": "kaggle-smoke",
+ "date": "2026-11-20",
+ "kernel": "justjoyful/ffmpeg-agent-grpo-auto version 2 (script kernel, mode=smoke), started by the owner in the web UI (Run All)",
+ "hardware": "Kaggle T4, one GPU, fp16",
+ "git_commit_cloned": "main at the time of the run (a66af95 or later)",
+ "hub_repo": "JustJoyful/ffmpeg-agent-ckpt-smoke-kaggle (private; removed after this report)",
+ "result": "exit code 0, RUN DONE, 2 checkpoints pushed, pinned FFmpeg sha256 check OK",
+ "split_used": "train (T18 sample table)",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}
