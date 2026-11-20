@@ -1,0 +1,108 @@
+{
+ "groups": 100,
+ "samples": 800,
+ "signal_total_reward": {
+  "n": 17,
+  "share": 0.17,
+  "ci95": [
+   0.1089356611405993,
+   0.2554800476760112
+  ]
+ },
+ "signal_pass_only_view": {
+  "n": 12,
+  "share": 0.12,
+  "ci95": [
+   0.06999406437019487,
+   0.1981209942671142
+  ]
+ },
+ "signal_without_pass_variance": {
+  "n": 5,
+  "share": 0.05,
+  "ci95": [
+   0.02154367915436798,
+   0.11175046923191911
+  ]
+ },
+ "term_varies": {
+  "pass": {
+   "n": 12,
+   "share": 0.12,
+   "ci95": [
+    0.06999406437019487,
+    0.1981209942671142
+   ]
+  },
+  "partial": {
+   "n": 10,
+   "share": 0.1,
+   "ci95": [
+    0.0552291370606751,
+    0.17436566150491345
+   ]
+  },
+  "spec_acc": {
+   "n": 1,
+   "share": 0.01,
+   "ci95": [
+    0.0017674320641406435,
+    0.054486196178705294
+   ]
+  },
+  "efficiency": {
+   "n": 16,
+   "share": 0.16,
+   "ci95": [
+    0.10095288488804781,
+    0.24420269389270238
+   ]
+  },
+  "clarify": {
+   "n": 0,
+   "share": 0.0,
+   "ci95": [
+    0.0,
+    0.03699349820698566
+   ]
+  },
+  "invalid": {
+   "n": 0,
+   "share": 0.0,
+   "ci95": [
+    0.0,
+    0.03699349820698566
+   ]
+  }
+ },
+ "primary_term": {
+  "pass": 12,
+  "efficiency": 4,
+  "partial": 1
+ },
+ "only_term": {
+  "efficiency": 4,
+  "partial": 1
+ },
+ "efficiency_sources": {
+  "pass_differs": 12,
+  "runs": 6
+ },
+ "pass_constant_groups_signal_terms": {
+  "efficiency": 4,
+  "partial": 1
+ },
+ "pass_constant_groups_efficiency_sources": {
+  "runs": 4
+ },
+ "mean_runs": 2.52125,
+ "needless_reencode_rate_of_passed": {
+  "n": 658,
+  "k": 0,
+  "rate": 0.0,
+  "ci95": [
+   0.0,
+   0.005804197923078207
+  ]
+ }
+}

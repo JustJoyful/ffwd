@@ -1,0 +1,64 @@
+from eval.reward_variance import analyse, group_causes
+from training import config
+
+W = config.REWARD_WEIGHTS
+
+
+def rec(tid, *, passed=True, runs=1, reenc=False, spec=1.0, partial=0.0, supported=True):
+    terms = {
+        "pass": 1.0 if passed else 0.0,
+        "partial": 0.0 if passed else partial,
+        "spec_acc": spec,
+        "efficiency": 0.0 if (not passed or reenc) else 1.0 / runs,
+        "clarify": 0.0,
+        "invalid": 0.0,
+    }
+    return {
+        "task_id": tid,
+        "total": sum(W[k] * v for k, v in terms.items()),
+        "terms": terms,
+        "runs": runs,
+        "passed": passed,
+        "needless_reencode": reenc,
+        "supported": supported,
+    }
+
+
+def test_identical_samples_have_no_signal():
+    c = group_causes([rec("a")] * 8)
+    assert not c["signal"] and c["varying"] == [] and c["primary"] is None
+
+
+def test_all_pass_but_one_run_more_is_runs_signal_only():
+    c = group_causes([rec("a")] * 7 + [rec("a", runs=2)])
+    assert c["signal"] and not c["pass_varies"]
+    assert c["only"] == "efficiency" and c["efficiency_sources"] == ["runs"]
+
+
+def test_needless_reencode_is_its_own_source():
+    c = group_causes([rec("a")] * 7 + [rec("a", reenc=True)])
+    assert c["signal"] and not c["pass_varies"] and c["efficiency_sources"] == ["re_encode"]
+
+
+def test_spec_accuracy_alone_can_create_signal():
+    c = group_causes([rec("a")] * 7 + [rec("a", spec=0.5)])
+    assert c["signal"] and c["only"] == "spec_acc"
+
+
+def test_failures_with_different_partial_credit_vary_in_partial():
+    c = group_causes([rec("a", passed=False, partial=0.2), rec("a", passed=False, partial=0.8)])
+    assert c["signal"] and not c["pass_varies"] and c["only"] == "partial"
+
+
+def test_pass_difference_is_primary_and_not_counted_as_efficiency_cause():
+    c = group_causes([rec("a")] * 4 + [rec("a", passed=False)] * 4)
+    assert c["pass_varies"] and c["primary"] == "pass"
+    assert c["efficiency_sources"] == ["pass_differs"]
+
+
+def test_analyse_counts_groups_not_samples():
+    recs = [rec("a")] * 8 + [rec("b")] * 7 + [rec("b", runs=2)] + [rec("c", passed=False)] * 8
+    out = analyse(recs)
+    assert out["groups"] == 3 and out["signal_total_reward"]["n"] == 1
+    assert out["signal_without_pass_variance"]["n"] == 1 and out["signal_pass_only_view"]["n"] == 0
+    assert out["efficiency_sources"] == {"runs": 1}

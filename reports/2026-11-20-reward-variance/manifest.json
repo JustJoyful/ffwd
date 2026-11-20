@@ -1,0 +1,12 @@
+{
+ "report": "reward-variance",
+ "date": "2026-11-20",
+ "git_commit_code": "b4d92a8 plus uncommitted eval/reward_variance.py (committed with this report)",
+ "model_gguf_sha256": "c461e0b04f391d96ff8b19b65a7d5be4e2de0b8f180ec4f440b962f078c95f3d",
+ "sampling": {"k": 8, "temperature": 1.0, "tasks_per_set": 100, "sets": ["widened pilot", "recovery pilot (scripted opening)", "T18 train sample"], "sample_seed": "config.BOOTSTRAP_SEED", "split": "train"},
+ "dev": "existing greedy run reports/2026-11-20-m1-dev/M1-0.6b-q8 scored with grpo_reward (dev only)",
+ "reward_weights": {"pass": 1.0, "partial": 0.3, "spec_acc": 0.2, "efficiency": 0.1, "clarify": 0.5, "invalid": -0.5},
+ "hardware": "RTX 3050 6 GB laptop GPU",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}

@@ -1,0 +1,337 @@
+{
+ "groups": 100,
+ "samples": 800,
+ "signal_total_reward": {
+  "n": 47,
+  "share": 0.47,
+  "ci95": [
+   0.3751081795934127,
+   0.5671114302990063
+  ]
+ },
+ "signal_pass_only_view": {
+  "n": 8,
+  "share": 0.08,
+  "ci95": [
+   0.04109346148438063,
+   0.14998107700948732
+  ]
+ },
+ "signal_without_pass_variance": {
+  "n": 39,
+  "share": 0.39,
+  "ci95": [
+   0.3001687400639442,
+   0.48796982954159257
+  ]
+ },
+ "term_varies": {
+  "pass": {
+   "n": 8,
+   "share": 0.08,
+   "ci95": [
+    0.04109346148438063,
+    0.14998107700948732
+   ]
+  },
+  "partial": {
+   "n": 6,
+   "share": 0.06,
+   "ci95": [
+    0.027786123963188185,
+    0.12476815445895917
+   ]
+  },
+  "spec_acc": {
+   "n": 36,
+   "share": 0.36,
+   "ci95": [
+    0.2727122040140433,
+    0.4576459754839126
+   ]
+  },
+  "efficiency": {
+   "n": 18,
+   "share": 0.18,
+   "ci95": [
+    0.1170022549894635,
+    0.26667358386300727
+   ]
+  },
+  "clarify": {
+   "n": 0,
+   "share": 0.0,
+   "ci95": [
+    0.0,
+    0.03699349820698566
+   ]
+  },
+  "invalid": {
+   "n": 1,
+   "share": 0.01,
+   "ci95": [
+    0.0017674320641406435,
+    0.054486196178705294
+   ]
+  }
+ },
+ "primary_term": {
+  "spec_acc": 28,
+  "efficiency": 9,
+  "pass": 8,
+  "partial": 1,
+  "invalid": 1
+ },
+ "only_term": {
+  "spec_acc": 28,
+  "efficiency": 7,
+  "partial": 1
+ },
+ "efficiency_sources": {
+  "runs": 15,
+  "pass_differs": 8
+ },
+ "pass_constant_groups_signal_terms": {
+  "spec_acc": 31,
+  "efficiency": 10,
+  "partial": 1,
+  "invalid": 1
+ },
+ "pass_constant_groups_efficiency_sources": {
+  "runs": 10
+ },
+ "mean_runs": 1.36625,
+ "needless_reencode_rate_of_passed": {
+  "n": 744,
+  "k": 0,
+  "rate": 0.0,
+  "ci95": [
+   4.336808689942018e-19,
+   0.005136728882017183
+  ]
+ }
+}
+{
+ "groups": 100,
+ "samples": 800,
+ "signal_total_reward": {
+  "n": 17,
+  "share": 0.17,
+  "ci95": [
+   0.1089356611405993,
+   0.2554800476760112
+  ]
+ },
+ "signal_pass_only_view": {
+  "n": 12,
+  "share": 0.12,
+  "ci95": [
+   0.06999406437019487,
+   0.1981209942671142
+  ]
+ },
+ "signal_without_pass_variance": {
+  "n": 5,
+  "share": 0.05,
+  "ci95": [
+   0.02154367915436798,
+   0.11175046923191911
+  ]
+ },
+ "term_varies": {
+  "pass": {
+   "n": 12,
+   "share": 0.12,
+   "ci95": [
+    0.06999406437019487,
+    0.1981209942671142
+   ]
+  },
+  "partial": {
+   "n": 10,
+   "share": 0.1,
+   "ci95": [
+    0.0552291370606751,
+    0.17436566150491345
+   ]
+  },
+  "spec_acc": {
+   "n": 1,
+   "share": 0.01,
+   "ci95": [
+    0.0017674320641406435,
+    0.054486196178705294
+   ]
+  },
+  "efficiency": {
+   "n": 16,
+   "share": 0.16,
+   "ci95": [
+    0.10095288488804781,
+    0.24420269389270238
+   ]
+  },
+  "clarify": {
+   "n": 0,
+   "share": 0.0,
+   "ci95": [
+    0.0,
+    0.03699349820698566
+   ]
+  },
+  "invalid": {
+   "n": 0,
+   "share": 0.0,
+   "ci95": [
+    0.0,
+    0.03699349820698566
+   ]
+  }
+ },
+ "primary_term": {
+  "pass": 12,
+  "efficiency": 4,
+  "partial": 1
+ },
+ "only_term": {
+  "efficiency": 4,
+  "partial": 1
+ },
+ "efficiency_sources": {
+  "pass_differs": 12,
+  "runs": 6
+ },
+ "pass_constant_groups_signal_terms": {
+  "efficiency": 4,
+  "partial": 1
+ },
+ "pass_constant_groups_efficiency_sources": {
+  "runs": 4
+ },
+ "mean_runs": 2.52125,
+ "needless_reencode_rate_of_passed": {
+  "n": 658,
+  "k": 0,
+  "rate": 0.0,
+  "ci95": [
+   0.0,
+   0.005804197923078207
+  ]
+ }
+}
+{
+ "groups": 100,
+ "samples": 800,
+ "signal_total_reward": {
+  "n": 32,
+  "share": 0.32,
+  "ci95": [
+   0.23669147324999096,
+   0.41662618610452384
+  ]
+ },
+ "signal_pass_only_view": {
+  "n": 11,
+  "share": 0.11,
+  "ci95": [
+   0.0625419635706457,
+   0.1863129650308031
+  ]
+ },
+ "signal_without_pass_variance": {
+  "n": 21,
+  "share": 0.21,
+  "ci95": [
+   0.141656540619153,
+   0.2997996883408986
+  ]
+ },
+ "term_varies": {
+  "pass": {
+   "n": 11,
+   "share": 0.11,
+   "ci95": [
+    0.0625419635706457,
+    0.1863129650308031
+   ]
+  },
+  "partial": {
+   "n": 7,
+   "share": 0.07,
+   "ci95": [
+    0.03431926106727268,
+    0.13749514739073498
+   ]
+  },
+  "spec_acc": {
+   "n": 20,
+   "share": 0.2,
+   "ci95": [
+    0.1333669333310325,
+    0.28882916559315885
+   ]
+  },
+  "efficiency": {
+   "n": 17,
+   "share": 0.17,
+   "ci95": [
+    0.1089356611405993,
+    0.2554800476760112
+   ]
+  },
+  "clarify": {
+   "n": 1,
+   "share": 0.01,
+   "ci95": [
+    0.0017674320641406435,
+    0.054486196178705294
+   ]
+  },
+  "invalid": {
+   "n": 1,
+   "share": 0.01,
+   "ci95": [
+    0.0017674320641406435,
+    0.054486196178705294
+   ]
+  }
+ },
+ "primary_term": {
+  "invalid": 1,
+  "spec_acc": 12,
+  "efficiency": 6,
+  "pass": 11,
+  "partial": 2
+ },
+ "only_term": {
+  "spec_acc": 12,
+  "efficiency": 4,
+  "partial": 2
+ },
+ "efficiency_sources": {
+  "runs": 9,
+  "pass_differs": 11,
+  "re_encode": 1
+ },
+ "pass_constant_groups_signal_terms": {
+  "clarify": 1,
+  "invalid": 1,
+  "spec_acc": 14,
+  "efficiency": 6,
+  "partial": 2
+ },
+ "pass_constant_groups_efficiency_sources": {
+  "runs": 6
+ },
+ "mean_runs": 1.1975,
+ "needless_reencode_rate_of_passed": {
+  "n": 751,
+  "k": 5,
+  "rate": 0.006657789613848202,
+  "ci95": [
+   0.0028470642920014185,
+   0.015489844285223455
+  ]
+ }
+}
+SAMPLING DONE
