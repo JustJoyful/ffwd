@@ -97,6 +97,18 @@ def test_push_pull_roundtrip_verifies_hashes(tmp_path, small_corpus):
     assert len(paths) == 2 and all(p.is_file() for p in paths.values())
 
 
+def test_push_excludes_test_real_clips_from_tarball_and_manifest(tmp_path, small_corpus):
+    manifest = json.loads((small_corpus / "manifest.json").read_text())
+    manifest[0]["role"] = "test-real"
+    (small_corpus / "manifest.json").write_text(json.dumps(manifest))
+    api = FakeApi(tmp_path / "remote")
+    push_corpus(small_corpus, "x/y", api=api)
+    paths = pull_corpus("x/y", tmp_path / "dst", api=api)
+    assert set(paths) == {manifest[1]["id"]}
+    assert not (tmp_path / "dst" / manifest[0]["file"]).exists()
+    assert not (small_corpus / "manifest.json.push").exists()  # temp file cleaned up
+
+
 def test_pull_rejects_tampered_clip(tmp_path, small_corpus):
     import tarfile
 

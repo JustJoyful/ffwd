@@ -1,0 +1,14 @@
+{
+ "report": "m1-hub",
+ "date": "2026-11-20",
+ "pushed": {
+  "corpus": {"repo": "JustJoyful/ffmpeg-agent-corpus", "type": "dataset", "private": true, "clips": 36, "excluded": "3 test-real clips (hevc_phone, screen_rec, wa_compressed): held out, never uploaded to the training-machine repo", "tarball_bytes": 355090461},
+  "model": {"repo": "JustJoyful/ffmpeg-agent-m1-0.6b", "type": "model", "private": true, "sha256": "pushed.json"}
+ },
+ "notes": [
+  "one corpus clip (meridian_4k) has an UNVERIFIED licence (Netflix Open Content says CC BY 4.0, Wikipedia says CC BY-NC-ND 4.0); private repo only, resolve before any publication",
+  "model weights must not be published until DeepSeek terms are reviewed for redistribution of derived models (card Licence section)"
+ ],
+ "code": "training/corpus/hub.py (exclude_roles), training/export/hub.py (push_model)",
+ "cost_usd": 0.0
+}

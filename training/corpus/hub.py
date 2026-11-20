@@ -27,8 +27,16 @@ def _api(token: str | None = None):
     return HfApi(token=token)
 
 
-def push_corpus(corpus_dir: Path, repo_id: str, api=None) -> None:
-    manifest = json.loads((corpus_dir / MANIFEST).read_text())
+def push_corpus(
+    corpus_dir: Path, repo_id: str, api=None, exclude_roles: tuple[str, ...] = ("test-real",)
+) -> None:
+    """Upload every clip except those whose role is in `exclude_roles`: held-out test-real clips must never sit on a
+    training machine, so the uploaded manifest (and tarball) lists the remaining clips only."""
+    manifest = [
+        rec
+        for rec in json.loads((corpus_dir / MANIFEST).read_text())
+        if rec.get("role") not in exclude_roles
+    ]
     for rec in manifest:  # never upload bytes that do not match the manifest
         got = hashlib.sha256((corpus_dir / rec["file"]).read_bytes()).hexdigest()
         if got != rec["sha256"]:
@@ -42,13 +50,13 @@ def push_corpus(corpus_dir: Path, repo_id: str, api=None) -> None:
     api.upload_file(
         path_or_fileobj=str(tar), path_in_repo=TARBALL, repo_id=repo_id, repo_type="dataset"
     )
+    filtered = corpus_dir / f"{MANIFEST}.push"
+    filtered.write_text(json.dumps(manifest, indent=2) + "\n")
     api.upload_file(
-        path_or_fileobj=str(corpus_dir / MANIFEST),
-        path_in_repo=MANIFEST,
-        repo_id=repo_id,
-        repo_type="dataset",
+        path_or_fileobj=str(filtered), path_in_repo=MANIFEST, repo_id=repo_id, repo_type="dataset"
     )
     tar.unlink()
+    filtered.unlink()
 
 
 def pull_corpus(repo_id: str, dest: Path, api=None) -> dict[str, Path]:

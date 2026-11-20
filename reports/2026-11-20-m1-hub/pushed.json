@@ -1,0 +1,11 @@
+{
+ "repo": "JustJoyful/ffmpeg-agent-m1-0.6b",
+ "private": true,
+ "sha256": {
+  "ffmpeg-agent-m1-0.6b-q8_0.gguf": "c461e0b04f391d96ff8b19b65a7d5be4e2de0b8f180ec4f440b962f078c95f3d",
+  "adapter/adapter_model.safetensors": "b4f8b98b5010e4b6c3581b9587b5ee5693ebd62e13b7eeabcffd1dbdc16b4372",
+  "adapter/adapter_config.json": "d38bffa501f1cff858eafa489423c5604bd0317624373aadd31669669a8c0515",
+  "chat-template.jinja": "8d12c21330339015cf3856b2c8fd0ade15556f92c87958d3426b832bae029af5",
+  "system-v1.txt": "56e7d7217b97c122662235cceb96acbf62bd822c6fec25f880035bfff805c724"
+ }
+}
