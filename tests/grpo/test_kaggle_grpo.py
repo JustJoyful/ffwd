@@ -61,5 +61,19 @@ def test_control_shuffles_rewards_and_main_does_not_and_each_has_its_own_repo():
     assert "--resume" in remote_ns(kg.params("main", resume=True))["main_run_args"]()
 
 
+def test_push_saves_without_running_unless_asked(monkeypatch):
+    seen = []
+
+    class R:
+        stdout = stderr = ""
+        returncode = 0
+
+    monkeypatch.setattr(kg, "kaggle", lambda *a, **k: (seen.append(a), R())[1])
+    kg.push(kg.params("smoke"))
+    kg.push(kg.params("smoke"), run=True)
+    assert "--no-run" in seen[0] and "--no-run" not in seen[1]
+    assert "--accelerator" in seen[0]  # GPU kernels still request the T4
+
+
 def test_smoke_repo_is_not_the_deleted_one():
     assert kg.params("smoke")["hub_repo"] != "JustJoyful/ffmpeg-agent-ckpt-smoke"

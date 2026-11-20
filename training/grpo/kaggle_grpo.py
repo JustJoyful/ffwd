@@ -7,8 +7,10 @@
   uv run python -m training.grpo.kaggle_grpo status | wait [--timeout-min N] | fetch --out DIR
 
 The pushed script is training/grpo/kaggle_remote.py with a PARAMS line prepended. HF_TOKEN and GITHUB_TOKEN are read inside
-the kernel from its Secrets: the Kaggle API has no way to attach them, so they are attached ONCE per kernel in the web UI
-(kernel page -> Add-ons -> Secrets); `push --mode probe` shows whether that worked. No token is ever in the pushed code.
+the kernel from its Secrets. Tested 20 Nov 2026: Secrets are visible only to runs started from the web UI (Run All in the
+editor), NOT to runs started through the API, even after the owner attached them and saved a committed version. So `push`
+saves the new version WITHOUT running it (`--no-run`); the owner opens the kernel and presses Run All; this tool then
+watches (`status`/`wait`) and fetches the log. No token is ever in the pushed code.
 Gates (owner decisions): control needs --approved; main needs --approved and --control-passed; both need the pool file to be
 committed on origin/main (the kernel clones it from there).
 """
@@ -82,7 +84,10 @@ def pool_on_origin() -> bool:
     )
 
 
-def push(p: dict) -> int:
+def push(p: dict, run: bool = False) -> int:
+    """New kernel version. By default it is saved WITHOUT running (`--no-run`, Quick Save): an API-started run cannot read
+    the kernel's Secrets (tested 20 Nov 2026, even after a UI commit), so it would only fail at the first line. The owner
+    opens the kernel in the web UI and presses Run All, which does get the Secrets."""
     gpu = p["mode"] != "probe"
     with tempfile.TemporaryDirectory(prefix="kernel-") as d:
         (Path(d) / "run.py").write_text(script(p))
@@ -93,6 +98,7 @@ def push(p: dict) -> int:
             )
         )
         args = ["kernels", "push", "-p", d] + (["--accelerator", "NvidiaTeslaT4"] if gpu else [])
+        args += [] if run else ["--no-run"]
         r = kaggle(*args, check=False)
     print(r.stdout, r.stderr)
     return r.returncode
@@ -117,6 +123,11 @@ def main() -> None:
     pu.add_argument("--steps", type=int)
     pu.add_argument("--resume", action="store_true")
     pu.add_argument(
+        "--run",
+        action="store_true",
+        help="also start the run from the API (no Secrets there: it fails)",
+    )
+    pu.add_argument(
         "--approved", action="store_true", help="owner's G3 go-ahead (control and main)"
     )
     pu.add_argument(
@@ -133,7 +144,7 @@ def main() -> None:
     if a.cmd == "push":
         check_gates(a.mode, approved=a.approved, control_passed=a.control_passed,
                     pool_on_origin=pool_on_origin() if a.mode in ("control", "main") else True)  # fmt: skip
-        sys.exit(push(params(a.mode, steps=a.steps, resume=a.resume)))
+        sys.exit(push(params(a.mode, steps=a.steps, resume=a.resume), run=a.run))
     if a.cmd == "status":
         print(kaggle("kernels", "status", SLUG, check=False).stdout)
     elif a.cmd == "wait":
