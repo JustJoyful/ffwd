@@ -1,0 +1,14 @@
+{
+ "report": "control-attempt1",
+ "date": "2026-11-21",
+ "kernel": "justjoyful/ffmpeg-agent-grpo-auto version 6, mode control, started by the owner in the web UI",
+ "hardware": "Kaggle T4, one GPU, 14.56 GiB",
+ "result": "failed: CUDA OOM at step 2 during batched generation; no checkpoint pushed",
+ "measured": {
+  "step1_step_time_s": 410.9,
+  "gpu_h_per_step": 0.114
+ },
+ "fix_commit": "b832a9e",
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}
