@@ -1,4 +1,4 @@
-# ARCHITECTURE: ffmpeg-agent
+# ARCHITECTURE: ffwd
 
 | | |
 |---|---|
@@ -161,7 +161,7 @@ Normalised ffprobe-style JSON: container, duration, size, bitrate; per stream: t
 1. Merge LoRA into base weights (fp16).
 2. `mlc_llm convert_weight` with **the same quantization as the WebLLM prebuilt build** (e.g. `q4f16_1`).
 3. `mlc_llm gen_config` with the **same conversation template** as the prebuilt Qwen3 entry.
-4. Upload to Hugging Face (`<user>/ffmpeg-agent-0.6b-q4f16_1-MLC`).
+4. Upload to Hugging Face (`<user>/ffwd-0.6b-q4f16_1-MLC`).
 5. In the app config, **copy the prebuilt Qwen3 record's `model_lib`** and set `model` to our repo; override `context_window_size` if needed.
 6. Only if architecture, vocab or quantization differ: compile our own WebGPU library with `mlc_llm compile --device webgpu`.
 

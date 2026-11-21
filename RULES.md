@@ -1,4 +1,4 @@
-# RULES: ffmpeg-agent
+# RULES: ffwd
 
 These rules are **non-negotiable** for every contributor, including Claude Code sessions. If a rule blocks progress, stop and ask the owner; don't work around it. Changing a rule requires a DECISIONS.md entry.
 

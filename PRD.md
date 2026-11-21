@@ -1,4 +1,4 @@
-# PRD: ffmpeg-agent *(placeholder name)*
+# PRD: ffwd
 
 | | |
 |---|---|
@@ -11,7 +11,7 @@
 
 ## 1. Summary
 
-ffmpeg-agent is a free, open-source website for **occasional video chores**. You drop in a file, describe what you want in one sentence, and a small AI agent running **on your own computer** writes the FFmpeg commands, runs them, **checks the result against your request**, and fixes the command if needed. Nothing is uploaded and there's nothing to install. Big files and batches can be handed off to an optional local helper app.
+ffwd is a free, open-source website for **occasional video chores**. You drop in a file, describe what you want in one sentence, and a small AI agent running **on your own computer** writes the FFmpeg commands, runs them, **checks the result against your request**, and fixes the command if needed. Nothing is uploaded and there's nothing to install. Big files and batches can be handed off to an optional local helper app.
 
 ## 2. Problem
 

@@ -1,4 +1,4 @@
-# EVALUATION: ffmpeg-agent
+# EVALUATION: ffwd
 
 How the model and product are measured. **The goal is believable numbers, not big numbers.**
 

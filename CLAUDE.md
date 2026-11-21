@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-You are helping build **ffmpeg-agent**: a browser-first video utility driven by a small, self-trained FFmpeg agent (Qwen3 0.6B/1.7B, SFT + multi-turn GRPO). The owner is a 2nd-year CSE student building a portfolio project. **He must be able to explain and defend every design decision in interviews**, so explain non-obvious choices briefly in PR descriptions and code comments, and never hide complexity behind magic.
+You are helping build **ffwd** (called ffmpeg-agent until 21 Nov 2026; the repo, Hugging Face, Kaggle and Python identifiers still say `ffmpeg-agent` until the planned rename, D-046): a browser-first video utility driven by a small, self-trained FFmpeg agent (Qwen3 0.6B/1.7B, SFT + multi-turn GRPO). The owner is a 2nd-year CSE student building a portfolio project. **He must be able to explain and defend every design decision in interviews**, so explain non-obvious choices briefly in PR descriptions and code comments, and never hide complexity behind magic.
 
 ## Read before working
 1. `README.md`: what and why (glossary: chore, family, spec, probe/run/check, teacher…)

@@ -1,8 +1,10 @@
-# ffmpeg-agent *(placeholder name)*
+# ffwd
+
+*Working name until 21 Nov 2026: ffmpeg-agent. The GitHub repo, the Hugging Face repos, the Kaggle kernel and the Python modules keep the `ffmpeg-agent` identifiers until a planned rename (D-046); the domain `ffwd.app` is intended and not yet checked or registered.*
 
 > Describe an odd video chore in one sentence. It runs **on your own machine**, with **nothing to install, nothing uploaded**, and **the result checked**.
 
-ffmpeg-agent is a browser-first video utility powered by a small language-model agent that I train myself. The agent turns a plain-English request ("take a frame every 2 seconds", "the iPhone video won't play in PowerPoint, fix it", "cut the first 3 s off all 40 files") into FFmpeg commands. It runs them locally, checks the output against the request, and fixes the command if needed.
+ffwd is a browser-first video utility powered by a small language-model agent that I train myself. The agent turns a plain-English request ("take a frame every 2 seconds", "the iPhone video won't play in PowerPoint, fix it", "cut the first 3 s off all 40 files") into FFmpeg commands. It runs them locally, checks the output against the request, and fixes the command if needed.
 
 The project has two goals, and both are deliberate:
 
