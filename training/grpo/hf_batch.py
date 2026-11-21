@@ -1,5 +1,7 @@
 """Batched HF generation for lockstep rollouts. torch is imported lazily so the rest of training/ stays CPU-light."""
 
+import gc
+
 from training.grpo.lockstep import BatchGenerate
 
 
@@ -15,9 +17,12 @@ def run_chunks(reqs, one_chunk, max_batch: int, is_oom, on_oom=lambda: None):
         except Exception as e:  # noqa: BLE001
             if not is_oom(e) or len(chunk) == 1:
                 raise
-            on_oom()
-            half = len(chunk) // 2
-            return attempt(chunk[:half]) + attempt(chunk[half:])
+        # The retry runs OUTSIDE the except block on purpose: while a handler is active the exception's traceback keeps the
+        # failed attempt's frames, and the CUDA tensors they hold, alive, so a retry inside it starts with the failed batch's
+        # memory still allocated and fails again (the main run died of exactly that at step 38, 21 Nov 2026).
+        on_oom()
+        half = len(chunk) // 2
+        return attempt(chunk[:half]) + attempt(chunk[half:])
 
     out = []
     for i in range(0, len(reqs), max_batch):
@@ -80,13 +85,19 @@ def hf_batch_generator_for(temperature: float, max_batch: int = 8):
                 torch.cuda.empty_cache()
             return results
 
+        def release():
+            gc.collect()  # drop reference cycles that still hold CUDA tensors, then return the blocks to the driver
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+
         def generate_batch(reqs):
+            release()  # the training step before this call leaves transient allocations behind
             return run_chunks(
                 reqs,
                 one_chunk,
                 max_batch,
                 is_oom=lambda e: isinstance(e, torch.OutOfMemoryError),
-                on_oom=torch.cuda.empty_cache,
+                on_oom=release,
             )
 
         return generate_batch
