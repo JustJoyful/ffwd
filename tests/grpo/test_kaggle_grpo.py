@@ -80,5 +80,11 @@ def test_the_kernel_sets_the_allocator_option_that_the_oom_message_recommended()
     assert "expandable_segments:True" in kg.script(kg.params("control"))
 
 
+def test_generation_chunk_is_8_for_the_control_and_smoke_and_16_for_the_main_run():
+    arg = {m: remote_ns(kg.params(m))["main_run_args"]() for m in ("smoke", "control", "main")}
+    assert "--gen-batch 8" in arg["smoke"] and "--gen-batch 8" in arg["control"]
+    assert "--gen-batch 16" in arg["main"]
+
+
 def test_smoke_repo_is_not_the_deleted_one():
     assert kg.params("smoke")["hub_repo"] != "JustJoyful/ffmpeg-agent-ckpt-smoke"

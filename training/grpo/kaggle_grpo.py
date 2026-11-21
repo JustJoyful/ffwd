@@ -45,7 +45,7 @@ def params(mode: str, *, steps: int | None = None, resume: bool = False) -> dict
         "num_generations": 8, "prompts_per_step": 8, "max_new_tokens": 256,
         "max_runs": config.MAX_RUNS_PER_JOB, "max_gpu_hours": config.GRPO_STOP_RULES["max_gpu_hours"],
         "save_steps": 10, "steps": steps or 100, "pool_ids": None, "pass_rates": T18_TABLE,
-        "extra_train": [], "shuffle_seed": None, "hub_repo": f"{HUB}-grpo",
+        "extra_train": [], "shuffle_seed": None, "hub_repo": f"{HUB}-grpo", "gen_batch": 8,
     }  # fmt: skip
     if mode == "smoke":
         p |= {"steps": 2, "save_steps": 1, "num_generations": 2, "prompts_per_step": 1,
@@ -53,6 +53,10 @@ def params(mode: str, *, steps: int | None = None, resume: bool = False) -> dict
     elif mode in ("control", "main"):
         # 60 main steps = 1.9 epochs over the pool's 249 unique contents (reports/2026-11-20-grpo-pool); the control is 30
         p |= {"pool_ids": POOL_IDS, "extra_train": ["hard-v1"], "steps": steps or 60}
+        # The control ran at chunk 8 (OOM fix): 782 s/step = 0.22 GPU-h, i.e. 13 h for 60 steps, over Kaggle's 12 h session.
+        # The main run decodes 16 per chunk (UNVERIFIED speed-up; an OOM now splits and retries instead of dying).
+        if mode == "main":
+            p |= {"gen_batch": 16}
         if mode == "control":
             p |= {"steps": steps or 30, "shuffle_seed": 20261115, "hub_repo": f"{HUB}-grpo-control"}
     return p

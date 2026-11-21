@@ -76,7 +76,7 @@ def main_run_args() -> str:
         f"--init /kaggle/working/m1-merged --ckpt-dir /kaggle/working/{P['mode']} --steps {P['steps']} "
         f"--save-steps {P['save_steps']} --num-generations {P['num_generations']} "
         f"--prompts-per-step {P['prompts_per_step']} --max-new-tokens {P['max_new_tokens']} "
-        f"--max-runs {P['max_runs']} --max-gpu-hours {P['max_gpu_hours']} "
+        f"--max-runs {P['max_runs']} --max-gpu-hours {P['max_gpu_hours']} --gen-batch {P['gen_batch']} "
         f"--corpus-repo {P['corpus_repo']} --hub-repo {P['hub_repo']}"
     )
     if P["pool_ids"]:

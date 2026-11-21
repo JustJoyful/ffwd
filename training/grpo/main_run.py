@@ -93,6 +93,12 @@ def main(argv: list[str] | None = None) -> None:
         help="also train on data/tasks/train/NAME.jsonl (hash pinned in MANIFEST.json extra_train)",
     )
     ap.add_argument(
+        "--gen-batch",
+        type=int,
+        default=8,
+        help="sequences per batched generation call; smaller = less GPU memory, slower (an OOM splits and retries)",
+    )
+    ap.add_argument(
         "--pool-ids",
         type=Path,
         help="train task ids to train on, one per line (the reward-variance pool); every id must exist",
@@ -188,7 +194,7 @@ def main(argv: list[str] | None = None) -> None:
     rollout = make_rollout_func(
         tasks, corpus, None, jobs_root=config.JOBS_DIR / "grpo-main", max_new_tokens=a.max_new_tokens, max_runs=a.max_runs,
         reward_fn=grpo_reward, on_rollout=on_rollout, shuffle_seed=a.shuffle_rewards,
-        batch_generator_for=hf_batch_generator_for(args.temperature), system_prompt_text=prompt, require_spec=True, stop_after_ask=True,
+        batch_generator_for=hf_batch_generator_for(args.temperature, a.gen_batch), system_prompt_text=prompt, require_spec=True, stop_after_ask=True,
     )  # fmt: skip
     trainer = GRPOTrainer(
         model=a.init,
