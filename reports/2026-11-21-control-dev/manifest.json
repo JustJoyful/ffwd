@@ -1,0 +1,21 @@
+{
+ "report": "control-dev",
+ "date": "2026-11-21",
+ "checkpoint": "checkpoint-30 of JustJoyful/ffmpeg-agent-ckpt-grpo-control (kernel version 8, mode control, owner-started)",
+ "evaluated_on": "data/tasks/dev/v1.jsonl (300 tasks), greedy, seed 20261115, prompt v1, Q8_0 GGUF, llama.cpp b12032",
+ "rule": "dev success not above M1's 95% Wilson interval AND at most 5% of episodes with an invalid action",
+ "result": {
+  "control": "294/300",
+  "m1": "293/300",
+  "paired_diff": "+0.3 pp [-0.7, +1.7]",
+  "invalid_episodes": "1/300",
+  "control_passes": true
+ },
+ "measured": {
+  "gpu_h_per_step": 0.213,
+  "seconds_per_step": 765,
+  "gpu_h_30_steps": 6.38
+ },
+ "test_splits_read": false,
+ "cost_usd": 0.0
+}
