@@ -132,6 +132,26 @@ def do_run(a: argparse.Namespace) -> None:
         cfg_path, _, ckpt = SYSTEMS[system]
         with serve(system, root):
             for sp in splits:
+                if (
+                    root / "STOP"
+                ).exists():  # `touch <runs-root>/STOP`: stop cleanly at the next split boundary
+                    log(
+                        root,
+                        "STOP file found: stopping at a split boundary; re-run the same command to resume",
+                    )
+                    return
+                prior = root / "runs" / f"{system}-{sp}"
+                if (
+                    prior / "manifest.json"
+                ).exists():  # run_baseline writes the manifest last: the split is finished
+                    log(root, f"skip {system} {sp}: finished")
+                    continue
+                if (
+                    prior.exists()
+                ):  # started but never finished: its lock is spent, so this needs a human decision
+                    sys.exit(
+                        f"{prior} is a partial run (no manifest.json). Re-running needs a written supersede reason."
+                    )
                 tasks_file = (
                     config.DATA_DIR / "tasks" / ("dev/v1.jsonl" if dry else f"{sp}/v1.jsonl")
                 )
