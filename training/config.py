@@ -164,17 +164,30 @@ ORIENTATION_MIN_GAP = 4.0
 # --- Task splits and who may read them (RULES §4.5; guard in training/taskgen/loader.py) ---
 DEV_ONLY_SYSTEM_PREFIXES = ("M1-oracle",)  # D-032 ablation: dev, descriptive, outside Holm
 TEST_SPLITS = ("test-iid", "test-compositional", "test-phrasing", "test-real")
-# Phase 1 preregistered primary comparison family (eval/PREREGISTRATION.md): (name, system_a, system_b, split);
-# reports b - a. Holm runs over exactly these. A split "x+y" pools the tasks of both splits into ONE comparison
-# (per-split and per-family differences are descriptive only, outside Holm).
+# Phase 1 preregistered confirmatory comparisons, IN TESTING ORDER (eval/PREREGISTRATION.md, Amendment 3):
+# (name, system_a, system_b, split, metric, lower_is_better); reports b - a. Fixed-sequence procedure at alpha 0.05:
+# each step is tested only if every earlier step rejected in its favourable direction; at the first step that does
+# not, the rest are descriptive. A split "x+y" pools the tasks of both splits into ONE comparison.
+# Metrics (eval.final_report): success | runs (mean runs per graded task) | needless_or_fail (copy-eligible tasks only).
+PREREG_PROCEDURE = "fixed-sequence"
+PREREG_ALPHA = 0.05
 PREREG_COMPARISONS = (
-    ("Q2 M1-B2", "B2", "M1", "test-iid"),
-    ("Q3 M3-M1", "M1", "M3", "test-iid"),
-    ("Q4 M3-X1", "X1", "M3", "test-iid"),
-    ("Q5a M3-M1 compositional", "M1", "M3", "test-compositional"),
-    ("Q5b M3-M1 phrasing", "M1", "M3", "test-phrasing"),
-    ("Q7 M3-B0 real+phrasing", "B0", "M3", "test-real+test-phrasing"),
+    ("Q2 M1-B2", "B2", "M1", "test-iid", "success", False),
+    ("Q7 M3-B0", "B0", "M3", "test-phrasing", "success", False),
+    ("Q3a M3-M1 needless-or-fail", "M1", "M3", "test-iid+test-phrasing", "needless_or_fail", True),
+    ("Q3b M3-M1 runs", "M1", "M3", "test-iid", "runs", True),
+    ("Q4 M3-X1", "X1", "M3", "test-iid", "success", False),
 )
+# Guard on the efficiency claim (not a step of the sequence): the one-sided 97.5% lower bound of the paired success
+# difference M3 - M1 on these splits pooled must exceed -GUARD_MARGIN.
+PREREG_GUARD = ("M1", "M3", ("test-iid", "test-compositional", "test-phrasing"))
+PREREG_GUARD_MARGIN = 0.02
+# The Phase 1 test run (eval/phase1_run.py): B0 is frozen by this file hash (reports/2026-11-16-paraphrase-robustness/FREEZE.md);
+# X1 may spend at most this much on the test splits (inside the lifetime cap); per-task cost estimate from the X1 dev run
+# (58/60, $0.0423 for 60 tasks: reports/2026-11-19-x1-dev), used only to print an estimate before spending.
+B0_FROZEN_SHA256 = "78bd78a021fdd2f29200c9f175c0043a743225c650e0cd52dcc9add3acbf811f"
+X1_TEST_CAP_USD = 0.70
+X1_EST_COST_PER_TASK_USD = 0.0423 / 60
 # D-027(b): real clips are split BY CLIP before any task is generated. A clip whose manifest `role` is
 # "test-real" is the input of test-real tasks only; taskgen never sees it and CI fails if another split uses it.
 CLIP_ROLES = ("taskgen", "test-real")

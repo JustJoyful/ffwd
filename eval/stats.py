@@ -27,8 +27,8 @@ def wilson_ci(successes: int, n: int, confidence: float = 0.95) -> tuple[float, 
 
 
 def paired_diff_ci(
-    a: dict[str, bool],
-    b: dict[str, bool],
+    a: dict[str, float],
+    b: dict[str, float],
     resamples: int = config.BOOTSTRAP_RESAMPLES,
     seed: int = config.BOOTSTRAP_SEED,
 ) -> tuple[float, float, float]:
@@ -43,8 +43,8 @@ def paired_diff_ci(
 
 
 def paired_diff_pvalue(
-    a: dict[str, bool],
-    b: dict[str, bool],
+    a: dict[str, float],
+    b: dict[str, float],
     resamples: int = config.BOOTSTRAP_RESAMPLES,
     seed: int = config.BOOTSTRAP_SEED,
 ) -> float:
