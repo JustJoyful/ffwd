@@ -80,6 +80,13 @@ def preflight(dry: bool) -> None:
 @contextmanager
 def serve(system: str, root: Path):
     cfg_path, gguf, _ = SYSTEMS[system]
+    with serve_gguf(cfg_path, gguf, root, system):
+        yield
+
+
+@contextmanager
+def serve_gguf(cfg_path: Path, gguf: Path | None, root: Path, name: str):
+    """llama-server for one model config under a memory cap; no server for a system without a GGUF (B0, X1)."""
     if gguf is None:
         yield
         return
@@ -87,7 +94,7 @@ def serve(system: str, root: Path):
     port = cfg["base_url"].rsplit(":", 1)[1].split("/")[0]
     argv = ["systemd-run", "--user", "--scope", "-q", "-p", f"MemoryMax={MEMORY_MAX}", str(LLAMA_SERVER),
             "-m", str(gguf), "--host", "127.0.0.1", "--port", port, *shlex.split(cfg["server_args"])]  # fmt: skip
-    logf = (root / f"server-{system}.log").open("w")
+    logf = (root / f"server-{name}.log").open("w")
     proc = subprocess.Popen(argv, stdout=logf, stderr=subprocess.STDOUT, cwd=ROOT)
     try:
         for _ in range(180):
@@ -100,7 +107,7 @@ def serve(system: str, root: Path):
             except Exception:
                 time.sleep(1)
         else:
-            raise RuntimeError(f"llama-server for {system} did not come up")
+            raise RuntimeError(f"llama-server for {name} did not come up")
         yield
     finally:
         proc.terminate()  # this pid only; never `pkill -f`
