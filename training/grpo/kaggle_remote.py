@@ -79,6 +79,8 @@ def main_run_args() -> str:
         f"--max-runs {P['max_runs']} --max-gpu-hours {P['max_gpu_hours']} --gen-batch {P['gen_batch']} "
         f"--corpus-repo {P['corpus_repo']} --hub-repo {P['hub_repo']}"
     )
+    if P.get("micro_batch"):
+        a += f" --micro-batch {P['micro_batch']}"
     if P["pool_ids"]:
         a += f" --pool-ids {P['pool_ids']}"
     else:

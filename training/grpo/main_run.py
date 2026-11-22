@@ -93,6 +93,13 @@ def main(argv: list[str] | None = None) -> None:
         help="also train on data/tasks/train/NAME.jsonl (hash pinned in MANIFEST.json extra_train)",
     )
     ap.add_argument(
+        "--micro-batch",
+        type=int,
+        default=None,
+        help="sequences per training forward/backward (default: num-generations); the effective batch is unchanged "
+        "(accumulation grows to match); smaller = less activation memory on long multi-turn sequences",
+    )
+    ap.add_argument(
         "--gen-batch",
         type=int,
         default=8,
@@ -176,9 +183,15 @@ def main(argv: list[str] | None = None) -> None:
 
         chunked._MM_OUT_DTYPE = False  # see training/precision.py
 
+    micro = a.micro_batch or a.num_generations
+    if (a.prompts_per_step * a.num_generations) % micro:
+        raise SystemExit(
+            f"--micro-batch {micro} must divide prompts-per-step x num-generations "
+            f"({a.prompts_per_step * a.num_generations}): the effective batch must not change"
+        )
     args = GRPOConfig(
         output_dir=str(a.ckpt_dir), max_steps=a.steps, seed=a.seed, report_to="none", num_generations=a.num_generations,
-        per_device_train_batch_size=a.num_generations, gradient_accumulation_steps=a.prompts_per_step,
+        per_device_train_batch_size=micro, gradient_accumulation_steps=a.prompts_per_step * a.num_generations // micro,
         max_completion_length=a.max_runs * 2 * a.max_new_tokens + 2048, beta=0.0, learning_rate=a.lr, temperature=1.0,
         logging_steps=1, save_strategy="steps", save_steps=a.save_steps, save_total_limit=2,
         bf16=plan["bf16"], fp16=plan["fp16"], gradient_checkpointing=True, model_init_kwargs={"dtype": plan["model_dtype"]},

@@ -80,10 +80,12 @@ def test_the_kernel_sets_the_allocator_option_that_the_oom_message_recommended()
     assert "expandable_segments:True" in kg.script(kg.params("control"))
 
 
-def test_generation_chunk_is_8_for_the_control_and_smoke_and_16_for_the_main_run():
+def test_generation_chunk_is_8_everywhere_and_only_the_main_resume_shrinks_the_training_micro_batch():
+    """The main run died at step 59 in the training forward pass with 8 sequences per micro-batch (22 Nov 2026)."""
     arg = {m: remote_ns(kg.params(m))["main_run_args"]() for m in ("smoke", "control", "main")}
-    assert "--gen-batch 8" in arg["smoke"] and "--gen-batch 8" in arg["control"]
-    assert "--gen-batch 16" in arg["main"]
+    assert all("--gen-batch 8" in a for a in arg.values())
+    assert "--micro-batch 4" in arg["main"]
+    assert "--micro-batch" not in arg["smoke"] and "--micro-batch" not in arg["control"]
 
 
 def test_smoke_repo_is_not_the_deleted_one():

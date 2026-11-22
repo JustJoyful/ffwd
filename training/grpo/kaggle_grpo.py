@@ -46,6 +46,7 @@ def params(mode: str, *, steps: int | None = None, resume: bool = False) -> dict
         "max_runs": config.MAX_RUNS_PER_JOB, "max_gpu_hours": config.GRPO_STOP_RULES["max_gpu_hours"],
         "save_steps": 10, "steps": steps or 100, "pool_ids": None, "pass_rates": T18_TABLE,
         "extra_train": [], "shuffle_seed": None, "hub_repo": f"{HUB}-grpo", "gen_batch": 8,
+        "micro_batch": None,
     }  # fmt: skip
     if mode == "smoke":
         p |= {"steps": 2, "save_steps": 1, "num_generations": 2, "prompts_per_step": 1,
@@ -54,9 +55,11 @@ def params(mode: str, *, steps: int | None = None, resume: bool = False) -> dict
         # 60 main steps = 1.9 epochs over the pool's 249 unique contents (reports/2026-11-20-grpo-pool); the control is 30
         p |= {"pool_ids": POOL_IDS, "extra_train": ["hard-v1"], "steps": steps or 60}
         # The control ran at chunk 8 (OOM fix): 782 s/step = 0.22 GPU-h, i.e. 13 h for 60 steps, over Kaggle's 12 h session.
-        # The main run decodes 16 per chunk (UNVERIFIED speed-up; an OOM now splits and retries instead of dying).
+        # The main run decoded 16 per chunk for steps 1-58 (an OOM splits and retries instead of dying) and then died at step 59
+        # in the TRAINING update (8 long sequences in one forward/backward). The resume from checkpoint-50 trains 4 sequences per
+        # micro-batch (same effective batch of 64) and decodes 8 per chunk for headroom: only ~10 steps remain, so speed matters less.
         if mode == "main":
-            p |= {"gen_batch": 16}
+            p |= {"gen_batch": 8, "micro_batch": 4}
         if mode == "control":
             p |= {"steps": steps or 30, "shuffle_seed": 20261115, "hub_repo": f"{HUB}-grpo-control"}
     return p
