@@ -1,0 +1,53 @@
+{
+ "seed": 20261115,
+ "tasks_sampled": 60,
+ "control_failures": [],
+ "mutants": {
+  "truncate_half": {
+   "applicable": 60,
+   "killed": 58
+  },
+  "wrong_width": {
+   "applicable": 44,
+   "killed": 44
+  },
+  "wrong_container_mkv": {
+   "applicable": 60,
+   "killed": 60
+  },
+  "empty_file": {
+   "applicable": 60,
+   "killed": 60
+  },
+  "garbage_file": {
+   "applicable": 60,
+   "killed": 60
+  },
+  "wrong_fps": {
+   "applicable": 7,
+   "killed": 7
+  },
+  "rotate_180": {
+   "applicable": 12,
+   "killed": 12
+  },
+  "lossless_claimed_but_reencoded": {
+   "applicable": 7,
+   "killed": 7
+  },
+  "louder_audio": {
+   "applicable": 3,
+   "killed": 3
+  }
+ },
+ "survivors": [
+  {
+   "mutant": "truncate_half",
+   "task_id": "dv-cdbeb8820a-verbo"
+  },
+  {
+   "mutant": "truncate_half",
+   "task_id": "dv-82bcc50831-casua"
+  }
+ ]
+}
