@@ -1,0 +1,490 @@
+{
+ "systems": {
+  "B0": {
+   "test-compositional": {
+    "k": 5,
+    "n": 10,
+    "rate": 0.5,
+    "ci95": [
+     0.23659309051256405,
+     0.763406909487436
+    ]
+   },
+   "test-iid": {
+    "k": 5,
+    "n": 10,
+    "rate": 0.5,
+    "ci95": [
+     0.23659309051256405,
+     0.763406909487436
+    ]
+   },
+   "test-phrasing": {
+    "k": 5,
+    "n": 10,
+    "rate": 0.5,
+    "ci95": [
+     0.23659309051256405,
+     0.763406909487436
+    ]
+   },
+   "runs_per_task_iid": 0.9,
+   "reencode_rate_iid": 0.0
+  },
+  "B2": {
+   "test-compositional": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0,
+    "ci95": [
+     2.7755575615628914e-17,
+     0.27753279986288915
+    ]
+   },
+   "test-iid": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0,
+    "ci95": [
+     2.7755575615628914e-17,
+     0.27753279986288915
+    ]
+   },
+   "test-phrasing": {
+    "k": 0,
+    "n": 10,
+    "rate": 0.0,
+    "ci95": [
+     2.7755575615628914e-17,
+     0.27753279986288915
+    ]
+   },
+   "runs_per_task_iid": 0.0,
+   "reencode_rate_iid": null
+  },
+  "M1": {
+   "test-compositional": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "test-iid": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "test-phrasing": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "runs_per_task_iid": 0.9,
+   "reencode_rate_iid": 1.0
+  },
+  "M3": {
+   "test-compositional": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "test-iid": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "test-phrasing": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "runs_per_task_iid": 0.9,
+   "reencode_rate_iid": 0.0
+  },
+  "X1": {
+   "test-compositional": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "test-iid": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "test-phrasing": {
+    "k": 10,
+    "n": 10,
+    "rate": 1.0,
+    "ci95": [
+     0.7224672001371109,
+     1.0
+    ]
+   },
+   "runs_per_task_iid": 0.9,
+   "reencode_rate_iid": 1.0
+  }
+ },
+ "comparisons": [
+  {
+   "name": "Q2 M1-B2",
+   "split": "test-iid",
+   "a": "B2",
+   "b": "M1",
+   "metric": "success",
+   "lower_is_better": false,
+   "n": 10,
+   "diff_b_minus_a": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ],
+   "favourable": true,
+   "p_raw": 0.0001,
+   "status": "rejected"
+  },
+  {
+   "name": "Q7 M3-B0",
+   "split": "test-phrasing",
+   "a": "B0",
+   "b": "M3",
+   "metric": "success",
+   "lower_is_better": false,
+   "n": 10,
+   "diff_b_minus_a": 0.5,
+   "ci95": [
+    0.2,
+    0.8
+   ],
+   "favourable": true,
+   "p_raw": 0.002,
+   "status": "rejected"
+  },
+  {
+   "name": "Q3a M3-M1 needless-or-fail",
+   "split": "test-iid+test-phrasing",
+   "a": "M1",
+   "b": "M3",
+   "metric": "needless_or_fail",
+   "lower_is_better": true,
+   "n": 6,
+   "diff_b_minus_a": -1.0,
+   "ci95": [
+    -1.0,
+    -1.0
+   ],
+   "favourable": true,
+   "p_raw": 0.0001,
+   "status": "rejected"
+  },
+  {
+   "name": "Q3b M3-M1 runs",
+   "split": "test-iid",
+   "a": "M1",
+   "b": "M3",
+   "metric": "runs",
+   "lower_is_better": true,
+   "n": 9,
+   "diff_b_minus_a": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "favourable": false,
+   "p_raw": 1.0,
+   "status": "NOT rejected: sequence stops"
+  },
+  {
+   "name": "Q4 M3-X1",
+   "split": "test-iid",
+   "a": "X1",
+   "b": "M3",
+   "metric": "success",
+   "lower_is_better": false,
+   "n": 10,
+   "diff_b_minus_a": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "favourable": false,
+   "p_raw": null,
+   "status": "descriptive (after the stop)"
+  }
+ ],
+ "material_spec_errors": {
+  "B0": {
+   "test-compositional": {
+    "n": 9,
+    "errors": 9,
+    "rate": 1.0,
+    "ci95": [
+     0.7008549515804562,
+     1.0
+    ],
+    "by_field": {
+     "no_spec": 9
+    },
+    "emits_spec": false
+   },
+   "test-iid": {
+    "n": 9,
+    "errors": 9,
+    "rate": 1.0,
+    "ci95": [
+     0.7008549515804562,
+     1.0
+    ],
+    "by_field": {
+     "no_spec": 9
+    },
+    "emits_spec": false
+   },
+   "test-phrasing": {
+    "n": 9,
+    "errors": 9,
+    "rate": 1.0,
+    "ci95": [
+     0.7008549515804562,
+     1.0
+    ],
+    "by_field": {
+     "no_spec": 9
+    },
+    "emits_spec": false
+   }
+  },
+  "B2": {
+   "test-compositional": {
+    "n": 9,
+    "errors": 9,
+    "rate": 1.0,
+    "ci95": [
+     0.7008549515804562,
+     1.0
+    ],
+    "by_field": {
+     "no_spec": 9
+    },
+    "emits_spec": false
+   },
+   "test-iid": {
+    "n": 9,
+    "errors": 9,
+    "rate": 1.0,
+    "ci95": [
+     0.7008549515804562,
+     1.0
+    ],
+    "by_field": {
+     "no_spec": 9
+    },
+    "emits_spec": false
+   },
+   "test-phrasing": {
+    "n": 9,
+    "errors": 9,
+    "rate": 1.0,
+    "ci95": [
+     0.7008549515804562,
+     1.0
+    ],
+    "by_field": {
+     "no_spec": 9
+    },
+    "emits_spec": false
+   }
+  },
+  "M1": {
+   "test-compositional": {
+    "n": 9,
+    "errors": 4,
+    "rate": 0.4444444444444444,
+    "ci95": [
+     0.18877852109766463,
+     0.7333487065045068
+    ],
+    "by_field": {
+     "time.end_s": 3,
+     "audio.codec": 1
+    },
+    "emits_spec": true
+   },
+   "test-iid": {
+    "n": 9,
+    "errors": 4,
+    "rate": 0.4444444444444444,
+    "ci95": [
+     0.18877852109766463,
+     0.7333487065045068
+    ],
+    "by_field": {
+     "time.end_s": 3,
+     "audio.codec": 1
+    },
+    "emits_spec": true
+   },
+   "test-phrasing": {
+    "n": 9,
+    "errors": 4,
+    "rate": 0.4444444444444444,
+    "ci95": [
+     0.18877852109766463,
+     0.7333487065045068
+    ],
+    "by_field": {
+     "time.end_s": 3,
+     "audio.codec": 1
+    },
+    "emits_spec": true
+   }
+  },
+  "M3": {
+   "test-compositional": {
+    "n": 9,
+    "errors": 3,
+    "rate": 0.3333333333333333,
+    "ci95": [
+     0.12058381838691101,
+     0.6457978644196037
+    ],
+    "by_field": {
+     "time.end_s": 3
+    },
+    "emits_spec": true
+   },
+   "test-iid": {
+    "n": 9,
+    "errors": 3,
+    "rate": 0.3333333333333333,
+    "ci95": [
+     0.12058381838691101,
+     0.6457978644196037
+    ],
+    "by_field": {
+     "time.end_s": 3
+    },
+    "emits_spec": true
+   },
+   "test-phrasing": {
+    "n": 9,
+    "errors": 3,
+    "rate": 0.3333333333333333,
+    "ci95": [
+     0.12058381838691101,
+     0.6457978644196037
+    ],
+    "by_field": {
+     "time.end_s": 3
+    },
+    "emits_spec": true
+   }
+  },
+  "X1": {
+   "test-compositional": {
+    "n": 9,
+    "errors": 1,
+    "rate": 0.1111111111111111,
+    "ci95": [
+     0.019890887638544935,
+     0.4349997055766559
+    ],
+    "by_field": {
+     "time.end_s": 1
+    },
+    "emits_spec": true
+   },
+   "test-iid": {
+    "n": 9,
+    "errors": 1,
+    "rate": 0.1111111111111111,
+    "ci95": [
+     0.019890887638544935,
+     0.4349997055766559
+    ],
+    "by_field": {
+     "time.end_s": 1
+    },
+    "emits_spec": true
+   },
+   "test-phrasing": {
+    "n": 9,
+    "errors": 1,
+    "rate": 0.1111111111111111,
+    "ci95": [
+     0.019890887638544935,
+     0.4349997055766559
+    ],
+    "by_field": {
+     "time.end_s": 1
+    },
+    "emits_spec": true
+   }
+  }
+ },
+ "descriptive": [
+  {
+   "name": "Q3a M3-M1 needless-or-fail",
+   "split": "test-iid",
+   "diff_b_minus_a": -1.0,
+   "ci95": [
+    -1.0,
+    -1.0
+   ]
+  },
+  {
+   "name": "Q3a M3-M1 needless-or-fail",
+   "split": "test-phrasing",
+   "diff_b_minus_a": -1.0,
+   "ci95": [
+    -1.0,
+    -1.0
+   ]
+  }
+ ],
+ "guard": {
+  "a": "M1",
+  "b": "M3",
+  "splits": [
+   "test-iid",
+   "test-compositional",
+   "test-phrasing"
+  ],
+  "diff_b_minus_a": 0.0,
+  "lower_bound_975": 0.0,
+  "margin": 0.02,
+  "met": true
+ },
+ "efficiency_claim": true
+}
