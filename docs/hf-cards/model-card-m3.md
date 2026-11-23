@@ -33,7 +33,7 @@ tags:
 M3 is Qwen3-0.6B fine-tuned in two stages for one narrow job: turn a plain-language video chore ("cut the first 3 seconds", "make this a GIF", "compress to under 10 MB") into a verified FFmpeg command through a small agent loop.
 
 - **M1 (the SFT parent)**: Qwen3-0.6B, LoRA SFT on 6,032 multi-turn trajectories. Private repo `JustJoyful/ffmpeg-agent-m1-0.6b`.
-- **M3 (this model)**: M1 plus multi-turn GRPO, **checkpoint-60 of a 60-step run** (the last clean checkpoint of the run, a rule fixed before any dev result, D-045). The LoRA adapter was merged into the weights and converted to GGUF with llama.cpp b12032; **the Q8_0 GGUF is what ships and what was evaluated.**
+- **M3 (this model)**: M1 plus multi-turn GRPO, **checkpoint-60 of a 60-step run** (the last clean checkpoint of the run, a rule fixed before any dev result, D-045). The LoRA adapter was merged into the weights and converted to GGUF with llama.cpp b12032; **the Q8_0 GGUF is what was evaluated in Phase 1; the Q5_K_M GGUF (same weights, smaller) is the shipping format since 23 Nov 2026 (see Evaluation).**
 
 The model emits **one JSON action per turn**:
 
@@ -59,7 +59,7 @@ Out of scope: arbitrary FFmpeg use, other media tasks (subtitles, stabilisation,
 
 Files (all part of the repo): `ffmpeg-agent-m3-0.6b-q8_0.gguf` (639,443,520 bytes; sha256 `0fa2333c66e4b8697465e5753f4ef4b8ada40ee3f77a234659afb223e382e1b1`, recorded in `reports/2026-11-23-phase-1/manifest.json`), `chat-template.jinja` (sha256 `8d12c21330339015cf3856b2c8fd0ade15556f92c87958d3426b832bae029af5`), `system-v1.txt` (sha256 `56e7d7217b97c122662235cceb96acbf62bd822c6fec25f880035bfff805c724`).
 
-**Important: use the custom chat template, not the stock Qwen3 one.** The agent template is stock Qwen3 non-thinking minus tools and reasoning, with the empty `<think>\n\n</think>\n\n` block kept in **every** assistant turn (D-026). Stock templates (HF, llama.cpp `--jinja`, WebLLM) drop that block from earlier turns, so the model would see contexts it was never trained on. Therefore:
+**Important: use the custom chat template, not the stock Qwen3 one.** The agent template is stock Qwen3 non-thinking minus tools and reasoning, with the empty `<think>\n\n</think>\n\n` block kept in **every** assistant turn (D-026). Stock templates (HF, llama.cpp `--jinja`, MLC/WebLLM; MLC's stock Qwen3 template was token-identical to ours on 0 of 11 fixtures) drop that block from earlier turns, so the model would see contexts it was never trained on. Therefore:
 
 - pass `--chat-template-file chat-template.jinja` to llama.cpp,
 - do **not** pass `chat_template_kwargs` or `enable_thinking` (the switch does not exist in this template),
@@ -91,7 +91,7 @@ GRPO telemetry (training-set rollouts, not test performance): mean over the firs
 
 ## Evaluation
 
-All numbers are for the **native GGUF Q8_0 path in llama.cpp** (owner condition, D-028). The browser (MLC q4f16_1) number comes from a Phase 2 parity check that has not been done. Systems: B0 frozen regex baseline, B2 stock Qwen3-0.6B in the same loop, M1 SFT, M3 (this model), X1 DeepSeek V4 Flash teacher in the same loop. One run of each system on each test split, preregistered (fixed-sequence, alpha 0.05, preregistration FINAL before any test split ran). Success is graded against the task's GOLD spec (`training/env/loop.py`), never against the spec the model states; the stated spec is scored only by the separate material-spec-error metric. Greedy decoding; Wilson 95% CIs; failed, timed-out, malformed and errored episodes count as failures.
+All numbers are for the **native GGUF Q8_0 path in llama.cpp** (owner condition, D-028). The Phase 1 test results below are Q8_0 only; browser and other-quantisation numbers are dev-only parity checks, in the section after the Q4_K_M table (updated 23 Nov 2026). Systems: B0 frozen regex baseline, B2 stock Qwen3-0.6B in the same loop, M1 SFT, M3 (this model), X1 DeepSeek V4 Flash teacher in the same loop. One run of each system on each test split, preregistered (fixed-sequence, alpha 0.05, preregistration FINAL before any test split ran). Success is graded against the task's GOLD spec (`training/env/loop.py`), never against the spec the model states; the stated spec is scored only by the separate material-spec-error metric. Greedy decoding; Wilson 95% CIs; failed, timed-out, malformed and errored episodes count as failures.
 
 Tasks are **generated** tasks (splits below), not real user clips.
 
@@ -133,12 +133,24 @@ Quantisation (dev only, the same 100 seeded dev tasks, greedy; `reports/2026-11-
 |---|---|---|
 | success | 97/100 = 97% [92, 99] | **60/100 = 60% [50, 69]** |
 
-Paired Q4 - Q8: -37 pp, 95% CI [-47, -28]. **Q8_0 ships; do not use the Q4_K_M GGUF.**
+Paired Q4 - Q8: -37 pp, 95% CI [-47, -28]. **Do not use the Q4_K_M GGUF.**
+
+**Update, 23 Nov 2026 (dev only: the same 100 seeded dev tasks, greedy; one seed, so about +-5 pp).** Sources in the project repo: `reports/2026-11-23-m3-quant-curve`, `reports/2026-11-23-mlc-parity`, `reports/2026-11-23-browser-gguf`.
+
+| format and runtime | success on 100 dev tasks |
+|---|---|
+| native llama.cpp (b12032), GGUF | Q4_K_M 60, Q5_K_M 97, Q6_K 99, Q8_0 97 |
+| browser: wllama 4.0.0 (llama.cpp b12637) in Chromium 159, WebGPU | Q4_K_M 62, **Q5_K_M 96** (97 with a q8_0 KV cache), Q6_K 98 |
+| browser: same, processor only (no WebGPU) | Q5_K_M 95 |
+| MLC `q4f16_1` (weights read back exactly and run in the same harness; the MLC runtime itself could not be built) | M3 2, M1 5 |
+| MLC `q0f16` (unquantised, 1.2 GB download; rejected for size) | 98 |
+
+**Shipping format (owner decision, D-050 and D-051): GGUF Q5_K_M** (444,411,456 bytes, sha256 `bbf439b749c02c04b5227ab93fb1430263a7c567c15552b6e12ae3836cde1e11`), one file for the browser (through wllama), the helper and the CLI. On one laptop (Intel i5-12450HX, NVIDIA RTX 3050) a model turn takes a median 2.2 s on WebGPU and 6.8 s on the processor only (the 5 s target is met on WebGPU, not on the processor); the download is 444 MB plus a 10.8 MB runtime. A descriptive extra row of the browser configuration on the three held-out test splits is run under the test lock (`eval/PREREGISTRATION.md`, Amendment 4); its result is added here when it is final. The Phase 1 numbers above remain those of M3 at Q8_0.
 
 ## Limitations
 
 - **Do not quantise to 4 bits.** M3 at Q4_K_M scores 60/100 against 97/100 at Q8_0 on the dev parity sample: 4-bit visibly damages this 0.6B fine-tune's format discipline (12 episodes with an invalid action, typically a forbidden `-y` flag or malformed JSON).
-- **Browser 4-bit build is untested.** The browser runtime plans an MLC q4f16_1 build (also 4-bit). That conversion has not been tested; the browser model may be materially worse than the numbers above until it passes the same parity check on the same dev sample, and must not be called M3 before then. Other quants (Q5_K_M, Q6_K, Q4 with an importance matrix) are not part of the Phase 1 claims.
+- **MLC 4-bit is not usable for this model.** The MLC `q4f16_1` weights score 2/100 (M3) and 5/100 (M1) on the same dev sample; the cliff is the 4-bit weight quantisation, not the runtime or the prompt. The browser therefore runs the GGUF Q5_K_M through wllama. That result is one laptop, one Chromium build (Playwright's), one seed and 100 dev tasks; integrated GPUs, Apple, Firefox, Safari and phones are untested, and wllama's llama.cpp build (b12637) differs from the native one (b12032), so outputs are not bit-identical to the native runs. Q4 with an importance matrix, Q4_K_S and Q5_K_S were not tried.
 - **The material spec error rate is high even where success is high** (M3 22% on test-iid against 97% success). Success is graded against the task's gold spec, never against the spec the model states, so a model can state a wrong spec and still produce a correct output; this metric scores the stated spec separately and is descriptive only (not preregistered). In the product the user confirms the model's spec and the runtime check uses it, so a wrong stated spec would be shown to the user and checked against; that is why it matters.
 - **Two known systematic spec bugs, inherited from M1 (D-043):** width and height are not swapped after a rotation (35% of rotate tasks on dev vs 7% elsewhere), and `end_s` is stated as source time after a speed change (51% vs 3%). GRPO gave spec accuracy no reward, so it did not fix them; a data fix is a post-Phase-1 item.
 - **One training seed per system.** The intervals cover test-set sampling noise only, not training-run variance. M1 vs M3 differences are one run each.
@@ -168,4 +180,4 @@ Full detail in the data card (`docs/hf-cards/data-card-corpus-and-tasks.md`). In
 
 ## Files
 
-`ffmpeg-agent-m3-0.6b-q8_0.gguf`, `chat-template.jinja`, `system-v1.txt`, `SHA256SUMS`. TODO(owner): decide whether the LoRA adapter of checkpoint-60 (currently on the private checkpoint repo `JustJoyful/ffmpeg-agent-ckpt-grpo`) is also uploaded, as it was for M1.
+`ffmpeg-agent-m3-0.6b-q8_0.gguf` (the Phase 1 evaluated file, 639,443,520 bytes, sha256 `0fa2333c66e4b8697465e5753f4ef4b8ada40ee3f77a234659afb223e382e1b1`), the Q5_K_M file named above (shipping format), `chat-template.jinja`, `system-v1.txt`, `SHA256SUMS`. TODO(owner): decide whether the LoRA adapter of checkpoint-60 (currently on the private checkpoint repo `JustJoyful/ffmpeg-agent-ckpt-grpo`) is also uploaded, as it was for M1.

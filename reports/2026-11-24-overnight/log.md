@@ -14,3 +14,4 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 ## Check-ins
 - 01:55 IST: test-iid at 68/500; post.sh waiting on the row; log created.
 - 02:04 IST: test-iid at 138/500; watchdog running (rowwatch.pid), post.sh rewritten (name-suffix fix, gates, per-step RAM watch, smoke before iGPU); wasm ?url fix + app-smoke committed on integration; morning report skeleton + component review written.
+- 02:05 IST: test-iid at 148/500; model card filled (quant curve, browser, Q5_K_M shipping format, MLC finding, hashes); owner items listed with suggestions.
