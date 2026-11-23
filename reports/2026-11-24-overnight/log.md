@@ -67,3 +67,5 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 04:53 IST (post2.sh): post2 ALLDONE2
 - 05:19 IST (post4.sh): start: speedprobe iGPU kv f16
 - 05:21 IST: queues finished earlier than planned. SECOND QUEUE ALL GREEN: size home 117.44 / chore 117.53 kB (limit 120), build tests 31 pass, e2e 32 pass 7 skipped (trim, 9:16, audio chores incl.), smoke rerun passed all 8 steps. iGPU subset: 4 genuine tasks, 0 pass, output GARBAGE on Intel gen-12lp, median 133 s/turn; CPU 4 threads: 12/12 pass, median 3.2 s. The 96/88 error rows are artifacts of stopping the runs (excluded, subset_summary.json). iGPU speedprobes/loadtimes/coexist failed on a port clash (my sequencing bug) and are being rerun. MORNING_REPORT sections 2 and 3 filled.
+- 05:21 IST (post4b.sh): start: speedprobe iGPU kv f16 with text
+- 05:22 IST: ROOT CAUSE of the iGPU failure: q8_0 KV + flash attention (f16 KV: 27 tok/s, warm turns 2.4 s on the Intel iGPU). post4b.sh running: text sanity probe with f16, then (if sane) full 100-task iGPU parity with f16 KV, load times, coexistence. Morning report updated; decision for owner: f16 KV default vs q8_0 + canary.
