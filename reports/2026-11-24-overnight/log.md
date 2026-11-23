@@ -17,3 +17,4 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 02:05 IST: test-iid at 148/500; model card filled (quant curve, browser, Q5_K_M shipping format, MLC finding, hashes); owner items listed with suggestions.
 - 02:06 IST: test-iid at 151/500; APP_FLOW.md written. Remaining light items skipped on purpose to save usage: copy rewrites (pages already carry owner-review copy) and new unit tests (no vitest while the row runs).
 - 02:36 IST: test-iid 387/500 (375 pass, 0 errors), watchdog alive, 4.3 GB free, no STOP flag; row ETA about 03:45; post.sh waiting. Light work done earlier; nothing new started (saving usage).
+- 03:17 IST: test-iid DONE 483/500 pass, 0 errors; test-phrasing 171/200 (156 pass, 0 errors); compositional next; watchdog alive, no STOP flag, 3.9 GB free; ETA row end about 03:50; post.sh waiting.
