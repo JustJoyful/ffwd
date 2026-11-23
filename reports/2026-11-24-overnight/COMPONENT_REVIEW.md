@@ -1,0 +1,19 @@
+# /app pieces built without a design precedent (24 Nov 2026), for the owner's review
+
+Source: stream C's report (the tool-UI stream). Each piece is built from existing classes in `app/styles/tool.css` and `theme.css`; none adds a colour, font or library. Screenshots come from the real-model smoke (`reports/2026-11-24-overnight/app-smoke/`, PENDING until it runs); where a state cannot be reached in the smoke the screenshot is marked "not captured". Tick one option per row.
+
+| # | Piece | Where | What it does | Why it had no precedent | Simplest on-design option (current) | Screenshot |
+|---|---|---|---|---|---|---|
+| 1 | `.notice__actions` button row | model consent notice (Download, Not now) | A flex row, 8 px gap, holding two small buttons | notices elsewhere have no buttons | Reuse `.btn--sm` blue + ghost, as in the plan card's "Run it / Change" | `app-smoke/04-*` |
+| 2 | `.modelzone` wrapper | top of the /app body | Full-width zone (spans both grid columns, above the picture on phones) holding the path notice and the model loader; hidden when empty | the body is a 2-column grid; a notice placed directly in it landed in the narrow left column | One wrapper with `grid-column: 1 / -1` and `order: -2`; no new look | `app-smoke/02-*`, `05-*` |
+| 3 | "Declined" state of the model box | after "Not now" | Says the model was not downloaded and that no plan can be made; offers Download again (focus moves there) | no mock covers refusing the download | Existing `.notice` text + one ghost button | not captured (needs a manual click) |
+| 4 | "Not published yet" notice | a build with no model URL | Says the on-device model is not published yet, no buttons | there is no public model host yet | Plain `.notice`, no action; disappears once a host exists | not captured (the smoke sets a URL) |
+| 5 | Download progress readout | while the model downloads | Percent numeral, "111 MB of 444 MB", the note that it is saved for next time, and a real progress bar (`role=progressbar`, `aria-valuenow`) | the old loader had a number and no bar | Reuses `.loader`, `.loader__n` and the run progress bar markup (`.progress .bar i.ok`), so reduced-motion rules already apply | `app-smoke/04-*` |
+| 6 | Request-field hint | under the textarea while the model is not ready | One line saying why "Make a plan" is disabled (model downloading, needs consent, failed) | the field never had a reason to be disabled | Plain `.step__hint`, linked with `aria-describedby` | `app-smoke/03-*` |
+| 7 | Audio-result chips | plan card for an audio output | "Picture: removed" (instead of the false "Picture: unchanged") and "Sound: AAC" | the chips assumed a video output | Existing chip classes with new values; `-vn` maps to the Picture chip | not captured (needs an audio chore) |
+| 8 | "Copy blocked" line | command reveal, when the clipboard is refused | "This browser blocked copying. Select the command above and copy it by hand." and never shows "Copied" | the copy button silently did nothing | Plain `.step__hint` | not captured |
+| 9 | Audio-only result in the video viewer | save step for an audio chore | An audio-only file plays in the existing `<video>` element with controls; the picture area is blank | no audio player exists in the design | Keep the viewer; a small audio player would be a new component (your call) | not captured |
+
+## Two small cross-stream notes
+- The model box's "Download" button and the save step's "Download" button share the same accessible name. They are never on screen together (the model is ready by the time of saving), but a test selecting the "Download" button while the model box is up would hit both.
+- `MODEL_ERROR_TEXT` for load_failed and hash_mismatch says "Reload the page", while the loader also offers Try again for those codes. Both show; the contract text could be aligned.
