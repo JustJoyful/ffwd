@@ -5,8 +5,8 @@
 | Phase | Name | Status |
 |---|---|---|
 | 0 | Go/no-go spike | ✅ **GO** (16 Nov 2026; owner items open, see reports/2026-11-15-phase-0/summary.md) |
-| 1 | Core model | 🔄 **In progress**: M1 (SFT 0.6B) trained, dev 98%; stopped before GRPO (G3) and the test run (G4), both need the owner; see `reports/PHASE1-STATUS.md` and `reports/2026-11-20-m1-milestone/` |
-| 2 | Website v1 | ⬜ Not started |
+| 1 | Core model | ✅ **Test run done (22–23 Nov 2026)**: B0, B2, M1, M3, X1 on the three generated test splits; M3 (GRPO checkpoint-60, Q8_0) 867/900, M1 866/900. Preregistered Q2, Q7 and Q3a rejected, Q3b not, so Q4 is descriptive and the efficiency claim rests on Q3a and the guard. Report: `reports/2026-11-23-phase-1/` (read `LIMITATIONS.md`). **Still open: the owner's review of 50 passed outputs (`reports/2026-11-23-passed-review/`) and the private model and data cards.** `test-real` is a Phase 4 addendum |
+| 2 | Website v1 | 🔄 **Started early (23 Nov 2026), in the separate JavaScript repo `ffwd-site` (D-047)**: home page, engine port with the conformance cases, ffmpeg.wasm `/app` flow with a scripted model, static pages and the analytics allowlist are built and tested. Not started: WebLLM/MLC model (Plan E), deployment |
 | 3 | Helper app | ⬜ Not started |
 | 4 | Science & polish | ⬜ Not started |
 | 5 | Users & iteration | ⬜ Not started |
@@ -67,9 +67,9 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 - [x] Teacher generation: budget-guarded DeepSeek client; off-peak bulk on `train`; keep **only check-passing** trajectories; data card
 - [x] Rejection sampling for easy tasks from base Qwen3 (free) (nothing to keep: stock Qwen3-0.6B scores 0/300 on dev)
 - [x] SFT (LoRA → merged) for 0.6B (M1, dev 98%; 1.7B not started)
-- [ ] Multi-turn GRPO environment + one main run (checkpoint/resume), reward v1, telemetry logging (environment, driver, telemetry and resume are built and smoke-tested; the main run and shuffled control wait for the owner's G3)
-- [ ] Eval on dev → checkpoint selection → **single** run on test splits
-- [ ] Export GGUF (done for M1: Q8_0, HF-vs-GGUF parity 99%); simple CLI (`ffmpeg-agent "<request>" file.mp4`) using llama.cpp + native FFmpeg; parity eval
+- [x] Multi-turn GRPO environment + one main run (checkpoint/resume), reward v1, telemetry logging (M3 = checkpoint-60 after the step-59 OOM and resume, D-045; the shuffled-reward control was not run)
+- [x] Eval on dev → checkpoint selection → **single** run on test splits (22–23 Nov 2026, test lock held: 15 ledger rows for 5 systems × 3 splits)
+- [x] Export GGUF (Q8_0 ships: M3 97/100 vs Q4_K_M 60/100 on the dev parity sample); simple CLI (`ffmpeg-agent "<request>" file.mp4`) using llama.cpp + native FFmpeg; parity eval
 - [ ] Model + data card on Hugging Face
 
 ### Exit criteria
@@ -122,7 +122,7 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 - [ ] Quantization study: fp16 vs MLC q4 vs GGUF Q4/Q8 (accuracy + speed)
 - [ ] Browser vs native speed table by family/size
 - [ ] DeepSeek baseline on all test splits (budget ≈ $0.75) + Claude Code/Codex subset
-- [ ] test-real set (hand-written, real clips); ELLMPEG subset if allowed
+- [ ] test-real set (hand-written, real clips; owner-recorded clips, excluded from training, dev and the app's fixtures); ELLMPEG subset if allowed
 - [ ] Sanity controls (shuffled reward, leakage audit, human spot-check)
 - [ ] Final report, README results section, 60–90 s demo video, blog-style write-up
 

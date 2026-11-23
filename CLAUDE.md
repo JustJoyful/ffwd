@@ -14,7 +14,7 @@ You are helping build **ffwd** (called ffmpeg-agent until 21 Nov 2026; the repo,
 7. `DECISIONS.md`: don't re-litigate settled decisions (D-001…); propose a new entry instead
 
 ## Current state
-Phase 0 done (GO, D-020); **Phase 1 in progress** (plan `docs/superpowers/plans/2026-11-16-phase-1-core-model.md`, status `reports/PHASE1-STATUS.md`; M1 (SFT 0.6B) is trained and scores 98% on dev, the DeepSeek ledger is $2.675 of $4; GRPO (G3) and the single test run (G4) need the owner's go-ahead, and no system has been run on a test split). Work happens on `main`. Phase 0 plan: `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
+Phase 0 done (GO, D-020); **Phase 1 test run done** (22–23 Nov 2026; report `reports/2026-11-23-phase-1/`, read its `LIMITATIONS.md`; plan `docs/superpowers/plans/2026-11-16-phase-1-core-model.md`, status `reports/PHASE1-STATUS.md`). M3 (GRPO checkpoint-60, Q8_0) 867/900 and M1 866/900 on the generated test splits; the single test run is spent, so test splits stay locked (`eval/testlock.py`). Still open in Phase 1: the owner's review of 50 passed outputs and the private HF model and data cards (nothing public until the DeepSeek terms are reviewed). The website is being built early in the separate JavaScript repo `ffwd-site` (D-047), not in this repo. Work happens on `main`. Phase 0 plan: `docs/superpowers/plans/2026-11-15-phase-0-spike.md`. Add commands below as they come to exist, and don't make up commands before then.
 
 ## Commands
 - `uv sync`: install the Python env (Python 3.11 pinned in `.python-version`; `training/` and `eval/` import from the repo root, no build step)
