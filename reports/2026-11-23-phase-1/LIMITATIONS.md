@@ -17,10 +17,10 @@ Read with `summary.md` (results and the preregistered tests), `failure_taxonomy.
 
 ## Metric caveats
 
-- **Material spec error rate is high even where success is high** (M3 22% on test-iid, against 97% success). The check runs against the spec the model itself states, so a wrong-but-consistent spec can pass; this metric exists to expose that, and is descriptive only (not preregistered).
+- **Material spec error rate is high even where success is high** (M3 22% on test-iid, against 97% success). Success is graded against the task's GOLD spec (RULES §4.4; `training/env/loop.py`), never against the spec the model states, so a model can state a wrong spec and still produce a correct output. This metric scores the stated spec separately. In the product the user confirms the model's spec and the runtime check uses it, so a wrong stated spec would be shown to the user and checked against; that is why it matters. Descriptive only (not preregistered). *Correction (23 Nov 2026): the first version of this sentence wrongly said the check runs against the model's own spec.*
 - **Two known systematic M1 spec bugs carry into M3** (recorded at D-043): width and height not swapped after a rotation (35% of rotate tasks on dev vs 7% elsewhere), and `end_s` stated as source time after a speed change (51% vs 3%). A data fix is a post-Phase-1 item.
 - **test-iid has near-duplicate requests of training requests** (the leakage audit, `reports/2026-11-22-leakage-audit`). The report shows the full split and the deduplicated subset side by side; the dedup numbers are descriptive and close to the full-split ones.
-- **The success rate on generated tasks is not the success rate on real clips.** Generated splits use the 22-clip corpus. The owner-recorded `test-real` set is a Phase 4 addendum and has not been run.
+- **The success rate on generated tasks is not the success rate on real clips.** Generated splits use the 35 clips visible to task generation (22 synthetic CC0 and 13 CC BY 3.0; the corpus hash was re-verified on 23 Nov 2026 and matches the one pinned in `data/tasks/MANIFEST.json`). *Correction: this line first said "22-clip corpus", which was stale.* The owner-recorded `test-real` set is a Phase 4 addendum and has not been run.
 
 ## Deployment risk carried into Phase 2
 

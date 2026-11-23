@@ -6,7 +6,7 @@
 |---|---|---|
 | 0 | Go/no-go spike | ✅ **GO** (16 Nov 2026; owner items open, see reports/2026-11-15-phase-0/summary.md) |
 | 1 | Core model | ✅ **Test run done (22–23 Nov 2026)**: B0, B2, M1, M3, X1 on the three generated test splits; M3 (GRPO checkpoint-60, Q8_0) 867/900, M1 866/900. Preregistered Q2, Q7 and Q3a rejected, Q3b not, so Q4 is descriptive and the efficiency claim rests on Q3a and the guard. Report: `reports/2026-11-23-phase-1/` (read `LIMITATIONS.md`). **Still open: the owner's review of 50 passed outputs (`reports/2026-11-23-passed-review/`) and the private model and data cards.** `test-real` is a Phase 4 addendum |
-| 2 | Website v1 | 🔄 **Started early (23 Nov 2026), in the separate JavaScript repo `ffwd-site` (D-047)**: home page, engine port with the conformance cases, ffmpeg.wasm `/app` flow with a scripted model, static pages and the analytics allowlist are built and tested. Not started: WebLLM/MLC model (Plan E), deployment |
+| 2 | Website v1 | 🔄 **Started early (23 Nov 2026), in the separate JavaScript repo `ffwd-web` (D-047)**: home page, engine port with the conformance cases, ffmpeg.wasm `/app` flow with a scripted model, static pages and the analytics allowlist are built and tested. Not started: WebLLM/MLC model (Plan E), deployment |
 | 3 | Helper app | ⬜ Not started |
 | 4 | Science & polish | ⬜ Not started |
 | 5 | Users & iteration | ⬜ Not started |
