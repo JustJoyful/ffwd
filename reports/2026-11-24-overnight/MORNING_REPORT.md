@@ -2,11 +2,22 @@
 
 Timeline and check-ins: `log.md` in this folder. Hard limits kept all night: nothing public, no money spent, no preregistration/checker/metric change, one heavy browser job at a time under the memory cap.
 
-## 1. Browser test row (M3 Q5_K_M, wllama, WebGPU): PENDING
-- Frozen configuration (Amendment 4): `grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192`. Amendment 4 was pushed to the private remote at 23:56 IST on 23 Nov; the first lock was taken at 01:46 IST on 24 Nov.
-- Dev dry run through the final driver: **97/100** (needs >= 95): passed, no infrastructure errors.
-- Results table and analysis: `reports/2026-11-23-phase-1-browser-row/report/summary.md` (PENDING until the three splits finish).
-- Honest notes for this row: it measures the Python harness loop driving the browser model, not the app's own JS loop (the JS loop ends a job on the first passing run, the Python one waits for `finish`); a circuit breaker watched the run; the row shared the machine with a ~35 s niced unit-test burst at 01:47 IST (native-ffmpeg conformance) and light niced unit tests by subagents; one laptop, one browser build, one seed; the row is descriptive and M3 Q8_0 stays the headline.
+## 1. Browser test row (M3 Q5_K_M, wllama, WebGPU): DONE. The preregistered guard is NOT shown.
+Frozen configuration (Amendment 4): `grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192`. Amendment 4 was pushed to the private remote at 23:56 IST on 23 Nov; the first lock was taken at 01:46 IST on 24 Nov; the dev dry run through the final driver scored 97/100. One run per split, 900 tasks, no infrastructure errors, no episode ended by the context rule. Full output: `reports/2026-11-23-phase-1-browser-row/report/` (`summary.md`, `results.json`, `manifest.json`).
+
+| System | test-iid | test-phrasing | test-compositional | pooled |
+|---|---|---|---|---|
+| **M3-browser (Q5_K_M, wllama)** | 483/500 = 96.6% | 181/200 = 90.5% | 191/200 = 95.5% | **855/900 = 95.0%** |
+| M3 Q8_0 (the headline) | 485/500 = 97.0% | 188/200 = 94.0% | 194/200 = 97.0% | 867/900 = 96.3% |
+| M1 | 485/500 | 187/200 | 194/200 | 866/900 |
+| X1 (DeepSeek teacher) | 483/500 | 188/200 | 195/200 | 866/900 |
+
+- **Primary (descriptive), paired difference browser minus M3 Q8_0, three splits pooled: -1.33 pp, 95% CI [-2.67, -0.11].** Per split: test-iid -0.40 [-2.00, +1.20]; test-phrasing **-3.50 [-7.00, -0.50]**; test-compositional -1.50 [-4.50, +1.50].
+- **Guard (Amendment 3 item 5, reused): one-sided 97.5% lower bound -2.67 pp against -2.0 pp: NOT shown.** Reported as it is: the browser configuration is not shown to be within 2 pp of M3 Q8_0 on the held-out splits, and the interval says it is measurably a little lower. The loss is concentrated in test-phrasing (7 fewer tasks than Q8_0 of 200).
+- Context only: versus M1 -1.22 pp [-2.56, 0.00]; versus X1 -1.22 pp [-3.11, +0.56] (n = 900). Needless re-encode or fail on the 90 copy-eligible tasks: browser 5.6% against 4.4% for Q8_0 (+1.11 pp [-4.44, +6.67]). Material spec error rate about the same as M3 (22%, 23%, 13% by split). Invalid-action episodes: browser 2, Q8_0 5, M1 3.
+- Latency (nothing else heavy ran; one 35 s niced unit-test burst at 01:47 IST and light niced subagent tests did): median turn 2.13 / 2.19 / 2.36 s by split, p90 3.5 to 4.1 s, max 20 to 22 s (long retry episodes); about 190 prompt tok/s and 53 generation tok/s.
+- **What this does and does not say.** The 100-task dev parity (96 to 97 against 97) could not see a 1 to 2 pp gap; 900 tasks can. This row measures the whole browser stack (Q5_K_M weights, a different llama.cpp build, KV q8_0 cache, WebGPU kernels), not the quantisation alone, so it does not say which part costs the points. It changes no Phase 1 result or conclusion; M3 Q8_0 stays the headline. It also measures the Python harness loop driving the browser model, not the app's own JS loop (the JS loop ends a job on the first passing run; the Python one waits for `finish`).
+- **Your decision (not mine).** Accept about 1.3 pp of success for a 444 MB download (against 639 MB for Q8_0), or look for a cheaper loss: candidates measured only on dev so far are Q6_K in the browser (98/100 on the dev sample, but 495 MB + 10.8 MB runtime = 505.9 MB, 6 MB over the approximate 500 MB limit) and an f16 KV cache (96 against 97 on dev: no evidence either way). Any new test-split run is a new system with its own lock and needs your approval; nothing was rerun.
 
 ## 2. iGPU simulation and CPU path under budget limits: PENDING
 Simulation (labelled "Intel UHD, simulated budget limits"; a real budget-laptop run stays on the launch checklist): only the Intel Vulkan driver visible, adapter asserted Intel, 4 physical cores, 7 GB hard cap. Pass criteria: >= 95/100 parity, <= 5 s median turn, responsive tab. Results in `reports/2026-11-23-igpu-sim/` (parity, F4 coexistence, load times, then the CPU path under the same limits). Note: with only the Intel driver visible every power preference picks Intel, so the "low-power vs default" answer comes from the dual-GPU `env.json` files (`byPreference`) of the dry run and the test row.

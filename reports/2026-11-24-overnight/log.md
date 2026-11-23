@@ -18,3 +18,18 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 02:06 IST: test-iid at 151/500; APP_FLOW.md written. Remaining light items skipped on purpose to save usage: copy rewrites (pages already carry owner-review copy) and new unit tests (no vitest while the row runs).
 - 02:36 IST: test-iid 387/500 (375 pass, 0 errors), watchdog alive, 4.3 GB free, no STOP flag; row ETA about 03:45; post.sh waiting. Light work done earlier; nothing new started (saving usage).
 - 03:17 IST: test-iid DONE 483/500 pass, 0 errors; test-phrasing 171/200 (156 pass, 0 errors); compositional next; watchdog alive, no STOP flag, 3.9 GB free; ETA row end about 03:50; post.sh waiting.
+- 03:49 IST (post.sh): test row finished (3 manifests); starting the queue
+- 03:49 IST (post.sh): start: row analysis
+- 03:49 IST (post.sh): ok: row analysis
+- 03:49 IST (post.sh): start: ff main to integration
+- 03:49 IST (post.sh): ok: ff main to integration
+- 03:49 IST (post.sh): start: pnpm install
+- 03:50 IST (post.sh): ok: pnpm install
+- 03:50 IST (post.sh): start: pnpm build
+- 03:50 IST (post.sh): ok: pnpm build
+- 03:50 IST (post.sh): start: pnpm size
+- 03:50 IST (post.sh): FAILED(1): pnpm size
+- 03:50 IST (post.sh): skipped (an earlier app gate failed): build tests
+- 03:50 IST (post.sh): skipped (an earlier app gate failed): e2e (scripted model, real ffmpeg.wasm)
+- 03:50 IST (post.sh): start: real-model smoke of /app
+- 03:50 IST: TEST ROW DONE 855/900 (95.0%) vs M3 Q8_0 867/900; pooled diff -1.33 pp [-2.67,-0.11]; GUARD NOT SHOWN (lower bound -2.67 vs -2.0); loss concentrated in test-phrasing (-3.5 pp). Analysis written (reports/2026-11-23-phase-1-browser-row/report). post.sh running the app chain (ff main done). MORNING_REPORT section 1 filled.

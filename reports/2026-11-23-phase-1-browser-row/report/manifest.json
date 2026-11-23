@@ -1,0 +1,42 @@
+{
+  "report_commit": "4d9cf365abafb8cc7fb1295220cdae293e2b6f95",
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261115
+  },
+  "runs": {
+    "test-iid": {
+      "checkpoint": "grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192",
+      "ffwd_commit": "7ed1ac4041c71dced21e7b8cc20e8edcbfcc54a3",
+      "ffwd_web_commit": "0c61afea2c92f5ed19057c22c5a47eefbf6d3bf9",
+      "nvidia": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 615.78.08",
+      "kernel": "7.2.9-2-cachyos",
+      "tasks_sha256": "bd01e887c032921949e1eb6f373fd41164e72ac6b956424ed0a55e7bd1f83470",
+      "n_tasks": 500,
+      "started": "2026-11-23T20:16:31.035764+00:00",
+      "finished": "2026-11-23T21:22:16.858744+00:00"
+    },
+    "test-phrasing": {
+      "checkpoint": "grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192",
+      "ffwd_commit": "c20ef62b0b75015b962846cbe6c75f89d6530b4e",
+      "ffwd_web_commit": "0c61afea2c92f5ed19057c22c5a47eefbf6d3bf9",
+      "nvidia": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 615.78.08",
+      "kernel": "7.2.9-2-cachyos",
+      "tasks_sha256": "86188225ded5abb8749690e465a7079c6900272ede113e3c10e3d7ee6748212e",
+      "n_tasks": 200,
+      "started": "2026-11-23T21:22:22.114372+00:00",
+      "finished": "2026-11-23T21:51:26.815130+00:00"
+    },
+    "test-compositional": {
+      "checkpoint": "grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192",
+      "ffwd_commit": "4d9cf365abafb8cc7fb1295220cdae293e2b6f95",
+      "ffwd_web_commit": "0c61afea2c92f5ed19057c22c5a47eefbf6d3bf9",
+      "nvidia": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 615.78.08",
+      "kernel": "7.2.9-2-cachyos",
+      "tasks_sha256": "19f599f1c570a19f7d41925dc4e1fa0232e3118f7defaadb71ef4faa50f17c9e",
+      "n_tasks": 200,
+      "started": "2026-11-23T21:51:31.939346+00:00",
+      "finished": "2026-11-23T22:19:16.298944+00:00"
+    }
+  }
+}

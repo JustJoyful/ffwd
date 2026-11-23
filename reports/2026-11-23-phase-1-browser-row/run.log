@@ -1,0 +1,12 @@
+2026-11-23T18:21:46+00:00 start dry=True checkpoint=grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192
+2026-11-23T18:21:49+00:00 run M3-browser-dev (100 tasks)
+2026-11-23T18:36:44+00:00 done M3-browser-dev
+2026-11-23T18:36:44+00:00 all splits finished
+2026-11-23T20:16:27+00:00 start dry=False checkpoint=grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192
+2026-11-23T20:16:30+00:00 run M3-browser-test-iid (500 tasks)
+2026-11-23T21:22:17+00:00 done M3-browser-test-iid
+2026-11-23T21:22:21+00:00 run M3-browser-test-phrasing (200 tasks)
+2026-11-23T21:51:27+00:00 done M3-browser-test-phrasing
+2026-11-23T21:51:31+00:00 run M3-browser-test-compositional (200 tasks)
+2026-11-23T22:19:16+00:00 done M3-browser-test-compositional
+2026-11-23T22:19:16+00:00 all splits finished

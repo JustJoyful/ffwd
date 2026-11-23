@@ -20,3 +20,4 @@ spikes/browser/playwright-report/
 
 # source videos and extracted archives: never in git (only data/corpus/manifest.json is tracked)
 videos/
+reports/**/.profile/
