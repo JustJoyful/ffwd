@@ -1,0 +1,71 @@
+{
+  "url": "https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q5_K_M.gguf",
+  "cors": {
+    "status": 206,
+    "type": "cors",
+    "bytes": 1024,
+    "contentRange": "bytes 0-1023/444415680",
+    "acceptRanges": "bytes"
+  },
+  "chromium": "159.0.8154.6",
+  "wllama": "4.0.0",
+  "COEP": "credentialless",
+  "runs": [
+    {
+      "connections": 4,
+      "load_ms": 49715.82500000298,
+      "bytes": 444415680,
+      "MB_per_s": 8.939119083309457,
+      "n_vocab": 151936,
+      "server": {
+        "requests": 18,
+        "ranged": 0,
+        "inflight": 0,
+        "peakInflight": 4,
+        "bytes": 11072458
+      }
+    },
+    {
+      "connections": 1,
+      "load_ms": 50616.02000001073,
+      "bytes": 444415680,
+      "MB_per_s": 8.780138778195239,
+      "n_vocab": 151936,
+      "server": {
+        "requests": 1,
+        "ranged": 0,
+        "inflight": 0,
+        "peakInflight": 1,
+        "bytes": 10838652
+      }
+    },
+    {
+      "connections": 8,
+      "load_ms": 48699.47500000894,
+      "bytes": 444415680,
+      "MB_per_s": 9.125677022183883,
+      "n_vocab": 151936,
+      "server": {
+        "requests": 1,
+        "ranged": 0,
+        "inflight": 0,
+        "peakInflight": 1,
+        "bytes": 10838652
+      }
+    },
+    {
+      "connections": 4,
+      "load_ms": 49708.739999994636,
+      "bytes": 444415680,
+      "MB_per_s": 8.940393178343445,
+      "n_vocab": 151936,
+      "server": {
+        "requests": 1,
+        "ranged": 0,
+        "inflight": 0,
+        "peakInflight": 1,
+        "bytes": 10838652
+      }
+    }
+  ]
+}

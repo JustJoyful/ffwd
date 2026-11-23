@@ -1,0 +1,121 @@
+{
+  "mode": "cpu",
+  "model": "grpo-m3-ckpt60-q5_k_m.gguf",
+  "n_ctx": 8192,
+  "kv_cache": {
+    "k": "f16",
+    "v": "f16",
+    "flash_attn": "default"
+  },
+  "chromium": "159.0.8154.6",
+  "chromium_args": [],
+  "playwright": "1.65.1",
+  "wllama": "4.0.0",
+  "env": {
+    "crossOriginIsolated": true,
+    "sharedArrayBuffer": true,
+    "hardwareConcurrency": 12,
+    "deviceMemoryGb": 16,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+    "gpu": {
+      "present": true,
+      "adapter": null
+    },
+    "libllama": "b12637-0b51bb2"
+  },
+  "load": {
+    "load_ms": 1706.2999999970198,
+    "downloaded_bytes": 444411456,
+    "total_bytes": 444411456,
+    "multithread": true,
+    "threads": 6,
+    "n_ctx": 8192,
+    "n_batch": 2048,
+    "n_vocab": 151936,
+    "eos": 151645,
+    "eot": 151643,
+    "eog": [
+      128247,
+      151643,
+      151645,
+      151662,
+      151663,
+      151664
+    ],
+    "storage_usage_bytes": 444412303
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "mem_total_kb": "16068456"
+  },
+  "runtime_log_gpu_lines": [
+    "l: ggml_webgpu: Failed to get an adapter: WebGPU not available on this browser (requestAdapter returned null)",
+    "d: load_tensors: offloading 0 repeating layers to GPU",
+    "d: load_tensors: offloaded 0/29 layers to GPU",
+    "d: load_tensors:          CPU model buffer size =   418.15 MiB",
+    "d: llama_context:        CPU  output buffer size =     2.32 MiB",
+    "d: llama_kv_cache:        CPU KV buffer size =   896.00 MiB",
+    "d: llama_kv_cache: size =  896.00 MiB (  8192 cells,  28 layers,  4/1 seqs), K (f16):  448.00 MiB, V (f16):  448.00 MiB",
+    "d: sched_reserve:        CPU compute buffer size =    36.14 MiB"
+  ],
+  "phases": {
+    "idle": {
+      "ticks": 60,
+      "max_stall_ms": 0.4050000011920929,
+      "p99_gap_ms": 50.40500000119209,
+      "long_tasks": 0,
+      "long_task_max_ms": 0
+    },
+    "model_alone": {
+      "hb": {
+        "ticks": 1363,
+        "max_stall_ms": 2.8099999874830246,
+        "p99_gap_ms": 50.32500000298023,
+        "long_tasks": 0,
+        "long_task_max_ms": 0
+      },
+      "completions": 6,
+      "gen_tok_s": 20.554799079253662,
+      "pp_tok_s": 76.77755822524205,
+      "mean_wall_ms": 11364.075833333036
+    },
+    "ffmpeg_alone": {
+      "hb": {
+        "ticks": 418,
+        "max_stall_ms": 0.6650000065565109,
+        "p99_gap_ms": 50.145000010728836,
+        "long_tasks": 0,
+        "long_task_max_ms": 0
+      },
+      "exec_ms": 20896.114999994636,
+      "code": 0,
+      "timed_out": false,
+      "out_bytes": 21463875,
+      "log_tail": ".4: 100.0%  0.0%  0.0%\nmb P  I16..4:  2.0%  0.0%  0.0%  P16..4: 14.0%  0.0%  0.0%  0.0%  0.0%    skip:84.0%\ncoded y,uvDC,uvAC intra: 14.6% 33.9% 25.7% inter: 8.1% 12.7% 11.1%\ni16 v,h,dc,p: 78% 15%  7%  0%\ni8c dc,h,v,p: 41% 18% 41%  1%\nkb/s:2726.46\nStatistics: 101297982 bytes read, 2 seeks\nAborted()\n"
+    },
+    "together": {
+      "hb": {
+        "ticks": 607,
+        "max_stall_ms": 3.969999998807907,
+        "p99_gap_ms": 51.23499999940395,
+        "long_tasks": 0,
+        "long_task_max_ms": 0
+      },
+      "ffmpeg": {
+        "exec_ms": 29344.95000000298,
+        "code": 0,
+        "timed_out": false,
+        "out_bytes": 21463875,
+        "log_tail": ".4: 100.0%  0.0%  0.0%\nmb P  I16..4:  2.0%  0.0%  0.0%  P16..4: 14.0%  0.0%  0.0%  0.0%  0.0%    skip:84.0%\ncoded y,uvDC,uvAC intra: 14.6% 33.9% 25.7% inter: 8.1% 12.7% 11.1%\ni16 v,h,dc,p: 78% 15%  7%  0%\ni8c dc,h,v,p: 41% 18% 41%  1%\nkb/s:2726.46\nStatistics: 101297982 bytes read, 2 seeks\nAborted()\n",
+        "t_end": 123666.46500000358
+      },
+      "overlap_s": 29.351829999998213,
+      "completions_total": 3,
+      "completions_inside": 2,
+      "gen_tok_s": 18.089046042501117,
+      "pp_tok_s": 64.86458878659805
+    }
+  },
+  "job": "f4Scale480",
+  "clip": "h264_100mb_60s.mp4"
+}

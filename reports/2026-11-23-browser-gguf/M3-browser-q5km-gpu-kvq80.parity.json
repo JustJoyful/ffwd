@@ -1,0 +1,123 @@
+{
+  "name": "M3-browser-q5km-gpu-kvq80",
+  "quant": "Q5_K_M",
+  "mode": "gpu",
+  "this": {
+    "k": 97,
+    "invalid": 0,
+    "runs": 1.1428571428571428,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "latency": {
+    "turns": 307,
+    "wall_ms": {
+      "median": 2292.1299999952316,
+      "p90": 4063.669999986887,
+      "p99": 9025.539999991655,
+      "max": 13997.765000000596,
+      "mean": 2617.2986319217016
+    },
+    "prompt_tok_s": 190.16216266628592,
+    "gen_tok_s": 52.85760070577386,
+    "prompt_tokens_processed": 42411,
+    "prompt_tokens_cached": 460446,
+    "generated_tokens": 30577,
+    "max_prompt_tokens": 4432,
+    "max_total_tokens": 4588,
+    "first_turn_wall_ms_median": 3758.22500000149,
+    "finish_reasons": {
+      "stop": 307
+    }
+  },
+  "taxonomy": {
+    "M3-browser-q5km-gpu-kvq80": {
+      "turns": 307,
+      "by_label": {
+        "ok": 290,
+        "check_failed": 6,
+        "run_failed": 11
+      },
+      "failed_episodes_first_problem": {
+        "run_failed": 2,
+        "check_failed": 1
+      },
+      "offending_options": []
+    }
+  },
+  "vs_native_same_quant": {
+    "ref_run": "reports/2026-11-23-m3-q5km-parity/M3-q5km",
+    "ref": {
+      "k": 97,
+      "invalid": 0,
+      "runs": 1.1428571428571428,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 1.0,
+      "a": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "b": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "only_a_passes": 0,
+      "only_b_passes": 0,
+      "mcnemar_p": 1.0,
+      "b_minus_a": {
+        "diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "first_turn_identical": 0.83,
+      "transcript_identical": 0.47
+    }
+  },
+  "vs_native_Q8_0": {
+    "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+    "ref": {
+      "k": 97,
+      "invalid": 0,
+      "runs": 1.1326530612244898,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.98,
+      "a": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "b": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "only_a_passes": 1,
+      "only_b_passes": 1,
+      "mcnemar_p": 1.0,
+      "b_minus_a": {
+        "diff": 0.0,
+        "ci95": [
+          -0.03,
+          0.03
+        ]
+      },
+      "first_turn_identical": 0.52,
+      "transcript_identical": 0.1
+    }
+  }
+}

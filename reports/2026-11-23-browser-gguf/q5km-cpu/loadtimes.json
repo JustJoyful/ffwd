@@ -1,0 +1,105 @@
+{
+  "mode": "cpu",
+  "model": "grpo-m3-ckpt60-q5_k_m.gguf",
+  "n_ctx": 8192,
+  "kv_cache": {
+    "k": "f16",
+    "v": "f16",
+    "flash_attn": "default"
+  },
+  "chromium": "159.0.8154.6",
+  "chromium_args": [],
+  "playwright": "1.65.1",
+  "wllama": "4.0.0",
+  "env": {
+    "crossOriginIsolated": true,
+    "sharedArrayBuffer": true,
+    "hardwareConcurrency": 12,
+    "deviceMemoryGb": 16,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+    "gpu": {
+      "present": true,
+      "adapter": null
+    },
+    "libllama": "b12637-0b51bb2"
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "mem_total_kb": "16068456"
+  },
+  "runtime_log_gpu_lines": [
+    "l: ggml_webgpu: Failed to get an adapter: WebGPU not available on this browser (requestAdapter returned null)",
+    "d: load_tensors: offloading 0 repeating layers to GPU",
+    "d: load_tensors: offloaded 0/29 layers to GPU",
+    "d: load_tensors:          CPU model buffer size =   418.15 MiB",
+    "d: llama_context:        CPU  output buffer size =     2.32 MiB",
+    "d: llama_kv_cache:        CPU KV buffer size =   896.00 MiB",
+    "d: llama_kv_cache: size =  896.00 MiB (  8192 cells,  28 layers,  4/1 seqs), K (f16):  448.00 MiB, V (f16):  448.00 MiB",
+    "d: sched_reserve:        CPU compute buffer size =    36.14 MiB"
+  ],
+  "times": {
+    "cold": {
+      "load_ms": 1359.8299999982119,
+      "downloaded_bytes": 444411456,
+      "total_bytes": 444411456,
+      "multithread": true,
+      "threads": 6,
+      "n_ctx": 8192,
+      "n_batch": 2048,
+      "n_vocab": 151936,
+      "eos": 151645,
+      "eot": 151643,
+      "eog": [
+        128247,
+        151643,
+        151645,
+        151662,
+        151663,
+        151664
+      ],
+      "storage_usage_bytes": 444412303
+    },
+    "warm_same_browser": {
+      "load_ms": 652.0099999904633,
+      "downloaded_bytes": 444411456,
+      "total_bytes": 444411456,
+      "multithread": true,
+      "threads": 6,
+      "n_ctx": 8192,
+      "n_batch": 2048,
+      "n_vocab": 151936,
+      "eos": 151645,
+      "eot": 151643,
+      "eog": [
+        128247,
+        151643,
+        151645,
+        151662,
+        151663,
+        151664
+      ],
+      "storage_usage_bytes": 444412303
+    },
+    "warm_after_restart": {
+      "load_ms": 840.8400000035763,
+      "downloaded_bytes": 444411456,
+      "total_bytes": 444411456,
+      "multithread": true,
+      "threads": 6,
+      "n_ctx": 8192,
+      "n_batch": 2048,
+      "n_vocab": 151936,
+      "eos": 151645,
+      "eot": 151643,
+      "eog": [
+        128247,
+        151643,
+        151645,
+        151662,
+        151663,
+        151664
+      ],
+      "storage_usage_bytes": 740
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "name": "M3-browser-q6k-gpu",
+  "quant": "Q6_K",
+  "mode": "gpu",
+  "this": {
+    "k": 98,
+    "invalid": 0,
+    "runs": 1.1122448979591837,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "latency": {
+    "turns": 305,
+    "wall_ms": {
+      "median": 2103.145000010729,
+      "p90": 3786.9599999934435,
+      "p99": 6044.085000008345,
+      "max": 13170.065000012517,
+      "mean": 2410.8752622950274
+    },
+    "prompt_tok_s": 207.86688720927796,
+    "gen_tok_s": 54.739405962204465,
+    "prompt_tokens_processed": 39578,
+    "prompt_tokens_cached": 452687,
+    "generated_tokens": 29716,
+    "max_prompt_tokens": 4458,
+    "max_total_tokens": 4668,
+    "first_turn_wall_ms_median": 3509.032499998808,
+    "finish_reasons": {
+      "stop": 305
+    }
+  },
+  "taxonomy": {
+    "M3-browser-q6k-gpu": {
+      "turns": 305,
+      "by_label": {
+        "ok": 292,
+        "check_failed": 6,
+        "rejected:other": 4,
+        "run_failed": 3
+      },
+      "failed_episodes_first_problem": {
+        "rejected:other": 1,
+        "check_failed": 1
+      },
+      "offending_options": []
+    }
+  },
+  "vs_native_same_quant": {
+    "ref_run": "reports/2026-11-23-m3-q6k-parity/M3-q6k",
+    "ref": {
+      "k": 99,
+      "invalid": 0,
+      "runs": 1.0816326530612246,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.99,
+      "a": [
+        0.99,
+        0.9455138038212947,
+        0.9982325679358592
+      ],
+      "b": [
+        0.98,
+        0.929988209271456,
+        0.9944980324498376
+      ],
+      "only_a_passes": 1,
+      "only_b_passes": 0,
+      "mcnemar_p": 1.0,
+      "b_minus_a": {
+        "diff": -0.01,
+        "ci95": [
+          -0.03,
+          0.0
+        ]
+      },
+      "first_turn_identical": 0.93,
+      "transcript_identical": 0.72
+    }
+  },
+  "vs_native_Q8_0": {
+    "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+    "ref": {
+      "k": 97,
+      "invalid": 0,
+      "runs": 1.1326530612244898,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.99,
+      "a": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "b": [
+        0.98,
+        0.929988209271456,
+        0.9944980324498376
+      ],
+      "only_a_passes": 0,
+      "only_b_passes": 1,
+      "mcnemar_p": 1.0,
+      "b_minus_a": {
+        "diff": 0.01,
+        "ci95": [
+          0.0,
+          0.03
+        ]
+      },
+      "first_turn_identical": 0.63,
+      "transcript_identical": 0.21
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "name": "M3-browser-q5km-cpu",
+  "quant": "Q5_K_M",
+  "mode": "cpu",
+  "this": {
+    "k": 95,
+    "invalid": 0,
+    "runs": 1.183673469387755,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "latency": {
+    "turns": 309,
+    "wall_ms": {
+      "median": 6833.8349999934435,
+      "p90": 11587.409999996424,
+      "p99": 30728.880000010133,
+      "max": 63692.935000002384,
+      "mean": 8212.531715210347
+    },
+    "prompt_tok_s": 55.44829277313676,
+    "gen_tok_s": 17.395342796460543,
+    "prompt_tokens_processed": 42621,
+    "prompt_tokens_cached": 464020,
+    "generated_tokens": 30746,
+    "max_prompt_tokens": 4432,
+    "max_total_tokens": 4583,
+    "first_turn_wall_ms_median": 10330.967499993742,
+    "finish_reasons": {
+      "stop": 309
+    }
+  },
+  "taxonomy": {
+    "M3-browser-q5km-cpu": {
+      "turns": 309,
+      "by_label": {
+        "ok": 286,
+        "check_failed": 12,
+        "run_failed": 11
+      },
+      "failed_episodes_first_problem": {
+        "run_failed": 2,
+        "check_failed": 3
+      },
+      "offending_options": []
+    }
+  },
+  "vs_native_same_quant": {
+    "ref_run": "reports/2026-11-23-m3-q5km-parity/M3-q5km",
+    "ref": {
+      "k": 97,
+      "invalid": 0,
+      "runs": 1.1428571428571428,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.98,
+      "a": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "b": [
+        0.95,
+        0.8882495307680808,
+        0.9784563208456319
+      ],
+      "only_a_passes": 2,
+      "only_b_passes": 0,
+      "mcnemar_p": 0.5,
+      "b_minus_a": {
+        "diff": -0.02,
+        "ci95": [
+          -0.05,
+          0.0
+        ]
+      },
+      "first_turn_identical": 0.74,
+      "transcript_identical": 0.31
+    }
+  },
+  "vs_native_Q8_0": {
+    "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+    "ref": {
+      "k": 97,
+      "invalid": 0,
+      "runs": 1.1326530612244898,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.98,
+      "a": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "b": [
+        0.95,
+        0.8882495307680808,
+        0.9784563208456319
+      ],
+      "only_a_passes": 2,
+      "only_b_passes": 0,
+      "mcnemar_p": 0.5,
+      "b_minus_a": {
+        "diff": -0.02,
+        "ci95": [
+          -0.05,
+          0.0
+        ]
+      },
+      "first_turn_identical": 0.47,
+      "transcript_identical": 0.07
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-23",
+  "purpose": "GGUF in the browser (wllama) vs the pass criteria of CRITERIA.md",
+  "ffwd_commit": "52a748c3c5483b598850ed19189c21045d4f785f",
+  "ffwd_web_commit": "c2fe88655fcc7b4b4a18e031f621e86071e40c03",
+  "ffwd_web_dirty": false,
+  "sample": {
+    "tasks": 100,
+    "seed": 20261115,
+    "split": "dev (eval.hf_parity.sample_ids)"
+  },
+  "decoding": {
+    "temperature": 0,
+    "max_tokens": 512,
+    "n_ctx": 8192,
+    "system_prompt": "system-v1.txt"
+  },
+  "ggufs": {
+    "Q4_K_M": {
+      "file": "grpo-m3-ckpt60-q4_k_m.gguf",
+      "bytes": 396701248,
+      "sha256": "f0f5226a6f0715f85781bc474cf3ca2b3db043e3b33e03f1871c9dd730eda817"
+    },
+    "Q5_K_M": {
+      "file": "grpo-m3-ckpt60-q5_k_m.gguf",
+      "bytes": 444411456,
+      "sha256": "bbf439b749c02c04b5227ab93fb1430263a7c567c15552b6e12ae3836cde1e11"
+    },
+    "Q6_K": {
+      "file": "grpo-m3-ckpt60-q6_k.gguf",
+      "bytes": 495103552,
+      "sha256": "07bfe6be1532f8dfa61866f57ae7ddb49f9c83d021ceb7a7aeb9d26d9400ec92"
+    },
+    "Q8_0": {
+      "file": "grpo-m3-ckpt60-q8_0.gguf",
+      "bytes": 639443520,
+      "sha256": "0fa2333c66e4b8697465e5753f4ef4b8ada40ee3f77a234659afb223e382e1b1"
+    }
+  },
+  "wllama": {
+    "version": "4.0.0",
+    "libllama": "b12637-0b51bb2",
+    "wasm_bytes": 10838652,
+    "wasm_sha256": "b012436a101ede8c877f2d26644c3181429d4fb8da4fd90c356110d86bfd74a6"
+  },
+  "native_reference": {
+    "llama_cpp": "b12032"
+  },
+  "browser": {
+    "chromium": "159.0.8154.6 (Playwright 1.65.1, headless new)",
+    "flags_gpu": [
+      "--enable-unsafe-webgpu",
+      "--enable-features=Vulkan",
+      "--use-angle=vulkan"
+    ],
+    "flags_cpu": []
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel i5-12450HX (12 threads)",
+    "ram": "16 GB",
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop",
+    "os": "Linux 7.2.9 (CachyOS)"
+  },
+  "chat_template_fixture": {
+    "file": "packages/protocol/conformance/chat-template-tokens.json",
+    "cases": 14
+  },
+  "cost_usd": 0.0,
+  "test_split_used": false,
+  "note": "ffwd_commit is the commit the report was written on; the spike code (eval/browser_parity.py etc.) is in the commit that adds this report"
+}

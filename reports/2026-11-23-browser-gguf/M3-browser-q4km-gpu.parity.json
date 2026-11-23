@@ -1,0 +1,146 @@
+{
+  "name": "M3-browser-q4km-gpu",
+  "quant": "Q4_K_M",
+  "mode": "gpu",
+  "this": {
+    "k": 62,
+    "invalid": 12,
+    "runs": 1.8061224489795917,
+    "n_graded": 98,
+    "nof": 0.38461538461538464,
+    "n_copy_eligible": 13
+  },
+  "latency": {
+    "turns": 418,
+    "wall_ms": {
+      "median": 2316.390000000596,
+      "p90": 4143.109999999404,
+      "p99": 8327.120000004768,
+      "max": 10473.739999994636,
+      "mean": 2679.6260406699334
+    },
+    "prompt_tok_s": 184.74647366212298,
+    "gen_tok_s": 55.101578049984326,
+    "prompt_tokens_processed": 62163,
+    "prompt_tokens_cached": 704223,
+    "generated_tokens": 42733,
+    "max_prompt_tokens": 4496,
+    "max_total_tokens": 4639,
+    "first_turn_wall_ms_median": 3331.5575000047684,
+    "finish_reasons": {
+      "stop": 418
+    }
+  },
+  "taxonomy": {
+    "M3-browser-q4km-gpu": {
+      "turns": 418,
+      "by_label": {
+        "ok": 213,
+        "rejected:option": 4,
+        "rejected:-y": 5,
+        "run_failed": 37,
+        "malformed_json": 13,
+        "schema_invalid": 35,
+        "run_before_spec": 40,
+        "check_failed": 51,
+        "rejected:other": 20
+      },
+      "failed_episodes_first_problem": {
+        "rejected:option": 1,
+        "schema_invalid": 8,
+        "check_failed": 11,
+        "rejected:other": 6,
+        "malformed_json": 3,
+        "run_failed": 9
+      },
+      "offending_options": [
+        [
+          "-y",
+          5
+        ],
+        [
+          "-xmp",
+          3
+        ],
+        [
+          "-xvercode",
+          1
+        ]
+      ]
+    }
+  },
+  "vs_native_same_quant": {
+    "ref_run": "reports/2026-11-22-m3-q4km-parity/M3-q4km",
+    "ref": {
+      "k": 60,
+      "invalid": 12,
+      "runs": 1.8673469387755102,
+      "n_graded": 98,
+      "nof": 0.38461538461538464,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.94,
+      "a": [
+        0.6,
+        0.5020025867910618,
+        0.6905987135675411
+      ],
+      "b": [
+        0.62,
+        0.5220975529551108,
+        0.7090240074752125
+      ],
+      "only_a_passes": 2,
+      "only_b_passes": 4,
+      "mcnemar_p": 0.6875,
+      "b_minus_a": {
+        "diff": 0.02,
+        "ci95": [
+          -0.03,
+          0.07
+        ]
+      },
+      "first_turn_identical": 0.85,
+      "transcript_identical": 0.51
+    }
+  },
+  "vs_native_Q8_0": {
+    "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+    "ref": {
+      "k": 97,
+      "invalid": 0,
+      "runs": 1.1326530612244898,
+      "n_graded": 98,
+      "nof": 0.0,
+      "n_copy_eligible": 13
+    },
+    "parity": {
+      "n": 100,
+      "agreement": 0.65,
+      "a": [
+        0.97,
+        0.9154806357094724,
+        0.9897454759759611
+      ],
+      "b": [
+        0.62,
+        0.5220975529551108,
+        0.7090240074752125
+      ],
+      "only_a_passes": 35,
+      "only_b_passes": 0,
+      "mcnemar_p": 5.820766091346741e-11,
+      "b_minus_a": {
+        "diff": -0.35,
+        "ci95": [
+          -0.45,
+          -0.26
+        ]
+      },
+      "first_turn_identical": 0.28,
+      "transcript_identical": 0.02
+    }
+  }
+}

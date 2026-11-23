@@ -1,0 +1,27 @@
+{
+  "url": "http://127.0.0.1:4333/model/m3-q5km-00001-of-00006.gguf",
+  "cors": null,
+  "chromium": "159.0.8154.6",
+  "wllama": "4.0.0",
+  "COEP": "credentialless",
+  "runs": [
+    {
+      "connections": 4,
+      "load_ms": 1914.8499999940395,
+      "bytes": 444412192,
+      "MB_per_s": 232.08720892048115,
+      "n_vocab": 151936,
+      "server": {
+        "requests": 30,
+        "ranged": 6,
+        "inflight": 0,
+        "peakInflight": 4,
+        "bytes": 455484650
+      },
+      "tokcheck": {
+        "checked": 14,
+        "bad": []
+      }
+    }
+  ]
+}
