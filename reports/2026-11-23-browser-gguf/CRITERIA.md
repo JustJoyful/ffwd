@@ -1,0 +1,20 @@
+# Browser GGUF spike: pass criteria, fixed before any measurement (23 Nov 2026, 20:55 IST)
+
+Owner decision (option B, 23 Nov 2026): run our GGUF in the browser with llama.cpp (wllama). The numbers in the owner's list are copied below; the lines marked **(my operational definition)** are how I read an under-specified word, written down before measuring so they cannot drift to fit the result. The owner may change them; any change is dated and shown next to the original.
+
+Candidate: **M3 (GRPO checkpoint-60) GGUF Q5_K_M**. Q4_K_M and Q6_K are measured for the size/accuracy curve. The verdict is stated for Q5_K_M; if Q5_K_M fails and another quant passes, that is reported as a separate line and the owner decides (I do not swap the candidate silently).
+
+| # | Criterion | Pass if | How it is measured |
+|---|---|---|---|
+| C1 | Dev parity | >= 95/100 successes on the SAME seeded 100 dev tasks as the MLC and GGUF parity runs (`eval.hf_parity.sample_ids`, seed 20261115) | the unchanged Python harness and checker; only the model call goes to the browser (see below) |
+| C2 | Turn latency | median <= 5 s per agent turn on the owner's laptop | **(my operational definition)** one turn = wall clock from the prompt text being handed to the runtime until the final reply token, over every model turn of the 100 episodes, including prompt processing of the whole history (the runtime's own prompt-prefix reuse stays on, as the product would have it). Median is the criterion; p90 and max are reported. Prompt-processing tok/s and generation tok/s are reported separately. |
+| C3 | Download | <= ~500 MB | **(my operational definition)** the model file in bytes (limit 500,000,000) plus the runtime wasm, both reported; the verdict uses model + wasm |
+| C4 | Load times | reported only (no threshold set by the owner) | cold = empty cache, model fetched and loaded; warm = cached model, fresh page. Cold is fetched from localhost, so it excludes real network time; the report says so and gives download time only as bytes/bandwidth arithmetic, labelled as an estimate |
+| C5 | Coexistence | the tab stays responsive, both slowdowns reported | one F4 re-encode (`f4Scale480` from `packages/protocol/conformance/bench-jobs.json`) in ffmpeg.wasm (core-mt, the version the site uses) running while the model generates. **(my operational definition)** responsive = the longest main-thread stall during the overlap is <= 200 ms (the "good" interaction threshold of Core Web Vitals), measured by a 50 ms heartbeat on the main thread plus the Long Tasks observer. Slowdown = time (or tok/s) alone divided by together, for the model and for ffmpeg separately. |
+| C6 | Real accelerated paths | asserted, not assumed | WebGPU run: adapter is not a fallback/software adapter (`isFallbackAdapter` false, architecture not swiftshader/llvmpipe). CPU/WASM run: `crossOriginIsolated` true, `SharedArrayBuffer` present, wllama reports multi-thread, thread count recorded. Hardware, browser build and launch flags are written into the manifest. Any run failing its assertion is discarded, not reported. |
+
+**Which runtime path counts.** wllama has a WebGPU backend and a CPU/WASM-SIMD backend. Both are measured on the same laptop. The verdict for C1 and C2 is stated for each path. The product path is WebGPU where available, CPU/WASM otherwise, so both matter; if they disagree (for example WebGPU passes C2 and CPU fails it) that is reported as it is, not averaged.
+
+**What is deliberately fixed.** Greedy decoding, 512 new tokens, stop at `<|im_end|>`, `n_ctx` 8192 (as the llama-server runs), the system prompt `system-v1.txt`, the same run budget, `require_spec`, `stop_after_ask`. The browser sees plain text only: the prompt string is built by our own JS port of `training/env/chat_template.py`, never by the runtime's chat template. No test split, no checker change.
+
+**Not decided by this file.** Which quant ships, whether a QAT plan is started. If any criterion fails the next critical-path item is the QAT plan (written, not started).
