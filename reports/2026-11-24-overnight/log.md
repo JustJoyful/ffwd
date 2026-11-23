@@ -33,3 +33,6 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 03:50 IST (post.sh): skipped (an earlier app gate failed): e2e (scripted model, real ffmpeg.wasm)
 - 03:50 IST (post.sh): start: real-model smoke of /app
 - 03:50 IST: TEST ROW DONE 855/900 (95.0%) vs M3 Q8_0 867/900; pooled diff -1.33 pp [-2.67,-0.11]; GUARD NOT SHOWN (lower bound -2.67 vs -2.0); loss concentrated in test-phrasing (-3.5 pp). Analysis written (reports/2026-11-23-phase-1-browser-row/report). post.sh running the app chain (ff main done). MORNING_REPORT section 1 filled.
+- 03:51 IST (post.sh): FAILED(1): real-model smoke of /app
+- 03:51 IST (post.sh): start: iGPU parity (100 dev tasks)
+- 03:56 IST: post.sh ran: analysis ok, ff main ok, build ok, size FAILED (home 117.45 ok; chore page 121.06 > 120, D asked to cut 1.06+ kB), build tests/e2e skipped by my gate, smoke ran (flow works end to end incl. real model plan; 2 script bugs, fixed on integration 92fbdd8). iGPU parity RUNNING on Intel gen-12lp (4 threads, 7 GB). post2.sh queued (waits for ALLDONE): ff main, build, size, build tests, e2e, smoke rerun. Push fixed (a 424 MB browser profile had been committed by mistake: removed, .gitignore rule added).

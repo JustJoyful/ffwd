@@ -1,0 +1,69 @@
+{
+  "app": "http://localhost:4177",
+  "steps": [
+    {
+      "name": "open /app",
+      "ok": true,
+      "detail": {
+        "crossOriginIsolated": true,
+        "webgpu": true
+      },
+      "seconds": 1.046
+    },
+    {
+      "name": "choose a video",
+      "ok": true,
+      "detail": {
+        "modelNotice": "The model runs on your graphics chip."
+      },
+      "seconds": 0.049
+    },
+    {
+      "name": "model asks before downloading",
+      "ok": true,
+      "detail": null,
+      "seconds": 0.003
+    },
+    {
+      "name": "consent and download starts",
+      "ok": false,
+      "error": "locator.getAttribute: Timeout 30000ms exceeded.",
+      "seconds": 31.585
+    },
+    {
+      "name": "model downloaded, checked and started",
+      "ok": true,
+      "detail": {
+        "loadSeconds": 0.009
+      },
+      "seconds": 0.009
+    },
+    {
+      "name": "type a request and make a plan",
+      "ok": true,
+      "detail": {
+        "plan": "Keep\n0:02 to 0:06\nLength\n0:04\nTurn\nnone\nFormat\nMP4 that plays widely\nSound\nAAC\nPicture\n640 × 360\nRun it\nChange"
+      },
+      "seconds": 7.452
+    },
+    {
+      "name": "run it",
+      "ok": true,
+      "detail": {
+        "done": true
+      },
+      "seconds": 1.342
+    },
+    {
+      "name": "save",
+      "ok": false,
+      "error": "page.waitForEvent: Timeout 30000ms exceeded while waiting for event \"download\"",
+      "seconds": 30.004
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "started": "2026-11-23T22:20:13.529Z",
+  "finished": "2026-11-23T22:21:25.798Z",
+  "allOk": false
+}
