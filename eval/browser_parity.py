@@ -17,7 +17,11 @@ import statistics
 import subprocess
 import time
 import tomllib
+import urllib.error
 import urllib.request
+from collections.abc import Iterator
+from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 
 from eval.hf_parity import sample_ids, turns
@@ -43,6 +47,10 @@ NATIVE = (
 Q8_RUN = "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8"
 
 
+class ContextFull(RuntimeError):
+    """The prompt plus the reply budget does not fit in n_ctx (D-050): the episode ends as not done, never truncated."""
+
+
 class BrowserPolicy:
     """messages -> reply text, through the bridge; any failure raises (the harness records it, RULES §4.2)."""
 
@@ -55,7 +63,84 @@ class BrowserPolicy:
             json.dumps({"messages": messages}).encode(),
             {"Content-Type": "application/json"},
         )
-        return json.load(urllib.request.urlopen(req, timeout=600))["text"]
+        try:
+            return json.load(urllib.request.urlopen(req, timeout=600))["text"]
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="replace")
+            if "context_full" in body:
+                raise ContextFull(body[:200]) from None
+            raise RuntimeError(f"bridge error {e.code}: {body[:200]}") from None
+
+
+@dataclass
+class Bridge:
+    """One browser model server: Chromium + wllama behind the HTTP bridge (spikes/wllama/run.mjs), under a hard memory cap."""
+
+    gguf: Path
+    mode: str  # "gpu" | "cpu"
+    ctx: int
+    kv: str | None
+    bridge_dir: Path
+    log_path: Path
+    name: str
+    port: int = 8123
+    mem_max: str = "6G"  # whole browser; hard cap, no MemoryHigh (throttling would distort latency)
+    cpus: str | None = None  # taskset list, e.g. "0,2,4,6": the CPU budget of a smaller machine
+    threads: int | None = None  # wllama n_threads
+    vk_icd: Path | None = (
+        None  # only this Vulkan driver is visible (simulates an iGPU-only machine)
+    )
+    expect_vendor: str | None = (
+        None  # abort unless the WebGPU adapter and the runtime log say this vendor
+    )
+    power_preference: str | None = None
+
+
+def bridge_argv(b: Bridge) -> list[str]:
+    icd = [f"VK_ICD_FILENAMES={b.vk_icd}", f"VK_DRIVER_FILES={b.vk_icd}"] if b.vk_icd else []
+    return [
+        "systemd-run", "--user", "--scope", "-q", "-p", f"MemoryMax={b.mem_max}", "-p", "MemorySwapMax=0",
+        *(["env", *icd] if icd else []),
+        *(["taskset", "-c", b.cpus] if b.cpus else []),
+        "node", "spikes/wllama/run.mjs", "bridge", "--model", str(b.gguf), "--mode", b.mode, "--ctx", str(b.ctx),
+        *(["--kv-k", b.kv, "--kv-v", b.kv, "--flash-attn", "true"] if b.kv else []),
+        *(["--threads", str(b.threads)] if b.threads else []),
+        *(["--expect-vendor", b.expect_vendor] if b.expect_vendor else []),
+        *(["--power-preference", b.power_preference] if b.power_preference else []),
+        "--bridge-port", str(b.port), "--out", str(b.bridge_dir.resolve()),
+        "--profile", str((config.DATA_DIR / f"browser-profile-{b.name}").resolve()),
+    ]  # fmt: skip
+
+
+@contextmanager
+def serve_bridge(b: Bridge) -> Iterator[str]:
+    """Start the bridge, yield its URL once healthy, always stop it (this pid only; never `pkill -f`)."""
+    b.log_path.parent.mkdir(parents=True, exist_ok=True)
+    log = b.log_path.open("w")
+    proc = subprocess.Popen(bridge_argv(b), cwd=SITE, stdout=log, stderr=subprocess.STDOUT)
+    url = f"http://127.0.0.1:{b.port}"
+    try:
+        for _ in range(240):
+            try:
+                if urllib.request.urlopen(f"{url}/health", timeout=2).status == 200:
+                    break
+            except Exception:
+                if proc.poll() is not None:
+                    raise SystemExit(f"bridge exited early, see {b.log_path}") from None
+                time.sleep(1)
+        else:
+            raise SystemExit("bridge did not come up")
+        yield url
+    finally:
+        try:
+            urllib.request.urlopen(f"{url}/shutdown", timeout=30)
+        except Exception:
+            pass
+        try:
+            proc.wait(timeout=60)
+        except subprocess.TimeoutExpired:
+            proc.terminate()
+        log.close()
 
 
 def turn_stats(turns_path: Path) -> dict:
@@ -100,9 +185,24 @@ def main() -> None:
         choices=("q8_0",),
         help="KV cache type for K and V (default f16); sets flash attention on",
     )
+    ap.add_argument(
+        "--mem-max", default="6G", help="hard memory cap for the whole browser (systemd MemoryMax)"
+    )
+    ap.add_argument("--cpus", help="taskset CPU list, e.g. 0,2,4,6")
+    ap.add_argument("--threads", type=int, help="wllama n_threads (default: the runtime's choice)")
+    ap.add_argument("--vk-icd", type=Path, help="Vulkan ICD json: the only driver Chromium can see")
+    ap.add_argument(
+        "--expect-vendor", help="abort unless the WebGPU adapter is from this vendor (e.g. intel)"
+    )
+    ap.add_argument("--power-preference", choices=("low-power", "high-performance"))
+    ap.add_argument("--name-suffix", default="", help="appended to the run name, e.g. -igpu")
     a = ap.parse_args()
     tag = a.quant.lower().replace("_", "")
-    name = f"M3-browser-{tag}-{a.mode}" + (f"-kv{a.kv.replace('_', '')}" if a.kv else "")
+    name = (
+        f"M3-browser-{tag}-{a.mode}"
+        + (f"-kv{a.kv.replace('_', '')}" if a.kv else "")
+        + a.name_suffix
+    )
     dest, bridge_dir = a.out / name, a.out / f"{name}-bridge"
     if dest.exists() or bridge_dir.exists():
         raise SystemExit(f"refusing to overwrite {dest}")
@@ -113,44 +213,20 @@ def main() -> None:
     tasks = [t for t in all_tasks if t["id"] in ids]
     raw = ("".join(json.dumps(t) + "\n" for t in tasks)).encode()
     a.out.mkdir(parents=True, exist_ok=True)
-    log_path = a.out / f"{name}-bridge.log"
-    log = log_path.open("w")
-    argv = ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=4G", "-p", "MemoryMax=5G",
-            "node", "spikes/wllama/run.mjs", "bridge", "--model", str(gguf), "--mode", a.mode, "--ctx", str(a.ctx),
-            *(["--kv-k", a.kv, "--kv-v", a.kv, "--flash-attn", "true"] if a.kv else []),
-            "--bridge-port", str(a.bridge_port), "--out", str(bridge_dir.resolve()),
-            "--profile", str((config.DATA_DIR / f"browser-profile-{name}").resolve())]  # fmt: skip
-    proc = subprocess.Popen(argv, cwd=SITE, stdout=log, stderr=subprocess.STDOUT)
-    url = f"http://127.0.0.1:{a.bridge_port}"
-    try:
-        for _ in range(240):
-            try:
-                if urllib.request.urlopen(f"{url}/health", timeout=2).status == 200:
-                    break
-            except Exception:
-                if proc.poll() is not None:
-                    raise SystemExit(f"bridge exited early, see {log_path}") from None
-                time.sleep(1)
-        else:
-            raise SystemExit("bridge did not come up")
+    br = Bridge(gguf=gguf, mode=a.mode, ctx=a.ctx, kv=a.kv, bridge_dir=bridge_dir, log_path=a.out / f"{name}-bridge.log",
+                name=name, port=a.bridge_port, mem_max=a.mem_max, cpus=a.cpus, threads=a.threads,
+                vk_icd=a.vk_icd, expect_vendor=a.expect_vendor, power_preference=a.power_preference)  # fmt: skip
+    with serve_bridge(br) as url:
         run_baseline(
             system="M3", policy=BrowserPolicy(url, name), tasks=tasks, out=dest, corpus=load_corpus(),
             meta={"model": name, "quant": a.quant, "runtime": f"wllama in Chromium ({a.mode}); see {bridge_dir.name}/env.json",
                   "temperature": 0.0, "model_config": str(CFG), "system_prompt": cfg["system_prompt"], "constrained_decoding": False,
-                  "require_spec": True, "stop_after_ask": True, "parity_sample_seed": SEED, "n_ctx": a.ctx, "gguf": gguf.name, "kv_cache": a.kv or "f16"},
+                  "require_spec": True, "stop_after_ask": True, "parity_sample_seed": SEED, "n_ctx": a.ctx, "gguf": gguf.name,
+                  "kv_cache": a.kv or "f16", "mem_max": a.mem_max, "cpus": a.cpus, "threads": a.threads,
+                  "vk_icd": str(a.vk_icd) if a.vk_icd else None},
             tasks_sha256=hashlib.sha256(raw).hexdigest(), system_prompt_text=load_prompt(cfg["system_prompt"]),
             require_spec=True, stop_after_ask=True,
         )  # fmt: skip
-    finally:
-        try:
-            urllib.request.urlopen(f"{url}/shutdown", timeout=30)
-        except Exception:
-            pass
-        try:
-            proc.wait(timeout=60)
-        except subprocess.TimeoutExpired:
-            proc.terminate()  # this pid only; never `pkill -f`
-        log.close()
     by_id = {t["id"]: t for t in tasks}
     new = side(dest, by_id, ids)
     summary = {"name": name, "quant": a.quant, "mode": a.mode, "this": {k: v for k, v in new.items() if k not in ("res", "eps")},
