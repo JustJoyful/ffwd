@@ -39,7 +39,7 @@ The project has two goals, and both are deliberate:
 | **Chore family** | A category of chores sharing an operation type; used for task generation and metrics |
 | **Spec** | A machine-checkable JSON description of what the output must look like (see ARCHITECTURE §3.2) |
 | **probe / run / check** | The agent's three tools: inspect the input, execute an allowlisted FFmpeg argument list, verify the output against the spec |
-| **Browser mode** | Everything runs in the tab: WebLLM (WebGPU) + ffmpeg.wasm |
+| **Browser mode** | Everything runs in the tab: wllama (llama.cpp in WebAssembly, WebGPU or CPU) + ffmpeg.wasm |
 | **Helper app** | Optional local app with native FFmpeg + llama.cpp, for big files, batches and GPU encoding |
 | **Teacher** | The large model whose verified trajectories form the SFT data (DeepSeek V4 Flash via API) |
 | **Rejection sampling** | Sampling a model many times and keeping only runs that pass `check()` |
@@ -53,7 +53,7 @@ The project has two goals, and both are deliberate:
 - LLM post-training: SFT + multi-turn GRPO with verifiable rewards, plus reward-hacking controls
 - An agent trained inside a real tool environment, not on static text
 - Honest evaluation against regex, base-model and frontier baselines, with confidence intervals
-- Model serving in two runtimes: WebLLM in the browser and llama.cpp native, with measured trade-offs
+- Model serving in two runtimes: llama.cpp natively and in the browser (wllama), from the same GGUF, with measured trade-offs
 - A shipped product with anonymous, privacy-respecting usage analytics (activated / returning users, funnel)
 
 Target resume bullets (fill with real numbers at the end):

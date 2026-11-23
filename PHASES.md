@@ -43,7 +43,7 @@ Update this table at the end of every phase. Each phase ends with a short `repor
   - [ ] ffmpeg.wasm (multithreaded) builds and runs under COOP/COEP on Cloudflare Pages
   - [ ] **HEVC decode in ffmpeg.wasm** (blocking for F3)
   - [ ] ffprobe availability in the installed ffmpeg.wasm version
-  - [ ] WebLLM loads Qwen3-0.6B and 1.7B (prebuilt); measure download size, cold/warm load, tokens/s on the owner's laptop + 1–2 other machines
+  - [ ] ~~WebLLM loads Qwen3-0.6B and 1.7B (prebuilt)~~ superseded (D-049/D-050): GGUF in the browser with wllama; measured on the owner's laptop 23 Nov 2026 (`reports/2026-11-23-browser-gguf`); still open: 1–2 other machines, integrated GPUs, Firefox/Safari
   - [ ] Peak tab memory: model + ffmpeg.wasm + 100 MB / 500 MB input
   - [ ] Seconds for 3 typical chores in the browser vs native
 - [ ] Measure GPU-hours per GRPO step for a toy multi-turn run (≈10 steps) on Kaggle; confirm the training library's multi-turn support
@@ -84,8 +84,8 @@ Update this table at the end of every phase. Each phase ends with a short `repor
 **Goal:** the public, browser-first product.
 
 ### Tasks
-- [ ] MLC conversion (reuse prebuilt Qwen3 `model_lib`), Hugging Face repo, parity eval in the browser
-- [ ] `apps/web`: capability check, file input, model worker (WebLLM), FFmpeg worker (ffmpeg.wasm MT), TS agent loop + checker (**passes the conformance suite**)
+- [x] Browser model decision and spike: MLC dropped (q4f16_1 2/100), **GGUF Q5_K_M through wllama passes the dev criteria on WebGPU** (96/100, 2.2 s per turn, 455 MB); [ ] Hugging Face model repo (public only after the DeepSeek terms review), [ ] one extra test-split row (plan in `reports/2026-11-23-browser-gguf/TEST_RUN_PLAN.md`, owner approval needed)
+- [ ] `apps/web`: capability check, file input, model worker (wllama), FFmpeg worker (ffmpeg.wasm MT), TS agent loop + checker (**passes the conformance suite**)
 - [ ] Spec confirmation UI, `ask_user` / `unsupported` UI, progress, preview, check summary, download / save-to-folder, "show command"
 - [ ] Batch of small files via the File System Access API
 - [ ] Cloudflare Pages with `_headers` (COOP/COEP), HTTPS, caching

@@ -15,8 +15,8 @@
   Static site (CDN)      │   Browser tab (Chrome/Edge, WebGPU)                             │
   Cloudflare Pages ──────┼─▶ ┌──────────────┐   ┌──────────────────┐   ┌────────────────┐  │
   (HTML/JS, COOP/COEP)   │   │ UI (React)   │◀─▶│ Agent loop (TS)  │◀─▶│ Model worker   │  │
-                         │   └──────────────┘   │ spec · plan ·    │   │ WebLLM/WebGPU  │  │
-  Model weights ─────────┼──────────────────────┼──────────────────┼──▶│ (MLC weights)  │  │
+                         │   └──────────────┘   │ spec · plan ·    │   │ wllama (GGUF)  │  │
+  Model weights ─────────┼──────────────────────┼──────────────────┼──▶│ WebGPU or CPU  │  │
   Hugging Face Hub       │                      │ probe/run/check  │   └────────────────┘  │
                          │                      └───────┬──────────┘                       │
                          │                              │ structured args only              │
@@ -34,7 +34,7 @@
   PostHog (anonymous events only) ◀── counts and categories, never media, prompts or paths
 ```
 
-**Offline (developer-side):** task generator → teacher/rejection-sampling data → SFT → multi-turn GRPO (Kaggle) → evaluation → export to MLC (WebLLM) and GGUF (llama.cpp) → Hugging Face Hub.
+**Offline (developer-side):** task generator → teacher/rejection-sampling data → SFT → multi-turn GRPO (Kaggle) → evaluation → export to **one GGUF** (used by the browser through wllama, by the helper and by the CLI through llama.cpp) → Hugging Face Hub (D-049, D-050).
 
 ---
 
@@ -42,7 +42,7 @@
 
 | Component | Responsibility | Tech |
 |---|---|---|
-| `apps/web` | UI, capability checks, file handling, agent loop (TS), workers, analytics | TypeScript, React + Vite, WebLLM, ffmpeg.wasm |
+| `apps/web` | UI, capability checks, file handling, agent loop (TS), workers, analytics | TypeScript, React + Vite, wllama (llama.cpp WASM), ffmpeg.wasm |
 | `apps/helper` | Local API: native FFmpeg + llama.cpp, batches, GPU encode | Python (FastAPI) controlling prebuilt `llama-server` and static FFmpeg binaries **[VERIFY packaging per OS]** |
 | `packages/protocol` | **Single source of truth**: JSON Schemas for actions, spec, probe result, check result; allowlist definition; conformance test cases | JSON Schema + generated TS/Python types |
 | `training/` | Task generator, media corpus, environment, teacher client, SFT, GRPO, export | Python 3.11, uv, TRL/Unsloth **[VERIFY multi-turn support]**, vLLM for rollouts |
@@ -146,24 +146,22 @@ Normalised ffprobe-style JSON: container, duration, size, bitrate; per stream: t
 
 | Concern | Design |
 |---|---|
-| **LLM** | WebLLM `WebWorkerMLCEngine` in a dedicated worker; Qwen3 **non-thinking** mode; JSON-constrained output for actions **[VERIFY WebLLM structured output with the custom model]** |
+| **LLM** | **wllama** (llama.cpp compiled to WebAssembly; WebGPU backend with CPU/WASM-SIMD fallback; MIT) running our GGUF in a dedicated worker. The agent chat template is rendered by our own JavaScript port (`app/agent/chat-template.js`) and handed over as a **plain-text completion**; the runtime's own chat template is never used (byte-identity and token-id checks: `reports/2026-11-23-browser-gguf`). Qwen3 **non-thinking** mode, greedy, unconstrained decoding (the Phase 1 numbers are unconstrained; the loop validates every action). Measured on the owner's laptop (RTX 3050): median turn 2.2 s on WebGPU and 6.8 s on CPU only |
 | **FFmpeg** | ffmpeg.wasm **multithreaded** core in its own worker; lazy-loaded (~30 MB core) |
 | **Probe** | ffmpeg.wasm `ffprobe()` if the installed version exposes it **[VERIFY]**; fallback: parse `ffmpeg -i` output |
-| **Cross-origin isolation** | Multithreaded ffmpeg.wasm needs `SharedArrayBuffer` → COOP `same-origin` + COEP on the site. Use `credentialless` COEP (or self-host assets) so model files and analytics still load **[VERIFY]** |
+| **Cross-origin isolation** | Multithreaded ffmpeg.wasm needs `SharedArrayBuffer` → COOP `same-origin` + COEP on the site. Use `credentialless` COEP so model files and analytics still load. **Verified 23 Nov 2026** for the model host: a cross-origin ranged `fetch` to Hugging Face's CDN works under credentialless COEP (analytics not yet verified) |
 | **Files** | `File` objects for single files; File System Access API (Chrome/Edge) for folder input/output in batches |
 | **Memory** | Enforce a browser-mode input size limit (set in Phase 0). Stream/chunk where possible; free buffers after each job; never hold the model, input and output longer than needed |
 | **Capability check** | `navigator.gpu` + adapter limits; estimate RAM; on failure, show system requirements + helper option |
-| **Caching** | WebLLM caches weights (IndexedDB/Cache API); ffmpeg core cached by the service worker. Model version pinned in config; a version change triggers a re-download prompt |
+| **Caching** | wllama caches the GGUF in the browser's OPFS (warm load about 1 s); ffmpeg core cached by the service worker. Model version pinned in config; a version change triggers a re-download prompt |
 | **Speed strategy** | For slow re-encodes: optional **dry run on a 2-second sample** to validate the command before the full run (Phase 0 decides whether it's worth it) |
 | **Helper detection** | Query `navigator.permissions` for `loopback-network`; if granted or the user opts in, ping `http://127.0.0.1:<port>/health`. Chrome shows a Local Network Access prompt for public sites reaching localhost (HTTP since Chrome 142, WebSocket since 147) |
 
-### 4.1 Model deployment to WebLLM
-1. Merge LoRA into base weights (fp16).
-2. `mlc_llm convert_weight` with **the same quantization as the WebLLM prebuilt build** (e.g. `q4f16_1`).
-3. `mlc_llm gen_config` with the **same conversation template** as the prebuilt Qwen3 entry.
-4. Upload to Hugging Face (`<user>/ffwd-0.6b-q4f16_1-MLC`).
-5. In the app config, **copy the prebuilt Qwen3 record's `model_lib`** and set `model` to our repo; override `context_window_size` if needed.
-6. Only if architecture, vocab or quantization differ: compile our own WebGPU library with `mlc_llm compile --device webgpu`.
+### 4.1 Model deployment to the browser (wllama, GGUF; D-050)
+1. Merge LoRA into base weights (fp16), convert to GGUF with llama.cpp b12032 and quantise to **Q5_K_M** (`training/export`). This is the **single model artifact** for the browser, the helper (`llama-server`) and the CLI: one file, one set of parity numbers.
+2. Publish it to a Hugging Face model repo (public repos only once the DeepSeek terms are reviewed). Record the revision hash and sha256 in the app config; the app verifies the hash after download. A fallback copy on R2 (`assets.ffwd.app`) is switched by one config value. wllama loads the file as-is (files over 64 MB are fetched in parts over several connections and resume); a split GGUF also works but is only needed where a host caps file size.
+3. The runtime is exact-pinned (wllama 4.0.0). `n_ctx` 8192 with q8_0 KV cache and flash attention (KV buffer 476 MiB instead of 896 MiB, no measured accuracy loss). **No history truncation**: the prompt format stays as trained; if the next prompt plus the 512-token reply budget would not fit, the loop ends the episode with a plain message and counts it as not done (on 300 dev episodes the longest need was 4,659 tokens).
+4. Every runtime or quantisation change is followed by the dev parity check (same seeded 100 tasks) and the pass criteria in `reports/2026-11-23-browser-gguf/CRITERIA.md`. A prompt-identity check is mandatory for any runtime: MLC's stock Qwen3 template was 0/11 identical to ours. MLC `q4f16_1` was rejected on evidence (2/100, D-049).
 
 ---
 
@@ -186,12 +184,12 @@ Normalised ffprobe-style JSON: container, duration, size, bitrate; per stream: t
 
 | Item | Decision |
 |---|---|
-| Base family | **Qwen3** (WebLLM ships prebuilt Qwen3 libraries) |
-| Sizes | **0.6B** (default candidate, ~0.5 GB download at q4) and **1.7B** (~1 GB). Final default chosen from accuracy + funnel data |
+| Base family | **Qwen3** (llama.cpp supports it natively, so wllama, `llama-server` and the CLI all run the same GGUF) |
+| Sizes | **0.6B** (default; Q5_K_M is 444 MB) and **1.7B** (not evaluated in the browser; at Q5_K_M it would exceed the 500 MB download budget). Final default chosen from accuracy + funnel data |
 | Mode | Non-thinking (short JSON actions; latency matters) |
-| Context | Budget ≈ system prompt + probe JSON + up to 4 observations; target ≤ 4k tokens **[VERIFY per runtime]** |
-| Browser format | MLC `q4f16_1` (or `q4f32_1` if fp16 shaders are missing on some GPUs) |
-| Native format | GGUF Q4_K_M and Q8_0 (benchmark both) |
+| Context | `n_ctx` 8192. Measured: first prompt 1.3k to 1.9k tokens; longest need 4,659 tokens over 300 dev episodes (3 exceed 4,096, none 6,144); no truncation (see §4.1) |
+| Browser format | **GGUF Q5_K_M** through wllama (dev 96/100 on WebGPU against 97/100 for Q8_0 natively). Not usable: MLC `q4f16_1` (2/100), GGUF Q4_K_M (62/100); rejected for size: MLC `q0f16` (1.2 GB) |
+| Native format | **the same GGUF** (Q5_K_M scored 97/100 on the dev sample, as Q8_0 did); Q8_0 stays as the reference |
 | Versioning | `agent-v{major}.{minor}-{size}`; recorded in every analytics event and evaluation report |
 
 ---
@@ -238,7 +236,7 @@ Normalised ffprobe-style JSON: container, duration, size, bitrate; per stream: t
 - **Compute:** Kaggle (~30 GPU-h/week, 2×T4 preferred over P100 for vLLM compatibility **[VERIFY]**), 12 h sessions → **checkpoint every N steps + resumable data loader + deterministic seeds**. No bf16 / FlashAttention 2 on these GPUs → fp16 with care. Paid Colab L4 as fallback.
 
 ### 7.5 Export
-Merged weights → (a) MLC for WebLLM (§4.1), (b) GGUF for llama.cpp. Every export is followed by a **parity eval** (same dev subset, all formats) so quantization loss is measured, not assumed.
+Merged weights → one GGUF for llama.cpp, wllama and the helper (§4.1). Every export is followed by a **parity eval** (same dev subset, all formats) so quantization loss is measured, not assumed.
 
 ---
 
@@ -299,7 +297,7 @@ ffmpeg-agent/
 │   ├── env/                 # Python agent loop, executor, checker, sandbox
 │   ├── teacher/             # budget-guarded API client, generation scripts
 │   ├── sft/  grpo/          # training configs and scripts (Kaggle notebooks generated from these)
-│   └── export/              # MLC + GGUF export and parity eval
+│   └── export/              # GGUF export and parity eval (the MLC path was tried and dropped, D-049)
 ├── eval/                    # baselines, runners, statistics, report templates
 ├── site-content/            # per-chore landing pages
 ├── docs/                    # these documents

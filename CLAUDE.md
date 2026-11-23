@@ -39,8 +39,8 @@ Phase 0 done (GO, D-020); **Phase 1 test run done** (22–23 Nov 2026; report `r
 - **Model actions:** `spec | ask_user | unsupported | run | finish`, one JSON action per turn. **`check` is not a model action**: the harness runs it after every `run`, so the model can't skip verification. Turn budget is ≤4 runs.
 - **The model never sees real paths.** It refers to input/output IDs and the harness maps them to paths inside the job dir. Protocols (`http:`, `pipe:`, `concat:` lists) and path traversal are rejected.
 - **Two specs:** training rewards use the generator's **gold spec**; runtime checks use the **user-confirmed spec**. Never swap them. `null` spec fields are unconstrained.
-- **Runtimes:** browser = WebLLM (MLC q4f16_1, prebuilt Qwen3 `model_lib`) + ffmpeg.wasm MT (needs COOP/COEP → Cloudflare Pages). Native = llama.cpp GGUF + static FFmpeg (CLI in Phase 1, FastAPI helper in Phase 3).
-- **Offline pipeline:** taskgen (hash-pinned splits) → DeepSeek V4 Flash teacher + rejection sampling (keep only check-passing trajectories) → SFT → multi-turn GRPO on Kaggle → export MLC + GGUF → parity eval.
+- **Runtimes:** browser = wllama (llama.cpp in WebAssembly, WebGPU or CPU) running our GGUF Q5_K_M + ffmpeg.wasm MT, the prompt rendered by our own JS port of the chat template and passed as plain text (D-049, D-050; MLC q4f16_1 is rejected: 2/100) (needs COOP/COEP → Cloudflare Pages). Native = llama.cpp, the SAME GGUF, + static FFmpeg (CLI in Phase 1, FastAPI helper in Phase 3).
+- **Offline pipeline:** taskgen (hash-pinned splits) → DeepSeek V4 Flash teacher + rejection sampling (keep only check-passing trajectories) → SFT → multi-turn GRPO on Kaggle → export one GGUF → parity eval.
 - Items marked **[VERIFY]** in ARCHITECTURE.md are unconfirmed assumptions. Confirm them; don't build on them blindly.
 
 ## Golden rules (summary of RULES.md)
