@@ -111,3 +111,11 @@ Headline table format:
 | M1 SFT | | | | | | | |
 | M3 SFT+MT-GRPO | | | | | | | |
 | X1 DeepSeek | | | | | | | |
+
+## Amendments (dated; the text above is kept as written)
+
+### A1 (23 Nov 2026, owner decision, D-049/D-050): MLC and WebLLM references now mean the GGUF in the browser (wllama)
+No question, metric, statistic or split changes. Two readings are updated because the browser runtime changed:
+- **Q6 (§1)**, "Parity eval across fp16 / MLC q4 / GGUF Q4 / Q8": read as fp16 / GGUF Q4_K_M, Q5_K_M, Q6_K, Q8_0 run natively in llama.cpp **and in the browser through wllama**, plus MLC `q4f16_1` and `q0f16`, which were measured once and rejected (`reports/2026-11-23-mlc-parity`: 2/100 and 98/100 with a 1.2 GB download). The pass criteria for a browser build are fixed in `reports/2026-11-23-browser-gguf/CRITERIA.md` (dev parity >= 95/100 on the same seeded 100 dev tasks, median turn <= 5 s, download <= ~500 MB, a responsive tab, real accelerated paths asserted).
+- **§4.2, "Tokens/s, ms per action | Browser (WebLLM) vs native (llama.cpp)":** read as browser (wllama, WebGPU and CPU paths reported separately) vs native (llama.cpp); prompt-processing and generation tok/s are reported separately.
+- **Extra Phase 1 row:** a browser row (M3 Q5_K_M, wllama) may be run once per test split as a descriptive extra under the test lock, never replacing M3 Q8_0 (see Amendment 4 in `eval/PREREGISTRATION.md`).

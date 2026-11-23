@@ -60,6 +60,7 @@ These rules are **non-negotiable** for every contributor, including Claude Code 
 2. Every published model has a model card: base model, data sources, teacher, training recipe, eval results with CIs, known limitations, licence.
 3. Every dataset has a data card: generator version, seeds, split hashes, family distribution, teacher usage and cost.
 4. Every exported format (MLC, GGUF Q4/Q8) gets a parity eval before release.
+   - *Amendment (23 Nov 2026, owner decision, D-049/D-050; no rule change):* the exported formats are now GGUF only (one artifact, Q5_K_M, served to the browser by wllama, to the helper and to the CLI by llama.cpp); the MLC export was tried and dropped. The rule is unchanged and now reads: every exported format, quantisation and runtime build (including a new wllama or llama.cpp version) gets a parity eval on the same seeded dev sample against its pass criteria before release. The original wording above is kept as written.
 5. The licence of every third-party asset (clips, datasets, models) is recorded before use.
 
 ## 8. Product & UX honesty
