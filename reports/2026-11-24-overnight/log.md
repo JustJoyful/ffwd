@@ -15,3 +15,4 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 01:55 IST: test-iid at 68/500; post.sh waiting on the row; log created.
 - 02:04 IST: test-iid at 138/500; watchdog running (rowwatch.pid), post.sh rewritten (name-suffix fix, gates, per-step RAM watch, smoke before iGPU); wasm ?url fix + app-smoke committed on integration; morning report skeleton + component review written.
 - 02:05 IST: test-iid at 148/500; model card filled (quant curve, browser, Q5_K_M shipping format, MLC finding, hashes); owner items listed with suggestions.
+- 02:06 IST: test-iid at 151/500; APP_FLOW.md written. Remaining light items skipped on purpose to save usage: copy rewrites (pages already carry owner-review copy) and new unit tests (no vitest while the row runs).

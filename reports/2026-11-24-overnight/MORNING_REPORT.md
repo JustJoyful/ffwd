@@ -21,7 +21,7 @@ Starting point: `reports/2026-11-23-site-inventory/INVENTORY.md`. 597 unit tests
 - Known gaps: no rules-only fast path in the app yet; the model host (HF or R2) does not exist, so a production build has no model URL (the loader says the model is not published yet); the desktop helper is not built; `shader-f16` requirement unknown; wllama's worker inside a module worker was unverified before the smoke (one likely bug already fixed: the wasm is now imported with `?url`).
 
 ## 4. Components built without a design precedent (for your review)
-See `COMPONENT_REVIEW.md` in this folder (what each does and the simplest on-design option).
+See `COMPONENT_REVIEW.md` in this folder (what each does and the simplest on-design option). The flow and both state machines are drawn in `APP_FLOW.md`.
 
 ## 5. LAUNCH CHECKLIST (for you)
 1. **Model card and data card** (`docs/hf-cards/` in the model repo): 16 TODO(owner) items; suggested text in `MODEL_CARD_OWNER_ITEMS.md` here. Weights licence, seeds, repo ids, the DeepSeek review outcome, whether teacher trajectories may be uploaded.
