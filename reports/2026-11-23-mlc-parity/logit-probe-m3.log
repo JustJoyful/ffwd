@@ -1,0 +1,5 @@
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<00:41,  7.41it/s]Loading weights:  41%|████      | 126/310 [00:00<00:00, 608.30it/s]Loading weights:  62%|██████▏   | 192/310 [00:00<00:00, 604.44it/s]Loading weights:  83%|████████▎ | 256/310 [00:00<00:00, 612.14it/s]Loading weights: 100%|██████████| 310/310 [00:01<00:00, 276.81it/s]
+orig {'n_tokens': 1494, 'top1_agree': 0.9979919678714859, 'mean_nll': 0.012828315816410734, 'tasks_with_any_disagreement': 3}
+q4 {'n_tokens': 1494, 'top1_agree': 0.9585006693440429, 'mean_nll': 0.15758857111056326, 'tasks_with_any_disagreement': 12}
+q4_body {'n_tokens': 1494, 'top1_agree': 0.9538152610441767, 'mean_nll': 0.14228783434174624, 'tasks_with_any_disagreement': 12}
+q4_embed {'n_tokens': 1494, 'top1_agree': 0.9959839357429718, 'mean_nll': 0.01329025774795208, 'tasks_with_any_disagreement': 5}

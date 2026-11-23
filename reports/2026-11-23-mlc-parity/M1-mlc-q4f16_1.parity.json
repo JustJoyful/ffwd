@@ -1,0 +1,82 @@
+{
+  "name": "M1-mlc-q4f16_1",
+  "ref_run": "reports/2026-11-20-m1-dev/M1-0.6b-q8",
+  "parity_ref_a_vs_this_b": {
+    "n": 100,
+    "agreement": 0.07,
+    "a": [
+      0.98,
+      0.929988209271456,
+      0.9944980324498376
+    ],
+    "b": [
+      0.05,
+      0.02154367915436798,
+      0.11175046923191911
+    ],
+    "only_a_passes": 93,
+    "only_b_passes": 0,
+    "mcnemar_p": 2.0194839173657902e-28,
+    "b_minus_a": {
+      "diff": -0.93,
+      "ci95": [
+        -0.98,
+        -0.88
+      ]
+    },
+    "first_turn_identical": 0.0,
+    "transcript_identical": 0.0
+  },
+  "ref": {
+    "k": 98,
+    "invalid": 0,
+    "runs": 1.1122448979591837,
+    "n_graded": 98,
+    "nof": 0.38461538461538464,
+    "n_copy_eligible": 13
+  },
+  "this": {
+    "k": 5,
+    "invalid": 76,
+    "runs": 0.8979591836734694,
+    "n_graded": 98,
+    "nof": 1.0,
+    "n_copy_eligible": 13
+  },
+  "taxonomy": {
+    "ref": {
+      "turns": 305,
+      "by_label": {
+        "ok": 292,
+        "check_failed": 7,
+        "run_failed": 6
+      },
+      "failed_episodes_first_problem": {
+        "check_failed": 2
+      },
+      "offending_options": []
+    },
+    "M1-mlc-q4f16_1": {
+      "turns": 723,
+      "by_label": {
+        "schema_invalid": 115,
+        "run_before_spec": 296,
+        "malformed_json": 169,
+        "ok": 48,
+        "other_error": 12,
+        "check_failed": 10,
+        "run_failed": 42,
+        "rejected:other": 31
+      },
+      "failed_episodes_first_problem": {
+        "schema_invalid": 55,
+        "malformed_json": 16,
+        "other_error": 3,
+        "check_failed": 4,
+        "run_failed": 7,
+        "rejected:other": 10
+      },
+      "offending_options": []
+    }
+  }
+}

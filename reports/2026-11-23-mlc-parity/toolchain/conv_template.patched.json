@@ -1,0 +1,33 @@
+{
+  "name": "ffwd-agent-v1",
+  "system_template": "<|im_start|>system\n{system_message}<|im_end|>\n",
+  "system_message": "<contents of packages/protocol/prompts/system-v1.txt>",
+  "system_prefix_token_ids": null,
+  "add_role_after_system_message": true,
+  "roles": {
+    "user": "<|im_start|>user",
+    "assistant": "<|im_start|>assistant"
+  },
+  "role_templates": {
+    "user": "{user_message}",
+    "assistant": "<think>\n\n</think>\n\n{assistant_message}",
+    "tool": "{tool_message}"
+  },
+  "messages": [],
+  "seps": [
+    "<|im_end|>\n"
+  ],
+  "role_content_sep": "\n",
+  "role_empty_sep": "\n<think>\n\n</think>\n\n",
+  "stop_str": [
+    "<|endoftext|>",
+    "<|im_end|>"
+  ],
+  "stop_token_ids": [
+    151643,
+    151645
+  ],
+  "strip_reasoning_in_history": false,
+  "function_string": "",
+  "use_function_calling": false
+}

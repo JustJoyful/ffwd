@@ -1,0 +1,72 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  22%|██▏       | 67/310 [00:00<00:00, 667.91it/s]Loading weights:  45%|████▌     | 141/310 [00:00<00:00, 698.42it/s]Loading weights:  68%|██████▊   | 211/310 [00:00<00:00, 564.22it/s]Loading weights:  93%|█████████▎| 289/310 [00:00<00:00, 624.30it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 667.97it/s]
+{
+ "name": "M3-mlc-q4f16_1",
+ "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+ "parity_ref_a_vs_this_b": {
+  "n": 100,
+  "agreement": 0.05,
+  "a": [
+   0.97,
+   0.9154806357094724,
+   0.9897454759759611
+  ],
+  "b": [
+   0.02,
+   0.005501967550162357,
+   0.07001179072854387
+  ],
+  "only_a_passes": 95,
+  "only_b_passes": 0,
+  "mcnemar_p": 5.048709793414476e-29,
+  "b_minus_a": {
+   "diff": -0.95,
+   "ci95": [
+    -0.99,
+    -0.9
+   ]
+  },
+  "first_turn_identical": 0.01,
+  "transcript_identical": 0.0
+ },
+ "ref": {
+  "k": 97,
+  "invalid": 0,
+  "runs": 1.1326530612244898,
+  "n_graded": 98,
+  "nof": 0.0,
+  "n_copy_eligible": 13
+ },
+ "this": {
+  "k": 2,
+  "invalid": 80,
+  "runs": 0.8367346938775511,
+  "n_graded": 98,
+  "nof": 1.0,
+  "n_copy_eligible": 13
+ },
+ "also_Q4_K_M": {
+  "k": 60,
+  "invalid": 12,
+  "runs": 1.8673469387755102,
+  "n_graded": 98,
+  "nof": 0.38461538461538464,
+  "n_copy_eligible": 13
+ },
+ "also_Q5_K_M": {
+  "k": 97,
+  "invalid": 0,
+  "runs": 1.1428571428571428,
+  "n_graded": 98,
+  "nof": 0.0,
+  "n_copy_eligible": 13
+ },
+ "also_Q6_K": {
+  "k": 99,
+  "invalid": 0,
+  "runs": 1.0816326530612246,
+  "n_graded": 98,
+  "nof": 0.0,
+  "n_copy_eligible": 13
+ }
+}

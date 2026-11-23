@@ -1,0 +1,11 @@
+# MLC q4f16_1 weights, dequantised back to fp16 (eval/mlc_dequant.py) and run through HF transformers fp16 by eval/mlc_parity.py.
+# Same protocol as eval/configs/grpo-m3-ckpt60-q8.toml (prompt v1, spec-first, greedy, 512 new tokens, agent chat template D-026);
+# there is no server here, so base_url / server_args do not exist. The MLC conversation template that WebLLM would use is checked
+# separately by eval/mlc_prompt_identity.py (see reports/2026-11-23-mlc-parity).
+model = "m3-mlc-q4f16_1-dequant"
+quant = "MLC q4f16_1 (weights dequantised to fp16, run in HF)"
+temperature = 0.0
+max_tokens = 512
+system_prompt = "system-v1.txt"
+require_spec = true
+stop_after_ask = true

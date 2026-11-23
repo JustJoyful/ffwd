@@ -1,0 +1,86 @@
+{
+ "M3": {
+  "rejected_top": [
+   [
+    "codec not allowed: video",
+    10
+   ],
+   [
+    "bad value for -metadata:s:v",
+    6
+   ],
+   [
+    "filter not allowed: vcrop",
+    4
+   ],
+   [
+    "filter not allowed: v",
+    4
+   ],
+   [
+    "filter not allowed: none",
+    3
+   ],
+   [
+    "bad filter syntax: '[...]",
+    2
+   ],
+   [
+    "bad value for -b:a",
+    2
+   ],
+   [
+    "unexpected positional argument: '{out:out1}PNG'",
+    1
+   ]
+  ],
+  "episodes_8_turns_with_le3_distinct_replies": 50,
+  "episodes": 100
+ },
+ "M1": {
+  "rejected_top": [
+   [
+    "bad filter syntax: '[...]",
+    5
+   ],
+   [
+    "unknown id: h264_quet",
+    4
+   ],
+   [
+    "unexpected positional argument: '{out:out1}v'",
+    4
+   ],
+   [
+    "filter not allowed: devconv",
+    4
+   ],
+   [
+    "filter not allowed: paletten",
+    4
+   ],
+   [
+    "codec not allowed: video",
+    3
+   ],
+   [
+    "unexpected positional argument: '{in:tos_multiaud}setpts=PTS/2'",
+    3
+   ],
+   [
+    "filter not allowed: rot",
+    2
+   ],
+   [
+    "filter not allowed: rotate",
+    1
+   ],
+   [
+    "bad value for -metadata:s:v",
+    1
+   ]
+  ],
+  "episodes_8_turns_with_le3_distinct_replies": 47,
+  "episodes": 100
+ }
+}

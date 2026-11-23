@@ -1,0 +1,74 @@
+{
+  "name": "M3-mlc-q0f16-control",
+  "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+  "parity_ref_a_vs_this_b": {
+    "n": 100,
+    "agreement": 0.99,
+    "a": [
+      0.97,
+      0.9154806357094724,
+      0.9897454759759611
+    ],
+    "b": [
+      0.98,
+      0.929988209271456,
+      0.9944980324498376
+    ],
+    "only_a_passes": 0,
+    "only_b_passes": 1,
+    "mcnemar_p": 1.0,
+    "b_minus_a": {
+      "diff": 0.01,
+      "ci95": [
+        0.0,
+        0.03
+      ]
+    },
+    "first_turn_identical": 0.88,
+    "transcript_identical": 0.63
+  },
+  "ref": {
+    "k": 97,
+    "invalid": 0,
+    "runs": 1.1326530612244898,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "this": {
+    "k": 98,
+    "invalid": 0,
+    "runs": 1.1020408163265305,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "taxonomy": {
+    "ref": {
+      "turns": 306,
+      "by_label": {
+        "ok": 290,
+        "check_failed": 9,
+        "run_failed": 7
+      },
+      "failed_episodes_first_problem": {
+        "run_failed": 1,
+        "check_failed": 2
+      },
+      "offending_options": []
+    },
+    "M3-mlc-q0f16-control": {
+      "turns": 304,
+      "by_label": {
+        "ok": 292,
+        "check_failed": 5,
+        "run_failed": 7
+      },
+      "failed_episodes_first_problem": {
+        "run_failed": 1,
+        "check_failed": 1
+      },
+      "offending_options": []
+    }
+  }
+}

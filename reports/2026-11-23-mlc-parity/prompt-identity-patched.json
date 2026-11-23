@@ -1,0 +1,164 @@
+{
+  "patched": true,
+  "conv_template_used": {
+    "name": "qwen3",
+    "system_template": "<|im_start|>system\n{system_message}<|im_end|>\n",
+    "system_message": "You are a helpful assistant.",
+    "system_prefix_token_ids": null,
+    "add_role_after_system_message": true,
+    "roles": {
+      "user": "<|im_start|>user",
+      "assistant": "<|im_start|>assistant"
+    },
+    "role_templates": {
+      "user": "{user_message}",
+      "assistant": "<think>\n\n</think>\n\n{assistant_message}",
+      "tool": "{tool_message}"
+    },
+    "messages": [],
+    "seps": [
+      "<|im_end|>\n"
+    ],
+    "role_content_sep": "\n",
+    "role_empty_sep": "\n<think>\n\n</think>\n\n",
+    "stop_str": [
+      "<|endoftext|>",
+      "<|im_end|>"
+    ],
+    "stop_token_ids": [
+      151643,
+      151645
+    ],
+    "strip_reasoning_in_history": false,
+    "function_string": "",
+    "use_function_calling": false
+  },
+  "n": 11,
+  "mlc_text_identical": 11,
+  "mlc_ids_identical": 11,
+  "piecewise_ids_identical": 11,
+  "llama_ids_identical": 11,
+  "rows": [
+    {
+      "name": "first-turn:dv-00607d212c-sympt",
+      "n_messages": 2,
+      "ref_tokens": 1403,
+      "mlc_tokens": 1403,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-0409e0cbba-polit",
+      "n_messages": 2,
+      "ref_tokens": 1405,
+      "mlc_tokens": 1405,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-041fefb1a8-terse",
+      "n_messages": 2,
+      "ref_tokens": 1410,
+      "mlc_tokens": 1410,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-0c9952d390-verbo",
+      "n_messages": 2,
+      "ref_tokens": 1413,
+      "mlc_tokens": 1413,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-0e0e2ee6e1-sympt",
+      "n_messages": 2,
+      "ref_tokens": 1427,
+      "mlc_tokens": 1427,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-10b9222a74-terse",
+      "n_messages": 2,
+      "ref_tokens": 1416,
+      "mlc_tokens": 1416,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-15656fa086-sympt",
+      "n_messages": 2,
+      "ref_tokens": 1418,
+      "mlc_tokens": 1418,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-1738cc9e26-sympt",
+      "n_messages": 2,
+      "ref_tokens": 1436,
+      "mlc_tokens": 1436,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-19e37dc88e-verbo",
+      "n_messages": 2,
+      "ref_tokens": 1472,
+      "mlc_tokens": 1472,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "first-turn:dv-1b784c6f17-sympt",
+      "n_messages": 2,
+      "ref_tokens": 1436,
+      "mlc_tokens": 1436,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    },
+    {
+      "name": "multi-turn:dv-00607d212c-sympt",
+      "n_messages": 6,
+      "ref_tokens": 1603,
+      "mlc_tokens": 1603,
+      "text_identical": true,
+      "mlc_ids_identical_to_ref": true,
+      "piecewise_ids_identical_to_ref": true,
+      "llama_text_identical_to_ref": true,
+      "llama_ids_identical_to_ref": true
+    }
+  ]
+}

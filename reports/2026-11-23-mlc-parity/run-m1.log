@@ -1,0 +1,48 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  15%|█▍        | 46/310 [00:00<00:00, 402.17it/s]Loading weights:  38%|███▊      | 119/310 [00:00<00:00, 535.42it/s]Loading weights:  58%|█████▊    | 179/310 [00:00<00:00, 558.94it/s]Loading weights:  77%|███████▋  | 240/310 [00:00<00:00, 571.31it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 595.27it/s]
+{
+ "name": "M1-mlc-q4f16_1",
+ "ref_run": "reports/2026-11-20-m1-dev/M1-0.6b-q8",
+ "parity_ref_a_vs_this_b": {
+  "n": 100,
+  "agreement": 0.07,
+  "a": [
+   0.98,
+   0.929988209271456,
+   0.9944980324498376
+  ],
+  "b": [
+   0.05,
+   0.02154367915436798,
+   0.11175046923191911
+  ],
+  "only_a_passes": 93,
+  "only_b_passes": 0,
+  "mcnemar_p": 2.0194839173657902e-28,
+  "b_minus_a": {
+   "diff": -0.93,
+   "ci95": [
+    -0.98,
+    -0.88
+   ]
+  },
+  "first_turn_identical": 0.0,
+  "transcript_identical": 0.0
+ },
+ "ref": {
+  "k": 98,
+  "invalid": 0,
+  "runs": 1.1122448979591837,
+  "n_graded": 98,
+  "nof": 0.38461538461538464,
+  "n_copy_eligible": 13
+ },
+ "this": {
+  "k": 5,
+  "invalid": 76,
+  "runs": 0.8979591836734694,
+  "n_graded": 98,
+  "nof": 1.0,
+  "n_copy_eligible": 13
+ }
+}

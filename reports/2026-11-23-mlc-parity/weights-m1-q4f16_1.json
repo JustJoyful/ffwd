@@ -1,0 +1,91 @@
+{
+  "per_class_vs_original_fp16": {
+    "model.embed_tokens.weight": {
+      "rel_rmse": 0.09692657524606323,
+      "max_abs_err": 0.02099609375,
+      "exact_share": 0.03190690565229768
+    },
+    "model.norm.weight": {
+      "rel_rmse": 0.0,
+      "max_abs_err": 0.0,
+      "exact_share": 1.0
+    },
+    "q_proj": {
+      "rel_rmse": 0.09907862781703192,
+      "max_abs_err": 0.04571533203125,
+      "exact_share": 0.030118942260742188
+    },
+    "k_proj": {
+      "rel_rmse": 0.09960606955759417,
+      "max_abs_err": 0.05792236328125,
+      "exact_share": 0.030013969966343472
+    },
+    "v_proj": {
+      "rel_rmse": 0.09979057214394332,
+      "max_abs_err": 0.034912109375,
+      "exact_share": 0.02998450824192592
+    },
+    "o_proj": {
+      "rel_rmse": 0.09823874436015734,
+      "max_abs_err": 0.039337158203125,
+      "exact_share": 0.029932260513305664
+    },
+    "q_norm": {
+      "rel_rmse": 0.0,
+      "max_abs_err": 0.0,
+      "exact_share": 1.0
+    },
+    "k_norm": {
+      "rel_rmse": 0.0,
+      "max_abs_err": 0.0,
+      "exact_share": 1.0
+    },
+    "gate_proj": {
+      "rel_rmse": 0.09824389794191592,
+      "max_abs_err": 0.0782470703125,
+      "exact_share": 0.030095815658569336
+    },
+    "up_proj": {
+      "rel_rmse": 0.09877560313857012,
+      "max_abs_err": 0.0841064453125,
+      "exact_share": 0.029995838801066082
+    },
+    "down_proj": {
+      "rel_rmse": 0.10132542171662112,
+      "max_abs_err": 0.05035400390625,
+      "exact_share": 0.029872122265043714
+    },
+    "input_layernorm": {
+      "rel_rmse": 0.0,
+      "max_abs_err": 0.0,
+      "exact_share": 1.0
+    },
+    "post_attention_layernorm": {
+      "rel_rmse": 0.0,
+      "max_abs_err": 0.0,
+      "exact_share": 1.0
+    }
+  },
+  "requantize_original_matches_mlc_files": {
+    "model.embed_tokens": {
+      "words_equal": 1.0,
+      "scales_equal": 1.0
+    },
+    "model.layers.0.mlp.down_proj": {
+      "words_equal": 1.0,
+      "scales_equal": 1.0
+    },
+    "model.layers.0.self_attn.o_proj": {
+      "words_equal": 1.0,
+      "scales_equal": 1.0
+    },
+    "model.layers.5.self_attn.c_attn": {
+      "words_equal": 1.0,
+      "scales_equal": 1.0
+    },
+    "model.layers.5.mlp.gate_up_proj": {
+      "words_equal": 1.0,
+      "scales_equal": 1.0
+    }
+  }
+}

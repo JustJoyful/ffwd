@@ -1,0 +1,48 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  20%|█▉        | 61/310 [00:00<00:00, 607.84it/s]Loading weights:  40%|████      | 124/310 [00:00<00:00, 611.63it/s]Loading weights:  61%|██████    | 188/310 [00:00<00:00, 608.64it/s]Loading weights:  80%|████████  | 249/310 [00:00<00:00, 602.59it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 595.93it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 600.66it/s]
+{
+ "name": "M3-mlc-q0f16-control",
+ "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+ "parity_ref_a_vs_this_b": {
+  "n": 100,
+  "agreement": 0.99,
+  "a": [
+   0.97,
+   0.9154806357094724,
+   0.9897454759759611
+  ],
+  "b": [
+   0.98,
+   0.929988209271456,
+   0.9944980324498376
+  ],
+  "only_a_passes": 0,
+  "only_b_passes": 1,
+  "mcnemar_p": 1.0,
+  "b_minus_a": {
+   "diff": 0.01,
+   "ci95": [
+    0.0,
+    0.03
+   ]
+  },
+  "first_turn_identical": 0.88,
+  "transcript_identical": 0.63
+ },
+ "ref": {
+  "k": 97,
+  "invalid": 0,
+  "runs": 1.1326530612244898,
+  "n_graded": 98,
+  "nof": 0.0,
+  "n_copy_eligible": 13
+ },
+ "this": {
+  "k": 98,
+  "invalid": 0,
+  "runs": 1.1020408163265305,
+  "n_graded": 98,
+  "nof": 0.0,
+  "n_copy_eligible": 13
+ }
+}

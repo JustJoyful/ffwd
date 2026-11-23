@@ -1,0 +1,30 @@
+{
+  "n_tasks": 12,
+  "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+  "variants": {
+    "orig": {
+      "n_tokens": 1494,
+      "top1_agree": 0.9979919678714859,
+      "mean_nll": 0.012828315816410734,
+      "tasks_with_any_disagreement": 3
+    },
+    "q4": {
+      "n_tokens": 1494,
+      "top1_agree": 0.9585006693440429,
+      "mean_nll": 0.15758857111056326,
+      "tasks_with_any_disagreement": 12
+    },
+    "q4_body": {
+      "n_tokens": 1494,
+      "top1_agree": 0.9538152610441767,
+      "mean_nll": 0.14228783434174624,
+      "tasks_with_any_disagreement": 12
+    },
+    "q4_embed": {
+      "n_tokens": 1494,
+      "top1_agree": 0.9959839357429718,
+      "mean_nll": 0.01329025774795208,
+      "tasks_with_any_disagreement": 5
+    }
+  }
+}

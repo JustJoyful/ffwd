@@ -1,0 +1,173 @@
+{
+  "name": "M3-mlc-q4f16_1",
+  "ref_run": "reports/2026-11-22-m3-ckpt60-dev/grpo-m3-ckpt60-q8",
+  "parity_ref_a_vs_this_b": {
+    "n": 100,
+    "agreement": 0.05,
+    "a": [
+      0.97,
+      0.9154806357094724,
+      0.9897454759759611
+    ],
+    "b": [
+      0.02,
+      0.005501967550162357,
+      0.07001179072854387
+    ],
+    "only_a_passes": 95,
+    "only_b_passes": 0,
+    "mcnemar_p": 5.048709793414476e-29,
+    "b_minus_a": {
+      "diff": -0.95,
+      "ci95": [
+        -0.99,
+        -0.9
+      ]
+    },
+    "first_turn_identical": 0.01,
+    "transcript_identical": 0.0
+  },
+  "ref": {
+    "k": 97,
+    "invalid": 0,
+    "runs": 1.1326530612244898,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "this": {
+    "k": 2,
+    "invalid": 80,
+    "runs": 0.8367346938775511,
+    "n_graded": 98,
+    "nof": 1.0,
+    "n_copy_eligible": 13
+  },
+  "taxonomy": {
+    "ref": {
+      "turns": 306,
+      "by_label": {
+        "ok": 290,
+        "check_failed": 9,
+        "run_failed": 7
+      },
+      "failed_episodes_first_problem": {
+        "run_failed": 1,
+        "check_failed": 2
+      },
+      "offending_options": []
+    },
+    "M3-mlc-q4f16_1": {
+      "turns": 739,
+      "by_label": {
+        "schema_invalid": 127,
+        "run_before_spec": 328,
+        "malformed_json": 155,
+        "ok": 33,
+        "check_failed": 12,
+        "rejected:other": 32,
+        "run_failed": 36,
+        "other_error": 16
+      },
+      "failed_episodes_first_problem": {
+        "schema_invalid": 64,
+        "check_failed": 3,
+        "malformed_json": 14,
+        "rejected:other": 8,
+        "run_failed": 7,
+        "run_before_spec": 1,
+        "other_error": 1
+      },
+      "offending_options": []
+    },
+    "Q4_K_M": {
+      "turns": 426,
+      "by_label": {
+        "ok": 213,
+        "rejected:option": 6,
+        "rejected:-y": 5,
+        "run_failed": 39,
+        "malformed_json": 16,
+        "schema_invalid": 32,
+        "run_before_spec": 40,
+        "check_failed": 55,
+        "rejected:other": 20
+      },
+      "failed_episodes_first_problem": {
+        "rejected:option": 1,
+        "schema_invalid": 8,
+        "check_failed": 14,
+        "run_failed": 8,
+        "malformed_json": 3,
+        "rejected:other": 6
+      },
+      "offending_options": [
+        [
+          "-y",
+          5
+        ],
+        [
+          "-xmp",
+          3
+        ],
+        [
+          "-2",
+          2
+        ],
+        [
+          "-xvercode",
+          1
+        ]
+      ]
+    },
+    "Q5_K_M": {
+      "turns": 307,
+      "by_label": {
+        "ok": 290,
+        "check_failed": 6,
+        "run_failed": 11
+      },
+      "failed_episodes_first_problem": {
+        "run_failed": 2,
+        "check_failed": 1
+      },
+      "offending_options": []
+    },
+    "Q6_K": {
+      "turns": 303,
+      "by_label": {
+        "ok": 294,
+        "check_failed": 6,
+        "run_failed": 3
+      },
+      "failed_episodes_first_problem": {
+        "check_failed": 1
+      },
+      "offending_options": []
+    }
+  },
+  "also_Q4_K_M": {
+    "k": 60,
+    "invalid": 12,
+    "runs": 1.8673469387755102,
+    "n_graded": 98,
+    "nof": 0.38461538461538464,
+    "n_copy_eligible": 13
+  },
+  "also_Q5_K_M": {
+    "k": 97,
+    "invalid": 0,
+    "runs": 1.1428571428571428,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  },
+  "also_Q6_K": {
+    "k": 99,
+    "invalid": 0,
+    "runs": 1.0816326530612246,
+    "n_graded": 98,
+    "nof": 0.0,
+    "n_copy_eligible": 13
+  }
+}

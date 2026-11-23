@@ -1,0 +1,11 @@
+--- data/tools/low_batch_specialization.py.orig	2026-11-23 16:25:07.091129477 +0530
++++ data/tools/mlc-venv/lib/python3.13/site-packages/mlc_llm/compiler_pass/low_batch_specialization.py	2026-11-23 16:25:07.094415874 +0530
+@@ -34,7 +34,7 @@
+                     for low_batch_func in low_batch_funcs
+                 ):
+                     continue
+-                buffers = [param for param in func.params if tirx.is_buffer_var(param)]
++                buffers = [func.buffer_map[param] for param in func.params if param in func.buffer_map]
+                 shapes = [buffer.shape for buffer in buffers]
+                 symbolic_vars = set(
+                     expr for shape in shapes for expr in shape if isinstance(expr, tirx.Var)

@@ -1,0 +1,50 @@
+{
+  "commit": "6e0c694f4d90f03c6d44335d3e6ad0b30051625d",
+  "git_dirty": true,
+  "note": "working tree dirty only by the new untracked files of this report (eval/mlc_*.py, eval/configs/mlc-q4f16_1-dequant.toml, this directory)",
+  "sample": {
+    "seed": 20261115,
+    "n": 100,
+    "split": "dev",
+    "ids_source": "eval.hf_parity.sample_ids over load_tasks('dev','dev-eval')"
+  },
+  "source_models": {
+    "m3": {
+      "path": "data/models/grpo-m3-ckpt60-merged/grpo-m3-ckpt60/model.safetensors",
+      "sha256": "f81b97c7115e058e11495e9d2abb73c733e302453d2301dd054c866d3935cf9c"
+    },
+    "m1": {
+      "path": "data/models/m1-merged/ffmpeg-agent-m1-0.6b/model.safetensors",
+      "sha256": "ab21f28d1cf7205977d51fe5d164e5adf4590cb4474c1737d8c5a9c891452c89"
+    }
+  },
+  "mlc_models": {
+    "m3-q4f16_1": {
+      "params_sha256_of_shard_hashes": "006e44351c23ee5681b113315b9ea38cc3ae385d1fbf28a58c50d14ddc9c7506",
+      "bytes": 335372288
+    },
+    "m1-q4f16_1": {
+      "params_sha256_of_shard_hashes": "6f26fbeffd390b2433ba7c769073f9915f1ab024f2bb0dd2f6d0f27b48fa31dc",
+      "bytes": 335372288
+    },
+    "m3-q0f16": {
+      "params_sha256_of_shard_hashes": "7a398e77bee7458a76242f1908386eb1e3648adaedb23ee8f105edc50ca6e5c4",
+      "bytes": 1192099840
+    }
+  },
+  "toolchain": {
+    "python": "3.13.18",
+    "mlc-llm-nightly-cu128": "0.26.dev6",
+    "mlc-ai-nightly-cu128": "0.26.dev246",
+    "apache-tvm-ffi": "0.1.13.post0 (pinned; 0.1.14-0.1.16 segfault with this wheel)",
+    "torch_in_mlc_venv": "2.15.0",
+    "transformers_in_mlc_venv": "5.24.0"
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop (driver 615.78)",
+    "cpu": "Intel i5-12450HX",
+    "ram_gb": 15,
+    "os": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44"
+  },
+  "cost_usd": 0.0
+}

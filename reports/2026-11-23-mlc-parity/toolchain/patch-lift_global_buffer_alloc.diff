@@ -1,0 +1,31 @@
+--- data/tools/lift_global_buffer_alloc.py.orig	2026-11-23 16:26:12.382118806 +0530
++++ data/tools/mlc-venv/lib/python3.13/site-packages/mlc_llm/compiler_pass/lift_global_buffer_alloc.py	2026-11-23 16:31:24.758909345 +0530
+@@ -100,7 +100,7 @@
+     alloc_buffers = []
+ 
+     insertion_point = len(params)
+-    while not tirx.is_buffer_var(params[insertion_point - 1]):
++    while params[insertion_point - 1] not in func.buffer_map:
+         insertion_point -= 1
+         assert insertion_point >= 1
+ 
+@@ -159,7 +159,8 @@
+ 
+     n_arg = len(call.args[1].fields)
+     for i in range(n_arg):
+-        buffer_shape = func.params[i].shape
++        p = func.params[i]
++        buffer_shape = (func.buffer_map[p] if p in func.buffer_map else p).shape
+         arg_shape = call.args[1][i].ty.shape.values
+         assert len(buffer_shape) == len(arg_shape)
+         for v_l, v_r in zip(buffer_shape, arg_shape):
+@@ -173,7 +174,8 @@
+         [ret_tensors] if isinstance(ret_tensors, relax.TensorType) else list(ret_tensors.fields)
+     )
+     for i, ret_tensor in enumerate(ret_tensors):
+-        buffer_shape = func.params[n_arg + i].shape
++        p = func.params[n_arg + i]
++        buffer_shape = (func.buffer_map[p] if p in func.buffer_map else p).shape
+         ret_tensor_shape = ret_tensor.shape.values
+         assert len(buffer_shape) == len(ret_tensor_shape)
+         for v_l, v_r in zip(buffer_shape, ret_tensor_shape):
