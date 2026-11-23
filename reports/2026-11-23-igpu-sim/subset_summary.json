@@ -1,0 +1,68 @@
+{
+  "igpu": {
+    "genuine_tasks": 4,
+    "genuine_passed": 0,
+    "artifact_error_rows": 96,
+    "invalid_action_episodes": 4,
+    "end_reasons": [
+      "turn_budget"
+    ],
+    "turns": 38,
+    "wall_s": {
+      "median": 133.1,
+      "p90": 144.1,
+      "p99": 175.7,
+      "max": 175.7,
+      "mean": 90.1
+    },
+    "first_turn_median_s": 137.3,
+    "prompt_tok_s": 15.4,
+    "gen_tok_s": 6.1,
+    "adapter": [
+      "intel",
+      "gen-12lp"
+    ],
+    "threads": 4,
+    "cap_bytes": "7516192768",
+    "memory_peak": {
+      "gpu_mib": 14,
+      "rss_mib": 2325,
+      "samples": 1142,
+      "avail_start_mib": 5513,
+      "avail_min_mib": 4328
+    }
+  },
+  "cpu": {
+    "genuine_tasks": 12,
+    "genuine_passed": 12,
+    "artifact_error_rows": 88,
+    "invalid_action_episodes": 0,
+    "end_reasons": [
+      "finish"
+    ],
+    "turns": 37,
+    "wall_s": {
+      "median": 3.2,
+      "p90": 9.2,
+      "p99": 21.4,
+      "max": 21.4,
+      "mean": 5.4
+    },
+    "first_turn_median_s": 8.3,
+    "prompt_tok_s": 58.0,
+    "gen_tok_s": 36.3,
+    "adapter": [
+      null,
+      null
+    ],
+    "threads": 4,
+    "cap_bytes": "7516192768",
+    "memory_peak": {
+      "gpu_mib": 14,
+      "rss_mib": 2204,
+      "samples": 64,
+      "avail_start_mib": 5959,
+      "avail_min_mib": 5589
+    }
+  }
+}

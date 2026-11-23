@@ -39,3 +39,31 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 03:57 IST: merged stream-D 4081b24 (chore pages use plain <a> instead of react-router Link: removes a 3.45 kB chunk, expected chore page 121.06 -> about 117.6 kB; trade-off: full page loads between marketing pages) into integration WITHOUT running tests (iGPU job running); post2.sh will build, size and test it.
 - 03:58 IST: DEVIATION from the plan, recorded: iGPU (Intel gen-12lp, 4 threads) runs at about 130-175 s per turn (4.3 tok/s generating, 10 tok/s prompt) against 2 s on the RTX: the 100-task parity would take 12+ hours and the verdict on the 5 s criterion is already clear. post.sh replaced by post3.sh: stops iGPU parity after 4 tasks (SUBSET), speedprobe f16 vs q8_0+FA on the iGPU, F4 coexistence, load times, CPU path stopped after 5 tasks (SUBSET), then ALLDONE so post2.sh (build/size/tests/e2e/smoke rerun) starts. Full 100-task runs can be done later if wanted.
 - 04:37 IST: iGPU parity 2/4 capped tasks (about 20 min per task; Intel gen-12lp, 4 threads), post3.sh alive and will stop it at 4 (ETA about 05:15), then speedprobe f16 vs q8, coexist, load times, CPU path (5 tasks), then post2.sh (build/size/tests/e2e/smoke). RAM 4.5 GB free. D's chore fix already merged (untested). Nothing new started.
+- 04:46 IST (post3.sh): igpu reached 4 tasks: stopping it (subset report)
+- 04:48 IST (post3.sh): speedprobe iGPU kv=f16
+- 04:48 IST (post3.sh): FAILED speedprobe kv=f16
+- 04:48 IST (post3.sh): speedprobe iGPU kv=q8
+- 04:48 IST (post3.sh): FAILED speedprobe kv=q8
+- 04:48 IST (post3.sh): iGPU F4 coexistence
+- 04:48 IST (post3.sh): FAILED coexist
+- 04:48 IST (post3.sh): iGPU load times
+- 04:48 IST (post3.sh): FAILED loadtimes
+- 04:48 IST (post3.sh): CPU path under limits: start
+- 04:50 IST (post3.sh): limits reached 5 tasks: stopping it (subset report)
+- 04:52 IST (post3.sh): post3 done
+- 04:52 IST (post2.sh): first queue finished; starting the second (app build, size, build tests, e2e, smoke rerun)
+- 04:52 IST (post2.sh): start: ff main to integration
+- 04:52 IST (post2.sh): ok: ff main to integration
+- 04:52 IST (post2.sh): start: pnpm build
+- 04:52 IST (post2.sh): ok: pnpm build
+- 04:52 IST (post2.sh): start: pnpm size
+- 04:52 IST (post2.sh): ok: pnpm size
+- 04:52 IST (post2.sh): start: build tests
+- 04:52 IST (post2.sh): ok: build tests
+- 04:52 IST (post2.sh): start: e2e (scripted model, real ffmpeg.wasm)
+- 04:53 IST (post2.sh): ok: e2e (scripted model, real ffmpeg.wasm)
+- 04:53 IST (post2.sh): start: real-model smoke of /app (rerun)
+- 04:53 IST (post2.sh): ok: real-model smoke of /app (rerun)
+- 04:53 IST (post2.sh): post2 ALLDONE2
+- 05:19 IST (post4.sh): start: speedprobe iGPU kv f16
+- 05:21 IST: queues finished earlier than planned. SECOND QUEUE ALL GREEN: size home 117.44 / chore 117.53 kB (limit 120), build tests 31 pass, e2e 32 pass 7 skipped (trim, 9:16, audio chores incl.), smoke rerun passed all 8 steps. iGPU subset: 4 genuine tasks, 0 pass, output GARBAGE on Intel gen-12lp, median 133 s/turn; CPU 4 threads: 12/12 pass, median 3.2 s. The 96/88 error rows are artifacts of stopping the runs (excluded, subset_summary.json). iGPU speedprobes/loadtimes/coexist failed on a port clash (my sequencing bug) and are being rerun. MORNING_REPORT sections 2 and 3 filled.

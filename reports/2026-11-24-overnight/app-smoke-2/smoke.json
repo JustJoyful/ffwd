@@ -1,0 +1,73 @@
+{
+  "app": "http://localhost:4177",
+  "steps": [
+    {
+      "name": "open /app",
+      "ok": true,
+      "detail": {
+        "crossOriginIsolated": true,
+        "webgpu": true
+      },
+      "seconds": 0.505
+    },
+    {
+      "name": "choose a video",
+      "ok": true,
+      "detail": {
+        "modelNotice": "The model runs on your graphics chip."
+      },
+      "seconds": 0.05
+    },
+    {
+      "name": "model asks before downloading",
+      "ok": true,
+      "detail": null,
+      "seconds": 0.002
+    },
+    {
+      "name": "consent and download starts",
+      "ok": true,
+      "detail": {
+        "sawProgressBar": true
+      },
+      "seconds": 0.079
+    },
+    {
+      "name": "model downloaded, checked and started",
+      "ok": true,
+      "detail": {
+        "loadSeconds": 0.785
+      },
+      "seconds": 0.785
+    },
+    {
+      "name": "type a request and make a plan",
+      "ok": true,
+      "detail": {
+        "plan": "Keep\n0:02 to 0:06\nLength\n0:04\nTurn\nnone\nFormat\nMP4 that plays widely\nSound\nAAC\nPicture\n640 × 360\nRun it\nChange"
+      },
+      "seconds": 10.332
+    },
+    {
+      "name": "run it",
+      "ok": true,
+      "detail": {
+        "done": true
+      },
+      "seconds": 1.337
+    },
+    {
+      "name": "save",
+      "ok": true,
+      "detail": {
+        "file": "smoke-clip-ffwd.mp4"
+      },
+      "seconds": 0.035
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "started": "2026-11-23T23:23:28.226Z",
+  "finished": "2026-11-23T23:23:42.136Z",
+  "allOk": true
+}
