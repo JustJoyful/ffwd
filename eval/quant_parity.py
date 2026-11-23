@@ -52,23 +52,38 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--q8-run", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--quant", default="Q4_K_M", choices=("Q4_K_M", "Q5_K_M", "Q6_K"))
     a = ap.parse_args()
-    if a.out.joinpath("M3-q4km").exists():
+    tag = a.quant.lower().replace("_", "")  # q4km, q5km, q6k; Q4_K_M keeps its original names
+    if a.out.joinpath(f"M3-{tag}").exists():
         raise SystemExit("refusing to overwrite a run")
+    gguf = GGUF.with_name(f"grpo-m3-ckpt60-{a.quant.lower()}.gguf")
+    cfg = CFG
+    if (
+        a.quant != "Q4_K_M"
+    ):  # same config, only the names differ (one server at a time on port 8081)
+        cfg = a.out / f"cfg-{tag}.toml"
+        a.out.mkdir(parents=True, exist_ok=True)
+        cfg.write_text(
+            CFG.read_text()
+            .replace("q4km", tag)
+            .replace("Q4_K_M", a.quant)
+            .replace("q4_k_m", a.quant.lower())
+        )
     all_tasks = load_tasks("dev", "dev-eval")  # dev only
     ids = set(sample_ids(all_tasks, N, SEED))
     tasks = {t["id"]: t for t in all_tasks if t["id"] in ids}
     a.out.mkdir(parents=True, exist_ok=True)
     subset = a.out / "sample-tasks.jsonl"
     subset.write_text("".join(json.dumps(t) + "\n" for t in all_tasks if t["id"] in ids))
-    with serve_gguf(CFG, GGUF, a.out, "q4km"):
-        run_baseline.main(["--system", "M3", "--model-config", str(CFG), "--tasks", str(subset),
-                           "--out", str(a.out / "M3-q4km")])  # fmt: skip
-    q8, q4 = side(a.q8_run, tasks, ids), side(a.out / "M3-q4km", tasks, ids)
+    with serve_gguf(cfg, gguf, a.out, tag):
+        run_baseline.main(["--system", "M3", "--model-config", str(cfg), "--tasks", str(subset),
+                           "--out", str(a.out / f"M3-{tag}")])  # fmt: skip
+    q8, q4 = side(a.q8_run, tasks, ids), side(a.out / f"M3-{tag}", tasks, ids)
     if set(q8["res"]) != set(q4["res"]) or len(q4["res"]) != N:
         raise SystemExit("task sets differ: refusing to compare")
     p = parity({i: bool(r["success"]) for i, r in q8["res"].items()}, {i: bool(r["success"]) for i, r in q4["res"].items()})  # fmt: skip
-    t8, t4 = turns(a.q8_run), turns(a.out / "M3-q4km")
+    t8, t4 = turns(a.q8_run), turns(a.out / f"M3-{tag}")
     p["first_turn_identical"] = sum(t8[i][:1] == t4[i][:1] for i in ids) / N
     p["transcript_identical"] = sum(t8[i] == t4[i] for i in ids) / N
     d = decide(
@@ -76,6 +91,9 @@ def main() -> None:
         {k: q4[k] for k in ("invalid", "runs", "nof")},
         p,
     )
+    d["ships"] = d["ships"].replace(
+        "Q4_K_M", a.quant
+    )  # decide() names Q4_K_M; this run may be another quant
     summary = {"sample_ids": sorted(ids), "parity_q8_a_vs_q4_b": p, "q8": {k: v for k, v in q8.items() if k not in ("res", "eps")}, "q4": {k: v for k, v in q4.items() if k not in ("res", "eps")}, "decision": d}  # fmt: skip
     (a.out / "parity.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps({k: v for k, v in summary.items() if k != "sample_ids"}, indent=1))

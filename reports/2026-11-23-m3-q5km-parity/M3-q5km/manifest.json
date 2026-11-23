@@ -1,0 +1,32 @@
+{
+  "git_commit": "49c2b43e38b758691c7a2ae159bad46adcdccf65",
+  "git_dirty": true,
+  "protocol_version": "0.3.0",
+  "ffmpeg_version": "ffmpeg version 5.1.1-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2022 the FFmpeg developers",
+  "system": "M3",
+  "model": "grpo-m3-ckpt60-q5km",
+  "quant": "Q5_K_M",
+  "temperature": 0.0,
+  "model_config": "reports/2026-11-23-m3-q5km-parity/cfg-q5km.toml",
+  "system_prompt": "system-v1.txt",
+  "constrained_decoding": false,
+  "require_spec": true,
+  "stop_after_ask": true,
+  "offset": 0,
+  "limit": null,
+  "dry_run": false,
+  "tasks_sha256": "224165faf994d8e1317c63853bf605885a94a870111996c854980b405ecb7923",
+  "n_tasks": 100,
+  "hardware": {
+    "platform": "Linux-7.2.9-2-cachyos-x86_64-with-glibc2.44",
+    "cpu": "x86_64",
+    "cpu_count": 12,
+    "ram_gb": 15.3,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  "started": "2026-11-23T10:26:02.712899+00:00",
+  "finished": "2026-11-23T10:30:48.152239+00:00",
+  "stopped_reason": null,
+  "cost_usd": 0.0,
+  "cache_hit_ratio": null
+}
