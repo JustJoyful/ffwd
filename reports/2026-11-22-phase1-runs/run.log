@@ -1,0 +1,23 @@
+2026-11-22T11:27:33+00:00 start dry=False systems=['B0', 'M1', 'M3', 'B2'] limit=None
+2026-11-22T11:27:33+00:00 run B0 test-iid
+2026-11-22T11:27:53+00:00 start dry=False systems=['X1'] limit=None
+2026-11-22T11:27:53+00:00 X1 test-iid: 500 tasks, estimate $0.3525, cap left $0.7000, lifetime left $1.3191
+2026-11-22T11:27:53+00:00 run X1 test-iid
+2026-11-22T11:35:17+00:00 run B0 test-phrasing
+2026-11-22T11:38:02+00:00 run B0 test-compositional
+2026-11-22T11:41:28+00:00 run M1 test-iid
+2026-11-22T12:05:59+00:00 run M1 test-phrasing
+2026-11-22T12:07:09+00:00 X1 test-phrasing: 200 tasks, estimate $0.1410, cap left $0.3702, lifetime left $0.9893
+2026-11-22T12:07:09+00:00 run X1 test-phrasing
+2026-11-22T12:16:00+00:00 run M1 test-compositional
+2026-11-22T12:21:09+00:00 X1 test-compositional: 200 tasks, estimate $0.1410, cap left $0.2325, lifetime left $0.8516
+2026-11-22T12:21:09+00:00 run X1 test-compositional
+2026-11-22T12:27:47+00:00 run M3 test-iid
+2026-11-22T12:35:37+00:00 done
+2026-11-22T12:51:32+00:00 run M3 test-phrasing
+2026-11-22T13:01:18+00:00 run M3 test-compositional
+2026-11-22T17:41:12+00:00 start dry=False systems=['B2'] limit=None
+2026-11-22T17:41:14+00:00 run B2 test-iid
+2026-11-22T21:30:21+00:00 run B2 test-phrasing
+2026-11-22T23:09:33+00:00 run B2 test-compositional
+2026-11-23T00:43:58+00:00 done

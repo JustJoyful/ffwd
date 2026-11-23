@@ -1,0 +1,15 @@
+{"ts": "2026-11-22T11:27:33.626589+00:00", "system": "B0", "checkpoint": "b0-frozen-paraphrase", "split": "test-iid", "git_commit": "374d7e75421889e95b021febf664cf14a1f92fbc"}
+{"ts": "2026-11-22T11:27:53.742553+00:00", "system": "X1", "checkpoint": "deepseek-v4-flash", "split": "test-iid", "git_commit": "374d7e75421889e95b021febf664cf14a1f92fbc"}
+{"ts": "2026-11-22T11:35:17.962765+00:00", "system": "B0", "checkpoint": "b0-frozen-paraphrase", "split": "test-phrasing", "git_commit": "ad838e102f208908b85adb00130f085ba4a1749f"}
+{"ts": "2026-11-22T11:38:02.261332+00:00", "system": "B0", "checkpoint": "b0-frozen-paraphrase", "split": "test-compositional", "git_commit": "aa6028a0f0b0a871188a9aee7b301e1046645e4d"}
+{"ts": "2026-11-22T11:41:28.436713+00:00", "system": "M1", "checkpoint": "m1-0.6b-q8_0", "split": "test-iid", "git_commit": "1c152265f1326d61ec2363389782c1729ae80827"}
+{"ts": "2026-11-22T12:05:59.853101+00:00", "system": "M1", "checkpoint": "m1-0.6b-q8_0", "split": "test-phrasing", "git_commit": "1c152265f1326d61ec2363389782c1729ae80827"}
+{"ts": "2026-11-22T12:07:09.907508+00:00", "system": "X1", "checkpoint": "deepseek-v4-flash", "split": "test-phrasing", "git_commit": "1c152265f1326d61ec2363389782c1729ae80827"}
+{"ts": "2026-11-22T12:16:00.292804+00:00", "system": "M1", "checkpoint": "m1-0.6b-q8_0", "split": "test-compositional", "git_commit": "1c152265f1326d61ec2363389782c1729ae80827"}
+{"ts": "2026-11-22T12:21:09.825711+00:00", "system": "X1", "checkpoint": "deepseek-v4-flash", "split": "test-compositional", "git_commit": "1c152265f1326d61ec2363389782c1729ae80827"}
+{"ts": "2026-11-22T12:27:47.530370+00:00", "system": "M3", "checkpoint": "grpo-m3-ckpt60-q8_0", "split": "test-iid", "git_commit": "1c152265f1326d61ec2363389782c1729ae80827"}
+{"ts": "2026-11-22T12:51:32.534705+00:00", "system": "M3", "checkpoint": "grpo-m3-ckpt60-q8_0", "split": "test-phrasing", "git_commit": "03b93707496f996f38bb63db64cc5ba4b91b517a"}
+{"ts": "2026-11-22T13:01:18.197204+00:00", "system": "M3", "checkpoint": "grpo-m3-ckpt60-q8_0", "split": "test-compositional", "git_commit": "03b93707496f996f38bb63db64cc5ba4b91b517a"}
+{"ts": "2026-11-22T17:41:14.171173+00:00", "system": "B2", "checkpoint": "qwen3-0.6b-q8_0", "split": "test-iid", "git_commit": "03b93707496f996f38bb63db64cc5ba4b91b517a"}
+{"ts": "2026-11-22T21:30:21.333214+00:00", "system": "B2", "checkpoint": "qwen3-0.6b-q8_0", "split": "test-phrasing", "git_commit": "03b93707496f996f38bb63db64cc5ba4b91b517a"}
+{"ts": "2026-11-22T23:09:33.272274+00:00", "system": "B2", "checkpoint": "qwen3-0.6b-q8_0", "split": "test-compositional", "git_commit": "03b93707496f996f38bb63db64cc5ba4b91b517a"}
