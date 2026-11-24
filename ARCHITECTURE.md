@@ -262,7 +262,7 @@ See **EVALUATION.md**. The harness reuses the same environment, protocol and che
 |---|---|
 | `site_visit` | `landing_page` (chore slug or home), `referrer_domain` |
 | `capability_checked` | `webgpu` (bool), `fail_reason` (category) |
-| `model_load_started` / `model_load_completed` | `model_version`, `cache_hit`, `ms` |
+| `model_load_started` / `model_load_completed` | `model_version`, `cache_hit`, `ms`; `model_load_completed` also carries `model_path` (`webgpu` \| `cpu`) and `canary_result` (`pass` \| `fail` \| `skipped`), categories only, any other value is sent as `other` (owner decision 2026-11-25; the adapter description and browser version stay on the device and are never sent) |
 | `edit_started` | `families[]`, `mode` (browser/helper), `input_size_bucket`, `n_files_bucket` |
 | `spec_confirmed` | `edited_by_user` (bool) |
 | `edit_completed` | `passed_check`, `runs`, `seconds_bucket`, `re_encoded`, `model_version` |
