@@ -369,6 +369,18 @@ def verify_sums(out: Path) -> list[str]:
     return problems + [f"{n}: not listed in SHA256SUMS" for n in sorted(present - set(listed))]
 
 
+def file_problem(out: Path, entry: dict, sha=sha256_file) -> str | None:
+    """Why one `files[]` entry of a manifest does not match the file on disk (None = fine). Size is compared before
+    the hash, so a truncated file is refused without reading it. The CLI passes a caching `sha` (apps/cli release.py).
+    """
+    p = out / entry["path"]
+    if not p.is_file():
+        return f"{entry['path']}: listed in ffwd-model.json but missing"
+    if p.stat().st_size != entry["size_bytes"] or sha(p) != entry["sha256"]:
+        return f"{entry['path']}: differs from ffwd-model.json"
+    return None
+
+
 def verify_package(out: Path) -> list[str]:
     """SHA256SUMS, the manifest's schema, and every manifest file's size and hash."""
     problems = verify_sums(out)
@@ -378,11 +390,8 @@ def verify_package(out: Path) -> list[str]:
     manifest = json.loads(mpath.read_text())
     problems += [f"ffwd-model.json: {e}" for e in validate("model", manifest)]
     for f in manifest.get("files", []):
-        p = out / f["path"]
-        if not p.is_file():
-            problems.append(f"{f['path']}: listed in ffwd-model.json but missing")
-        elif p.stat().st_size != f["size_bytes"] or sha256_file(p) != f["sha256"]:
-            problems.append(f"{f['path']}: differs from ffwd-model.json")
+        if problem := file_problem(out, f):
+            problems.append(problem)
     return problems
 
 
