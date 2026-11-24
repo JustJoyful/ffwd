@@ -1,0 +1,630 @@
+{
+ "old_rev": "ca3467f~1",
+ "total": {
+  "files": 503,
+  "episodes": 37305,
+  "run_actions": 53705,
+  "backslash_in_quotes": 0,
+  "affected_actions": 0
+ },
+ "unique_run_arg_lists": 10259,
+ "affected": [],
+ "datasets": {
+  "data/aborted-runs/B1-qwen3-0.6b-capped-oom-kill": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/aborted-runs/B1-qwen3-0.6b-interrupted-session-crash": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/aborted-runs/B1-qwen3-0.6b-oom-killed": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/aborted-runs/browser-0.6b-json0-thinking-check-bug.json": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/aborted-runs/browser-0.6b-json1-cache-error.json": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/aborted-runs/browser-0.6b-json1-no-schema.json": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/aborted-runs/browser-0.6b-old-build.json": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/bench/manifest.json": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/budget-ledger.jsonl": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/jobs/taskgen-verify-cache.jsonl": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/models/grpo-control-hub": {
+   "files": 5,
+   "episodes": 9,
+   "run_actions": 9,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/models/grpo-m3-ckpt50-hub": {
+   "files": 4,
+   "episodes": 6,
+   "run_actions": 6,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/models/grpo-m3-ckpt60-hub": {
+   "files": 3,
+   "episodes": 3,
+   "run_actions": 3,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/sft/m1-v1": {
+   "files": 3,
+   "episodes": 5775,
+   "run_actions": 6202,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/sft/m1-v1-kaggle": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks-hard/dev-recovery": {
+   "files": 3,
+   "episodes": 500,
+   "run_actions": 500,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks-hard/overnight": {
+   "files": 1,
+   "episodes": 1813,
+   "run_actions": 1813,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks-hard/recovery-base": {
+   "files": 2,
+   "episodes": 420,
+   "run_actions": 420,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks-hard/recovery-pilot": {
+   "files": 3,
+   "episodes": 600,
+   "run_actions": 600,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks-hard/widened-pilot": {
+   "files": 2,
+   "episodes": 300,
+   "run_actions": 300,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks/MANIFEST.json": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks/dev": {
+   "files": 4,
+   "episodes": 415,
+   "run_actions": 415,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks/test-compositional": {
+   "files": 1,
+   "episodes": 200,
+   "run_actions": 200,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks/test-iid": {
+   "files": 1,
+   "episodes": 458,
+   "run_actions": 458,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks/test-phrasing": {
+   "files": 1,
+   "episodes": 176,
+   "run_actions": 176,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/tasks/train": {
+   "files": 2,
+   "episodes": 4265,
+   "run_actions": 4265,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/teacher/bulk-20261119": {
+   "files": 9,
+   "episodes": 9762,
+   "run_actions": 21252,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/teacher/smoke": {
+   "files": 4,
+   "episodes": 1960,
+   "run_actions": 4322,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "data/teacher/teacher-pilot-20261119": {
+   "files": 3,
+   "episodes": 37,
+   "run_actions": 84,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-15-phase-0": {
+   "files": 29,
+   "episodes": 133,
+   "run_actions": 145,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-16-paraphrase-robustness": {
+   "files": 7,
+   "episodes": 77,
+   "run_actions": 91,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-16-phase0-followups": {
+   "files": 21,
+   "episodes": 241,
+   "run_actions": 276,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-16-phase1-dev-baselines": {
+   "files": 6,
+   "episodes": 286,
+   "run_actions": 286,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-16-spike-v1": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-16-taskgen-v1": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-gguf-path-proof": {
+   "files": 7,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-m1-export-smoke": {
+   "files": 4,
+   "episodes": 1,
+   "run_actions": 5,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-parity-native-5.1.1-vs-wasm-5.1.4-run2": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-parity-native-5.1.1-vs-wasm-5.1.4-run3-fixed-harness": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-parity-native-5.1.1-vs-wasm-5.1.4-run4-fresh-build": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-phase1-dev-baselines-pinned": {
+   "files": 6,
+   "episodes": 563,
+   "run_actions": 563,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-phase1-dev-baselines-protocol03": {
+   "files": 6,
+   "episodes": 556,
+   "run_actions": 556,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-rotation-spelling": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-sft-data": {
+   "files": 3,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-taskgen-v1-final": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-taskgen-v1-pinned": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-teacher-bulk": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-teacher-pilot": {
+   "files": 3,
+   "episodes": 37,
+   "run_actions": 84,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-19-x1-dev": {
+   "files": 6,
+   "episodes": 57,
+   "run_actions": 65,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-g3-pilots": {
+   "files": 21,
+   "episodes": 1453,
+   "run_actions": 1758,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-grpo-pool": {
+   "files": 6,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-kaggle-smoke": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-leakage-audit": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-m1-dev": {
+   "files": 4,
+   "episodes": 289,
+   "run_actions": 328,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-m1-dev-failures": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-m1-hub": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-m1-milestone": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-m1-parity": {
+   "files": 5,
+   "episodes": 98,
+   "run_actions": 106,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-main-run-smoke": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-prereg-m3-efficiency-draft": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-prereg-no-m3-draft": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-reward-variance": {
+   "files": 9,
+   "episodes": 262,
+   "run_actions": 262,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-spec-acc-groups": {
+   "files": 5,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-t18-pass-rates": {
+   "files": 9,
+   "episodes": 69,
+   "run_actions": 69,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-20-test-counts": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-21-control-attempt1": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-21-control-dev": {
+   "files": 5,
+   "episodes": 289,
+   "run_actions": 325,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-checker-mutation": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-leakage-audit": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-m3-ckpt50-dev": {
+   "files": 3,
+   "episodes": 289,
+   "run_actions": 332,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-m3-ckpt60-dev": {
+   "files": 3,
+   "episodes": 289,
+   "run_actions": 332,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-m3-q4km-parity": {
+   "files": 5,
+   "episodes": 195,
+   "run_actions": 321,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-phase1-dryrun": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-phase1-dryrun-runs": {
+   "files": 15,
+   "episodes": 36,
+   "run_actions": 36,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-22-phase1-runs": {
+   "files": 45,
+   "episodes": 3292,
+   "run_actions": 3623,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-browser-gguf": {
+   "files": 45,
+   "episodes": 489,
+   "run_actions": 667,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-igpu-sim": {
+   "files": 21,
+   "episodes": 12,
+   "run_actions": 12,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-m3-q5km-parity": {
+   "files": 5,
+   "episodes": 196,
+   "run_actions": 210,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-m3-q6k-parity": {
+   "files": 5,
+   "episodes": 196,
+   "run_actions": 204,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-mlc-parity": {
+   "files": 24,
+   "episodes": 269,
+   "run_actions": 937,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-passed-review": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-phase-1": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-23-phase-1-browser-row": {
+   "files": 26,
+   "episodes": 932,
+   "run_actions": 1087,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-24-canary": {
+   "files": 15,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-24-overnight": {
+   "files": 4,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-24-release-local-test": {
+   "files": 2,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/2026-11-25-public-prep": {
+   "files": 3,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  },
+  "reports/TEST_RUNS.jsonl": {
+   "files": 1,
+   "episodes": 0,
+   "run_actions": 0,
+   "backslash_in_quotes": 0,
+   "affected_actions": 0
+  }
+ }
+}
