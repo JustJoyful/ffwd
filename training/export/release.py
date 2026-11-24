@@ -1,5 +1,5 @@
-"""Build the local release package of a model (D-053): the GGUFs byte-identical to the evaluated files, `ffwd-model.json`,
-the card as README.md, the licence, `SHA256SUMS`. Nothing is uploaded here.
+"""Build the local release package of a model (D-053): the GGUFs byte-identical to the evaluated files, the merged fp16
+HF model (`weights/`), the optional LoRA adapters, `ffwd-model.json`, the card as README.md, the licence, `SHA256SUMS`. Nothing is uploaded here.
 
     uv run python -m training.export.release build --version 1.0.0 --out releases/ffwd-0.6b-v1.0.0
     uv run python -m training.export.release verify --out releases/ffwd-0.6b-v1.0.0
@@ -51,6 +51,24 @@ SYSTEM_PROMPT_SHA = "56e7d7217b97c122662235cceb96acbf62bd822c6fec25f880035bfff80
 CHAT_TEMPLATE_SHA = "8d12c21330339015cf3856b2c8fd0ade15556f92c87958d3426b832bae029af5"
 LICENCE_SHA = "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
 ADAPTER_SHA = "67958a13b78bd3588b583a22fb2a50a9cbca7efc8312dcbc227b6c15e7958e06"  # = the Hub LFS etag of checkpoint-60
+# The M1 SFT adapter (base of the checkpoint-60 adapter): reports/2026-11-20-m1-dev/manifest.json `adapter_sha256`.
+ADAPTER_M1_SHA = "b4f8b98b5010e4b6c3581b9587b5ee5693ebd62e13b7eeabcffd1dbdc16b4372"
+# The merged fp16 model of checkpoint-60 that the GGUFs were converted from (D-053 addendum 2): its 197 matrix tensors
+# are bit-identical to grpo-m3-ckpt60-f16.gguf, the file the Q5_K_M and Q8_0 were quantised from.
+WEIGHTS_SHA = "f81b97c7115e058e11495e9d2abb73c733e302453d2301dd054c866d3935cf9c"
+# What an HF dir needs to load; no optimizer, RNG or trainer files, and not model.safetensors.index.json (one shard).
+WEIGHTS_FILES = (
+    "model.safetensors",
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer_config.json",
+    "chat_template.jinja",
+)
+
+
+ADAPTER_FILES = ("adapter_model.safetensors", "adapter_config.json")
+FORMATS = {".safetensors": "safetensors", ".json": "json", ".jinja": "jinja"}
 
 
 class ReleaseError(Exception):
@@ -72,11 +90,15 @@ class Inputs:
     q8: Model
     adapter: Path  # folder with adapter_model.safetensors + adapter_config.json
     adapter_sha256: str
+    weights: Path  # the merged fp16 HF folder; WEIGHTS_FILES are copied from it to weights/
+    weights_sha256: str
     card: Path
     licence: Path
     system_prompt: Path
     chat_template: Path
     canary_reference: Path
+    adapter_m1: Path | None = None  # optional extra, copied to adapter-m1/
+    adapter_m1_sha256: str = ""
     pins: tuple[str, str, str] = (SYSTEM_PROMPT_SHA, CHAT_TEMPLATE_SHA, LICENCE_SHA)
 
 
@@ -132,6 +154,10 @@ def default_inputs(repo: Path = config.REPO_ROOT) -> Inputs:
         q8=mk("Q8_0", "grpo-m3-ckpt60-q8_0.gguf", "evaluated"),
         adapter=repo / "data/models/grpo-m3-ckpt60-hub/checkpoints/checkpoint-60",
         adapter_sha256=ADAPTER_SHA,
+        weights=repo / "data/models/grpo-m3-ckpt60-merged/grpo-m3-ckpt60",
+        weights_sha256=WEIGHTS_SHA,
+        adapter_m1=repo / "data/sft/m1-v1-kaggle/adapter-final",
+        adapter_m1_sha256=ADAPTER_M1_SHA,
         card=repo / "docs/hf-cards/model-card-m3.md",
         licence=repo / "docs/hf-cards/LICENSE-Qwen3-Apache-2.0.txt",
         system_prompt=config.PROTOCOL_DIR / "prompts/system-v1.txt",
@@ -187,7 +213,7 @@ def make_readme(card: str, version: str, f: dict) -> str:
     card = _sub(
         card,
         r"The LoRA adapter of checkpoint-60 \(now on.*$",
-        "`adapter/adapter_model.safetensors` and `adapter/adapter_config.json` are the LoRA adapter of checkpoint-60 as trained. Its base is the merged M1 model (`base_model_name_or_path` is `/kaggle/working/m1-merged`), not Qwen3-0.6B itself: to re-merge, first merge the M1 SFT adapter into Qwen3-0.6B (private repo `JustJoyful/ffmpeg-agent-m1-0.6b`), then this adapter into the result.",
+        "`weights/` is the merged fp16 Hugging Face model of checkpoint-60 (`model.safetensors`, config, tokenizer; the GGUFs were converted from exactly these weights). `adapter/adapter_model.safetensors` and `adapter/adapter_config.json` are the LoRA adapter of checkpoint-60 as trained, and `adapter-m1/` the M1 SFT adapter; both are optional extras (marked `optional` in `ffwd-model.json`). The checkpoint-60 adapter's base is the merged M1 model (`base_model_name_or_path` is `/kaggle/working/m1-merged`), not Qwen3-0.6B itself: to re-merge, first merge `adapter-m1/` into Qwen3-0.6B, then `adapter/` into the result (`training.export.merge`).",
     )
     return card
 
@@ -228,7 +254,9 @@ def build_manifest(i: Inputs, version: str, out: Path) -> dict:
     system = i.system_prompt.read_text()
     ref = json.loads(i.canary_reference.read_text())
 
-    def entry(path: str, role: str, fmt: str, quant: str | None = None) -> dict:
+    def entry(
+        path: str, role: str, fmt: str, quant: str | None = None, optional: bool = False
+    ) -> dict:
         p = out / path
         q = {"quant": quant} if quant else {}
         return {
@@ -236,6 +264,7 @@ def build_manifest(i: Inputs, version: str, out: Path) -> dict:
             "role": role,
             "format": fmt,
             **q,
+            **({"optional": True} if optional else {}),
             "sha256": sha256_file(p),
             "size_bytes": p.stat().st_size,
         }
@@ -252,8 +281,20 @@ def build_manifest(i: Inputs, version: str, out: Path) -> dict:
         "files": [
             entry(names["q5"], "shipped", "gguf", "Q5_K_M"),
             entry(names["q8"], "evaluated", "gguf", "Q8_0"),
-            entry("adapter/adapter_model.safetensors", "adapter", "safetensors"),
-            entry("adapter/adapter_config.json", "adapter", "json"),
+            *(
+                entry(
+                    f"weights/{f}",
+                    "weights",
+                    FORMATS[Path(f).suffix],
+                    "f16" if "model" in f else None,
+                )
+                for f in WEIGHTS_FILES
+            ),
+            *(
+                entry(f"{d}/{f}", "adapter", FORMATS[Path(f).suffix], optional=True)
+                for d in ("adapter", *(["adapter-m1"] if i.adapter_m1 else []))
+                for f in ADAPTER_FILES
+            ),
             entry("system-v1.txt", "prompt", "text"),
             entry("chat-template.jinja", "template", "jinja"),
         ],
@@ -296,6 +337,12 @@ def build(i: Inputs, version: str, out: Path) -> dict:
                 f"{m.src.name}: {m.src.stat().st_size} bytes != recorded {m.size_bytes}"
             )
     _check_hash(i.adapter / "adapter_model.safetensors", i.adapter_sha256, "adapter")
+    _check_hash(i.weights / "model.safetensors", i.weights_sha256, "weights")
+    if i.adapter_m1:
+        _check_hash(i.adapter_m1 / "adapter_model.safetensors", i.adapter_m1_sha256, "M1 adapter")
+    for f in WEIGHTS_FILES:
+        if not (i.weights / f).is_file():
+            raise ReleaseError(f"weights folder lacks {f}")
     _check_hash(i.system_prompt, pin_sys, "system prompt")
     _check_hash(i.chat_template, pin_tmpl, "chat template")
     _check_hash(i.licence, pin_lic, "licence")
@@ -310,8 +357,11 @@ def build(i: Inputs, version: str, out: Path) -> dict:
     # 2. copy (never re-quantise)
     _copy(i.q5.src, out / names["q5"], i.q5.sha256)
     _copy(i.q8.src, out / names["q8"], i.q8.sha256)
-    for f in ("adapter_model.safetensors", "adapter_config.json"):
-        _copy(i.adapter / f, out / "adapter" / f, sha256_file(i.adapter / f))
+    for d, src in (("adapter", i.adapter), ("adapter-m1", i.adapter_m1)):
+        for f in ADAPTER_FILES if src else ():
+            _copy(src / f, out / d / f, sha256_file(src / f))
+    for f in WEIGHTS_FILES:
+        _copy(i.weights / f, out / "weights" / f, sha256_file(i.weights / f))
     _copy(i.system_prompt, out / "system-v1.txt", pin_sys)
     _copy(i.chat_template, out / "chat-template.jinja", pin_tmpl)
     _copy(i.licence, out / "LICENSE", pin_lic)

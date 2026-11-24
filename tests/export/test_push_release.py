@@ -8,7 +8,14 @@ from huggingface_hub.errors import RepositoryNotFoundError
 from training.export.push_release import PushError, rename, upload
 from training.export.release import build
 
-WRITES = ("create_repo", "create_commit", "create_tag", "move_repo", "update_repo_settings")
+WRITES = (
+    "create_repo",
+    "create_commit",
+    "create_tag",
+    "delete_tag",
+    "move_repo",
+    "update_repo_settings",
+)
 
 
 class FakeApi:
@@ -45,6 +52,10 @@ class FakeApi:
 
     def create_tag(self, repo_id, **kw):
         self.calls.append(("create_tag", repo_id, kw))
+
+    def delete_tag(self, repo_id, **kw):
+        self.calls.append(("delete_tag", repo_id, kw))
+        self.tags.remove(kw["tag"])
 
     def move_repo(self, **kw):
         self.calls.append(("move_repo", kw))
@@ -101,6 +112,45 @@ def test_existing_tag_and_wrong_tag_are_refused(package):
         )
     with pytest.raises(PushError, match="does not match"):
         upload(package, "u/r", "v2.0.0", go=False, api=FakeApi(), say=lambda _m: None)
+
+
+def test_move_tag_dry_run_prints_and_writes_nothing(package):
+    api, out = FakeApi({"u/r": True}, tags=["v1.0.0"]), []
+    assert upload(package, "u/r", None, go=False, move_tag=True, api=api, say=out.append) is None
+    assert api.calls == [] and any("DELETE tag v1.0.0" in line for line in out)
+
+
+def test_move_tag_go_commits_then_deletes_and_recreates_the_tag(package):
+    api = FakeApi({"u/r": True}, tags=["v1.0.0"])
+    upload(package, "u/r", None, go=True, move_tag=True, api=api, say=lambda _m: None)
+    assert api.names() == ["create_repo", "create_commit", "delete_tag", "create_tag"]
+    assert (
+        api.calls[-1][2]["revision"] == "c0ffee" and api.tags == []
+    )  # fake tags list is not re-added
+    assert not any(n == "update_repo_settings" for n in api.names())
+
+
+def test_move_tag_refuses_public_repo_and_never_deletes_without_the_flag(package):
+    pub = FakeApi({"u/r": False}, tags=["v1.0.0"])
+    with pytest.raises(PushError, match="PUBLIC"):
+        upload(package, "u/r", None, go=True, move_tag=True, api=pub, say=lambda _m: None)
+    assert pub.calls == []
+    api = FakeApi({"u/r": True}, tags=["v1.0.0"])
+    with pytest.raises(PushError, match="already exists"):
+        upload(package, "u/r", None, go=True, api=api, say=lambda _m: None)
+    assert api.calls == []
+
+
+def test_move_tag_rechecks_privacy_before_deleting(package):
+    class Flip(FakeApi):
+        def create_commit(self, *a, **kw):
+            self.repos["u/r"] = False  # made public behind our back
+            return super().create_commit(*a, **kw)
+
+    api = Flip({"u/r": True}, tags=["v1.0.0"])
+    with pytest.raises(PushError, match="not private any more"):
+        upload(package, "u/r", None, go=True, move_tag=True, api=api, say=lambda _m: None)
+    assert "delete_tag" not in api.names()
 
 
 def test_stale_remote_files_need_delete_stale(package):

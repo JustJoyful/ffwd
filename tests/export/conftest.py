@@ -48,6 +48,12 @@ the Q5_K_M file named above (shipping format), `chat-template.jinja`, `system-v1
 def inputs(tmp_path: Path) -> Inputs:
     src = tmp_path / "src"
     (src / "adapter").mkdir(parents=True)
+    for d in ("weights", "adapter-m1"):
+        (src / d).mkdir()
+    for f in release.WEIGHTS_FILES:
+        (src / "weights" / f).write_bytes(b"w-" + f.encode())
+    (src / "adapter-m1" / "adapter_model.safetensors").write_bytes(b"lora-m1")
+    (src / "adapter-m1" / "adapter_config.json").write_text("{}")
     (src / "q5.gguf").write_bytes(b"q5")
     (src / "q8.gguf").write_bytes(b"q8")
     (src / "adapter" / "adapter_model.safetensors").write_bytes(b"lora")
@@ -76,6 +82,10 @@ def inputs(tmp_path: Path) -> Inputs:
         q8=Model(src / "q8.gguf", sha(b"q8"), 2, "Q8_0", "evaluated"),
         adapter=src / "adapter",
         adapter_sha256=sha(b"lora"),
+        weights=src / "weights",
+        weights_sha256=sha(b"w-model.safetensors"),
+        adapter_m1=src / "adapter-m1",
+        adapter_m1_sha256=sha(b"lora-m1"),
         card=src / "card.md",
         licence=src / "lic.txt",
         system_prompt=PROMPTS / "system-v1.txt",

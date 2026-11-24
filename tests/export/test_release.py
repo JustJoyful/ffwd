@@ -1,5 +1,6 @@
 """The release build (D-053) on tiny fake files; the real GGUFs are never touched here."""
 
+import dataclasses
 import hashlib
 import json
 import shutil
@@ -44,6 +45,33 @@ def test_build_is_valid_byte_identical_and_verifies(inputs, tmp_path):
     )
     if shutil.which("sha256sum"):
         subprocess.run(["sha256sum", "-c", "SHA256SUMS"], cwd=out, check=True, capture_output=True)
+
+
+def test_weights_and_optional_adapters_are_listed_and_checked(inputs, tmp_path):
+    out = tmp_path / "pkg"
+    m = build(inputs, "1.0.0", out)
+    by = {f["path"]: f for f in m["files"]}
+    assert (out / "weights/model.safetensors").read_bytes() == b"w-model.safetensors"
+    assert by["weights/model.safetensors"]["role"] == "weights"
+    assert {p: f.get("optional") for p, f in by.items() if f["role"] == "adapter"} == {
+        "adapter/adapter_model.safetensors": True,
+        "adapter/adapter_config.json": True,
+        "adapter-m1/adapter_model.safetensors": True,
+        "adapter-m1/adapter_config.json": True,
+    }
+    assert not any(f.get("optional") for f in m["files"] if f["role"] != "adapter")
+    (out / "weights/model.safetensors").write_bytes(b"x")
+    assert "weights/model.safetensors: sha256 differs" in " | ".join(verify_package(out))
+
+
+def test_wrong_weights_hash_or_missing_weights_file_refuses(inputs, tmp_path):
+    bad = dataclasses.replace(inputs, weights_sha256=sha(b"other"))
+    with pytest.raises(ReleaseError, match="weights"):
+        build(bad, "1.0.0", tmp_path / "a")
+    (inputs.weights / "tokenizer.json").unlink()
+    with pytest.raises(ReleaseError, match="tokenizer.json"):
+        build(inputs, "1.0.0", tmp_path / "b")
+    assert not (tmp_path / "a").exists() and not (tmp_path / "b").exists()
 
 
 def test_manifest_output_is_deterministic(inputs, tmp_path):

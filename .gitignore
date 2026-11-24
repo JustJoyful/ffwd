@@ -25,3 +25,5 @@ releases/*/*.gguf
 # release packages (D-053): the GGUFs and the 40 MB LoRA adapter stay local; the small text files are tracked
 releases/*/adapter/
 releases/*/*.safetensors
+releases/*/weights/
+releases/*/adapter-m1/

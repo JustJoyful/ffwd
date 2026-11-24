@@ -5,7 +5,8 @@ by default; a real action needs `--go`. Visibility is never touched here (making
     uv run python -m training.export.push_release upload --package releases/ffwd-0.6b-v1.0.0 [--delete-stale] [--go]
 
 `upload` makes ONE commit with every file of the package and then tags that exact commit (`create_tag(revision=oid)`),
-so the tag, and the revision the website pins, is the uploaded content. Needs `hf auth login` with write access.
+so the tag, and the revision the website pins, is the uploaded content. `--move-tag` (with `--go`, private repos only)
+re-points an existing tag at the new commit; without it an existing tag is refused. Needs `hf auth login` with write access.
 """
 
 import argparse
@@ -57,6 +58,7 @@ def upload(
     *,
     go: bool,
     delete_stale: bool = False,
+    move_tag: bool = False,
     api=None,
     say=print,
 ) -> str | None:
@@ -79,6 +81,7 @@ def upload(
     if private is False:
         raise PushError(f"{repo_id} is PUBLIC: this script only uploads to private repos")
     stale: list[str] = []
+    moving = False
     if private is None:
         say(f"{repo_id} does not exist: would create it (private=True)")
     else:
@@ -86,8 +89,9 @@ def upload(
             t.name.removeprefix("refs/tags/")
             for t in api.list_repo_refs(repo_id, repo_type="model").tags
         }
-        if tag in tags:
-            raise PushError(f"tag {tag} already exists on {repo_id}")
+        if tag in tags and not move_tag:
+            raise PushError(f"tag {tag} already exists on {repo_id} (--move-tag moves it)")
+        moving = tag in tags
         stale = sorted(
             set(api.list_repo_files(repo_id, repo_type="model")) - set(files) - IGNORE_REMOTE
         )
@@ -100,6 +104,8 @@ def upload(
     )
     if stale and delete_stale:
         say(f"{'deleting' if go else 'would delete'} in the same commit: {stale}")
+    if moving:
+        say(f"{'then' if go else 'would then'} DELETE tag {tag} and re-create it on the new commit")
     say(
         f"then {'create' if go else 'would create'} tag {tag} on that commit (private repo, visibility untouched)"
     )
@@ -111,6 +117,10 @@ def upload(
     info = api.create_commit(
         repo_id, ops, repo_type="model", commit_message=f"ffwd-0.6b v{version}"
     )
+    if moving:
+        if _repo_private(api, repo_id) is not True:  # re-check right before the destructive step
+            raise PushError(f"{repo_id} is not private any more: tag {tag} NOT moved")
+        api.delete_tag(repo_id, tag=tag, repo_type="model")
     api.create_tag(repo_id, tag=tag, revision=info.oid, repo_type="model")
     say(f"committed {info.oid} and tagged {tag}; private={_repo_private(api, repo_id)}")
     return info.oid
@@ -135,6 +145,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="delete remote files that are not in the package",
     )
+    u.add_argument(
+        "--move-tag",
+        action="store_true",
+        help="the tag already exists: delete it and re-create it on the new commit (private repos only; "
+        "real only with --go, otherwise the dry run prints it)",
+    )
     for p in (r, u):
         p.add_argument("--go", action="store_true", help="really do it (default: dry run)")
     a = ap.parse_args(argv)
@@ -142,7 +158,9 @@ def main(argv: list[str] | None = None) -> int:
         if a.cmd == "rename":
             rename(a.src, a.to, go=a.go)
         else:
-            upload(a.package, a.repo, a.tag, go=a.go, delete_stale=a.delete_stale)
+            upload(
+                a.package, a.repo, a.tag, go=a.go, delete_stale=a.delete_stale, move_tag=a.move_tag
+            )
     except PushError as e:
         print(f"REFUSED: {e}", file=sys.stderr)
         return 1

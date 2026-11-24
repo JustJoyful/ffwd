@@ -4,7 +4,7 @@ Local release packages of the model (D-053). One folder per version, `ffwd-0.6b-
 
 ## Layout of a package
 
-`ffwd-model.json` (the manifest apps read; schema `packages/protocol/schemas/model.schema.json`, examples `packages/protocol/conformance/model-manifest.jsonl`), the two GGUFs, `adapter/` (LoRA adapter of checkpoint-60, base is the merged M1), `chat-template.jinja`, `system-v1.txt`, `README.md` (the model card, generated from `docs/hf-cards/model-card-m3.md`), `LICENSE` (Qwen3 Apache-2.0), `RELEASE_NOTES.md`, `SHA256SUMS` (every file except itself). Git ignores the GGUFs and `adapter/`; the small text files are tracked.
+`ffwd-model.json` (the manifest apps read; schema `packages/protocol/schemas/model.schema.json`, examples `packages/protocol/conformance/model-manifest.jsonl`), the two GGUFs, `weights/` (the merged fp16 Hugging Face model of checkpoint-60 that the GGUFs were converted from), `adapter/` (LoRA adapter of checkpoint-60) and `adapter-m1/` (the M1 SFT adapter, its base; both adapters are `optional` in the manifest; to re-merge, merge `adapter-m1/` into Qwen3-0.6B first, then `adapter/`), `chat-template.jinja`, `system-v1.txt`, `README.md` (the model card, generated from `docs/hf-cards/model-card-m3.md`), `LICENSE` (Qwen3 Apache-2.0), `RELEASE_NOTES.md`, `SHA256SUMS` (every file except itself). Git ignores the GGUFs, `weights/`, `adapter/` and `adapter-m1/`; the small text files are tracked.
 
 ## Build and verify (local, safe, can be repeated)
 
@@ -32,7 +32,7 @@ uv run python -m training.export.push_release upload --package releases/ffwd-0.6
 uv run python scripts/release_github.py --repo OWNER/REPO --package releases/ffwd-0.6b-v1.0.0 # gh release create (draft)
 ```
 
-All three refuse when `SHA256SUMS` or `ffwd-model.json` do not verify. `upload` refuses a public repo, an existing tag, and (with `--go`) remote files outside the package unless `--delete-stale`. None of them changes visibility.
+All three refuse when `SHA256SUMS` or `ffwd-model.json` do not verify. `upload` refuses a public repo, an existing tag (unless `--move-tag`, which needs a private repo, deletes the tag and re-creates it on the new commit, and is only real with `--go`), and (with `--go`) remote files outside the package unless `--delete-stale`. None of them changes visibility.
 
 ## Order of the manual steps (owner)
 
