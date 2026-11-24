@@ -231,3 +231,32 @@ def test_over_length_episode_ends_as_too_long_and_never_truncates(tmp_path, corp
     assert (
         len(inner.seen) == 2
     )  # the third turn never reached the model; history was not cut to fit
+
+
+def test_quant_selects_the_evaluated_file_with_default_kv_and_a_wrong_pin_starts_nothing(
+    pkg, tmp_path, corpus, monkeypatch, capsys
+):
+    root, m = pkg
+    q8 = b"q8 bytes"
+    (root / "m-Q8_0.gguf").write_bytes(q8)
+    m["files"].append(
+        {"format": "gguf", "path": "m-Q8_0.gguf", "quant": "Q8_0", "role": "evaluated",
+         "sha256": sha(q8), "size_bytes": len(q8)}
+    )  # fmt: skip
+    write(root, m)
+    code, _ = run_main(monkeypatch, tmp_path, corpus, "--release", str(root), "--quant", "q8_0")
+    s = FakeServer.last
+    assert code == 0 and s.model == root / "m-Q8_0.gguf" and s.ctx == 8192
+    assert (
+        s.flags["kv"] is None and s.flags["flash"] is None
+    )  # the evaluated config: no -ctk/-ctv/-fa
+    code, _ = run_main(monkeypatch, tmp_path, corpus, "--model", str(root / "m-Q8_0.gguf"))
+    assert (
+        code == 5 and "--quant" in capsys.readouterr().err
+    )  # a sibling file is not picked by path
+    FakeServer.last = None
+    monkeypatch.setattr(
+        cli, "require_pinned", lambda: (_ for _ in ()).throw(cli.PinMismatch("FFmpeg 9 found"))
+    )
+    code, _ = run_main(monkeypatch, tmp_path, corpus, "--release", str(root))
+    assert code == 5 and FakeServer.last is None and "FFmpeg 9 found" in capsys.readouterr().err

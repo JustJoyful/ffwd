@@ -95,9 +95,10 @@ def test_a_run_before_the_spec_is_rejected_and_the_failed_check_is_reported_hone
     policy = Script([GOOD, {"action": "spec", "spec": SPEC}, WRONG, WRONG, WRONG, WRONG, WRONG])
     _, r = _job(tmp_path, corpus, policy)
     assert not r.ok and r.output is None and "Nothing was claimed as done" in r.message
+    assert r.runs == 4 and r.check["passed"] is False
     assert (
-        r.runs == 4 and r.check["passed"] is False
-    )  # RULES §8.1: never claim success without a passing check
+        "the last run failed the check (" in r.message
+    )  # the cause is named, not just "budget used up"  # RULES §8.1: never claim success without a passing check
 
 
 def test_unsupported_and_ask_user_paths(tmp_path, corpus):

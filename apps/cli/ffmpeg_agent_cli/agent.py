@@ -81,6 +81,7 @@ def run_job(
     runs = revisions = asks = invalid = 0
     last_check: dict | None = None
     last_out: Path | None = None
+    last_failure = ""  # shown to the person: why the last run did not pass
     for _ in range(config.MAX_TURNS_PER_JOB):
         try:
             reply = policy(messages)
@@ -155,6 +156,10 @@ def run_job(
             )
             if not res.ok:
                 last_check = {"passed": False}
+                tail = (res.stderr_tail or "").strip().splitlines()
+                last_failure = (
+                    f"the last run failed: {res.rejected or (tail[-1] if tail else 'no output')}"
+                )
                 obs = {"run_ok": False, "rejected": res.rejected, "stderr_tail": res.stderr_tail}
             else:
                 last_out = res.outputs[OUTPUT_ID]
@@ -167,13 +172,13 @@ def run_job(
                     input_paths=[input_path],
                 )
                 failed = [c for c in last_check["checks"] if not c["ok"]]
+                names = ", ".join(c["field"] for c in failed) or str(last_check["error"])
+                last_failure = (
+                    "" if last_check["passed"] else f"the last run failed the check ({names})"
+                )
                 say(
                     f"  run {runs}: "
-                    + (
-                        "check passed"
-                        if last_check["passed"]
-                        else f"check failed ({', '.join(c['field'] for c in failed) or last_check['error']})"
-                    )
+                    + ("check passed" if last_check["passed"] else f"check failed ({names})")
                 )
                 obs = {
                     "run_ok": True,
@@ -192,7 +197,9 @@ def run_job(
     why = "the run budget was used up" if runs >= max_runs else "the model did not finish"
     return JobResult(
         False,
-        f"Could not produce a verified result: {why}. Nothing was claimed as done.",
+        f"Could not produce a verified result: {why}"
+        + (f"; {last_failure}" if last_failure else "")
+        + ". Nothing was claimed as done.",
         spec=confirmed,
         runs=runs,
         check=last_check,

@@ -9,6 +9,7 @@ from apps.cli.ffmpeg_agent_cli.release import MANIFEST, ReleaseRefused, load_rel
 from apps.cli.ffmpeg_agent_cli.server import TEMPLATE, LlamaServer
 from training import config
 from training.env.constrained import load_prompt
+from training.env.ffmpeg_pin import PinMismatch, require_pinned
 from training.policies import ChatPolicy
 
 
@@ -36,6 +37,13 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         help="GGUF file; a ffwd-model.json next to it makes this a release run",
     )
+    ap.add_argument(
+        "--quant",
+        help="release runs: use this file from the manifest instead of the shipped one, e.g. q8_0 (the "
+        "evaluated Phase 1 file). It runs with llama.cpp's default KV cache and attention, as it was "
+        "evaluated (RELEASE_NOTES), not the shipped file's q8_0 KV + flash attention. The canary is "
+        "WebGPU-specific to the shipped file and is refused with --quant.",
+    )
     ap.add_argument("--canary", action="store_true", help="release runs: check the canary first")
     ap.add_argument(
         "--llama-server", type=Path, required=True, help="path to the llama-server binary"
@@ -51,6 +59,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     if root is None and a.model is None:
         ap.error("give --release DIR or --model FILE")
+    if a.quant and root is None:
+        ap.error("--quant needs --release DIR (or --model next to a manifest)")
+    if a.quant and a.canary:
+        ap.error("--canary checks the shipped file only; drop --quant")
     if root is None and a.canary:
         ap.error("--canary needs a release manifest")
     if root is not None and a.max_tokens is not None:
@@ -58,20 +70,35 @@ def main(argv: list[str] | None = None) -> int:
     if not a.file.is_file():
         print(f"no such file: {a.file}", file=sys.stderr)
         return 4
+    try:  # before any server starts; FFmpeg comes from PATH or from $FFMPEG_AGENT_PIN_HOME (see training.config)
+        require_pinned()
+    except (PinMismatch, OSError) as e:
+        print(f"refused: {e}", file=sys.stderr)
+        return 5
     out_dir = a.out or a.file.parent
     out_dir.mkdir(parents=True, exist_ok=True)
     if root is not None:
         try:
-            rel = load_release(root)
+            rel = load_release(root, a.quant)
             if a.model and a.model.resolve() != rel.gguf.resolve():
-                raise ReleaseRefused(f"{a.model.name} is not the shipped file {rel.gguf.name}")
+                raise ReleaseRefused(
+                    f"{a.model.name} is not the selected file {rel.gguf.name}; "
+                    "pick another quant explicitly with --quant"
+                )
         except ReleaseRefused as e:
             print(f"refused: {e}", file=sys.stderr)
             return 5
         rt = rel.runtime
-        model, system, flags = rel.gguf, rel.system_prompt, {
-            "template": rel.template, "kv": rt["kv_cache_type"], "flash": rt["flash_attention"],
-        }  # fmt: skip
+        model, system = rel.gguf, rel.system_prompt
+        flags = {
+            "template": rel.template,
+            "kv": rt["kv_cache_type"],
+            "flash": rt["flash_attention"],
+        }
+        if (
+            rel.evaluated
+        ):  # RELEASE_NOTES: the evaluated Q8_0 numbers used the default (f16) KV cache, no -fa flag
+            flags |= {"kv": None, "flash": None}
         n_ctx, max_tokens, temperature = rt["n_ctx"], rt["max_tokens"], rt["temperature"]
     else:
         print(

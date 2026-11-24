@@ -31,6 +31,9 @@ class Release:
     gguf: Path  # the file with role "shipped"
     template: Path
     system_prompt: str
+    evaluated: bool = (
+        False  # the --quant file with role "evaluated": run with the Phase 1 flags, not the manifest's
+    )
 
     @property
     def runtime(self) -> dict:
@@ -72,7 +75,8 @@ def _cached_sha(path: Path, expected: str) -> str:
     return got
 
 
-def load_release(root: Path) -> Release:
+def load_release(root: Path, quant: str | None = None) -> Release:
+    """`quant` None = the manifest's shipped file; else the one gguf whose quant matches (case-insensitive)."""
     try:
         m = json.loads((root / MANIFEST).read_text())
     except (OSError, ValueError) as e:
@@ -91,6 +95,17 @@ def load_release(root: Path) -> Release:
     shipped = [f for f in m["files"] if f["role"] == "shipped" and f["format"] == "gguf"]
     if len(shipped) != 1:
         raise ReleaseRefused("the manifest must list exactly one shipped gguf")
+    if quant is not None:
+        shipped = [
+            f
+            for f in m["files"]
+            if f["format"] == "gguf" and f.get("quant", "").lower() == quant.lower()
+        ]
+        if len(shipped) != 1:
+            have = sorted(f["quant"] for f in m["files"] if f["format"] == "gguf")
+            raise ReleaseRefused(
+                f"no gguf with quant {quant} in the manifest (have: {', '.join(have)})"
+            )
     by_path = {f["path"]: f for f in m["files"]}
     entries = [shipped[0]]
     for key in (
@@ -111,6 +126,7 @@ def load_release(root: Path) -> Release:
         root / shipped[0]["path"],
         root / m["chat_template"]["file"],
         (root / m["prompt"]["file"]).read_text(),
+        evaluated=quant is not None and shipped[0]["role"] != "shipped",
     )
 
 
