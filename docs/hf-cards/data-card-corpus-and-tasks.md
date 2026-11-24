@@ -19,7 +19,7 @@ tags:
   - synthetic
 ---
 
-> DRAFT: for a PRIVATE repo until the owner flips visibility (launch checklist in `reports/2026-11-24-overnight/MORNING_REPORT.md`). Local draft, not pushed. The one remaining `TODO(owner)` below (the CC BY 3.0 verification date) needs an answer before use.
+> DRAFT: for a PRIVATE repo until the owner flips visibility (launch checklist in `reports/2026-11-24-overnight/MORNING_REPORT.md`). Local draft, not pushed. No `TODO(owner)` remains in this card (the Big Buck Bunny verification date is deliberately `null`).
 
 # ffwd data card: clip corpus and hash-pinned task splits
 
@@ -60,7 +60,7 @@ The clips are **modified** (short cuts, plus derived re-encodes): CC BY 3.0 asks
 
 Source archive hashes are in the manifest (for example the 1080p archive sha256 `d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5`). `tos_avoff` exists in the corpus but is never drawn by task generation (`reports/2026-11-19-taskgen-v1-final/clip-usage.json`: av_skew guard); the other 34 are used.
 
-The manifest does not record when or where the licence text was checked against the source page. TODO(owner): check the licence pages for Tears of Steel and for the Wikimedia Commons Big Buck Bunny 4K file, then write the date and the URLs you checked here before the repo leaves private.
+Licence verification (owner's check of the Wikimedia Commons file pages, supplied 2026-11-24; I did not re-fetch these pages): **Tears of Steel (4K, Commons file "Tears of Steel in 4K"): CC BY 3.0, verified 2016-04-10** (the Commons reviewer confirmed the original YouTube upload was available under the stated licence on that date). **Big Buck Bunny 4K (Commons file `Big_Buck_Bunny_4K.webm`): CC BY 3.0 stated on the file page and linked to the Blender Foundation's own licensing statement; no explicit reviewer verification date is shown, so the verification date is recorded as `null`** (the 2015-05-10 date on that page is the upload date, not a licence review). Note that the Tears of Steel clips in this corpus were built from the Blender Foundation download `tears_of_steel_1080p.mov.zip` at download.blender.org (see `training/corpus/sources.json`), not from the Commons 4K file; the CC BY 3.0 licence is the Blender Foundation's own, and the Commons review is supporting evidence for it.
 
 ### 1.3 Restricted clips and consent
 
