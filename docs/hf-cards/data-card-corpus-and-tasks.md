@@ -1,13 +1,13 @@
 ---
 # DRAFT front matter for a PRIVATE Hugging Face dataset repo. Not pushed anywhere.
 # The corpus repo that exists today is the private dataset JustJoyful/ffmpeg-agent-corpus (clip tarball + manifest).
-# The task splits and teacher trajectories are not on the Hub; TODO(owner): decide repo id(s) and what is uploaded (D-046 rename pending).
-# TODO(owner): choose dataset licence. Mixed content: the clips keep their own licences (see the clip table); the generated tasks, trajectories and manifests have no recorded licence.
+# Owner decisions of 24 Nov 2026 (D-052): upload the corpus clips with their licences, the task generator and ALL generated splits (test splits included, with hashes); NOT the teacher trajectories (local only; optional later). Generated tasks and manifests: CC BY 4.0. The clips keep their own licences (see the clip table). test-real is private and not part of this dataset.
+# The dataset repo id was not decided; it is the existing private dataset JustJoyful/ffmpeg-agent-corpus until the ffwd rename (D-046), which happens before it goes public.
 license: other
 license_name: mixed-per-clip-see-card
 language:
   - en
-pretty_name: ffwd FFmpeg-agent clip corpus, task splits and teacher trajectories
+pretty_name: ffwd FFmpeg-agent clip corpus and task splits
 size_categories:
   - 1K<n<10K
 task_categories:
@@ -17,18 +17,19 @@ tags:
   - video
   - agent
   - synthetic
-  - trajectories
 ---
 
-> DRAFT: for a PRIVATE repo only. Nothing in this file or the data it describes may become public until the DeepSeek terms have been reviewed (owner's standing rule); the teacher trajectories contain DeepSeek-generated outputs. Local draft, not pushed. Every `TODO(owner)` below needs an answer before use.
+> DRAFT: for a PRIVATE repo until the owner flips visibility (launch checklist in `reports/2026-11-24-overnight/MORNING_REPORT.md`). Local draft, not pushed. The one remaining `TODO(owner)` below (the CC BY 3.0 verification date) needs an answer before use.
 
-# ffwd data card: clip corpus, hash-pinned task splits, teacher trajectories
+# ffwd data card: clip corpus and hash-pinned task splits
 
-(Identifiers still say `ffmpeg-agent` until the planned rename to ffwd, D-046.) This card covers three things that are used together: the **clip corpus** the tasks run on, the **task splits** generated from it, and the **teacher trajectories** (plus programmatic ones) used for SFT. The test-real owner-recorded clips are **not** part of this dataset (see Exclusions).
+(Identifiers still say `ffmpeg-agent` until the planned rename to ffwd, D-046.) This card covers what is uploaded: the **clip corpus** the tasks run on, the task **generator**, and the **task splits** generated from it, **including the three test splits** (with their hashes). It also documents, in section 3, how the **teacher trajectories** used for SFT were made; **the trajectories are NOT uploaded** (they stay local; uploading them is an optional later step). Owner-recorded real clips are **not** part of this dataset (see Exclusions).
+
+**Licences:** the generated tasks and manifests are licensed **CC BY 4.0**; every clip keeps its own licence (CC0-1.0 for the synthetic clips, CC BY 3.0 for the Blender Foundation clips, with the attribution below).
 
 ## 1. Clip corpus
 
-The corpus is 35 clips that task generation can see, listed in `data/corpus/manifest.json` (the local manifest also holds 3 `test-real` rows that are excluded everywhere below). Every row records the sha256 of the clip, a probe of it (container, duration, streams), tags, licence, attribution and, for non-synthetic clips, the exact `ffmpeg` command, source file hash, source URL, cut start and FFmpeg version used to build it (`training/corpus/sources.json` and `training/corpus/ingest_sources.py` rebuild every clip from the untracked source files; `--rebuild-check` re-runs each command and compares hashes). The private Hub dataset `JustJoyful/ffmpeg-agent-corpus` holds the tarball of exactly these 35 clips and a manifest that lists only them (the push code excludes `test-real` clips; the current Hub manifest has 35 rows, none `test-real`).
+The corpus is 35 clips that task generation can see, listed in `data/corpus/manifest.json` (the local manifest also holds owner-recorded rows that are private, excluded everywhere below and not described here). Every row records the sha256 of the clip, a probe of it (container, duration, streams), tags, licence, attribution and, for non-synthetic clips, the exact `ffmpeg` command, source file hash, source URL, cut start and FFmpeg version used to build it (`training/corpus/sources.json` and `training/corpus/ingest_sources.py` rebuild every clip from the untracked source files; `--rebuild-check` re-runs each command and compares hashes). The private Hub dataset `JustJoyful/ffmpeg-agent-corpus` holds the tarball of exactly these 35 clips and a manifest that lists only them (the push code excludes owner-recorded clips; the current Hub manifest has 35 rows).
 
 ### 1.1 Synthetic clips: 22, licence CC0-1.0 (synthetic, generated)
 
@@ -59,12 +60,12 @@ The clips are **modified** (short cuts, plus derived re-encodes): CC BY 3.0 asks
 
 Source archive hashes are in the manifest (for example the 1080p archive sha256 `d87a41de040d3814dbde143e9ab85ef122caf22265f660b0bebf476cd8b357a5`). `tos_avoff` exists in the corpus but is never drawn by task generation (`reports/2026-11-19-taskgen-v1-final/clip-usage.json`: av_skew guard); the other 34 are used.
 
-The manifest does not record when or where the licence text was checked against the source page. TODO(owner): confirm and record the date you verified the CC BY 3.0 licence for Tears of Steel and for the Wikimedia Commons Big Buck Bunny 4K file before the repo leaves private.
+The manifest does not record when or where the licence text was checked against the source page. TODO(owner): check the licence pages for Tears of Steel and for the Wikimedia Commons Big Buck Bunny 4K file, then write the date and the URLs you checked here before the repo leaves private.
 
 ### 1.3 Restricted clips and consent
 
 - **Restricted:** the manifest has a `restricted` flag for clips whose licence is unverified (D-033); such clips are invisible to task generation. One such clip existed (`meridian_4k`); it was **removed** from the manifest, the media and the Hub repo (history squashed) on 20 Nov 2026 (D-042). No clip in the corpus is currently `restricted`.
-- **Consent:** the manifest has a `consent` field. It is `null` for every clip in this dataset. The only non-null value belongs to an excluded `test-real` clip (below).
+- **Consent:** the manifest has a `consent` field. It is `null` for every clip in this dataset.
 
 ## 2. Task splits (generator v1, hash-pinned)
 
@@ -73,7 +74,7 @@ Tasks are produced by `training.taskgen.build` (generator version 1.0, seed 2026
 | split | file | tasks | contents | ambiguous | unsupported | sha256 |
 |---|---|---|---|---|---|---|
 | train | `data/tasks/train/v1.jsonl` | 4,472 | 1,500 | 201 | 306 | `1651d8addfc901ef5189c46fa97e7ba9f93010c887537293cb4f9dc12382e6aa` |
-| train (extra) | `data/tasks/train/hard-v1.jsonl` | 300 | TODO(owner): not in MANIFEST.json | not recorded | not recorded | `e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca` |
+| train (extra) | `data/tasks/train/hard-v1.jsonl` | 300 | 300 | 0 | 0 | `e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca` |
 | dev | `data/tasks/dev/v1.jsonl` | 300 | 300 | 2 | 9 | `784c8017f96275cd952133a2ab6065218cdd10c8e548d5d48a3255e575ac2585` |
 | test-iid | `data/tasks/test-iid/v1.jsonl` | 500 | 500 | 20 | 22 | `bd01e887c032921949e1eb6f373fd41164e72ac6b956424ed0a55e7bd1f83470` |
 | test-compositional | `data/tasks/test-compositional/v1.jsonl` | 200 | 200 | 0 | 0 | `19f599f1c570a19f7d41925dc4e1fa0232e3118f7defaadb71ef4faa50f17c9e` |
@@ -81,14 +82,14 @@ Tasks are produced by `training.taskgen.build` (generator version 1.0, seed 2026
 
 Definitions (`training/config.py`, EVALUATION):
 
-- **train**: content-hash bucket below 70; every content rendered in 3 of 5 request styles (terse, polite, verbose, symptom, casual_typos), so tasks overcount distinct cases by about 3x. `hard-v1` is a separate hash-pinned, train-only reweighted pool of 300 tasks (families F2, F6, F7, F8, F10, F11 over-represented) built for the GRPO pilots (D-040). Both are used only for training and for the GRPO pool.
+- **train**: content-hash bucket below 70; every content rendered in 3 of 5 request styles (terse, polite, verbose, symptom, casual_typos), so tasks overcount distinct cases by about 3x. `hard-v1` is a separate hash-pinned, train-only reweighted pool of 300 tasks (families F2, F6, F7, F8, F10, F11 over-represented; one style per content) built for the GRPO pilots (D-040). Both are used only for training and for the GRPO pool. `hard-v1` is registered in `data/tasks/MANIFEST.json` under `extra_train`: generator version 1.0 (`taskgen-1.0-hard`), pool draw seed 20261120, split-hash seed 20261116, file sha256 as in the table, pool manifest sha256 `a335f9debe2e02f0813874fc73418eb14a4f1b3504131372b3fb297fa765182f`; `training.taskgen.loader.load_extra_train` verifies the hash on every read.
 - **dev**: bucket 70 to 74; used for development and informational checkpoint runs, never as a claim.
 - **test-iid**: bucket 75 to 89; same distribution as train.
 - **test-compositional**: family combinations never generated outside this split: F3+F4, F5+F12, F1+F8, F4+F10, F6+F9, F9+F12, F1+F4+F6 (190 two-family and 10 three-family tasks).
 - **test-phrasing**: the remaining bucket, rendered only in two held-out request styles (`context_first`, `indirect`) that train never uses.
 - Difficulty (number of families) in train: 1: 2,113, 2: 1,439, 3: 755, 4: 165. Family counts per split are in `data/tasks/MANIFEST.json` (a family counts for every task that contains it). Draw mix: about 8% ambiguous and 8% unsupported targets, 55/30/12/3% for 1/2/3/4 families among the rest.
 - Generation bookkeeping: 16,817 attempts; 7,504 dropped as duplicates, 976 for no valid draft, the rest dropped when the reference solution failed verification (full table in `MANIFEST.json`).
-- The corpus hash recorded in the manifest (`corpus_manifest_sha256` `7055b86b3308c377c88c005550ee4a701b0f969cc2b7a10d2d0eb5957e6c5d19`) covers only clips task generation can see, so adding a `test-real` or restricted clip changes no split.
+- The corpus hash recorded in the manifest (`corpus_manifest_sha256` `7055b86b3308c377c88c005550ee4a701b0f969cc2b7a10d2d0eb5957e6c5d19`) covers only clips task generation can see, so adding an owner-recorded or restricted clip changes no split.
 
 `unsupported` and `ambiguous` tasks are graded on the action alone (the right move is to refuse or ask, D-038). Success on all other tasks is graded against the task's `gold_spec`.
 
@@ -121,12 +122,13 @@ Held-out splits pass the gate. **test-iid is the training distribution and conta
 ### 3.2 Terms and licence of the trajectories
 
 - The trajectories contain DeepSeek model outputs. `DATA_CARD.json` of the bulk run stores a snapshot of DeepSeek's Open Platform Terms of Service (fetched 2026-11-18; snapshot sha256 `e700b82e5f9170d9ac20b0dc1424b718aed76c1ccc6d6b02cb6312f4beab22de`). Section 4.2 of those terms (effective 29 April 2026) says the user retains rights in the Inputs, DeepSeek assigns rights in the Outputs to the user, and the user may use Inputs and Outputs for "training other models (such as model distillation)". The owner read section 4.2 on 2026-11-19 and confirmed outputs may be used to train other models.
-- **Review pending:** the owner's standing rule is that nothing becomes public until the DeepSeek terms have been reviewed, including for redistribution of trajectories and of derived models. That review is not done. TODO(owner): record the outcome here and decide whether the trajectories may be uploaded at all (they are local only, under `data/teacher/`, and not on the Hub).
-- **Dataset licence:** TODO(owner): choose dataset licence for the task files, manifests and trajectories. The clips keep their own licences (section 1).
+- **DeepSeek terms review: done.** §4.2(2) assigns outputs to the user; §4.2(3) permits training other models incl. distillation; snapshot sha256 `e700b82e5f9170d9ac20b0dc1424b718aed76c1ccc6d6b02cb6312f4beab22de`; read by the owner 19 Nov 2026 (`training/teacher/terms/2026-11-19/terms.json`).
+- **Trajectories are not uploaded** (owner decision, 24 Nov 2026): they stay local under `data/teacher/`. Uploading them is an optional later step and would need its own licence line.
+- **Dataset licence:** the generated tasks and manifests are CC BY 4.0 (owner decision, 24 Nov 2026). The clips keep their own licences (section 1).
 
 ## Exclusions: what is NOT in this dataset
 
-- **`test-real` owner-recorded clips.** Three owner-recorded clips (`hevc_phone`, `screen_rec`, `wa_compressed`) are in the local manifest with `role: test-real`. They are meant only for a later-phase real-clip test set, which has not been run. They are excluded from the Hub corpus push, invisible to task generation (the corpus hash ignores them), and excluded from training, dev and every app fixture. One of them (`wa_compressed`) carries the manifest consent note `friend agreed`, a consent question that stays open for any release. TODO(owner): if the clips are ever released, decide the attribution text and recheck consent; the manifest records the owner's name as attribution, which this draft deliberately does not repeat.
+- **Owner-recorded real clips (`test-real`).** These are private, are not part of this dataset, are not on the Hub and are not listed, hashed or described here. They are excluded from the Hub corpus push, invisible to task generation (the corpus hash ignores them) and excluded from training, dev and every app fixture. They are never published unless the clip's owner agrees (RULES section 3).
 - **Restricted / unverified-licence clips:** none are present (see 1.3).
 - **No real user videos.** No analytics, prompts, file names or user content are part of this dataset.
 - **Test task contents are not in any training prompt, SFT example or GRPO pool**; the task loader's split-purpose guard stops training code from reading test splits.
@@ -139,7 +141,7 @@ Held-out splits pass the gate. **test-iid is the training distribution and conta
 - **Teacher data limits:** 27% of teacher trajectories had a schema-invalid turn (the probe's raw container string copied into the spec), fixed by dropping those turns; the teacher put an arbitrary `nearest_supported` on most unsupported tasks, so those examples are mostly oracle-written with templated reasons; 982 train tasks were not reached by the teacher budget and are covered only by canonical oracle solutions; paraphrases add wording variety, not new solutions.
 - **Systematic spec bugs in the SFT data** (width/height after a rotation, `end_s` after a speed change) are carried into M1 and M3 (D-043); a data fix is a post-Phase-1 item.
 - **FFmpeg version:** tasks and references were verified with FFmpeg 5.1.1 static, and the source clips were cut with FFmpeg 9.0.2 (the manifest records the version per clip); behaviour on other builds (for example ffmpeg.wasm 5.1.4) is not covered by the hashes here.
-- **Inconsistent clip counts elsewhere in the repo.** `reports/2026-11-20-m1-hub/README.md` says "14 real CC-licensed clips" (it predates the removal of `meridian_4k`) and `reports/2026-11-23-phase-1/LIMITATIONS.md` says "22-clip corpus". The current manifest has 22 synthetic plus 13 CC BY 3.0 clips visible to task generation (35). TODO(owner): align those reports or confirm which count you want quoted.
+- **Clip count:** 35 everywhere (22 synthetic plus 13 CC BY 3.0), as visible to task generation. Older dated reports in the project repo quote earlier counts (22, 36) from before the corpus reached its final size; this card and the model card are the reference.
 
 ## Intended use
 
