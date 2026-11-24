@@ -57,6 +57,7 @@
    "file": "train/hard-v1.jsonl",
    "generator": "1.0",
    "pool_manifest_sha256": "a335f9debe2e02f0813874fc73418eb14a4f1b3504131372b3fb297fa765182f",
+   "seed": 20261120,
    "sha256": "e3cb68beb756868ef04d4c828cb1c0f148000b43ad6bfc751982ab0dc89a35ca",
    "styles": {
     "casual_typos": 62,
@@ -65,6 +66,7 @@
     "terse": 62,
     "verbose": 63
    },
+   "taskgen_seed": 20261116,
    "tasks": 300
   }
  },

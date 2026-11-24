@@ -63,6 +63,8 @@ def register(pool_dir: Path, name: str, tasks_root: Path | None = None) -> dict:
         "tasks": len(tasks),
         "pool_manifest_sha256": hashlib.sha256(pool_manifest).hexdigest(),
         "generator": json.loads(pool_manifest).get("generator_version"),
+        "seed": json.loads(pool_manifest).get("seed"),  # the pool's own draw seed
+        "taskgen_seed": json.loads(pool_manifest).get("taskgen_seed"),  # split-hash seed
         "family_count": {  # string keys: what the JSON round trip gives anyway
             str(k): v for k, v in sorted(Counter(len(t["families"]) for t in tasks).items())
         },
