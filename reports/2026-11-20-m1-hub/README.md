@@ -6,7 +6,7 @@ Qwen/Qwen3-0.6B (Apache-2.0). LoRA adapter (all-linear, r=16, alpha=32, dropout 
 
 ## Training data
 
-SFT set `m1-v1`: 6,032 train / 333 validation multi-turn trajectories (1.54 M trained tokens) on synthetic FFmpeg tasks from the project's task generator v1 (22 synthetic clips + 14 real CC-licensed clips; held-out splits and the owner's own clips are not in the training data). Sources: 3,021 teacher trajectories (kept only if the checker passed), 1,896 teacher paraphrases of train requests, 1,115 programmatic oracle trajectories. Every trajectory: spec first, then run(s), then finish, ask_user or unsupported.
+SFT set `m1-v1`: 6,032 train / 333 validation multi-turn trajectories (1.54 M trained tokens) on synthetic FFmpeg tasks from the project's task generator v1 (35 clips in all: 22 synthetic CC0 clips + 13 CC BY 3.0 clips; held-out splits and the owner's own clips are not in the training data). Sources: 3,021 teacher trajectories (kept only if the checker passed), 1,896 teacher paraphrases of train requests, 1,115 programmatic oracle trajectories. Every trajectory: spec first, then run(s), then finish, ask_user or unsupported.
 
 ## Teacher
 
