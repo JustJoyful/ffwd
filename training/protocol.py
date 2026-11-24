@@ -9,8 +9,8 @@ from referencing import Registry, Resource
 
 from training import config
 
-Kind = Literal["action", "spec", "probe", "check", "task"]
-KINDS: tuple[Kind, ...] = ("action", "spec", "probe", "check", "task")
+Kind = Literal["action", "spec", "probe", "check", "task", "model"]
+KINDS: tuple[Kind, ...] = ("action", "spec", "probe", "check", "task", "model")
 
 
 @cache

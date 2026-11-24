@@ -22,3 +22,6 @@ spikes/browser/playwright-report/
 videos/
 reports/**/.profile/
 releases/*/*.gguf
+# release packages (D-053): the GGUFs and the 40 MB LoRA adapter stay local; the small text files are tracked
+releases/*/adapter/
+releases/*/*.safetensors
