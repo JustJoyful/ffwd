@@ -20,7 +20,7 @@ tags:
   - reinforcement-learning
 ---
 
-> DRAFT: for a PRIVATE repo until the owner flips visibility (launch checklist in `reports/2026-11-24-overnight/MORNING_REPORT.md`). The DeepSeek terms review is recorded as done (section Data provenance). Local draft, not pushed. The one remaining `TODO(owner)` below needs an answer before use.
+> DRAFT: for a PRIVATE repo until the owner flips visibility (launch checklist in `reports/2026-11-24-overnight/MORNING_REPORT.md`). The DeepSeek terms review is recorded as done (section Data provenance). Local draft, not pushed. No `TODO(owner)` remains in this card.
 
 # ffwd M3 (ffmpeg-agent-m3-0.6b): a 0.6B FFmpeg agent trained with SFT and multi-turn GRPO
 
@@ -181,11 +181,12 @@ Full detail in the data card (`docs/hf-cards/data-card-corpus-and-tasks.md`). In
 
 ## Licence
 
-- **Base model:** Qwen/Qwen3-0.6B is licensed **Apache-2.0** (the licence field of the base model's Hugging Face page, `license: apache-2.0`, read on 2026-11-23 and again on 2026-11-24; its card names Qwen/Qwen3-0.6B-Base as its own base model). TODO(owner): read the licence text on the base model's page yourself and quote it here.
+- **Base model:** Qwen/Qwen3-0.6B is licensed **Apache-2.0** (the licence field of the base model's Hugging Face page, `license: apache-2.0`, read on 2026-11-23 and again on 2026-11-24; its card names Qwen/Qwen3-0.6B-Base as its own base model). The licence text (Apache License 2.0, "Copyright 2024 Alibaba Cloud", the file the base model repo ships as `LICENSE`, sha256 `832dd9e0…92e`) was supplied by the owner on 2026-11-24 and is shipped unchanged in this repo as `LICENSE`.
+- **Changes made to the base model (Apache-2.0 §4b):** this repo contains a derivative of Qwen3-0.6B: it was fine-tuned (LoRA, then merged) with supervised learning and multi-turn GRPO, then converted to GGUF and quantised to Q5_K_M. The original copyright, patent, trademark and attribution notices of Qwen3 are retained in `LICENSE`; no NOTICE file ships with the base model. "Qwen" and "Alibaba Cloud" are used only to name the origin of the base model (§6).
 - **Project code:** GPL-3.0 (D-016), because the browser build ships an FFmpeg core containing GPL components.
 - **These model weights:** Apache-2.0, the Qwen3 base licence (owner decision, 24 Nov 2026, D-052; compatible with D-016). The DeepSeek terms review that this depended on is done (section Data provenance).
 - **Training clips:** per-clip licences in the data card (CC0-1.0 for synthetic clips, CC BY 3.0 for the Blender Foundation clips, with attribution).
 
 ## Files
 
-`ffmpeg-agent-m3-0.6b-q8_0.gguf` (the Phase 1 evaluated file, 639,443,520 bytes, sha256 `0fa2333c66e4b8697465e5753f4ef4b8ada40ee3f77a234659afb223e382e1b1`), the Q5_K_M file named above (shipping format), `chat-template.jinja`, `system-v1.txt`, `SHA256SUMS`. The LoRA adapter of checkpoint-60 (now on the private checkpoint repo `JustJoyful/ffmpeg-agent-ckpt-grpo`) will be included in the model repo next to the GGUF, as for M1, so others can re-merge and re-quantise (owner decision, 24 Nov 2026; nothing is uploaded yet).
+`ffmpeg-agent-m3-0.6b-q8_0.gguf` (the Phase 1 evaluated file, 639,443,520 bytes, sha256 `0fa2333c66e4b8697465e5753f4ef4b8ada40ee3f77a234659afb223e382e1b1`), the Q5_K_M file named above (shipping format), `chat-template.jinja`, `system-v1.txt`, `SHA256SUMS`, `LICENSE` (the Qwen3 Apache-2.0 text, unchanged). The LoRA adapter of checkpoint-60 (now on the private checkpoint repo `JustJoyful/ffmpeg-agent-ckpt-grpo`) will be included in the model repo next to the GGUF, as for M1, so others can re-merge and re-quantise (owner decision, 24 Nov 2026; nothing is uploaded yet).
