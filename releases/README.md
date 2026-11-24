@@ -16,6 +16,14 @@ uv run python -m training.export.release verify --out releases/ffwd-0.6b-v1.0.0
 
 The build copies (never re-quantises) the GGUFs from `data/models/grpo-m3-ckpt60-gguf/` and refuses on any hash that differs from the evaluation manifests. It reads `../ffwd-web/app/model/canary-reference.json` and `config.js` (override the folder with `FFWD_WEB_DIR`) and refuses if they disagree. Rebuild after editing the card or `RELEASE_NOTES.md` (it rewrites `SHA256SUMS`).
 
+## Run the CLI against the package
+
+```
+uv run python -m apps.cli.ffmpeg_agent_cli "<request>" file.mp4 --release releases/ffwd-0.6b-v1.0.0 --llama-server /path/to/llama-server [--canary]
+```
+
+The CLI (version in `apps/cli/ffmpeg_agent_cli/__init__.py`) loads `ffwd-model.json` and refuses, exit code 5 and nothing started, on a schema error, a `protocol_version` other than the one it was built for, a `min_app_version` above its own, or a shipped GGUF, system prompt or chat template whose size or sha256 differs. The GGUF is hashed once; a marker in `~/.cache/ffwd/verified.json` (keyed by path, size and mtime) skips the re-hash. It then starts llama-server with the manifest's runtime (`-c 8192 -ctk q8_0 -ctv q8_0 -fa on`, the package's template) and ends an episode whose next prompt plus 512 tokens would not fit as "too long" (exit code 6). `--model <gguf>` alone, with no manifest next to it, keeps the old defaults (`-c 4096`, f16 KV) and prints a warning.
+
 ## The two prepared steps (both dry runs unless `--go`)
 
 ```

@@ -36,7 +36,7 @@ What was and was not verified for this command (24 Nov 2026, llama.cpp b12032, c
 
 - Verified here: the server starts on the packaged Q5_K_M file with every flag above except `-ngl 99` (run with `-ngl 0`, CPU, 4 threads), serves `/health`, and the canary prompt in `ffwd-model.json` returns the expected 20 token ids (20 of 20, text `{"action": "spec", "spec": {"family": ["F1"], "outputs": [{"`) with the q8_0 KV cache and flash attention on.
 - Not verified here: `-ngl 99` on a GPU with this exact command line; the Q8_0 file with q8_0 KV; any llama.cpp build other than b12032 (the browser build is b12637 inside wllama 4.0.0); end-to-end jobs through the CLI with this package.
-- The CLI as it stands starts its own server with `-c 4096`, f16 KV and no `-ctk/-ctv/-fa` (`apps/cli/ffmpeg_agent_cli/server.py`), so it does not use the shipped runtime defaults of `ffwd-model.json` (8192, q8_0). It has not been changed for this release.
+- The CLI reads `ffwd-model.json` (`--release DIR`, or a manifest next to `--model`): it refuses a bad manifest, a protocol_version or min_app_version mismatch, or a file whose size or sha256 differs, and starts llama-server with the manifest's runtime defaults (`-c 8192 -ctk q8_0 -ctv q8_0 -fa on`). Not run against a real llama-server yet, and `-fa off`, `-ctk f16` and the `--canary` request fields (`/completion`, `return_tokens`) are unverified.
 
 ## Licence
 
