@@ -69,3 +69,8 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 05:21 IST: queues finished earlier than planned. SECOND QUEUE ALL GREEN: size home 117.44 / chore 117.53 kB (limit 120), build tests 31 pass, e2e 32 pass 7 skipped (trim, 9:16, audio chores incl.), smoke rerun passed all 8 steps. iGPU subset: 4 genuine tasks, 0 pass, output GARBAGE on Intel gen-12lp, median 133 s/turn; CPU 4 threads: 12/12 pass, median 3.2 s. The 96/88 error rows are artifacts of stopping the runs (excluded, subset_summary.json). iGPU speedprobes/loadtimes/coexist failed on a port clash (my sequencing bug) and are being rerun. MORNING_REPORT sections 2 and 3 filled.
 - 05:21 IST (post4b.sh): start: speedprobe iGPU kv f16 with text
 - 05:22 IST: ROOT CAUSE of the iGPU failure: q8_0 KV + flash attention (f16 KV: 27 tok/s, warm turns 2.4 s on the Intel iGPU). post4b.sh running: text sanity probe with f16, then (if sane) full 100-task iGPU parity with f16 KV, load times, coexistence. Morning report updated; decision for owner: f16 KV default vs q8_0 + canary.
+- 05:24 IST (post4b.sh): ok: speedprobe iGPU kv f16 with text
+- 05:24 IST (post4b.sh): f16 output sane: no
+- 05:24 IST (post4b.sh): post4b done
+- 05:58 IST (post4c.sh): start: A f16 repeat (text)
+- 05:58 IST: RETRACTION: the f16 probe with text capture is garbage and slow too (4.8 tok/s), unlike the earlier f16 probe (27 tok/s, no text): the iGPU cause is NOT established; MORNING_REPORT corrected. post4c.sh running three controlled probes (f16 repeat, f16 with Mesa shader cache disabled, q8_0+FA with cache disabled), about 10 min.
