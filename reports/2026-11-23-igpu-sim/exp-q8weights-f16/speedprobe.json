@@ -1,0 +1,156 @@
+{
+  "mode": "gpu",
+  "model": "grpo-m3-ckpt60-q8_0.gguf",
+  "n_ctx": 8192,
+  "kv_cache": {
+    "k": "f16",
+    "v": "f16",
+    "flash_attn": "default"
+  },
+  "chromium": "159.0.8154.6",
+  "chromium_args": [
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan"
+  ],
+  "playwright": "1.65.1",
+  "wllama": "4.0.0",
+  "env": {
+    "crossOriginIsolated": true,
+    "sharedArrayBuffer": true,
+    "hardwareConcurrency": 4,
+    "deviceMemoryGb": 16,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+    "gpu": {
+      "present": true,
+      "requested": "default",
+      "vendor": "intel",
+      "architecture": "gen-12lp",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false,
+      "features": [
+        "depth32float-stencil8",
+        "rg11b10ufloat-renderable",
+        "bgra8unorm-storage",
+        "texture-formats-tier1",
+        "chromium-experimental-multi-draw-indirect",
+        "texture-compression-bc",
+        "dual-source-blending",
+        "chromium-experimental-sampling-resource-table",
+        "core-features-and-limits",
+        "chromium-experimental-timestamp-query-inside-passes",
+        "float32-filterable",
+        "indirect-first-instance",
+        "texture-compression-astc-sliced-3d",
+        "float32-blendable",
+        "atomic-vec2u-min-max",
+        "subgroup-size-control",
+        "texture-compression-unaligned",
+        "texture-compression-astc",
+        "texture-compression-etc2",
+        "depth-clip-control",
+        "texture-compression-bc-sliced-3d",
+        "shader-f16",
+        "texture-formats-tier2",
+        "timestamp-query",
+        "clip-distances",
+        "primitive-index",
+        "texture-component-swizzle",
+        "subgroups"
+      ],
+      "maxBufferSize": 4294967292,
+      "maxStorageBufferBindingSize": 4294967292,
+      "byPreference": {
+        "low-power": "intel gen-12lp",
+        "high-performance": "intel gen-12lp"
+      }
+    },
+    "libllama": "b12637-0b51bb2"
+  },
+  "load": {
+    "load_ms": 2981.920000001788,
+    "downloaded_bytes": 639443520,
+    "total_bytes": 639443520,
+    "multithread": true,
+    "threads": 4,
+    "n_ctx": 8192,
+    "n_batch": 2048,
+    "n_vocab": 151936,
+    "eos": 151645,
+    "eot": 151643,
+    "eog": [
+      128247,
+      151643,
+      151645,
+      151662,
+      151663,
+      151664
+    ],
+    "storage_usage_bytes": 639444357
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "mem_total_kb": "16068456"
+  },
+  "memory_cap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p3608823-i16185658.scope",
+    "memory_max": "7516192768"
+  },
+  "runtime_log_gpu_lines": [
+    "l: ggml_webgpu: adapter_info: vendor_id: 0 | vendor: intel | architecture: gen-12lp | device_id: 0 | name:  | device_desc: ",
+    "d: llama_prepare_model_devices: using device WebGPU (WebGPU) (unknown id) - 2047 MiB free",
+    "d: load_tensors: offloading output layer to GPU",
+    "d: load_tensors: offloading 27 repeating layers to GPU",
+    "d: load_tensors: offloaded 29/29 layers to GPU",
+    "d: load_tensors:       WebGPU model buffer size =   604.15 MiB",
+    "d: llama_context:        CPU  output buffer size =     2.32 MiB",
+    "d: llama_kv_cache:     WebGPU KV buffer size =   896.00 MiB",
+    "d: llama_kv_cache: size =  896.00 MiB (  8192 cells,  28 layers,  4/1 seqs), K (f16):  448.00 MiB, V (f16):  448.00 MiB",
+    "w: resolve_fused_ops: layer 0 is assigned to device WebGPU but Flash Attention over K/V rows is assigned to device CPU (usually due to missing support)",
+    "d: sched_reserve:     WebGPU compute buffer size =    36.03 MiB",
+    "d: sched_reserve:        CPU compute buffer size =    12.02 MiB"
+  ],
+  "runs": [
+    {
+      "wall_s": 60.43617999999225,
+      "prompt_n": 1403,
+      "cache_n": 0,
+      "gen_n": 64,
+      "pp_tok_s": 24.167966089604654,
+      "gen_tok_s": 26.63077570799819,
+      "finish": "length",
+      "text_head": " Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solu"
+    },
+    {
+      "wall_s": 2.5470999999940394,
+      "prompt_n": 200,
+      "cache_n": 1403,
+      "gen_n": 64,
+      "pp_tok_s": 1052.0833881293433,
+      "gen_tok_s": 26.829106258591704,
+      "finish": "length",
+      "text_head": " Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solu"
+    },
+    {
+      "wall_s": 2.404865000009537,
+      "prompt_n": 1,
+      "cache_n": 1402,
+      "gen_n": 64,
+      "pp_tok_s": 24.73961554637441,
+      "gen_tok_s": 26.736787782900677,
+      "finish": "length",
+      "text_head": " Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solu"
+    },
+    {
+      "wall_s": 2.570899999991059,
+      "prompt_n": 200,
+      "cache_n": 1403,
+      "gen_n": 64,
+      "pp_tok_s": 990.6826298661093,
+      "gen_tok_s": 26.68848061632598,
+      "finish": "length",
+      "text_head": " Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solution Solu"
+    }
+  ]
+}

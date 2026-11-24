@@ -1,0 +1,175 @@
+{
+  "mode": "gpu",
+  "model": "grpo-m3-ckpt60-q5_k_m.gguf",
+  "n_ctx": 8192,
+  "kv_cache": {
+    "k": "q8_0",
+    "v": "q8_0",
+    "flash_attn": "true"
+  },
+  "chromium": "159.0.8154.6",
+  "chromium_args": [
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan"
+  ],
+  "playwright": "1.65.1",
+  "wllama": "4.0.0",
+  "env": {
+    "crossOriginIsolated": true,
+    "sharedArrayBuffer": true,
+    "hardwareConcurrency": 4,
+    "deviceMemoryGb": 16,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+    "gpu": {
+      "present": true,
+      "requested": "default",
+      "vendor": "intel",
+      "architecture": "gen-12lp",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false,
+      "features": [
+        "depth32float-stencil8",
+        "rg11b10ufloat-renderable",
+        "bgra8unorm-storage",
+        "texture-formats-tier1",
+        "chromium-experimental-multi-draw-indirect",
+        "texture-compression-bc",
+        "dual-source-blending",
+        "chromium-experimental-sampling-resource-table",
+        "core-features-and-limits",
+        "chromium-experimental-timestamp-query-inside-passes",
+        "float32-filterable",
+        "indirect-first-instance",
+        "texture-compression-astc-sliced-3d",
+        "float32-blendable",
+        "atomic-vec2u-min-max",
+        "subgroup-size-control",
+        "texture-compression-unaligned",
+        "texture-compression-astc",
+        "texture-compression-etc2",
+        "depth-clip-control",
+        "texture-compression-bc-sliced-3d",
+        "shader-f16",
+        "texture-formats-tier2",
+        "timestamp-query",
+        "clip-distances",
+        "primitive-index",
+        "texture-component-swizzle",
+        "subgroups"
+      ],
+      "maxBufferSize": 4294967292,
+      "maxStorageBufferBindingSize": 4294967292,
+      "byPreference": {
+        "low-power": "intel gen-12lp",
+        "high-performance": "intel gen-12lp"
+      }
+    },
+    "libllama": "b12637-0b51bb2"
+  },
+  "load": {
+    "load_ms": 3312.890000000596,
+    "downloaded_bytes": 444411456,
+    "total_bytes": 444411456,
+    "multithread": true,
+    "threads": 4,
+    "n_ctx": 8192,
+    "n_batch": 2048,
+    "n_vocab": 151936,
+    "eos": 151645,
+    "eot": 151643,
+    "eog": [
+      128247,
+      151643,
+      151645,
+      151662,
+      151663,
+      151664
+    ],
+    "storage_usage_bytes": 444412303
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "mem_total_kb": "16068456"
+  },
+  "memory_cap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p3623492-i16199640.scope",
+    "memory_max": "7516192768"
+  },
+  "runtime_log_gpu_lines": [
+    "l: ggml_webgpu: adapter_info: vendor_id: 0 | vendor: intel | architecture: gen-12lp | device_id: 0 | name:  | device_desc: ",
+    "d: llama_prepare_model_devices: using device WebGPU (WebGPU) (unknown id) - 2047 MiB free",
+    "d: load_tensors: offloading output layer to GPU",
+    "d: load_tensors: offloading 27 repeating layers to GPU",
+    "d: load_tensors: offloaded 29/29 layers to GPU",
+    "d: load_tensors:       WebGPU model buffer size =   418.15 MiB",
+    "d: llama_context:        CPU  output buffer size =     2.32 MiB",
+    "d: llama_kv_cache:     WebGPU KV buffer size =   476.00 MiB",
+    "d: llama_kv_cache: size =  476.00 MiB (  8192 cells,  28 layers,  4/1 seqs), K (q8_0):  238.00 MiB, V (q8_0):  238.00 MiB",
+    "d: init_rotation:     WebGPU rotation buffer size =     2.19 MiB",
+    "w: resolve_fused_ops: layer 0 is assigned to device WebGPU but Flash Attention over K/V rows is assigned to device CPU (usually due to missing support)",
+    "d: sched_reserve:     WebGPU compute buffer size =    40.03 MiB",
+    "d: sched_reserve:        CPU compute buffer size =    12.02 MiB"
+  ],
+  "phases": {
+    "idle": {
+      "ticks": 60,
+      "max_stall_ms": 0.7149999886751175,
+      "p99_gap_ms": 50.71499998867512,
+      "long_tasks": 0,
+      "long_task_max_ms": 0
+    },
+    "model_alone": {
+      "hb": {
+        "ticks": 4888,
+        "max_stall_ms": 1.3499999940395355,
+        "p99_gap_ms": 50.17000000178814,
+        "long_tasks": 0,
+        "long_task_max_ms": 0
+      },
+      "completions": 6,
+      "gen_tok_s": 7.682168584005242,
+      "pp_tok_s": 22.517913569682438,
+      "mean_wall_ms": 40738.99583332986
+    },
+    "ffmpeg_alone": {
+      "hb": {
+        "ticks": 419,
+        "max_stall_ms": 2.0850000083446503,
+        "p99_gap_ms": 51.395000010728836,
+        "long_tasks": 0,
+        "long_task_max_ms": 0
+      },
+      "exec_ms": 20990.44500000775,
+      "code": 0,
+      "timed_out": false,
+      "out_bytes": 21463875,
+      "log_tail": ".4: 100.0%  0.0%  0.0%\nmb P  I16..4:  2.0%  0.0%  0.0%  P16..4: 14.0%  0.0%  0.0%  0.0%  0.0%    skip:84.0%\ncoded y,uvDC,uvAC intra: 14.6% 33.9% 25.7% inter: 8.1% 12.7% 11.1%\ni16 v,h,dc,p: 78% 15%  7%  0%\ni8c dc,h,v,p: 41% 18% 41%  1%\nkb/s:2726.46\nStatistics: 101297982 bytes read, 2 seeks\nAborted()\n"
+    },
+    "together": {
+      "hb": {
+        "ticks": 495,
+        "max_stall_ms": 3.260000005364418,
+        "p99_gap_ms": 51.49500000476837,
+        "long_tasks": 0,
+        "long_task_max_ms": 0
+      },
+      "ffmpeg": {
+        "exec_ms": 21047.464999988675,
+        "code": 0,
+        "timed_out": false,
+        "out_bytes": 21463875,
+        "log_tail": ".4: 100.0%  0.0%  0.0%\nmb P  I16..4:  2.0%  0.0%  0.0%  P16..4: 14.0%  0.0%  0.0%  0.0%  0.0%    skip:84.0%\ncoded y,uvDC,uvAC intra: 14.6% 33.9% 25.7% inter: 8.1% 12.7% 11.1%\ni16 v,h,dc,p: 78% 15%  7%  0%\ni8c dc,h,v,p: 41% 18% 41%  1%\nkb/s:2726.46\nStatistics: 101297982 bytes read, 2 seeks\nAborted()\n",
+        "t_end": 293937.02499999106
+      },
+      "overlap_s": 21.057,
+      "completions_total": 4,
+      "completions_inside": 3,
+      "gen_tok_s": 26.836813555542893,
+      "pp_tok_s": 1078.2185807386359
+    }
+  },
+  "job": "f4Scale480",
+  "clip": "h264_100mb_60s.mp4"
+}

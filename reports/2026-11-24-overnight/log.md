@@ -74,3 +74,10 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 05:24 IST (post4b.sh): post4b done
 - 05:58 IST (post4c.sh): start: A f16 repeat (text)
 - 05:58 IST: RETRACTION: the f16 probe with text capture is garbage and slow too (4.8 tok/s), unlike the earlier f16 probe (27 tok/s, no text): the iGPU cause is NOT established; MORNING_REPORT corrected. post4c.sh running three controlled probes (f16 repeat, f16 with Mesa shader cache disabled, q8_0+FA with cache disabled), about 10 min.
+- 06:01 IST (post4c.sh): ok: A f16 repeat (text)
+- 06:01 IST (post4c.sh): start: B f16, Mesa shader cache disabled
+- 06:03 IST (post4c.sh): ok: B f16, Mesa shader cache disabled
+- 06:03 IST (post4c.sh): start: C q8_0+FA, Mesa shader cache disabled
+- 06:04 IST (post4c.sh): ok: C q8_0+FA, Mesa shader cache disabled
+- 06:04 IST (post4c.sh): post4c done
+- 06:12 IST: iGPU FINAL: output wrong in all 5 configurations tried (Q5 q8KV+FA, Q5 f16KV x2, Q5 f16 no mesa cache, Q8_0 f16KV); not KV, not quant, not shader cache; criteria: parity FAIL, tab responsive PASS (F4 21.0 s alone and together, stall 3.3 ms), load cold 2.4 s warm 1.6 s. MORNING_REPORT section 2 final. All queues idle.
