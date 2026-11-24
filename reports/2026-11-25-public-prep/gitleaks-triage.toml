@@ -1,0 +1,7 @@
+# default rules + allowlist for the task-set content_key field (sha256 of task content, not a secret)
+[extend]
+useDefault = true
+[[allowlists]]
+description = "task jsonl content_key sha256"
+regexTarget = "line"
+regexes = ['''"content_key": "[0-9a-f]{64}"''']
