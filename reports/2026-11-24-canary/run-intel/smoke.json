@@ -1,0 +1,194 @@
+{
+  "app": "http://localhost:4177",
+  "variant": "intel",
+  "memoryCap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p1731891-i22705091.scope",
+    "memory_max": "5368709120",
+    "contained": {
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p1731891-i22705091.scope",
+      "memory_max": "5368709120"
+    }
+  },
+  "steps": [
+    {
+      "name": "open /app",
+      "ok": true,
+      "detail": {
+        "crossOriginIsolated": true,
+        "webgpu": true
+      },
+      "seconds": 0.482
+    },
+    {
+      "name": "choose a video",
+      "ok": true,
+      "detail": {
+        "modelNotice": "The model runs on your graphics chip."
+      },
+      "seconds": 0.044
+    },
+    {
+      "name": "model asks before downloading",
+      "ok": true,
+      "detail": null,
+      "seconds": 0.037
+    },
+    {
+      "name": "consent and download starts",
+      "ok": true,
+      "detail": {
+        "sawProgressBar": true
+      },
+      "seconds": 0.06
+    },
+    {
+      "name": "model downloaded, checked and started",
+      "ok": true,
+      "detail": {
+        "mainThread": {
+          "maxGapMs": 76,
+          "ticks": 1535
+        },
+        "loadSeconds": 76.182,
+        "sawCheckNotice": {
+          "seen": true,
+          "firstAt": "2026-11-24T13:44:12.247Z",
+          "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once.",
+          "zone": [
+            {
+              "at": "2026-11-24T13:44:07.143Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n12%\n\n54 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-24T13:44:07.440Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n40%\n\n176 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-24T13:44:07.740Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n100%\n\n444 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-24T13:44:08.040Z",
+              "text": "The model runs on your graphics chip.\n\nStarting the model"
+            },
+            {
+              "at": "2026-11-24T13:44:12.247Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and meas"
+            },
+            {
+              "at": "2026-11-24T13:45:22.992Z",
+              "text": "The model runs on your processor\n\nA check on this computer found that its graphics chip gives wrong answers with the model, so ffwd uses your processor instead."
+            }
+          ],
+          "samples": 253,
+          "maxGapMs": 306,
+          "inPage": [
+            {
+              "step": "canary",
+              "at": "2026-11-24T13:44:12.091Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once."
+            },
+            {
+              "step": "benchmark",
+              "at": "2026-11-24T13:45:16.900Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once."
+            }
+          ]
+        },
+        "notice": {
+          "path": "cpu",
+          "wait": "measured",
+          "text": "The model runs on your processor\n\nA check on this computer found that its graphics chip gives wrong answers with the model, so ffwd uses your processor instead. This is slower, but the answers are right. On this computer, the first step takes about 24 seconds and each step after it about 5 seconds. A typical job spends about 32 seconds on the model before the video work starts. For big videos the desktop app, when it is out, will be faster."
+        },
+        "verdict": {
+          "ffwd:path:v1:bbf439b749c02c04:intel|gen-12lp|": {
+            "webgpu": "broken",
+            "path": "cpu",
+            "canary": "fail",
+            "why": "canary",
+            "bench": {
+              "cpu": {
+                "ppTokS": 66.7,
+                "genTokS": 55.8
+              }
+            },
+            "at": 1795527922892
+          }
+        }
+      },
+      "seconds": 76.183
+    },
+    {
+      "name": "what this variant must show",
+      "ok": true,
+      "detail": {
+        "verdict": {
+          "webgpu": "broken",
+          "path": "cpu",
+          "canary": "fail",
+          "why": "canary",
+          "bench": {
+            "cpu": {
+              "ppTokS": 66.7,
+              "genTokS": 55.8
+            }
+          },
+          "at": 1795527922892
+        },
+        "uiPath": "cpu",
+        "wait": "measured"
+      },
+      "seconds": 0
+    },
+    {
+      "name": "type a request and make a plan",
+      "ok": true,
+      "detail": {
+        "plan": "Keep\n0:02 to 0:06\nLength\n0:04\nTurn\nnone\nFormat\nMP4 that plays widely\nSound\nAAC\nPicture\n640 × 360\nRun it\nChange"
+      },
+      "seconds": 24.1
+    },
+    {
+      "name": "run it",
+      "ok": true,
+      "detail": {
+        "done": true
+      },
+      "seconds": 2.347
+    },
+    {
+      "name": "save",
+      "ok": true,
+      "detail": {
+        "file": "smoke-clip-ffwd.mp4"
+      },
+      "seconds": 0.039
+    },
+    {
+      "name": "second visit uses the remembered verdict",
+      "ok": true,
+      "detail": {
+        "loadSeconds": 0.081,
+        "sawCheckNotice": false,
+        "path": "cpu",
+        "wait": "measured"
+      },
+      "seconds": 0.273
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "started": "2026-11-24T13:44:06.211Z",
+  "minAvailMib": 5061,
+  "adapter": {
+    "gpu": true,
+    "adapter": {
+      "vendor": "intel",
+      "architecture": "gen-12lp",
+      "description": "",
+      "isFallbackAdapter": false
+    }
+  },
+  "finished": "2026-11-24T13:45:50.103Z",
+  "allOk": true
+}

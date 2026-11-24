@@ -1,0 +1,181 @@
+{
+  "mode": "gpu",
+  "model": "grpo-m3-ckpt60-q5_k_m.gguf",
+  "n_ctx": 8192,
+  "kv_cache": {
+    "k": "q8_0",
+    "v": "q8_0",
+    "flash_attn": "true"
+  },
+  "chromium": "159.0.8154.6",
+  "chromium_args": [
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan"
+  ],
+  "playwright": "1.65.1",
+  "wllama": "4.0.0",
+  "env": {
+    "crossOriginIsolated": true,
+    "sharedArrayBuffer": true,
+    "hardwareConcurrency": 12,
+    "deviceMemoryGb": 16,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+    "gpu": {
+      "present": true,
+      "requested": "default",
+      "vendor": "intel",
+      "architecture": "gen-12lp",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false,
+      "features": [
+        "depth32float-stencil8",
+        "rg11b10ufloat-renderable",
+        "bgra8unorm-storage",
+        "texture-formats-tier1",
+        "chromium-experimental-multi-draw-indirect",
+        "texture-compression-bc",
+        "dual-source-blending",
+        "chromium-experimental-sampling-resource-table",
+        "core-features-and-limits",
+        "chromium-experimental-timestamp-query-inside-passes",
+        "float32-filterable",
+        "indirect-first-instance",
+        "texture-compression-astc-sliced-3d",
+        "float32-blendable",
+        "atomic-vec2u-min-max",
+        "subgroup-size-control",
+        "texture-compression-unaligned",
+        "texture-compression-astc",
+        "texture-compression-etc2",
+        "depth-clip-control",
+        "texture-compression-bc-sliced-3d",
+        "shader-f16",
+        "texture-formats-tier2",
+        "timestamp-query",
+        "clip-distances",
+        "primitive-index",
+        "texture-component-swizzle",
+        "subgroups"
+      ],
+      "maxBufferSize": 4294967292,
+      "maxStorageBufferBindingSize": 4294967292,
+      "byPreference": {
+        "low-power": "intel gen-12lp",
+        "high-performance": "intel gen-12lp"
+      }
+    },
+    "libllama": "b12637-0b51bb2"
+  },
+  "load": {
+    "load_ms": 2320.685000002384,
+    "downloaded_bytes": 444411456,
+    "total_bytes": 444411456,
+    "multithread": true,
+    "threads": 4,
+    "n_ctx": 8192,
+    "n_batch": 2048,
+    "n_vocab": 151936,
+    "eos": 151645,
+    "eot": 151643,
+    "eog": [
+      128247,
+      151643,
+      151645,
+      151662,
+      151663,
+      151664
+    ],
+    "storage_usage_bytes": 444412303
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "mem_total_kb": "16068456"
+  },
+  "memory_cap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p1327736-i22246916.scope",
+    "memory_max": "5368709120"
+  },
+  "runtime_log_gpu_lines": [
+    "l: ggml_webgpu: adapter_info: vendor_id: 0 | vendor: intel | architecture: gen-12lp | device_id: 0 | name:  | device_desc: ",
+    "d: llama_prepare_model_devices: using device WebGPU (WebGPU) (unknown id) - 2047 MiB free",
+    "d: load_tensors: offloading output layer to GPU",
+    "d: load_tensors: offloading 27 repeating layers to GPU",
+    "d: load_tensors: offloaded 29/29 layers to GPU",
+    "d: load_tensors:       WebGPU model buffer size =   418.15 MiB",
+    "d: llama_context:        CPU  output buffer size =     2.32 MiB",
+    "d: llama_kv_cache:     WebGPU KV buffer size =   476.00 MiB",
+    "d: llama_kv_cache: size =  476.00 MiB (  8192 cells,  28 layers,  4/1 seqs), K (q8_0):  238.00 MiB, V (q8_0):  238.00 MiB",
+    "d: init_rotation:     WebGPU rotation buffer size =     2.19 MiB",
+    "w: resolve_fused_ops: layer 0 is assigned to device WebGPU but Flash Attention over K/V rows is assigned to device CPU (usually due to missing support)",
+    "d: sched_reserve:     WebGPU compute buffer size =    40.03 MiB",
+    "d: sched_reserve:        CPU compute buffer size =    12.02 MiB"
+  ],
+  "reference": {
+    "text": "{\"action\": \"spec\", \"spec\": {\"family\": [\"F1\"], \"outputs\": [{\"",
+    "tokens": [
+      4913,
+      1311,
+      788,
+      330,
+      9535,
+      497,
+      330,
+      9535,
+      788,
+      5212,
+      18984,
+      788,
+      4383,
+      37,
+      16,
+      7914,
+      330,
+      41006,
+      788,
+      61753
+    ]
+  },
+  "runs": [
+    {
+      "text": "болболболболболболболболболболболболболболболболболболболбол",
+      "ids": [
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302,
+        125302
+      ],
+      "matched": 0,
+      "of": 20,
+      "wall_ms": 60877.96999999881,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 1176,
+        "prompt_ms": 60149.45,
+        "prompt_per_token_ms": 51.14749149659864,
+        "prompt_per_second": 19.551300967839275,
+        "predicted_n": 20,
+        "predicted_ms": 714.829,
+        "predicted_per_token_ms": 37.62257894736842,
+        "predicted_per_second": 26.579783416733232
+      }
+    }
+  ]
+}

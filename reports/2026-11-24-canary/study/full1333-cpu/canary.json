@@ -1,0 +1,176 @@
+{
+  "mode": "cpu",
+  "model": "grpo-m3-ckpt60-q5_k_m.gguf",
+  "n_ctx": 8192,
+  "kv_cache": {
+    "k": "q8_0",
+    "v": "q8_0",
+    "flash_attn": "true"
+  },
+  "chromium": "159.0.8154.6",
+  "chromium_args": [],
+  "playwright": "1.65.1",
+  "wllama": "4.0.0",
+  "env": {
+    "crossOriginIsolated": true,
+    "sharedArrayBuffer": true,
+    "hardwareConcurrency": 12,
+    "deviceMemoryGb": 16,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.0.0 Safari/537.36",
+    "gpu": {
+      "present": true,
+      "requested": "default",
+      "adapter": null,
+      "byPreference": {
+        "low-power": null,
+        "high-performance": null
+      }
+    },
+    "libllama": "b12637-0b51bb2"
+  },
+  "load": {
+    "load_ms": 1468.2950000166893,
+    "downloaded_bytes": 444411456,
+    "total_bytes": 444411456,
+    "multithread": true,
+    "threads": 4,
+    "n_ctx": 8192,
+    "n_batch": 2048,
+    "n_vocab": 151936,
+    "eos": 151645,
+    "eot": 151643,
+    "eog": [
+      128247,
+      151643,
+      151645,
+      151662,
+      151663,
+      151664
+    ],
+    "storage_usage_bytes": 444412303
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "mem_total_kb": "16068456"
+  },
+  "memory_cap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p1367469-i22344550.scope",
+    "memory_max": "5368709120"
+  },
+  "runtime_log_gpu_lines": [
+    "l: ggml_webgpu: Failed to get an adapter: WebGPU not available on this browser (requestAdapter returned null)",
+    "d: load_tensors: offloading 0 repeating layers to GPU",
+    "d: load_tensors: offloaded 0/29 layers to GPU",
+    "d: load_tensors:          CPU model buffer size =   418.15 MiB",
+    "d: llama_context:        CPU  output buffer size =     2.32 MiB",
+    "d: llama_kv_cache:        CPU KV buffer size =   476.00 MiB",
+    "d: llama_kv_cache: size =  476.00 MiB (  8192 cells,  28 layers,  4/1 seqs), K (q8_0):  238.00 MiB, V (q8_0):  238.00 MiB",
+    "d: init_rotation:        CPU rotation buffer size =     2.19 MiB",
+    "d: sched_reserve:        CPU compute buffer size =    36.14 MiB"
+  ],
+  "reference": {
+    "text": "{\"action\": \"spec\", \"spec\": {\"family\": [\"F1\"], \"outputs\": [{\"",
+    "tokens": [
+      4913,
+      1311,
+      788,
+      330,
+      9535,
+      497,
+      330,
+      9535,
+      788,
+      5212,
+      18984,
+      788,
+      4383,
+      37,
+      16,
+      7914,
+      330,
+      41006,
+      788,
+      61753
+    ]
+  },
+  "runs": [
+    {
+      "text": "{\"action\": \"spec\", \"spec\": {\"family\": [\"F1\"], \"outputs\": [{\"",
+      "ids": [
+        4913,
+        1311,
+        788,
+        330,
+        9535,
+        497,
+        330,
+        9535,
+        788,
+        5212,
+        18984,
+        788,
+        4383,
+        37,
+        16,
+        7914,
+        330,
+        41006,
+        788,
+        61753
+      ],
+      "matched": 20,
+      "of": 20,
+      "wall_ms": 20478.740000009537,
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 1333,
+        "prompt_ms": 19880.676,
+        "prompt_per_token_ms": 14.914235558889722,
+        "prompt_per_second": 67.05003391232773,
+        "predicted_n": 20,
+        "predicted_ms": 583.004,
+        "predicted_per_token_ms": 30.68442105263158,
+        "predicted_per_second": 32.58982785709875
+      }
+    },
+    {
+      "text": "{\"action\": \"spec\", \"spec\": {\"family\": [\"F1\"], \"outputs\": [{\"",
+      "ids": [
+        4913,
+        1311,
+        788,
+        330,
+        9535,
+        497,
+        330,
+        9535,
+        788,
+        5212,
+        18984,
+        788,
+        4383,
+        37,
+        16,
+        7914,
+        330,
+        41006,
+        788,
+        61753
+      ],
+      "matched": 20,
+      "of": 20,
+      "wall_ms": 600.0399999916553,
+      "timings": {
+        "cache_n": 1332,
+        "prompt_n": 1,
+        "prompt_ms": 31.955,
+        "prompt_per_token_ms": 31.955,
+        "prompt_per_second": 31.294007197621657,
+        "predicted_n": 20,
+        "predicted_ms": 564.93,
+        "predicted_per_token_ms": 29.733157894736838,
+        "predicted_per_second": 33.63248544067407
+      }
+    }
+  ]
+}
