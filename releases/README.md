@@ -1,6 +1,6 @@
 # releases/
 
-Local release packages of the model (D-053). One folder per version, `ffwd-0.6b-v<MAJOR.MINOR.PATCH>/`. Nothing here has been uploaded, renamed or published: every step below is **not run**.
+Local release packages of the model (D-053). One folder per version, `ffwd-0.6b-v<MAJOR.MINOR.PATCH>/`. The v1.0.0 package was uploaded to the PRIVATE Hub repo `JustJoyful/ffwd-0.6b` (tag `v1.0.0`, see D-053 addenda); nothing is public. Steps marked **not run** below have not been done.
 
 ## Layout of a package
 
@@ -36,8 +36,8 @@ All three refuse when `SHA256SUMS` or `ffwd-model.json` do not verify. `upload` 
 
 ## Order of the manual steps (owner)
 
-1. **Decide the Hub repo** (not run): no M3 model repo exists on the Hub today. `JustJoyful/ffmpeg-agent-m1-0.6b` (private) holds the M1 model; `JustJoyful/ffmpeg-agent-ckpt-grpo` holds checkpoints with optimizer states. Renaming either moves its whole history into `ffwd-0.6b`. Recommended: do not rename; let `upload` create a fresh private `JustJoyful/ffwd-0.6b`, and rename the M1 repo later if wanted.
-2. `rename ... --go` (only if you chose a rename) (not run).
-3. `upload --package ... ` as a dry run, read it, then `--go` (not run). The tag `v1.0.0` points at the uploaded commit; the site pins that tag or the commit hash.
+1. **Decide the Hub repo** (DONE: a fresh private repo, no rename): no M3 model repo exists on the Hub today. `JustJoyful/ffmpeg-agent-m1-0.6b` (private) holds the M1 model; `JustJoyful/ffmpeg-agent-ckpt-grpo` holds checkpoints with optimizer states. Renaming either moves its whole history into `ffwd-0.6b`. Recommended: do not rename; let `upload` create a fresh private `JustJoyful/ffwd-0.6b`, and rename the M1 repo later if wanted.
+2. `rename` (NOT needed: a fresh repo was used).
+3. `upload --package ... ` as a dry run, read it, then `--go` (DONE for v1.0.0; re-uploads of an unpublished version use `--go --move-tag`). The tag `v1.0.0` points at the uploaded commit; the site pins that tag or the commit hash.
 4. Check the private repo contents (README renders, `sha256sum -c SHA256SUMS` on a download, no `test-real` data), then flip visibility on the Hub yourself (not run; no code for it exists).
 5. Decide where the GitHub release lives (see the report), then `scripts/release_github.py --repo ... --go` creates a draft (not run); publish it by hand (not run).

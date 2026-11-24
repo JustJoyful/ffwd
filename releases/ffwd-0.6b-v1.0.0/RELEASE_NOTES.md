@@ -35,9 +35,10 @@ Request with `temperature` 0 and `max_tokens` 512 on `/v1/chat/completions`. For
 What was and was not verified for this command (24 Nov 2026, llama.cpp b12032, commit dde879bc4):
 
 - Verified here: the server starts on the packaged Q5_K_M file with every flag above except `-ngl 99` (run with `-ngl 0`, CPU, 4 threads), serves `/health`, and the canary prompt in `ffwd-model.json` returns the expected 20 token ids (20 of 20, text `{"action": "spec", "spec": {"family": ["F1"], "outputs": [{"`) with the q8_0 KV cache and flash attention on.
-- Not verified here: `-ngl 99` on a GPU with this exact command line; the Q8_0 file with q8_0 KV; any llama.cpp build other than b12032 (the browser build is b12637 inside wllama 4.0.0); end-to-end jobs through the CLI with this package.
+- Not verified here: `-ngl 99` on a GPU with this exact command line; the Q8_0 file with q8_0 KV; any llama.cpp build other than b12032 (the browser build is b12637 inside wllama 4.0.0); the CLI with the GPU flag.
 - The CLI reads `ffwd-model.json` (`--release DIR`, or a manifest next to `--model`): it refuses a bad manifest, a protocol_version or min_app_version mismatch, or a file whose size or sha256 differs, and starts llama-server with the manifest's runtime defaults (`-c 8192 -ctk q8_0 -ctv q8_0 -fa on`). Not run against a real llama-server yet, and `-fa off`, `-ctk f16` and the `--canary` request fields (`/completion`, `return_tokens`) are unverified.
 
 ## Licence
 
 The weights are a derivative of Qwen/Qwen3-0.6B and are under Apache-2.0 (`LICENSE`, the Qwen3 text unchanged; the changes made are stated in the card). Project code: GPL-3.0.
+- CLI: verified on one run each of three jobs with the pinned FFmpeg 5.1.1 (remove the audio with the canary in release mode, the same through the legacy `--model` path, and make it 720p in release mode), plus one `--quant q8_0` job, llama.cpp b12032 on CPU. The CLI refuses any other FFmpeg version. This is a handful of single jobs on two clips, not an evaluation.
