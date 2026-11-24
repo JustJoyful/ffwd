@@ -1,6 +1,11 @@
-# Morning report (24 Nov 2026). Filled in as results land; anything marked PENDING had not finished when this was last saved.
+# Morning report (24 Nov 2026), final as of 06:55 IST
 
 Timeline and check-ins: `log.md` in this folder. Hard limits kept all night: nothing public, no money spent, no preregistration/checker/metric change, one heavy browser job at a time under the memory cap.
+
+## Summary (read this first)
+- **Finished:** the browser test row (900 tasks, three splits, one run each, no infrastructure errors); the four-stream app build, merged, verified in a real browser (build tests, e2e, and a real-model smoke with screenshots); the iGPU and CPU experiments.
+- **Needs your decision, in this order:** (1) **the preregistered guard was NOT shown for the browser Q5_K_M row** (-1.33 pp pooled, -3.5 pp on test-phrasing): accept the loss, or pick another format; (2) **WebGPU on the Intel iGPU gave wrong output in every configuration**: build a load-time canary with a fallback to the processor path?; (3) KV q8_0 (you confirmed it on the RTX; the iGPU evidence says it is not the cause); (4) the CPU thread default; (5) the launch checklist in section 5.
+- **Adapted or failed, stated plainly:** the iGPU and CPU runs were stopped early (a 100-task run was not feasible and the iGPU output was garbage), so they are subsets; stopping them left 96 and 88 artifact error rows, excluded in `subset_summary.json`; my first iGPU follow-ups failed on a port clash I caused; I first blamed the KV cache for the iGPU failure and retracted it; a 424 MB browser profile was committed by mistake and removed before any push; a ~35 s niced unit-test burst ran at 01:47 IST during the row's first minutes. Nothing public, no money spent, no preregistration, checker or metric change.
 
 ## 1. Browser test row (M3 Q5_K_M, wllama, WebGPU): DONE. The preregistered guard is NOT shown.
 Frozen configuration (Amendment 4): `grpo-m3-ckpt60-q5_k_m[sha256:bbf439b7]+wllama-4.0.0[libllama-b12637-0b51bb2]+chromium-159.0.8154.6+webgpu+kv-q8_0-fa+n_ctx8192`. Amendment 4 was pushed to the private remote at 23:56 IST on 23 Nov; the first lock was taken at 01:46 IST on 24 Nov; the dev dry run through the final driver scored 97/100. One run per split, 900 tasks, no infrastructure errors, no episode ended by the context rule. Full output: `reports/2026-11-23-phase-1-browser-row/report/` (`summary.md`, `results.json`, `manifest.json`).
@@ -45,7 +50,7 @@ So it is **not** the KV type, **not** the weight quantisation and **not** the Me
 - **CPU: thread choice matters a lot.** Pinned to 4 P-core threads it ran at 36 tok/s (3.2 s median); my first CPU run (wllama's default 6 threads on this 12-thread hybrid CPU, with other load around) gave 17 tok/s and 6.8 s. The measured waits in the app's CPU notice (10 s first step, 6 s later) came from that slower run, so they are pessimistic for a well-pinned run; they were left unchanged until more machines are measured. A thread default such as min(4, cores/2) is worth testing.
 - System memory (shared with an iGPU): peak drop in available memory 1.2 GB on the iGPU run, 0.4 GB on the CPU run (7 GB cap never reached).
 
-## 3. The app (branch `integration`, merged from four parallel streams; on `main` only after the post-row window)
+## 3. The app (four parallel streams, merged on `integration`; `main` of `ffwd-web` was fast-forwarded to it at 06:55 IST; there is no remote)
 Starting point: `reports/2026-11-23-site-inventory/INVENTORY.md`. 597 unit tests green and lint clean on `integration`.
 - Model runtime (stream A): `app/model/*` (streaming SHA-256, model host and worker, client with consent/progress/retry, store wiring, capability path).
 - Agent engine (stream B): model errors end a job as failed with the "too long" / "model unavailable" sentences (never success); loop invariants pinned with 77 tests; conformance suites wired in Node (validator 39, describe-spec 8, offset 8, frames 9, invariants 13, quality 6, rotation 7 of 12; the other 5 need ffmpeg 5.x and run in CI); a privacy leak fixed (ffmpeg log tails sent to the model carried the user's file name).
@@ -59,14 +64,37 @@ Starting point: `reports/2026-11-23-site-inventory/INVENTORY.md`. 597 unit tests
 ## 4. Components built without a design precedent (for your review)
 See `COMPONENT_REVIEW.md` in this folder (what each does and the simplest on-design option). The flow and both state machines are drawn in `APP_FLOW.md`.
 
-## 5. LAUNCH CHECKLIST (for you)
-1. **Model card and data card** (`docs/hf-cards/` in the model repo): 16 TODO(owner) items; suggested text in `MODEL_CARD_OWNER_ITEMS.md` here. Weights licence, seeds, repo ids, the DeepSeek review outcome, whether teacher trajectories may be uploaded.
-2. **DeepSeek terms review**: nothing goes public before it. Then decide HF visibility.
-3. **HF repo contents check** before flipping public: the GGUF Q5_K_M with sha256 `bbf439b7...` (444,411,456 bytes), no test-real clips, no teacher trajectories unless cleared, model card text approved, licence lines for every third-party asset. Flip public only after 1 and 2.
-4. **Model host**: public HF repo primary, R2 fallback (R2 untested). Pin the revision hash in the app config; no URL exists yet.
-5. **Cloudflare**: login, a Pages project, an R2 bucket and `assets.` host for the 31 MB ffmpeg core (over Pages' 25 MiB per-file cap), CORS/CORP headers, preview deploy, then production deploy. `SITE_URL` is still a placeholder and `pnpm check:release` refuses to ship with it.
-6. **Analytics**: still off. Decide persistence and Do Not Track handling (currently respected), then set the key. PostHog under COEP credentialless is unverified.
-7. **Copy to approve**: home, chore pages (5), privacy, requirements (now says the processor path works, with measured waits).
-8. **Real devices**: run the bench kit on a friend's iGPU laptop (`node bench.mjs --model <gguf>` from the kit built by `node scripts/make-bench-kit.mjs`). The simulated iGPU here is not a budget laptop.
-9. **Decisions still open**: `PROTOCOL_SOURCE_REPO` repo variable; memory floor (PRD 8 GB vs code 4 GB); the ESLint boundary rule (a hook blocks the config edit; a unit test enforces it); M1.1 scope; the "14 real clips" wording in the M1 hub README; stale text in `WEB_ARCHITECTURE.md` and `DESIGN.md` (local, gitignored).
-10. **What I did not do**: nothing public; no deploy; no money; no HF change; no preregistration, checker or metric change.
+## 5. LAUNCH CHECKLIST AND DECISIONS (for you)
+
+### A. Decisions about the model and the browser
+1. **Q5_K_M against Q8_0 (the test-row result).** The guard (lower bound above -2.0 pp) is NOT shown: pooled -1.33 pp [-2.67, -0.11], test-phrasing -3.5 pp [-7.0, -0.5]. Options: accept about 1.3 pp for a 444 MB download (Q8_0 is 639 MB); Q6_K (dev 98/100; 495 MB + 10.8 MB runtime = 505.9 MB, 6 MB over the approximate limit); an f16 KV cache (dev 96 against 97: no evidence either way). The row measures the whole browser stack, so it cannot say which part costs the points. Any new test-split run is a new system with its own lock and needs your approval.
+2. **KV cache q8_0.** You confirmed it on the RTX 3050 (parity 97 against 96 for f16, 420 MiB less GPU memory, 4% slower generation). The iGPU evidence shows q8_0 is NOT what breaks the Intel path (Q5_K_M with f16 KV and Q8_0 weights with f16 KV are garbage too). Keep it, or choose f16 for simplicity: no data against q8_0 on NVIDIA; unproven on other adapters.
+3. **WebGPU canary and fallback (the iGPU finding).** On the Intel gen-12lp adapter the model's output was wrong in all five configurations tried, at 5 to 27 tok/s. Recommendation: at model load run a tiny canary prompt with a known expected reply; on a mismatch fall back to the processor path and say so (the path notice exists). Small to build (in `app/model`). Also needed: more evidence on other GPUs (the bench kit, a real budget laptop, Chrome stable, Firefox, Apple, AMD).
+4. **CPU thread count.** Pinned to 4 P-core threads the processor path ran at 36 tok/s (3.2 s median turn, 12 of 12 tasks passed on that subset); wllama's default 6 threads on this hybrid CPU gave 17 tok/s (6.8 s). The app's wait message (10 s first step, 6 s later) was measured with the slow default, so it is pessimistic for a well-pinned run. Consider a default of min(4, cores/2) after more machines are measured.
+5. **No-GPU visitors** get the processor path with an honest wait (built). The app has NO rules-only fast path yet, so nothing promises one; the desktop helper is not built.
+
+### B. Before anything goes public
+6. **Model card and data card:** `docs/hf-cards/`; the model card is filled except 5 owner items, the data card has 6 (suggested text in `MODEL_CARD_OWNER_ITEMS.md`): repo ids, weights licence, seeds, adapter upload, dataset licence, the CC BY verification date, the `hard-v1` manifest gap, the clip-count wording.
+7. **DeepSeek terms review** (nothing public before it), then the **HF repo contents check**: GGUF Q5_K_M sha256 `bbf439b7...` (444,411,456 bytes), no test-real clips, no trajectories unless cleared, hashes match, licence lines for every third-party asset; flip public only after both.
+8. **Model host:** public HF repo primary, R2 fallback (R2 untested); pin the revision hash. No production model URL exists yet, so a production build says the model is not published.
+9. **Cloudflare:** login; a Pages project; an R2 bucket and `assets.` host for the 31 MB ffmpeg core (Pages caps a file at 25 MiB) with CORS and CORP headers; preview deploy, then production. `SITE_URL` is still the placeholder `https://ffwd.example` and `pnpm check:release` refuses to ship with it.
+10. **Analytics:** off. Decide persistence and Do Not Track handling (respected today) before setting a key; PostHog under COEP credentialless is unverified; `model_load_started/completed` exist, a failure event does not (ARCHITECTURE section 9 does not list it), and the `ms` property now carries a bucket label.
+11. **Copy to approve:** home, the 5 chore pages (note: they now use plain links, so moving between them is a full page load), privacy, requirements (now says the processor path works, with measured waits).
+12. **Review the 9 components built without a design precedent** (`COMPONENT_REVIEW.md`); screenshots of the real flow are in `app-smoke-2/`.
+13. **Real devices:** run the bench kit on a friend's iGPU laptop (`node scripts/make-bench-kit.mjs`, then `node bench.mjs --model <gguf>`; its agreement-with-native number would have caught the garbage). The simulated iGPU here is one adapter, not a budget laptop.
+
+### C. Housekeeping and open items
+14. **Stale docs:** `WEB_ARCHITECTURE.md` and `DESIGN.md` (local, gitignored) still describe Tailwind, `tokens.css`, `app/workers/` and an Ink/Cobalt palette; the code and `theme.css` are the truth. `ARCHITECTURE.md`, README, CLAUDE.md and PHASES were updated; RULES section 7 item 4 and EVALUATION A1 carry dated amendments (no rule changes).
+15. **Other open decisions:** `PROTOCOL_SOURCE_REPO` repo variable; memory floor (PRD 8 GB vs code 4 GB); the ESLint boundary rule (a hook blocks the config edit; a unit test enforces it); M1.1 scope; the "14 real clips" wording in the M1 hub README.
+16. **Git state:** model repo pushed to the private remote (the browser-row ledger `reports/TEST_RUNS.jsonl` is committed with its 3 lock rows). `ffwd-web` has no remote; its branches `stream-A..D`, `integration`, `feat/cpu-path` are merged into `main`; the worktrees `../ffwd-web-A`, `-B`, `-C`, `-D`, `-int`, `-cap` can be removed with `git worktree remove`.
+17. **Known risks to keep in mind:** the browser row used the Python harness loop, not the app's own JS loop (the JS loop ends a job on the first passing run, the Python one waits for `finish`); wllama 4.0.0 is days old and its wasm binary was not rebuilt or audited (source, provenance and package were reviewed); 5 conformance rotation cases only run with ffmpeg 5.x (CI); the new e2e CI job has not run on GitHub; the app's wllama worker path was verified in Chromium with the real model on the RTX only.
+
+### D. What did NOT run, and why
+- A 100-task iGPU parity (infeasible: about 130 s per turn, and the output was garbage); the iGPU parity is 4 genuine tasks, the CPU-under-limits parity 12 (both SUBSETS; the 95/100 target was not measured on either).
+- Tab responsiveness for the CPU path under the budget limits (the coexistence run was done for the iGPU path only).
+- A fresh-context review of the whole site branch (skipped to save usage; the four streams were each tested, merged and verified end to end, but not independently reviewed).
+- New unit tests for untested branches and rewritten page copy (no vitest while the row ran; usage).
+- A real network cold download of our own GGUF (our repos are private); Firefox, Safari, mobile; R2.
+
+### E. What I did not do
+Nothing public; no deploy; no money; no HF change; no preregistration, checker or metric change; no test split was run a second time.

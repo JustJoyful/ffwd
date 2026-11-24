@@ -81,3 +81,4 @@ Times are IST. One line per check-in; newest at the bottom. Hard limits: nothing
 - 06:04 IST (post4c.sh): ok: C q8_0+FA, Mesa shader cache disabled
 - 06:04 IST (post4c.sh): post4c done
 - 06:12 IST: iGPU FINAL: output wrong in all 5 configurations tried (Q5 q8KV+FA, Q5 f16KV x2, Q5 f16 no mesa cache, Q8_0 f16KV); not KV, not quant, not shader cache; criteria: parity FAIL, tab responsive PASS (F4 21.0 s alone and together, stall 3.3 ms), load cold 2.4 s warm 1.6 s. MORNING_REPORT section 2 final. All queues idle.
+- 06:54 IST: FINAL. Nothing running, RAM 6.7 GB free. ffwd-web main fast-forwarded to integration. MORNING_REPORT finalized (summary, decisions, launch checklist, what did not run). TEST_RUNS.jsonl ledger (3 lock rows) committed. No further check-ins scheduled.
