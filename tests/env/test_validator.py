@@ -38,3 +38,11 @@ def test_stream_copy_only_detection():
     assert not uses_stream_copy_only(["-c:v", "copy", "-vf", "scale=640:-2"])
     assert not uses_stream_copy_only(["-c:v", "copy", "-c:a", "aac"])
     assert not uses_stream_copy_only(["-ss", "2"])  # no codec option → FFmpeg re-encodes by default
+
+
+def test_non_ascii_digits_rejected():
+    # Python's \d matches Arabic-Indic digits; the JS validator is ASCII-only, so ours must be too.
+    r = validate_run(
+        ["-i", "{in:a}", "-t", "١٢", "{out:o}"], ["a"], ["o"], known_inputs={"a"}, known_outputs={"o"}
+    )
+    assert not r.ok

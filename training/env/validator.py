@@ -47,12 +47,16 @@ def allowlist() -> dict:
 
 
 def _split_graph(graph: str) -> list[str]:
-    """Split a filtergraph on , and ; outside [labels], '...' quotes and backslash escapes
-    (the same tokenisation FFmpeg applies)."""
+    """Split a filtergraph on , and ; outside [labels], '...' quotes and backslash escapes.
+
+    This is FFmpeg's av_get_token: a backslash escapes the next character only OUTSIDE single quotes; inside quotes it
+    is a literal and the next ' closes the quote, so `'\\'` is one complete quoted string. Honouring the escape inside
+    quotes hid `,movie=...` from the allow-list (review S1, same fix as the JS validator; shared conformance cases).
+    """
     parts, buf, i, quoted, bracket = [], [], 0, False, False
     while i < len(graph):
         ch = graph[i]
-        if ch == "\\" and i + 1 < len(graph):
+        if not quoted and ch == "\\" and i + 1 < len(graph):
             buf.append(graph[i : i + 2])
             i += 2
             continue
@@ -110,7 +114,7 @@ def _check_value(opt: str, kind: str, value: str) -> None:
     elif kind.startswith("enum:"):
         if value not in kind[5:].split(","):
             raise _Reject(f"bad value for {opt}: {value!r}")
-    elif not re.fullmatch(_KIND_RE[kind], value):
+    elif not re.fullmatch(_KIND_RE[kind], value, re.ASCII):  # \d is ASCII-only, as in the JS twin
         raise _Reject(f"bad value for {opt}: {value!r}")
 
 
