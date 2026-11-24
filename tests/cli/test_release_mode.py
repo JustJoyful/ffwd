@@ -260,3 +260,26 @@ def test_quant_selects_the_evaluated_file_with_default_kv_and_a_wrong_pin_starts
     )
     code, _ = run_main(monkeypatch, tmp_path, corpus, "--release", str(root))
     assert code == 5 and FakeServer.last is None and "FFmpeg 9 found" in capsys.readouterr().err
+
+
+def test_relative_paths_are_made_absolute_for_the_sandbox(pkg, tmp_path, corpus, monkeypatch):
+    root, m = pkg
+    write(root, m)
+    monkeypatch.chdir(tmp_path)
+    clip = tmp_path / "clip.mp4"
+    shutil.copy(corpus["h264_long"], clip)
+    seen = {}
+    monkeypatch.setattr(cli, "LlamaServer", FakeServer)
+    monkeypatch.setattr(
+        cli, "ChatPolicy", lambda *a, **k: Script([{"action": "spec", "spec": SPEC}, GOOD, FINISH])
+    )
+    monkeypatch.setattr(
+        cli,
+        "run_job",
+        lambda req, f, *a, out_dir, **k: seen.update(f=f, o=out_dir)
+        or type("R", (), {"ok": True, "message": "", "exit_code": 0})(),
+    )
+    cli.main(
+        ["cut", "clip.mp4", "--release", str(root), "--llama-server", "x", "--yes", "--out", "o"]
+    )
+    assert seen["f"].is_absolute() and seen["o"].is_absolute()

@@ -75,7 +75,9 @@ def main(argv: list[str] | None = None) -> int:
     except (PinMismatch, OSError) as e:
         print(f"refused: {e}", file=sys.stderr)
         return 5
-    out_dir = a.out or a.file.parent
+    # absolute: the bwrap sandbox binds the job dir by path, and a relative one makes every run fail ("Read-only file system")
+    a.file = a.file.resolve()
+    out_dir = (a.out or a.file.parent).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
     if root is not None:
         try:
