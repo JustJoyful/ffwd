@@ -109,14 +109,6 @@ def test_canary_must_match_the_rendered_prompt_and_the_shipped_file(inputs, tmp_
         build(inputs, "1.0.0", tmp_path / "b")
 
 
-def test_site_runtime_defaults_must_agree(inputs, tmp_path):
-    inputs.site_config.write_text(
-        inputs.site_config.read_text().replace("nCtx: 8192", "nCtx: 4096")
-    )
-    with pytest.raises(ReleaseError, match="runtime defaults"):
-        build(inputs, "1.0.0", tmp_path / "pkg")
-
-
 def test_bad_version_refused(inputs, tmp_path):
     with pytest.raises(ReleaseError, match="MAJOR"):
         build(inputs, "1.0", tmp_path / "pkg")

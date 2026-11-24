@@ -30,7 +30,7 @@ MIN_APP_VERSION = (
     "1.0.0"  # the first app generation that knows this manifest format (schema: model.schema.json)
 )
 CHAT_TEMPLATE_ID = "ffwd-agent-chat-v1"  # D-026: Qwen3 non-thinking, no tools, empty think block in EVERY assistant turn
-# Runtime defaults = the owner-confirmed configuration (D-050, D-051), the same numbers as ffwd-web app/model/config.js
+# Runtime defaults = the owner-confirmed configuration (D-050, D-051). The site reads them from this manifest (2026-11-24).
 # (checked against that file at build time). Greedy decoding, max reply 512 tokens.
 RUNTIME = {
     "n_ctx": 8192,
@@ -43,7 +43,7 @@ RUNTIME = {
 # CPU, f16 KV, no flash attention. The build id comes from canary-reference.json itself.
 CANARY_REFERENCE = {"backend": "cpu", "kv_cache_type": "f16", "flash_attention": False}
 CANARY_MIN_MATCH = (
-    18  # ffwd-web PATH_CHOICE.canaryMinMatch, checked against config.js at build time
+    18  # canary match rule (18 of the first 20 ids); the site reads it from this manifest
 )
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 # Pins for the small files the package ships (protocol prompts and the owner-supplied licence text).
@@ -77,9 +77,6 @@ class Inputs:
     system_prompt: Path
     chat_template: Path
     canary_reference: Path
-    site_config: (
-        Path  # ffwd-web app/model/config.js, read only, to cross-check the runtime defaults
-    )
     pins: tuple[str, str, str] = (SYSTEM_PROMPT_SHA, CHAT_TEMPLATE_SHA, LICENCE_SHA)
 
 
@@ -140,7 +137,6 @@ def default_inputs(repo: Path = config.REPO_ROOT) -> Inputs:
         system_prompt=config.PROTOCOL_DIR / "prompts/system-v1.txt",
         chat_template=config.PROTOCOL_DIR / "prompts/chat-template.jinja",
         canary_reference=web / "app/model/canary-reference.json",
-        site_config=web / "app/model/config.js",
     )
 
 
@@ -196,7 +192,7 @@ def make_readme(card: str, version: str, f: dict) -> str:
     return card
 
 
-def canary_manifest(ref: dict, system: str, q5_sha: str, site_cfg: str) -> dict:
+def canary_manifest(ref: dict, system: str, q5_sha: str) -> dict:
     """The canary block. The prompt is not stored: the build re-renders it from the system prompt and the user turn
     with the chat template and requires byte equality with the site's stored prompt."""
     if ref["model"]["sha256"] != q5_sha or ref.get("ggufSha256Checked") is not True:
@@ -214,8 +210,6 @@ def canary_manifest(ref: dict, system: str, q5_sha: str, site_cfg: str) -> dict:
     msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     if render(msgs, add_generation_prompt=True) != prompt:
         raise ReleaseError("canary prompt is not what the chat template renders")
-    if f"canaryMinMatch: {CANARY_MIN_MATCH}," not in site_cfg:
-        raise ReleaseError("site config.js canaryMinMatch differs from the build's")
     return {
         "file_sha256": q5_sha,
         "user_turn": user,
@@ -229,26 +223,9 @@ def canary_manifest(ref: dict, system: str, q5_sha: str, site_cfg: str) -> dict:
     }
 
 
-def _check_site_runtime(site_cfg: str, q5: Model) -> None:
-    want = [
-        f"bytes: {q5.size_bytes},",
-        f'sha256: "{q5.sha256}",',
-        f"nCtx: {RUNTIME['n_ctx']},",
-        f'kvCache: "{RUNTIME["kv_cache_type"]}",',
-        f"maxTokens: {RUNTIME['max_tokens']},",
-    ]
-    missing = [w for w in want if w not in site_cfg]
-    if missing:
-        raise ReleaseError(
-            f"ffwd-web app/model/config.js differs from the build's runtime defaults: {missing}"
-        )
-
-
 def build_manifest(i: Inputs, version: str, out: Path) -> dict:
     names = {"q5": f"{NAME}-v{version}-Q5_K_M.gguf", "q8": f"{NAME}-v{version}-Q8_0.gguf"}
     system = i.system_prompt.read_text()
-    site_cfg = i.site_config.read_text()
-    _check_site_runtime(site_cfg, i.q5)
     ref = json.loads(i.canary_reference.read_text())
 
     def entry(path: str, role: str, fmt: str, quant: str | None = None) -> dict:
@@ -292,7 +269,7 @@ def build_manifest(i: Inputs, version: str, out: Path) -> dict:
             "add_generation_prompt": True,
         },
         "runtime": dict(RUNTIME),
-        "canary": canary_manifest(ref, system, i.q5.sha256, site_cfg),
+        "canary": canary_manifest(ref, system, i.q5.sha256),
     }
 
 

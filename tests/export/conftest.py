@@ -71,9 +71,6 @@ def inputs(tmp_path: Path) -> Inputs:
         "roundTrips": True,
     }
     (src / "canary.json").write_text(json.dumps(ref))
-    (src / "config.js").write_text(
-        f'bytes: 2,\nsha256: "{sha(b"q5")}",\nnCtx: 8192,\nkvCache: "q8_0",\nmaxTokens: 512,\ncanaryMinMatch: 18,\n'
-    )
     return Inputs(
         q5=Model(src / "q5.gguf", sha(b"q5"), 2, "Q5_K_M", "shipped"),
         q8=Model(src / "q8.gguf", sha(b"q8"), 2, "Q8_0", "evaluated"),
@@ -84,6 +81,5 @@ def inputs(tmp_path: Path) -> Inputs:
         system_prompt=PROMPTS / "system-v1.txt",
         chat_template=PROMPTS / "chat-template.jinja",
         canary_reference=src / "canary.json",
-        site_config=src / "config.js",
         pins=(release.SYSTEM_PROMPT_SHA, release.CHAT_TEMPLATE_SHA, sha(b"licence text")),
     )
