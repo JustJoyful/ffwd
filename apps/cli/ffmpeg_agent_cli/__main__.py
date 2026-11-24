@@ -4,8 +4,9 @@ import argparse
 import sys
 from pathlib import Path
 
-from apps.cli.ffmpeg_agent_cli.agent import run_job
-from apps.cli.ffmpeg_agent_cli.server import LlamaServer
+from apps.cli.ffmpeg_agent_cli.agent import context_guard, run_job
+from apps.cli.ffmpeg_agent_cli.release import MANIFEST, ReleaseRefused, load_release, run_canary
+from apps.cli.ffmpeg_agent_cli.server import TEMPLATE, LlamaServer
 from training import config
 from training.env.constrained import load_prompt
 from training.policies import ChatPolicy
@@ -25,7 +26,17 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="ffmpeg-agent")
     ap.add_argument("request")
     ap.add_argument("file", type=Path)
-    ap.add_argument("--model", type=Path, required=True, help="GGUF model file")
+    ap.add_argument(
+        "--release",
+        type=Path,
+        help="release folder with ffwd-model.json (verified, its runtime defaults are used)",
+    )
+    ap.add_argument(
+        "--model",
+        type=Path,
+        help="GGUF file; a ffwd-model.json next to it makes this a release run",
+    )
+    ap.add_argument("--canary", action="store_true", help="release runs: check the canary first")
     ap.add_argument(
         "--llama-server", type=Path, required=True, help="path to the llama-server binary"
     )
@@ -33,19 +44,54 @@ def main(argv: list[str] | None = None) -> int:
         "--out", type=Path, default=None, help="output folder (default: next to the input)"
     )
     ap.add_argument("--yes", action="store_true", help="accept the model's spec without asking")
-    ap.add_argument("--max-tokens", type=int, default=512)
+    ap.add_argument("--max-tokens", type=int, help="legacy runs only (default 512)")
     a = ap.parse_args(argv)
+    root = a.release or (
+        a.model.parent if a.model and (a.model.parent / MANIFEST).is_file() else None
+    )
+    if root is None and a.model is None:
+        ap.error("give --release DIR or --model FILE")
+    if root is None and a.canary:
+        ap.error("--canary needs a release manifest")
+    if root is not None and a.max_tokens is not None:
+        ap.error("--max-tokens: a release run takes max_tokens from the manifest")
     if not a.file.is_file():
         print(f"no such file: {a.file}", file=sys.stderr)
         return 4
     out_dir = a.out or a.file.parent
     out_dir.mkdir(parents=True, exist_ok=True)
-    with LlamaServer(a.llama_server, a.model) as server:
-        policy = ChatPolicy(
-            server.base_url, "agent", None, temperature=0.0, max_tokens=a.max_tokens
+    if root is not None:
+        try:
+            rel = load_release(root)
+            if a.model and a.model.resolve() != rel.gguf.resolve():
+                raise ReleaseRefused(f"{a.model.name} is not the shipped file {rel.gguf.name}")
+        except ReleaseRefused as e:
+            print(f"refused: {e}", file=sys.stderr)
+            return 5
+        rt = rel.runtime
+        model, system, flags = rel.gguf, rel.system_prompt, {
+            "template": rel.template, "kv": rt["kv_cache_type"], "flash": rt["flash_attention"],
+        }  # fmt: skip
+        n_ctx, max_tokens, temperature = rt["n_ctx"], rt["max_tokens"], rt["temperature"]
+    else:
+        print(
+            f"warning: no {MANIFEST} next to the model; runtime defaults and files are unverified",
+            file=sys.stderr,
         )
+        model, system, flags = a.model, load_prompt(config.SYSTEM_PROMPT_V1), {"template": TEMPLATE}
+        n_ctx, max_tokens, temperature = 4096, a.max_tokens or 512, 0.0
+    with LlamaServer(a.llama_server, model, n_ctx, **flags) as server:
+        if a.canary:
+            ok, detail = run_canary(rel, server)
+            print(f"canary {'passed' if ok else 'FAILED'}: {detail}")
+            if not ok:
+                return 5
+        policy = context_guard(
+            ChatPolicy(server.base_url, "agent", None, temperature=temperature, max_tokens=max_tokens),
+            server.count_tokens, n_ctx, max_tokens,
+        )  # fmt: skip
         result = run_job(
-            a.request, a.file, policy, out_dir=out_dir, system_prompt=load_prompt(config.SYSTEM_PROMPT_V1),
+            a.request, a.file, policy, out_dir=out_dir, system_prompt=system,
             confirm=lambda lines: _confirm(lines, a.yes), ask=lambda q: input(f"{q} ").strip(),
         )  # fmt: skip
     print(("\n" if result.ok else "\n! ") + result.message)

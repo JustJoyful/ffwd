@@ -12,6 +12,7 @@ from pathlib import Path
 
 from training import config
 from training.env.actions import ParseError, parse_action
+from training.env.chat_template import render
 from training.env.checker import check
 from training.env.describe_spec import describe_spec
 from training.env.executor import execute, output_path_for
@@ -20,6 +21,23 @@ from training.env.probe import probe
 
 INPUT_ID, OUTPUT_ID = "in1", "out1"
 MAX_SPEC_REVISIONS = 2
+
+
+class ContextFull(RuntimeError):
+    """The next prompt plus the reply budget does not fit in n_ctx: the job ends as not done, never truncated (D-051)."""
+
+
+def context_guard(
+    policy: Policy, count_tokens: Callable[[str], int], n_ctx: int, max_tokens: int
+) -> Policy:
+    """Refuse a model call whose rendered prompt + reply budget would not fit in the context window."""
+
+    def guarded(messages: list[dict]) -> str:
+        if count_tokens(render(messages, add_generation_prompt=True)) + max_tokens > n_ctx:
+            raise ContextFull
+        return policy(messages)
+
+    return guarded
 
 
 @dataclass
@@ -64,7 +82,18 @@ def run_job(
     last_check: dict | None = None
     last_out: Path | None = None
     for _ in range(config.MAX_TURNS_PER_JOB):
-        reply = policy(messages)
+        try:
+            reply = policy(messages)
+        except ContextFull:
+            return JobResult(
+                False,
+                "Too long: the conversation no longer fits in the model's context window, so I "
+                "stopped. Nothing was claimed as done.",
+                spec=confirmed,
+                runs=runs,
+                check=last_check,
+                exit_code=6,
+            )
         action = parse_action(reply)
         if isinstance(action, ParseError):
             invalid += 1
