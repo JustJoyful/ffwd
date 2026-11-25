@@ -1,0 +1,17 @@
+{
+  "_note": "Numbers that exist only in markdown reports (no machine-readable file). Everything else in make_figures.py is read from the result files named in the script.",
+  "quant_curve_dev_n100": {
+    "n": 100,
+    "native_gguf_llamacpp_b12032": {
+      "Q4_K_M": {"k": 60, "source": "reports/2026-11-23-m3-quant-curve/summary.md (table, success column)"},
+      "Q5_K_M": {"k": 97, "source": "reports/2026-11-23-m3-quant-curve/summary.md (table, success column)"},
+      "Q6_K": {"k": 99, "source": "reports/2026-11-23-m3-quant-curve/summary.md (table, success column)"},
+      "Q8_0": {"k": 97, "source": "reports/2026-11-23-m3-quant-curve/summary.md (table, success column)"}
+    },
+    "mlc_stored_weights_read_back_through_hf_fp16_M3": {
+      "q4f16_1": {"k": 2, "source": "reports/2026-11-23-mlc-parity/summary.md (Results table)"},
+      "q0f16": {"k": 98, "source": "reports/2026-11-23-mlc-parity/summary.md (Results table, control)"}
+    },
+    "mlc_M1_q4f16_1": {"k": 5, "source": "reports/2026-11-23-mlc-parity/summary.md (Results table; this is M1, not M3)"}
+  }
+}
