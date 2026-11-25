@@ -4,6 +4,10 @@
 
 This repository holds the model side of ffwd: the agent protocol, the checker, the task generator, the training pipeline (SFT, then multi-turn GRPO with execution-verified rewards), the evaluation harness, and a command-line tool. The browser app is in the separate repository `ffwd-web`. The released model is **ffwd-0.6b v1.0.0**, a fine-tune of Qwen3-0.6B.
 
+## Status: early preview
+
+**Early preview.** The model is v1.0.0, but the website/app that runs it is an early preview, version 0.9.0, and this release's `min_app_version` is 0.9.0. Known limitation: vague or ambiguous real-world requests may not be handled correctly. The owner's own example: asking it, on a real clip, "Make the video potrait mode, lower the volume" did not produce a correct result (the cause has not been investigated). Clear, specific requests such as "cut the first 3 seconds" or "make it 720p" work best. The reported accuracy (95.0% on 900 held-out tasks in the browser; native Q8_0 96.3%; the non-inferiority guard is not shown, -1.33 pp [-2.67, -0.11]) is measured on generated tasks, not on real users' wording; real-world accuracy is unknown.
+
 ## How it works
 
 - The model emits one JSON action per turn: `spec` (what the output must look like), `ask_user`, `unsupported`, `run` (an allowlisted FFmpeg argument list), `finish`.
@@ -26,6 +30,7 @@ The browser row is 1.33 percentage points below native (95% CI [-2.67, -0.11]); 
 
 ## Limitations (short version)
 
+- Vague or ambiguous real-world requests may not be handled correctly (for example, "Make the video potrait mode, lower the volume" on a real clip did not give a correct result; cause not investigated). Clear, specific requests work best. Real-world accuracy is unknown.
 - The test tasks are generated from 35 clips (22 synthetic, 13 CC BY 3.0 cuts). Success on generated tasks is not success on your clips; the real-clip split was not part of this release.
 - GRPO did not raise accuracy over the SFT parent; it reduced needless re-encodes (9% to 2% on one split). One training seed per system.
 - The stated spec is materially wrong in about a fifth of test-iid episodes even when the output passes (success is graded on the gold spec); the spec is shown for confirmation before running (CLI). Two systematic spec bugs (rotation width/height, speed-change end time) are known.

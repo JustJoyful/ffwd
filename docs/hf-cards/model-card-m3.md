@@ -26,6 +26,10 @@ tags:
 
 Repo id: `JustJoyful/ffwd-0.6b` (owner decision, 24 Nov 2026). The existing private repos are still named `ffmpeg-agent-*` (D-046); the model repo is renamed to this id BEFORE it goes public, with redirects, and the site pins a revision hash, not a branch. Hub and Kaggle identifiers and file names in this card (`ffmpeg-agent-m3-0.6b-q8_0.gguf`, `JustJoyful/ffmpeg-agent-ckpt-grpo`, the private M1 repo `JustJoyful/ffmpeg-agent-m1-0.6b`) are the current names of those objects.
 
+## Status: early preview
+
+**Early preview.** The model is v1.0.0, but the website/app that runs it is an early preview, version 0.9.0, and this release's `min_app_version` is 0.9.0. Known limitation: vague or ambiguous real-world requests may not be handled correctly. The owner's own example: asking it, on a real clip, "Make the video potrait mode, lower the volume" did not produce a correct result (the cause has not been investigated). Clear, specific requests such as "cut the first 3 seconds" or "make it 720p" work best. The reported accuracy (95.0% on 900 held-out tasks in the browser; native Q8_0 96.3%; the non-inferiority guard is not shown, -1.33 pp [-2.67, -0.11]) is measured on generated tasks, not on real users' wording; real-world accuracy is unknown.
+
 ## What it is
 
 M3 is Qwen3-0.6B fine-tuned in two stages for one narrow job: turn a plain-language video chore ("cut the first 3 seconds", "make this a GIF", "compress to under 10 MB") into a verified FFmpeg command through a small agent loop.
@@ -156,6 +160,7 @@ The browser model scores **95.0% on 900 held-out tasks; native Q8_0 scores 96.3%
 
 ## Limitations
 
+- **Vague or ambiguous real-world requests may not be handled correctly (early preview, app 0.9.0).** Example reported by the owner on a real clip: "Make the video potrait mode, lower the volume" did not produce a correct result (cause not investigated). Clear, specific requests ("cut the first 3 seconds", "make it 720p") work best. All reported accuracy is on generated tasks, not real users' wording; real-world accuracy is unknown.
 - **The shipped browser format is slightly below native Q8_0 on the held-out splits:** 95.0% against 96.3% on 900 tasks (-1.33 pp [-2.67, -0.11]; the preregistered guard is not shown). The loss is concentrated in test-phrasing (90.5% against 94.0%).
 - **Do not quantise to 4 bits.** M3 at Q4_K_M scores 60/100 against 97/100 at Q8_0 on the dev parity sample: 4-bit visibly damages this 0.6B fine-tune's format discipline (12 episodes with an invalid action, typically a forbidden `-y` flag or malformed JSON).
 - **MLC 4-bit is not usable for this model.** The MLC `q4f16_1` weights score 2/100 (M3) and 5/100 (M1) on the same dev sample; the cliff is the 4-bit weight quantisation, not the runtime or the prompt. The browser therefore runs the GGUF Q5_K_M through wllama. That result is one laptop, one Chromium build (Playwright's), one seed and 100 dev tasks; integrated GPUs, Apple, Firefox, Safari and phones are untested, and wllama's llama.cpp build (b12637) differs from the native one (b12032), so outputs are not bit-identical to the native runs. Q4 with an importance matrix, Q4_K_S and Q5_K_S were not tried.

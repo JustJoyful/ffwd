@@ -2,6 +2,10 @@
 
 A 0.6B FFmpeg agent: Qwen3-0.6B fine-tuned with SFT and multi-turn GRPO (checkpoint-60 of a 60-step run) to turn a plain-language video chore ("cut the first 3 seconds", "make this a GIF") into a verified FFmpeg command. It emits one JSON action per turn (`spec`, `ask_user`, `unsupported`, `run`, `finish`) inside a harness that checks every run. The model card is `README.md`; the manifest apps read is `ffwd-model.json`.
 
+## Status: early preview
+
+**Early preview.** The model is v1.0.0, but the website/app that runs it is an early preview, version 0.9.0, and this release's `min_app_version` is 0.9.0. Known limitation: vague or ambiguous real-world requests may not be handled correctly. The owner's own example: asking it, on a real clip, "Make the video potrait mode, lower the volume" did not produce a correct result (the cause has not been investigated). Clear, specific requests such as "cut the first 3 seconds" or "make it 720p" work best. The reported accuracy (95.0% on 900 held-out tasks in the browser; native Q8_0 96.3%; the non-inferiority guard is not shown, -1.33 pp [-2.67, -0.11]) is measured on generated tasks, not on real users' wording; real-world accuracy is unknown.
+
 ## Results (generated held-out tasks, 900 across the three test splits; read the card's Limitations)
 
 - **95.0% (855/900) in the browser** (the shipped file, Q5_K_M, wllama 4.0.0 on WebGPU, q8_0 KV cache, `n_ctx` 8192).

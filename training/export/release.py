@@ -26,9 +26,7 @@ from training.protocol import validate
 NAME = "ffwd-0.6b"
 BASE_MODEL = "Qwen/Qwen3-0.6B"
 LICENCE_ID = "Apache-2.0"
-MIN_APP_VERSION = (
-    "1.0.0"  # the first app generation that knows this manifest format (schema: model.schema.json)
-)
+MIN_APP_VERSION = "0.9.0"  # the first app (website early preview, D-055) that knows this manifest format (schema: model.schema.json)
 CHAT_TEMPLATE_ID = "ffwd-agent-chat-v1"  # D-026: Qwen3 non-thinking, no tools, empty think block in EVERY assistant turn
 # Runtime defaults = the owner-confirmed configuration (D-050, D-051). The site reads them from this manifest (2026-11-24).
 # (checked against that file at build time). Greedy decoding, max reply 512 tokens.

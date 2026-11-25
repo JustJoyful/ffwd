@@ -157,7 +157,7 @@
   ],
   "licence": "Apache-2.0",
   "licence_file": "LICENSE",
-  "min_app_version": "1.0.0",
+  "min_app_version": "0.9.0",
   "name": "ffwd-0.6b",
   "prompt": {
     "file": "system-v1.txt",

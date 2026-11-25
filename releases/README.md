@@ -1,6 +1,6 @@
 # releases/
 
-Local release packages of the model (D-053). One folder per version, `ffwd-0.6b-v<MAJOR.MINOR.PATCH>/`. The v1.0.0 package was uploaded to the PRIVATE Hub repo `JustJoyful/ffwd-0.6b` (tag `v1.0.0`, see D-053 addenda); nothing is public. Steps marked **not run** below have not been done.
+Local release packages of the model (D-053). One folder per version, `ffwd-0.6b-v<MAJOR.MINOR.PATCH>/`. The v1.0.0 package was uploaded to the PRIVATE Hub repo `JustJoyful/ffwd-0.6b` (tag `v1.0.0`, see D-053 addenda); nothing is public. The model is v1.0.0 but the website/app is an early preview, 0.9.0 (D-055), so `min_app_version` is `0.9.0`; the CLI stays 1.0.0. Steps marked **not run** below have not been done.
 
 ## Layout of a package
 
