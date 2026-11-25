@@ -1,0 +1,200 @@
+{
+  "app": "http://localhost:4180",
+  "variant": "nvidia",
+  "memoryCap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p2377949-i27446206.scope",
+    "memory_max": "5368709120",
+    "contained": {
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p2377949-i27446206.scope",
+      "memory_max": "5368709120"
+    }
+  },
+  "steps": [
+    {
+      "name": "open /app",
+      "ok": true,
+      "detail": {
+        "crossOriginIsolated": true,
+        "webgpu": true
+      },
+      "seconds": 0.137
+    },
+    {
+      "name": "choose a video",
+      "ok": true,
+      "detail": {
+        "modelNotice": "The model runs on your graphics chip."
+      },
+      "seconds": 0.046
+    },
+    {
+      "name": "model asks before downloading",
+      "ok": true,
+      "detail": null,
+      "seconds": 0.003
+    },
+    {
+      "name": "consent and download starts",
+      "ok": true,
+      "detail": {
+        "sawProgressBar": true
+      },
+      "seconds": 0.08
+    },
+    {
+      "name": "model downloaded, checked and started",
+      "ok": true,
+      "detail": {
+        "mainThread": {
+          "maxGapMs": 76,
+          "ticks": 349
+        },
+        "loadSeconds": 16.701,
+        "sawCheckNotice": {
+          "seen": true,
+          "firstAt": "2026-11-24T21:39:37.828Z",
+          "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once.",
+          "zone": [
+            {
+              "at": "2026-11-24T21:39:33.621Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n67%\n\n296 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-24T21:39:33.921Z",
+              "text": "The model runs on your graphics chip.\n\nStarting the model"
+            },
+            {
+              "at": "2026-11-24T21:39:37.828Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and meas"
+            },
+            {
+              "at": "2026-11-24T21:39:49.864Z",
+              "text": "The model runs on your graphics chip.\n\nOn this computer a step takes about 2 seconds, the first one about 5."
+            }
+          ],
+          "samples": 55,
+          "maxGapMs": 303,
+          "inPage": [
+            {
+              "step": "canary",
+              "at": "2026-11-24T21:39:37.609Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once."
+            },
+            {
+              "step": "benchmark",
+              "at": "2026-11-24T21:39:42.266Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once."
+            }
+          ]
+        },
+        "notice": {
+          "path": "webgpu",
+          "wait": "measured",
+          "text": "The model runs on your graphics chip.\n\nOn this computer a step takes about 2 seconds, the first one about 5."
+        },
+        "verdict": {
+          "ffwd:path:v1:bbf439b749c02c04:159.0:nvidia|ampere|": {
+            "webgpu": "ok",
+            "path": "webgpu",
+            "canary": "pass",
+            "why": null,
+            "bench": {
+              "webgpu": {
+                "ppTokS": 399.3,
+                "genTokS": 57.4
+              },
+              "cpu": {
+                "ppTokS": 80.4,
+                "genTokS": 56.5
+              }
+            },
+            "at": 1795556389579
+          }
+        }
+      },
+      "seconds": 16.701
+    },
+    {
+      "name": "what this variant must show",
+      "ok": true,
+      "detail": {
+        "verdict": {
+          "webgpu": "ok",
+          "path": "webgpu",
+          "canary": "pass",
+          "why": null,
+          "bench": {
+            "webgpu": {
+              "ppTokS": 399.3,
+              "genTokS": 57.4
+            },
+            "cpu": {
+              "ppTokS": 80.4,
+              "genTokS": 56.5
+            }
+          },
+          "at": 1795556389579
+        },
+        "uiPath": "webgpu",
+        "wait": "measured"
+      },
+      "seconds": 0
+    },
+    {
+      "name": "type a request and make a plan",
+      "ok": true,
+      "detail": {
+        "plan": "Keeps\n\nKeep\n0:00 to 0:06\nLength\n0:06\nFrame rate\n25 per second\nFormat\nMP4 that plays widely\nSound\nAAC\nSound sync\nin sync\nPicture\n640 × 360\n\nThis plan doesn't change anything. Reword your request?\n\nYour request mentions a portrait picture, but this plan doesn't change it.\n\nYour request mentions the volume, but this plan doesn't change it.\n\nReword my request\nRun anyway"
+      },
+      "seconds": 7.42
+    },
+    {
+      "name": "run it",
+      "ok": true,
+      "detail": {
+        "probe": true,
+        "ranIt": false,
+        "noChangeWarning": true,
+        "reword": true,
+        "text": "Keeps\n\nKeep\n0:00 to 0:06\nLength\n0:06\nFrame rate\n25 per second\nFormat\nMP4 that plays widely\nSound\nAAC\nSound sync\nin sync\nPicture\n640 × 360\n\nThis plan doesn't change anything. Reword your request?\n\nYour request mentions a portrait picture, but this plan doesn't change it.\n\nYour request mentions the volume, but this plan doesn't change it.\n\nReword my request\nRun anyway"
+      },
+      "seconds": 0.005
+    },
+    {
+      "name": "save",
+      "ok": true,
+      "detail": {
+        "note": "no Download button (the job did not finish)"
+      },
+      "seconds": 0.001
+    },
+    {
+      "name": "second visit uses the remembered verdict",
+      "ok": true,
+      "detail": {
+        "loadSeconds": 0.076,
+        "sawCheckNotice": false,
+        "path": "webgpu",
+        "wait": "measured"
+      },
+      "seconds": 0.232
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": [],
+  "started": "2026-11-24T21:39:32.522Z",
+  "minAvailMib": 4875,
+  "adapter": {
+    "gpu": true,
+    "adapter": {
+      "vendor": "nvidia",
+      "architecture": "ampere",
+      "description": "",
+      "isFallbackAdapter": false
+    }
+  },
+  "finished": "2026-11-24T21:39:58.108Z",
+  "allOk": true
+}
