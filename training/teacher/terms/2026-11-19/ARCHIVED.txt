@@ -1,0 +1,1 @@
+The raw snapshots of the DeepSeek terms pages (.html and response headers) were removed from this repository on 2026-11-25. They are archived privately by the owner. terms.json keeps the URLs, the fetch date and the sha256 of each snapshot; the relevant clauses are quoted in the data card.

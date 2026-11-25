@@ -27,3 +27,15 @@ releases/*/adapter/
 releases/*/*.safetensors
 releases/*/weights/
 releases/*/adapter-m1/
+
+# public-release cleanup (2026-11-25)
+*.log
+*.log.gz
+download.txt
+reports/**/server*.log*
+*.har
+.claude/
+graphify-out/
+scratch-prep/
+CLAUDE.md
+docs/superpowers/
