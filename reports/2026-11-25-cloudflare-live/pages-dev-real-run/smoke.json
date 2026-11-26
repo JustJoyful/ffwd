@@ -1,0 +1,587 @@
+{
+  "app": "https://ffwd.pages.dev",
+  "variant": "nvidia",
+  "memoryCap": {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p3741146-i33104111.scope",
+    "memory_max": "5368709120",
+    "contained": {
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-p3741146-i33104111.scope",
+      "memory_max": "5368709120"
+    }
+  },
+  "steps": [
+    {
+      "name": "open /app",
+      "ok": true,
+      "detail": {
+        "crossOriginIsolated": true,
+        "webgpu": true
+      },
+      "seconds": 1.285
+    },
+    {
+      "name": "choose a video",
+      "ok": true,
+      "detail": {
+        "modelNotice": "The model runs on your graphics chip."
+      },
+      "seconds": 0.038
+    },
+    {
+      "name": "model asks before downloading",
+      "ok": true,
+      "detail": null,
+      "seconds": 1.811
+    },
+    {
+      "name": "consent and download starts",
+      "ok": true,
+      "detail": {
+        "sawProgressBar": true
+      },
+      "seconds": 0.028
+    },
+    {
+      "name": "model downloaded, checked and started",
+      "ok": true,
+      "detail": {
+        "mainThread": {
+          "maxGapMs": 97,
+          "ticks": 1471
+        },
+        "loadSeconds": 70.893,
+        "sawCheckNotice": {
+          "seen": true,
+          "firstAt": "2026-11-25T08:13:22.941Z",
+          "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once.",
+          "zone": [
+            {
+              "at": "2026-11-25T08:12:24.993Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n0%\n\n0 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:27.398Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n1%\n\n7 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:27.697Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n2%\n\n10 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:28.899Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n4%\n\n18 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:29.200Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n6%\n\n25 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:29.800Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n7%\n\n31 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:30.400Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n8%\n\n37 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:30.699Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n9%\n\n40 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:31.001Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n10%\n\n45 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:31.603Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n11%\n\n49 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:32.203Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n12%\n\n53 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:32.503Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n13%\n\n58 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:33.104Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n14%\n\n63 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:33.703Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n15%\n\n68 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:34.302Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n16%\n\n72 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:34.603Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n17%\n\n76 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:35.203Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n18%\n\n80 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:35.503Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n19%\n\n85 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:36.103Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n20%\n\n89 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:36.703Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n21%\n\n94 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:37.604Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n22%\n\n99 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:37.904Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n23%\n\n102 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:38.204Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n24%\n\n107 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:38.804Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n25%\n\n111 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:39.105Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n26%\n\n116 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:39.707Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n27%\n\n120 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:40.309Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n28%\n\n125 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:40.909Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n29%\n\n129 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:41.509Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n30%\n\n134 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:41.809Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n31%\n\n138 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:42.410Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n32%\n\n142 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:43.010Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n33%\n\n147 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:43.609Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n34%\n\n152 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:43.909Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n35%\n\n156 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:44.509Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n36%\n\n160 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:44.809Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n37%\n\n164 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:45.409Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n38%\n\n170 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:46.009Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n39%\n\n175 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:46.310Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n40%\n\n178 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:46.909Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n41%\n\n184 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:47.209Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n42%\n\n188 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:47.811Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n43%\n\n192 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:48.110Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n44%\n\n196 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:49.010Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n45%\n\n201 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:49.310Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n46%\n\n206 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:49.610Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n47%\n\n210 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:49.910Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n48%\n\n213 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:50.510Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n49%\n\n219 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:51.112Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n50%\n\n223 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:51.713Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n51%\n\n227 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:52.013Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n52%\n\n232 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:52.313Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n53%\n\n236 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:53.213Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n54%\n\n241 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:53.513Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n55%\n\n245 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:54.115Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n56%\n\n250 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:55.015Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n58%\n\n256 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:55.315Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n58%\n\n259 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:55.915Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n59%\n\n263 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:56.216Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n60%\n\n267 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:56.815Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n61%\n\n271 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:57.415Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n62%\n\n276 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:58.016Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n63%\n\n281 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:58.615Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n64%\n\n285 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:12:59.515Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n65%\n\n289 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:00.115Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n66%\n\n293 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:00.716Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n67%\n\n298 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:01.317Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n68%\n\n303 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:01.618Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n69%\n\n307 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:02.217Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n70%\n\n311 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:02.818Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n72%\n\n318 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:03.118Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n72%\n\n320 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:03.419Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n73%\n\n325 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:03.719Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n74%\n\n329 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:04.319Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n75%\n\n333 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:04.619Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n76%\n\n339 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:05.219Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n77%\n\n342 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:05.818Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n78%\n\n347 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:06.419Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n79%\n\n352 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:07.018Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n80%\n\n356 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:07.618Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n81%\n\n360 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:08.218Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n82%\n\n365 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:08.818Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n83%\n\n369 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:09.419Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n84%\n\n373 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:09.718Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n85%\n\n378 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:10.320Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n86%\n\n383 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:10.921Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n87%\n\n388 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:11.521Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n88%\n\n392 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:11.822Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n89%\n\n396 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:12.122Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n90%\n\n401 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:12.723Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n91%\n\n405 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:13.023Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n92%\n\n409 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:13.322Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n93%\n\n415 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:13.922Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n95%\n\n421 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:14.222Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n95%\n\n422 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:14.522Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n96%\n\n427 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:14.822Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n97%\n\n431 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:15.423Z",
+              "text": "The model runs on your graphics chip.\n\nDownloading the model\n\n98%\n\n437 MB of 444 MB. It is saved in your browser for next time."
+            },
+            {
+              "at": "2026-11-25T08:13:16.023Z",
+              "text": "The model runs on your graphics chip.\n\nStarting the model"
+            },
+            {
+              "at": "2026-11-25T08:13:22.941Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and meas"
+            },
+            {
+              "at": "2026-11-25T08:13:35.275Z",
+              "text": "The model runs on your graphics chip.\n\nOn this computer a step takes about 2 seconds, the first one about 5."
+            }
+          ],
+          "samples": 236,
+          "maxGapMs": 303,
+          "inPage": [
+            {
+              "step": "canary",
+              "at": "2026-11-25T08:13:22.738Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once."
+            },
+            {
+              "step": "benchmark",
+              "at": "2026-11-25T08:13:27.559Z",
+              "text": "Checking this computer's graphics chip\n\nThe first time on a computer, ffwd tests that the on-device model gives the right answers on the graphics chip, and measures how fast each choice is. This can take a minute or more. The result is remembered, so it only happens once."
+            }
+          ]
+        },
+        "notice": {
+          "path": "webgpu",
+          "wait": "measured",
+          "text": "The model runs on your graphics chip.\n\nOn this computer a step takes about 2 seconds, the first one about 5."
+        },
+        "verdict": {
+          "ffwd:path:v1:bbf439b749c02c04:159.0:nvidia|ampere|": {
+            "webgpu": "ok",
+            "path": "webgpu",
+            "canary": "pass",
+            "why": null,
+            "bench": {
+              "webgpu": {
+                "ppTokS": 401.6,
+                "genTokS": 54.2
+              },
+              "cpu": {
+                "ppTokS": 83.8,
+                "genTokS": 52.4
+              }
+            },
+            "at": 1795594415109
+          }
+        }
+      },
+      "seconds": 70.894
+    },
+    {
+      "name": "what this variant must show",
+      "ok": true,
+      "detail": {
+        "verdict": {
+          "webgpu": "ok",
+          "path": "webgpu",
+          "canary": "pass",
+          "why": null,
+          "bench": {
+            "webgpu": {
+              "ppTokS": 401.6,
+              "genTokS": 54.2
+            },
+            "cpu": {
+              "ppTokS": 83.8,
+              "genTokS": 52.4
+            }
+          },
+          "at": 1795594415109
+        },
+        "uiPath": "webgpu",
+        "wait": "measured"
+      },
+      "seconds": 0
+    },
+    {
+      "name": "type a request and make a plan",
+      "ok": true,
+      "detail": {
+        "plan": "Will change\n\nKeep\n0:02 to 0:06\nLength\n0:04\n\nKeeps\n\nFormat\nMP4 that plays widely\nSound\nAAC\nPicture\n640 × 360\nHow closely the result is checked\nRun it\nChange"
+      },
+      "seconds": 7.393
+    },
+    {
+      "name": "run it",
+      "ok": true,
+      "detail": {
+        "done": true,
+        "doesntMatch": false,
+        "downloadAnyway": false,
+        "nothingToDownload": false,
+        "feedbackOffered": false,
+        "checks": "Run 1\n, every check passed\n\nFormat\nMP4\nVideo format\nH264\nPixel format\nyuv420p\nPicture width\n640 px\nPicture height\n360 px\nTurn\n0 degrees\nPicture\nPresent\nSound\nPresent\nSound format\nAAC\nLength\n4 s\n\nDone, every check passed"
+      },
+      "seconds": 1.362
+    },
+    {
+      "name": "save",
+      "ok": true,
+      "detail": {
+        "file": "smoke-clip-ffwd.mp4"
+      },
+      "seconds": 0.048
+    },
+    {
+      "name": "second visit uses the remembered verdict",
+      "ok": true,
+      "detail": {
+        "loadSeconds": 0.833,
+        "sawCheckNotice": false,
+        "path": "webgpu",
+        "wait": "measured"
+      },
+      "seconds": 9.08
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "failedRequests": [
+    "https://us.aws.cdn.hf.co/xet-bridge-us/6b05bfdfc56ce9ebf2394f29/767c6e8c252209290d8815d308195fbc19808f7f105f3368afeed438 net::ERR_ABORTED"
+  ],
+  "started": "2026-11-25T08:12:21.526Z",
+  "minAvailMib": 4603,
+  "adapter": {
+    "gpu": true,
+    "adapter": {
+      "vendor": "nvidia",
+      "architecture": "ampere",
+      "description": "",
+      "isFallbackAdapter": false
+    }
+  },
+  "finished": "2026-11-25T08:13:53.820Z",
+  "allOk": true
+}
